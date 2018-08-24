@@ -1,122 +1,149 @@
 <?php
-if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
-/*
-Plugin Name: WordPress Book List
-Plugin URI: https://www.jakerevans.com
-Description: For authors, publishers, librarians, and book-lovers alike - use it to sell your books, record and catalog your library, and more!
-Version: 5.8.4d
-Author: Jake Evans
-Text Domain: wpbooklist
-Author URI: https://www.jakerevans.com
-License: GPL2
-*/ 
-
-// All Possible Shortcodes
-/*
-[wpbooklist_shortcode]
-[showbookcover]
-[wpbooklist_bookfinder]
-[wpbooklist_carousel]
-[wpbooklist_categories]
-*/
-
-
-
+/**
+ * WordPress Book List
+ *
+ * @package     WordPress Book List
+ * @author      Jake Evans
+ * @copyright   2018 Jake Evans
+ * @license     GPL-2.0+
+ *
+ * @wordpress-plugin
+ * Plugin Name: WordPress Book List
+ * Plugin URI: https://www.jakerevans.com
+ * Description: For authors, publishers, librarians, and book-lovers alike - use it to sell your books, record and catalog your library, and more!
+ * Version: 6.0.0
+ * Author: Jake Evans
+ * Text Domain: wpbooklist
+ * Author URI: https://www.jakerevans.com
+ */
 
 global $wpdb;
-require_once('includes/functions.php');
-require_once('includes/ajaxfunctions.php');
 
-// Parse the wpbooklistconfig file
-$config_array = parse_ini_file("wpbooklistconfig.ini");
+/* REQUIRE STATEMENTS */
+	require_once 'includes/class-wpbooklist-functions.php';
+	require_once 'includes/ajaxfunctions.php';
+	require_once 'includes/classes/rest/class-wpbooklist-rest-functions.php';
+/* END REQUIRE STATEMENTS */
 
-// Get the default admin message for inclusion into database 
-define('ADMIN_MESSAGE', $config_array['initial_admin_message']);
+/* MISC. INCLUSIONS & DEFINITIONS */
 
-// Grabbing database prefix
-define('$wpdb->prefix', $wpdb->prefix);
+	// Parse the wpbooklistconfig file.
+	$config_array = parse_ini_file( 'wpbooklistconfig.ini' );
 
-// Root plugin folder directory
-define('WPBOOKLIST_VERSION_NUM', '5.8.4');
+	// Loading textdomain.
+	load_plugin_textdomain( 'wpbooklist', false, ROOT_DIR . 'languages' );
 
-// Root plugin folder directory
-//define('ROOT_DIR', ABSPATH.'wp-content/plugins/wpbooklist/');
-define('ROOT_DIR', plugin_dir_path(__FILE__));
+/* END MISC. INCLUSIONS & DEFINITIONS */
 
-// Root WordPress Plugin Directory
-define('ROOT_WP_PLUGINS_DIR', str_replace('/wpbooklist', '', plugin_dir_path(__FILE__)));
+/* CONSTANT DEFINITIONS */
 
-// Root plugin folder URL
-define('ROOT_URL', plugins_url().'/wpbooklist/');
+	// Get the default admin message for inclusion into database.
+	define( 'ADMIN_MESSAGE', $config_array['initial_admin_message'] );
 
-// Quotes Directory
-define('QUOTES_DIR', ROOT_DIR.'quotes/');
+	// Grabbing database prefix.
+	//define( '$WPDB->PREFIX', $wpdb->prefix );
 
-// Root JavaScript Directory
-define('JAVASCRIPT_URL', ROOT_URL.'assets/js/');
+	// Root plugin folder directory.
+	define( 'WPBOOKLIST_VERSION_NUM', '6.0.0' );
 
-// Root JavaScript Directory
-define('SOUNDS_URL', ROOT_URL.'assets/sounds/');
+	// Root plugin folder directory.
+	define( 'ROOT_DIR', plugin_dir_path( __FILE__ ) );
 
-// Root Classes Directory
-define('CLASS_DIR', ROOT_DIR.'includes/classes/');
+	// Root WordPress Plugin Directory.
+	define( 'ROOT_WP_PLUGINS_DIR', str_replace( '/wpbooklist', '', plugin_dir_path( __FILE__ ) ) );
 
-// Root Image URL
-define('ROOT_IMG_URL', ROOT_URL.'assets/img/');
+	// Root plugin folder URL .
+	define( 'ROOT_URL', plugins_url() . '/wpbooklist/' );
 
-// Root Image Icons URL
-define('ROOT_IMG_ICONS_URL', ROOT_URL.'assets/img/icons/');
+	// Quotes Directory.
+	define( 'QUOTES_DIR', ROOT_DIR . 'quotes/' );
 
-// Root CSS URL
-define('ROOT_CSS_URL', ROOT_URL.'assets/css/');
+	// Root JavaScript Directory.
+	define( 'JAVASCRIPT_URL', ROOT_URL . 'assets/js/' );
 
-// Root UI directory
-define('ROOT_INCLUDES_UI', ROOT_DIR.'includes/ui/');
+	// Root SOUNDS Directory.
+	define( 'SOUNDS_URL', ROOT_URL . 'assets/sounds/' );
 
-// Root UI Admin directory
-define('ROOT_INCLUDES_UI_ADMIN_DIR', ROOT_DIR.'includes/ui/admin/');
+	// Root Classes Directory.
+	define( 'CLASS_DIR', ROOT_DIR . 'includes/classes/' );
 
-// Define the Uploads base directory
-$uploads = wp_upload_dir();
-$upload_path = $uploads['basedir'];
-define('UPLOADS_BASE_DIR', $upload_path.'/');
+	// Root REST Classes Directory.
+	define( 'CLASS_REST_DIR', ROOT_DIR . 'includes/classes/rest/' );
 
-$upload_url = $uploads['baseurl'];
-define('UPLOADS_BASE_URL', $upload_url.'/');
+	// Root Storytime Classes Directory.
+	define( 'CLASS_STORYTIME_DIR', ROOT_DIR . 'includes/classes/storytime/' );
 
-// Define the Library Stylepaks base directory
-define('LIBRARY_STYLEPAKS_UPLOAD_DIR', UPLOADS_BASE_DIR.'wpbooklist/stylepaks/library/');
+	// Root Image URL .
+	define( 'ROOT_IMG_URL', ROOT_URL . 'assets/img/' );
 
-// Define the Library Stylepaks base url
-define('LIBRARY_STYLEPAKS_UPLOAD_URL', UPLOADS_BASE_URL.'wpbooklist/stylepaks/library/');
+	// Root Image Icons URL .
+	define( 'ROOT_IMG_ICONS_URL', ROOT_URL . 'assets/img/icons/' );
 
-// Define the Posts Stylepaks base directory
-define('POST_TEMPLATES_UPLOAD_DIR', UPLOADS_BASE_DIR.'wpbooklist/templates/posts/');
+	// Root CSS URL .
+	define( 'ROOT_CSS_URL', ROOT_URL . 'assets/css/' );
 
-// Define the Posts Stylepaks base url
-define('POST_TEMPLATES_UPLOAD_URL', UPLOADS_BASE_URL.'wpbooklist/templates/posts/');
+	// Root UI directory.
+	define( 'ROOT_INCLUDES_UI', ROOT_DIR . 'includes/ui/' );
 
-// Define the Pages Stylepaks base directory
-define('PAGE_TEMPLATES_UPLOAD_DIR', UPLOADS_BASE_DIR.'wpbooklist/templates/pages/');
+	// Root UI Admin directory.
+	define( 'ROOT_INCLUDES_UI_ADMIN_DIR', ROOT_DIR . 'includes/ui/admin/' );
 
-// Define the Pages Stylepaks base url
-define('PAGE_TEMPLATES_UPLOAD_URL', UPLOADS_BASE_URL.'wpbooklist/templates/pages/');
+	// Define the Uploads base directory.
+	$uploads     = wp_upload_dir();
+	$upload_path = $uploads['basedir'];
+	define( 'UPLOADS_BASE_DIR', $upload_path . '/' );
 
-// Define the Library DB backups base directory
-define('LIBRARY_DB_BACKUPS_UPLOAD_DIR', UPLOADS_BASE_DIR.'wpbooklist/backups/library/db/');
+	// Define the Uploads base URL.
+	$upload_url = $uploads['baseurl'];
+	define( 'UPLOADS_BASE_URL', $upload_url . '/' );
 
-// Define the Library DB backups base directory
-define('LIBRARY_DB_BACKUPS_UPLOAD_URL', UPLOADS_BASE_URL.'wpbooklist/backups/library/db/');
+	// Define the Library Stylepaks base directory.
+	define( 'LIBRARY_STYLEPAKS_UPLOAD_DIR', UPLOADS_BASE_DIR . 'wpbooklist/stylepaks/library/' );
 
-// Define the page templates base directory
-define('PAGE_POST_TEMPLATES_DEFAULT_DIR', ROOT_DIR.'includes/templates/');
+	// Define the Library Stylepaks base url.
+	define( 'LIBRARY_STYLEPAKS_UPLOAD_URL', UPLOADS_BASE_URL . 'wpbooklist/stylepaks/library/' );
 
-// Define the edit page offset
-define('EDIT_PAGE_OFFSET', 100);
+	// Define the Posts Stylepaks base directory.
+	define( 'POST_TEMPLATES_UPLOAD_DIR', UPLOADS_BASE_DIR . 'wpbooklist/templates/posts/' );
 
-// Loading textdomain
-load_plugin_textdomain( 'wpbooklist', false, ROOT_DIR.'languages' );
+	// Define the Posts Stylepaks base url.
+	define( 'POST_TEMPLATES_UPLOAD_URL', UPLOADS_BASE_URL . 'wpbooklist/templates/posts/' );
 
+	// Define the Pages Stylepaks base directory.
+	define( 'PAGE_TEMPLATES_UPLOAD_DIR', UPLOADS_BASE_DIR . 'wpbooklist/templates/pages/' );
+
+	// Define the Pages Stylepaks base url.
+	define( 'PAGE_TEMPLATES_UPLOAD_URL', UPLOADS_BASE_URL . 'wpbooklist/templates/pages/' );
+
+	// Define the Library DB backups base directory.
+	define( 'LIBRARY_DB_BACKUPS_UPLOAD_DIR', UPLOADS_BASE_DIR . 'wpbooklist/backups/library/db/' );
+
+	// Define the Library DB backups base directory.
+	define( 'LIBRARY_DB_BACKUPS_UPLOAD_URL', UPLOADS_BASE_URL . 'wpbooklist/backups/library/db/' );
+
+	// Define the page templates base directory.
+	define( 'PAGE_POST_TEMPLATES_DEFAULT_DIR', ROOT_DIR . 'includes/templates/' );
+
+	// Define the edit page offset.
+	define( 'EDIT_PAGE_OFFSET', 100 );
+
+/* END OF CONSTANT DEFINITIONS */
+
+
+/* CLASS INSTANTIATIONS */
+
+	// Call the class found in wpbooklist-functions.php.
+	$wp_book_list_general_functions = new WPBookList_General_Functions();
+
+	// Call the class found in class-wpbooklist-rest-functions.php.
+	$wp_book_list_rest_functions = new WPBookList_Rest_Functions();
+
+
+/* END CLASS INSTANTIATIONS */
+
+
+
+/*
 // For admin messages
 add_action( 'admin_notices', 'wpbooklist_jre_for_reviews_and_wpbooklist_admin_notice__success' );
 
@@ -133,10 +160,10 @@ add_action( 'admin_menu', 'wpbooklist_jre_my_admin_menu' );
 add_action( 'init', 'wpbooklist_jre_register_table_name', 1 );
 
 // Function to run any code that is needed to modify the plugin between different versions
-add_action( 'plugins_loaded', 'wpbooklist_upgrade_function');
+add_action( 'plugins_loaded', 'wpbooklist_upgrade_function' );
 
 // Handles the popup that appears when the user deactivates WPBookList
-add_action( 'admin_footer', 'wpbooklist_exit_survey');
+add_action( 'admin_footer', 'wpbooklist_exit_survey' );
 
 // Creates tables upon activation
 register_activation_hook( __FILE__, 'wpbooklist_jre_create_tables' );
@@ -145,55 +172,55 @@ register_activation_hook( __FILE__, 'wpbooklist_jre_create_tables' );
 //register_uninstall_hook( __FILE__, 'wpbooklist_jre_delete_tables' );
 
 // Adding the general admin css file
-add_action('admin_enqueue_scripts', 'wpbooklist_jre_plugin_general_admin_style' );
+add_action( 'admin_enqueue_scripts', 'wpbooklist_jre_plugin_general_admin_style' );
 
 // Adding the admin template css file
-add_action('admin_enqueue_scripts', 'wpbooklist_jre_plugin_admin_template_style' );
+add_action( 'admin_enqueue_scripts', 'wpbooklist_jre_plugin_admin_template_style' );
 
 // Adding the posts & pages css file
-add_action('wp_enqueue_scripts', 'wpbooklist_jre_posts_pages_default_style' );
+add_action( 'wp_enqueue_scripts', 'wpbooklist_jre_posts_pages_default_style' );
 
 // Adding the front-end library ui css file
-add_action('wp_enqueue_scripts', 'wpbooklist_jre_frontend_library_ui_default_style');
+add_action( 'wp_enqueue_scripts', 'wpbooklist_jre_frontend_library_ui_default_style' );
 
 // Adding the front-end storytime ui css file
-add_action('wp_enqueue_scripts', 'wpbooklist_jre_frontend_storytime_style');
+add_action( 'wp_enqueue_scripts', 'wpbooklist_jre_frontend_storytime_style' );
 
 // Adding Colorbox css file
-add_action('wp_enqueue_scripts', 'wpbooklist_jre_plugin_colorbox_style' );
-add_action('admin_enqueue_scripts', 'wpbooklist_jre_plugin_colorbox_style' );
+add_action( 'wp_enqueue_scripts', 'wpbooklist_jre_plugin_colorbox_style' );
+add_action( 'admin_enqueue_scripts', 'wpbooklist_jre_plugin_colorbox_style' );
 
 // Code for adding the frontend sort/search CSS file
-add_action('wp_enqueue_scripts', 'wpbooklist_jre_plugin_sort_search_style' );
+add_action( 'wp_enqueue_scripts', 'wpbooklist_jre_plugin_sort_search_style' );
 
 // Adding the form check js file
-add_action('admin_enqueue_scripts', 'wpbooklist_form_checks_js' );
+add_action( 'admin_enqueue_scripts', 'wpbooklist_form_checks_js' );
 
 // Adding the html entities decode js file
-//add_action('admin_enqueue_scripts', 'wpbooklist_he_js' );
+//add_action( 'admin_enqueue_scripts', 'wpbooklist_he_js' );
 
 // Adding the jquery masked js file
-add_action('admin_enqueue_scripts', 'wpbooklist_jquery_masked_input_js' );
+add_action( 'admin_enqueue_scripts', 'wpbooklist_jquery_masked_input_js' );
 
 // Code for adding the jquery readmore file for text blocks like description and notes
-add_action('wp_enqueue_scripts', 'wpbooklist_jquery_readmore_js' );
+add_action( 'wp_enqueue_scripts', 'wpbooklist_jquery_readmore_js' );
 
 // Adding the front-end library shortcode
-add_shortcode('wpbooklist_shortcode', 'wpbooklist_jre_plugin_dynamic_shortcode_function');
+add_shortcode( 'wpbooklist_shortcode', 'wpbooklist_jre_plugin_dynamic_shortcode_function' );
 
 // Shortcode that allows a book image to be placed on a page
-add_shortcode('showbookcover', 'wpbooklist_book_cover_shortcode');
+add_shortcode( 'showbookcover', 'wpbooklist_book_cover_shortcode' );
 
 // Shortcode that displays StoryTime on the frontend
-add_shortcode('wpbooklist_storytime', 'wpbooklist_storytime_shortcode');
+add_shortcode( 'wpbooklist_storytime', 'wpbooklist_storytime_shortcode' );
 
 // Adding colorbox JS file on both front-end and dashboard
-add_action('admin_enqueue_scripts', 'wpbooklist_jre_plugin_colorbox_script' );
-add_action('wp_enqueue_scripts', 'wpbooklist_jre_plugin_colorbox_script' );
+add_action( 'admin_enqueue_scripts', 'wpbooklist_jre_plugin_colorbox_script' );
+add_action( 'wp_enqueue_scripts', 'wpbooklist_jre_plugin_colorbox_script' );
 
 // Adding AddThis sharing JS file
-add_action('admin_enqueue_scripts', 'wpbooklist_jre_plugin_addthis_script' );
-add_action('wp_enqueue_scripts', 'wpbooklist_jre_plugin_addthis_script' );
+add_action( 'admin_enqueue_scripts', 'wpbooklist_jre_plugin_addthis_script' );
+add_action( 'wp_enqueue_scripts', 'wpbooklist_jre_plugin_addthis_script' );
 
 // The function that determines which template to load for WPBookList Pages
 add_filter( 'the_content', 'wpbooklist_set_page_post_template' );
@@ -415,6 +442,5 @@ add_action( 'wp_ajax_nopriv_wpbooklist_storytime_save_settings_action', 'wpbookl
 add_action( 'admin_footer', 'wpbooklist_delete_story_action_javascript' );
 add_action( 'wp_ajax_wpbooklist_delete_story_action', 'wpbooklist_delete_story_action_callback' );
 add_action( 'wp_ajax_nopriv_wpbooklist_delete_story_action', 'wpbooklist_delete_story_action_callback' );
+*/
 
-
-?>
