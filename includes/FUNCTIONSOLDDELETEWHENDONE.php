@@ -26,42 +26,8 @@ if ( ! class_exists( 'WPBookList_General_Functions', false ) ) :
 		"use strict";
 		jQuery(document).ready(function($) {
 
-		  // Making the last active library the viewed library after page reload
-		  if(window.location.href.includes('library=') && window.location.href.includes('tab=edit-books') && window.location.href.includes('WPBookList')){
-		        $('#wpbooklist-editbook-select-library').val(window.location.href.substr( window.location.href.lastIndexOf("=")+1));
-		        $('#wpbooklist-editbook-select-library').trigger("change");
-		  }
 
-		  // Highlight active tab
-		  if(window.location.href.includes('&tab=')){
-		    $('.nav-tab').each(function(){
-		      if(window.location.href == '<?php echo admin_url();?>admin.php'+$(this).attr('href')){
-		        $(this).first().css({'background-color':'#F05A1A', 'color':'white'})
-		      }
-		    })
-		  } else {
-		    $('.nav-tab').first().css({'background-color':'#F05A1A', 'color':'white'})
-		  }
-
-		  // Only allow one localization checkbox to be checked
-		  $(".wpbooklist-localization-checkbox").change(function(){
-		    $('[name=us-based-book-info]').attr('checked', false);
-		    $('[name=uk-based-book-info]').attr('checked', false);
-		    $('[name=au-based-book-info]').attr('checked', false);
-		    $('[name=br-based-book-info]').attr('checked', false);
-		    $('[name=ca-based-book-info]').attr('checked', false);
-		    $('[name=cn-based-book-info]').attr('checked', false);
-		    $('[name=fr-based-book-info]').attr('checked', false);
-		    $('[name=de-based-book-info]').attr('checked', false);
-		    $('[name=in-based-book-info]').attr('checked', false);
-		    $('[name=it-based-book-info]').attr('checked', false);
-		    $('[name=jp-based-book-info]').attr('checked', false);
-		    $('[name=mx-based-book-info]').attr('checked', false);
-		    $('[name=es-based-book-info]').attr('checked', false); 
-		    $('[name=nl-based-book-info]').attr('checked', false);
-		    $('[name=sg-based-book-info]').attr('checked', false);
-		    $(this).attr('checked', true);
-		  });
+		  
 
 		  // Handles the enabling/disabling of the 'Create a Library' button and input placeholder text
 		  $(".wpbooklist-dynamic-input").on('click', function() { 

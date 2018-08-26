@@ -879,7 +879,7 @@ if ( ! class_exists( 'WPBookList_General_Functions', false ) ) :
 			$library_stylepaks_upload_dir = LIBRARY_STYLEPAKS_UPLOAD_URL;
 
 			// Modify the 'LIBRARY_STYLEPAKS_UPLOAD_URL' to make sure we're using the right protocol, as it seems that wp_upload_dir() doesn't return https - introduced in 5.5.2.
-			$protocol = ( ! empty( filter_var( wp_unslash( $_SERVER['HTTPS'] ), FILTER_SANITIZE_STRING ) ) && 'off' !== filter_var( wp_unslash( $_SERVER['HTTPS'] ), FILTER_SANITIZE_STRING ) ) || 443 === filter_var( wp_unslash( $_SERVER['SERVER_PORT'] ), FILTER_SANITIZE_NUMBER_INT ) ? 'https://' : 'http://';
+			$protocol = ( ! empty( filter_var( wp_unslash( $_SERVER['HTTPS'] ), FILTER_SANITIZE_STRING ) ) && 'off' !== filter_var( wp_unslash( $_SERVER['HTTPS'] ), FILTER_SANITIZE_STRING ) ) || ( isset( $_SERVER['SERVER_PORT'] ) && 443 === filter_var( wp_unslash( $_SERVER['SERVER_PORT'] ), FILTER_SANITIZE_NUMBER_INT ) ) ? 'https://' : 'http://';
 
 			if ( 'https://' === $protocol || 'https' === $protocol ) {
 				if ( strpos( LIBRARY_STYLEPAKS_UPLOAD_URL, 'http://' ) !== false ) {
@@ -1066,8 +1066,8 @@ if ( ! class_exists( 'WPBookList_General_Functions', false ) ) :
 			$offset = 0;
 
 			ob_start();
-			include_once ROOT_INCLUDES_UI . 'class-frontend-library-ui.php';
-			$front_end_library_ui = new WPBookList_Front_End_Library_UI( $which_table, $action );
+			include_once ROOT_INCLUDES_UI . 'class-wpbooklist-frontend-library-ui.php';
+			$front_end_library_ui = new WPBookList_Frontend_Library_UI( $which_table, $action );
 			return ob_get_clean();
 		}
 
