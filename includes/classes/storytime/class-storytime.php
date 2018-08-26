@@ -688,6 +688,44 @@ class  WPBookList_Storytime {
 
 	}
 
+		/**
+		 * Code for adding the top admin stroytime notice/advert
+		 */
+		public function wpbooklist_jre_storytime_admin_notice() {
+			global $wpdb;
+			$table_name       = $wpdb->prefix . 'wpbooklist_jre_storytime_stories_settings';
+			$settings_results = $wpdb->get_row( "SELECT * FROM $table_name" );
+			$dismiss          = $settings_results->newnotify;
+			$dismissmessage   = $settings_results->notifydismiss;
+
+			if ( 1 === $dismiss && '' !== $settings_results->notifymessage && 1 === $dismissmessage ) {
+				$message = $settings_results->notifymessage;
+				?>
+				<div class="notice notice-success is-dismissible">
+					<p><?php echo $message; ?></p>
+				</div>
+				<?php
+			}
+		}
+
+		/** Function that displays StoryTime on the front end
+		 *
+		 *  @param array $atts - The array that contains the shortcode attributes/arguments.
+		 */
+		public function wpbooklist_storytime_shortcode( $atts ) {
+			global $wpdb;
+
+			ob_start();
+			require_once STORYTIME_CLASS_DIR . 'class-storytime.php';
+			$storytime_class = new WPBookList_Storytime( 'frontend_shortcode_output' );
+			echo $storytime_class->reader_shortcode_output;
+			return ob_get_clean();
+		}
+
+
+
+
+
 
 }
 

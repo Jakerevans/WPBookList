@@ -32,9 +32,12 @@ var sassBackendSourcePartial = ['dev/scss/_wpbooklist-backend-ui.scss'];
 var sassPostPagesSource = ['dev/scss/wpbooklist-posts-pages-default.scss'];
 var sassWatch = ['dev/scss/*.scss'];
 
-var jsBackendSource = ['dev/js/wpbooklist_admin.min.js']; // Any .js file in scripts directory
-var jsFrontendSource = ['dev/js/wpbooklist_frontend.min.js']; // Any .js file in scripts 
-var jsWatch = ['dev/js/*.js'];
+var jsBackendSource = ['dev/js/backend/*.js']; // Any .js file in scripts directory
+var jsFrontendSource = ['dev/js/frontend/*.js']; // Any .js file in scripts 
+
+
+var jsFrontendWatch = ['dev/js/frontend/*.js'];
+var jsBackendWatch = ['dev/js/backend/*.js'];
 
 
 // Task to compile Frontend SASS file
@@ -67,16 +70,18 @@ gulp.task('sassPostPagesSource', function() {
         .pipe(gulp.dest('assets/css')); // The destination for the compiled file
 });
 
-// Task to minify Backend js file
-gulp.task('jsBackendSource', function() {
+// Task to concatenate and uglify js files
+gulp.task('concatAdminJs', function() {
     gulp.src(jsBackendSource) // use jsSources
+        .pipe(concat('wpbooklist_admin.min.js')) // Concat to a file named 'script.js'
         .pipe(uglify()) // Uglify concatenated file
         .pipe(gulp.dest('assets/js')); // The destination for the concatenated and uglified file
 });
 
-// Task to minify Frontend js file
-gulp.task('jsFrontendSource', function() {
+// Task to concatenate and uglify js files
+gulp.task('concatFrontendJs', function() {
     gulp.src(jsFrontendSource) // use jsSources
+        .pipe(concat('wpbooklist_frontend.min.js')) // Concat to a file named 'script.js'
         .pipe(uglify()) // Uglify concatenated file
         .pipe(gulp.dest('assets/js')); // The destination for the concatenated and uglified file
 });
@@ -84,8 +89,9 @@ gulp.task('jsFrontendSource', function() {
 // Task to watch for changes in our file sources
 gulp.task('watch', function() {
     gulp.watch(sassWatch,['sassWatch']);
-    gulp.watch(jsWatch,['jsWatch']);
+    gulp.watch(jsFrontendWatch,['jsFrontendWatch']);
+    gulp.watch(jsBackendWatch,['jsBackendWatch']);
 });
 
 // Default gulp task
-gulp.task('default', ['sassFrontendSource', 'sassBackendSource', 'sassPostPagesSource', 'jsBackendSource', 'jsFrontendSource', 'watch']);
+gulp.task('default', ['sassFrontendSource', 'sassBackendSource', 'sassPostPagesSource', 'concatAdminJs', 'concatFrontendJs', 'watch']);

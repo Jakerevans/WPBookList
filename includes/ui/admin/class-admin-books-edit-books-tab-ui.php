@@ -9,48 +9,62 @@
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
-    exit;
+	exit;
 }
 
 if ( ! class_exists( 'WPBookList_EditBook_Tab', false ) ) :
-/**
- * WPBookList_Edit_Book Class.
- */
-class WPBookList_EditBook_Tab {
+	/**
+	 * WPBookList_Edit_Book Class.
+	 */
+	class WPBookList_EditBook_Tab {
 
-    public function __construct() {
-        require_once(CLASS_DIR.'class-admin-ui-template.php');
-        require_once(CLASS_DIR.'class-edit-book-form.php');
-        // Instantiate the class
-        $this->template = new WPBookList_Admin_UI_Template;
-        $this->form = new WPBookList_Edit_Book_Form;
-        $this->output_open_admin_container();
-        $this->output_tab_content();
-        $this->output_close_admin_container();
-        $this->output_admin_template_advert();
-    }
+		/**
+		 * Class Constructor
+		 */
+		public function __construct() {
+			require_once CLASS_DIR . 'class-admin-ui-template.php';
+			require_once CLASS_BOOK_DIR . 'class-edit-book-form.php';
 
-    private function output_open_admin_container(){
-        $title = __('Edit & Delete Books', 'wpbooklist');
-        $icon_url = ROOT_IMG_ICONS_URL.'edit.svg';
-        echo $this->template->output_open_admin_container($title, $icon_url);
-    }
+			// Instantiate the class.
+			$this->template = new WPBookList_Admin_UI_Template();
+			$this->form     = new WPBookList_Edit_Book_Form();
+			$this->output_open_admin_container();
+			$this->output_tab_content();
+			$this->output_close_admin_container();
+			$this->output_admin_template_advert();
+		}
 
-    private function output_tab_content(){
-        echo $this->form->output_edit_book_form('default', 0);
-    }
+		/**
+		 * Opens the admin container for the tab
+		 */
+		private function output_open_admin_container() {
+			$title    = __( 'Edit & Delete Books', 'wpbooklist' );
+			$icon_url = ROOT_IMG_ICONS_URL . 'edit.svg';
+			echo $this->template->output_open_admin_container( $title, $icon_url );
+		}
 
-    #TODO: Replace that 'Book Added Succesfully!' line above with a link to open the title in colorbox, once that functionality is complete
+		/**
+		 * Outputs actual tab contents
+		 */
+		private function output_tab_content() {
+			echo $this->form->output_edit_book_form( 'default', 0 );
+		}
 
-    private function output_close_admin_container(){
-        echo $this->template->output_close_admin_container();
-    }
+		/**
+		 * Closes admin container
+		 */
+		private function output_close_admin_container() {
+			echo $this->template->output_close_admin_container();
+		}
 
-    private function output_admin_template_advert(){
-        echo $this->template->output_template_advert();
-    }
+		/**
+		 * Outputs advertisment area
+		 */
+		private function output_admin_template_advert() {
+			echo $this->template->output_template_advert();
+		}
 
-}
+	}
 
 endif;
 

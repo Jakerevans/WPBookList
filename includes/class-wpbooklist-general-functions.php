@@ -1,6 +1,6 @@
 <?php
 /**
- * Class WPBookList_General_Functions - class-wpbooklist-functions.php
+ * Class WPBookList_General_Functions - class-wpbooklist-general-functions.php
  *
  * @author   Jake Evans
  * @category Admin
@@ -18,12 +18,647 @@ if ( ! class_exists( 'WPBookList_General_Functions', false ) ) :
 	 */
 	class WPBookList_General_Functions {
 
-
-
-		/** Function for loading the Form Check JS where needed
-		 *
-		 *  @param string $hook - The string that contains the admin page url info.
+		/**
+		 *  Functions that loads up all menu pages/contents, etc.
 		 */
+		public function wpbooklist_jre_admin_page_function() {
+			global $wpdb;
+			require_once ROOT_INCLUDES_UI_ADMIN_DIR . 'class-admin-master-ui.php';
+		}
+
+		/**
+		 *  Function to add the admin menu
+		 */
+		public function wpbooklist_jre_my_admin_menu() {
+			add_menu_page( 'WPBookList Options', 'WPBookList', 'manage_options', 'WPBookList-Options', array( $this, 'wpbooklist_jre_admin_page_function' ), ROOT_IMG_URL . 'icon-256x256.png', 6 );
+
+			$submenu_array = array(
+				'Books',
+				'Display Options',
+				'Settings',
+				'StoryTime',
+				'Extensions',
+				'StylePaks',
+				'Template Paks',
+			);
+
+			// Filter to allow the addition of a new subpage.
+			if ( has_filter( 'wpbooklist_add_sub_menu' ) ) {
+				$submenu_array = apply_filters( 'wpbooklist_add_sub_menu', $submenu_array );
+			}
+
+			foreach ( $submenu_array as $key => $submenu ) {
+				$menu_slug = strtolower( str_replace( ' ', '-', $submenu ) );
+				add_submenu_page( 'WPBookList-Options', 'WPBookList', $submenu, 'manage_options', 'WPBookList-Options-' . $menu_slug, array( $this, 'wpbooklist_jre_admin_page_function' ) );
+			}
+
+			remove_submenu_page( 'WPBookList-Options', 'WPBookList-Options' );
+		}
+
+		
+
+		/**
+		 *  Code for adding ajax
+		 */
+		public function wpbooklist_jre_prem_add_ajax_library() {
+
+			$html = '<script type="text/javascript">';
+
+			// Checking $protocol in HTTP or HTTPS.
+			if ( isset( $_SERVER['HTTPS'] ) && 'off' !== $_SERVER['HTTPS'] ) {
+				// This is HTTPS.
+				$protocol = 'https';
+			} else {
+				// This is HTTP.
+				$protocol = 'http';
+			}
+			$temp_ajax_path = admin_url( 'admin-ajax.php' );
+			$good_ajax_url  = $protocol . strchr( $temp_ajax_path, ':' );
+
+			$html .= 'var ajaxurl = "' . $good_ajax_url . '"';
+			$html .= '</script>';
+			echo $html;
+		}
+
+		/**
+		 *  Here we take the Constant defined in wpbooklist.php that holds the values that all our nonces will be created from, we create the actual nonces using wp_create_nonce, and the we define our new, final nonces Constant, called WPBOOKLIST_FINAL_NONCES_ARRAY.
+		 */
+		public function wpbooklist_jre_create_nonces() {
+
+			$temp_array = array();
+			foreach ( json_decode( WPBOOKLIST_NONCES_ARRAY ) as $key => $noncetext ) {
+				$nonce              = wp_create_nonce( $noncetext );
+				$temp_array[ $key ] = $nonce;
+			}
+
+			// Defining our final nonce array.
+			define( 'WPBOOKLIST_FINAL_NONCES_ARRAY', wp_json_encode( $temp_array ) );
+
+		}
+
+		/**
+		 * Adding the admin js file
+		 */
+		public function wpbooklist_jre_admin_js() {
+
+			wp_register_script( 'adminjs', ROOT_JS_URL . 'wpbooklist_admin.min.js', array( 'jquery' ), WPBOOKLIST_VERSION_NUM, true );
+
+			// Next 4-5 lines are required to allow translations of strings that would otherwise live in the wpbooklist-admin-js.js JavaScript File.
+			require_once CLASS_TRANSLATIONS_DIR . 'class-wpbooklist-translations.php';
+			$trans = new WPBookList_Translations();
+
+			// Localize the script with the appropriate translation array from the Translations class.
+			$translation_array1 = $trans->admin_js_trans_strings();
+			$translation_array2 = $trans->common_trans_strings();
+
+			// Now grab all of our Nonces to pass to the JavaScript for the Ajax functions and merge with the Translations array.
+			$final_array_of_php_values = array_merge( $translation_array1, $translation_array2 );
+			$final_array_of_php_values = array_merge( $final_array_of_php_values, json_decode( WPBOOKLIST_FINAL_NONCES_ARRAY, true ) );
+
+			// Adding some other individual values we may need.
+			$final_array_of_php_values['ROOT_IMG_ICONS_URL'] = ROOT_IMG_ICONS_URL;
+			$final_array_of_php_values['FOR_TAB_HIGHLIGHT']  = admin_url() . 'admin.php';
+
+			// Now registering/localizing our JavaScript file, passing all the PHP variables we'll need in our $final_array_of_php_values array, to be accessed from 'wphealthtracker_php_variables' object (like wphealthtracker_php_variables.nameofkey, like any other JavaScript object).
+			wp_localize_script( 'adminjs', 'wpbooklistPhpVariables', $final_array_of_php_values );
+
+			wp_enqueue_script( 'adminjs' );
+
+			return $final_array_of_php_values;
+
+		}
+
+		/**
+		 * Adding the frontend js file
+		 */
+		public function wpbooklist_jre_frontend_js() {
+
+			wp_register_script( 'frontendjs', ROOT_JS_URL . 'wpbooklist_frontend.min.js', array( 'jquery' ), WPBOOKLIST_VERSION_NUM, true );
+
+			// Next 4-5 lines are required to allow translations of strings that would otherwise live in the wpbooklist-admin-js.js JavaScript File.
+			require_once CLASS_TRANSLATIONS_DIR . 'class-wpbooklist-translations.php';
+			$trans = new WPBookList_Translations();
+
+			// Localize the script with the appropriate translation array from the Translations class.
+			$translation_array1 = $trans->frontend_js_trans_strings();
+			$translation_array2 = $trans->common_trans_strings();
+
+			// Now grab all of our Nonces to pass to the JavaScript for the Ajax functions and merge with the Translations array.
+			$final_array_of_php_values = array_merge( $translation_array1, $translation_array2 );
+			$final_array_of_php_values = array_merge( $final_array_of_php_values, json_decode( WPBOOKLIST_FINAL_NONCES_ARRAY, true ) );
+
+			// Adding some other individual values we may need.
+			$final_array_of_php_values['ROOT_IMG_ICONS_URL'] = ROOT_IMG_ICONS_URL;
+
+			// Now registering/localizing our JavaScript file, passing all the PHP variables we'll need in our $final_array_of_php_values array, to be accessed from 'wphealthtracker_php_variables' object (like wphealthtracker_php_variables.nameofkey, like any other JavaScript object).
+			wp_localize_script( 'frontendjs', 'wpbooklistPhpVariables', $final_array_of_php_values );
+
+			wp_enqueue_script( 'frontendjs' );
+
+			return $final_array_of_php_values;
+
+		}
+
+		/**
+		 *  Function to add table names to the global $wpdb
+		 */
+		public function wpbooklist_jre_register_table_name() {
+			global $wpdb;
+			$wpdb->wpbooklist_jre_saved_book_log             = "{$wpdb->prefix}wpbooklist_jre_saved_book_log";
+			$wpdb->wpbooklist_jre_saved_page_post_log        = "{$wpdb->prefix}wpbooklist_jre_saved_page_post_log";
+			$wpdb->wpbooklist_jre_saved_books_for_featured   = "{$wpdb->prefix}wpbooklist_jre_saved_books_for_featured";
+			$wpdb->wpbooklist_jre_user_options               = "{$wpdb->prefix}wpbooklist_jre_user_options";
+			$wpdb->wpbooklist_jre_page_options               = "{$wpdb->prefix}wpbooklist_jre_page_options";
+			$wpdb->wpbooklist_jre_post_options               = "{$wpdb->prefix}wpbooklist_jre_post_options";
+			$wpdb->wpbooklist_jre_list_dynamic_db_names      = "{$wpdb->prefix}wpbooklist_jre_list_dynamic_db_names";
+			$wpdb->wpbooklist_jre_book_quotes                = "{$wpdb->prefix}wpbooklist_jre_book_quotes";
+			$wpdb->wpbooklist_jre_purchase_stylepaks         = "{$wpdb->prefix}wpbooklist_jre_purchase_stylepaks";
+			$wpdb->wpbooklist_jre_color_options              = "{$wpdb->prefix}wpbooklist_jre_color_options";
+			$wpdb->wpbooklist_jre_active_extensions          = "{$wpdb->prefix}wpbooklist_jre_active_extensions";
+			$wpdb->wpbooklist_jre_storytime_stories          = "{$wpdb->prefix}wpbooklist_jre_storytime_stories";
+			$wpdb->wpbooklist_jre_storytime_stories_settings = "{$wpdb->prefix}wpbooklist_jre_storytime_stories_settings";
+		}
+
+		/**
+		 *  Runs once upon plugin activation and creates tables
+		 */
+		public function wpbooklist_jre_create_tables() {
+			require_once ABSPATH . 'wp-admin/includes/upgrade.php';
+			global $wpdb;
+			global $charset_collate;
+
+			$url      = home_url();
+			$plugin   = 'WPBookList';
+			$date     = time();
+			$postdata = http_build_query(
+				array(
+					'url'    => $url,
+					'plugin' => $plugin,
+					'date'   => $date,
+				)
+			);
+
+			$opts = array(
+				'http' =>
+					array(
+						'method'  => 'POST',
+						'header'  => 'Content-type: application/x-www-form-urlencoded',
+						'content' => $postdata,
+					),
+			);
+
+			$context      = stream_context_create( $opts );
+			$result       = '';
+			$responsecode = '';
+			if ( function_exists( 'file_get_contents' ) ) {
+				wp_remote_get( 'https://jakerevans.com/pmfileforrecord.php', false, $context );
+			} else {
+				if ( function_exists( 'curl_init' ) ) {
+					$ch = curl_init();
+					curl_setopt( $ch, CURLOPT_HEADER, 0 );
+					curl_setopt( $ch, CURLOPT_RETURNTRANSFER, 1 );
+					curl_setopt( $ch, CURLOPT_FOLLOWLOCATION, 1 );
+					curl_setopt( $ch, CURLOPT_CONNECTTIMEOUT, 10 );
+					curl_setopt( $ch, CURLOPT_TIMEOUT, 10 );
+					$url = 'https://jakerevans.com/pmfileforrecord.php';
+					curl_setopt( $ch, CURLOPT_URL, $url );
+
+					$data = array(
+						'url'    => $url,
+						'plugin' => $plugin,
+						'date'   => $date,
+					);
+
+					curl_setopt( $ch, CURLOPT_POSTFIELDS, http_build_query( $data ) );
+
+					$result = curl_exec( $ch );
+					$responsecode = curl_getinfo( $ch, CURLINFO_HTTP_CODE );
+					curl_close( $ch );
+				}
+			}
+
+			// Call this manually as we may have missed the init hook.
+			wpbooklist_jre_register_table_name();
+
+			$default_table     = $wpdb->prefix . 'wpbooklist_jre_saved_book_log';
+			$sql_create_table1 = "CREATE TABLE {$wpdb->wpbooklist_jre_saved_book_log} 
+			(
+				ID bigint(190) auto_increment,
+				title varchar(255),
+				isbn varchar(190),
+				subject varchar(255),
+				country varchar(255),
+				author varchar(255),
+				author_url varchar(255),
+				price varchar(255),
+				finished varchar(255),
+				date_finished varchar(255),
+				signed varchar(255),
+				first_edition varchar(255),
+				image varchar(255),
+				pages bigint(255),
+				pub_year bigint(255),
+				publisher varchar(255),
+				category varchar(255),
+				description MEDIUMTEXT, 
+				notes MEDIUMTEXT,
+				itunes_page varchar(255),
+				google_preview varchar(255),
+				amazon_detail_page varchar(255),
+				kobo_link varchar(255),
+				bam_link varchar(255),
+				bn_link varchar(255),
+				rating bigint(255),
+				review_iframe varchar(255),
+				similar_products MEDIUMTEXT,
+				page_yes varchar(255),
+				post_yes varchar(255),
+				book_uid varchar(255),
+				lendstatus varchar(255),
+				currentlendemail varchar(255),
+				currentlendname varchar(255),
+				lendable varchar(255),
+				copies bigint(255),
+				copieschecked bigint(255),
+				lendedon bigint(255),
+				woocommerce varchar(255),
+				authorfirst varchar(255),
+				authorlast varchar(255),
+				PRIMARY KEY  (ID),
+				KEY isbn (isbn)
+			) $charset_collate; ";
+			dbDelta( $sql_create_table1 );
+
+			$sql_create_table2 = "CREATE TABLE {$wpdb->wpbooklist_jre_user_options} 
+			(
+				ID bigint(190) auto_increment,
+				username varchar(190),
+				version varchar(255) NOT NULL DEFAULT '3.3',
+				amazonaff varchar(255) NOT NULL DEFAULT 'wpbooklistid-20',
+				amazonauth varchar(255),
+				itunesaff varchar(255) NOT NULL DEFAULT '1010lnPx',
+				enablepurchase bigint(255),
+				amazonapipublic varchar(255),
+				amazonapisecret varchar(255),
+				googleapi varchar(255),
+				appleapi varchar(255),
+				openlibraryapi varchar(255),
+				hidestats bigint(255),
+				hidesortby bigint(255),
+				hidesearch bigint(255),
+				hidefilter bigint(255),
+				hidebooktitle bigint(255),
+				hidebookimage bigint(255),
+				hidefinished bigint(255),
+				hidelibrarytitle bigint(255),
+				hideauthor bigint(255),
+				hidecategory bigint(255),
+				hidepages bigint(255),
+				hidebookpage bigint(255),
+				hidebookpost bigint(255),
+				hidepublisher bigint(255),
+				hidepubdate bigint(255),
+				hidesigned bigint(255),
+				hidesubject bigint(255),
+				hidecountry bigint(255),
+				hidefirstedition bigint(255),
+				hidefinishedsort bigint(255),
+				hidesignedsort bigint(255),
+				hidefirstsort bigint(255),
+				hidesubjectsort bigint(255),
+				hidefacebook bigint(255),
+				hidemessenger bigint(255),
+				hidetwitter bigint(255),
+				hidegoogleplus bigint(255),
+				hidepinterest bigint(255),
+				hideemail bigint(255),
+				hidefrontendbuyimg bigint(255),
+				hidefrontendbuyprice bigint(255),
+				hidecolorboxbuyimg bigint(255),
+				hidecolorboxbuyprice bigint(255),
+				hidegoodreadswidget bigint(255),
+				hidedescription bigint(255),
+				hidesimilar bigint(255),
+				hideamazonreview bigint(255),
+				hidenotes bigint(255),
+				hidebottompurchase bigint(255),
+				hidegooglepurchase bigint(255),
+				hidefeaturedtitles bigint(255),
+				hidebnpurchase bigint(255),
+				hideitunespurchase bigint(255),
+				hideamazonpurchase bigint(255),
+				hiderating bigint(255),
+				hideratingbook bigint(255),
+				hidequote bigint(255),
+				hidequotebook bigint(255),
+				sortoption varchar(255),
+				booksonpage bigint(255) NOT NULL DEFAULT 12,
+				amazoncountryinfo varchar(255) NOT NULL DEFAULT 'US',
+				stylepak varchar(255) NOT NULL DEFAULT 'Default',
+				admindismiss bigint(255) NOT NULL DEFAULT 1,
+				activeposttemplate varchar(255),
+				activepagetemplate varchar(255),
+				hidekindleprev bigint(255),
+				hidegoogleprev bigint(255),
+				hidebampurchase bigint(255),
+				hidekobopurchase bigint(255),
+				patreonaccess varchar(255),
+				patreonrefresh varchar(255),
+				patreonack varchar(255),
+				adminmessage varchar(10000) NOT NULL DEFAULT '" . ADMIN_MESSAGE . "',
+				PRIMARY KEY  (ID),
+				KEY username (username)
+			) $charset_collate; ";
+
+			// If table doesn't exist, create table and add initial data to it.
+			$test_name = $wpdb->prefix . 'wpbooklist_jre_user_options';
+			if ( $test_name !== $wpdb->get_var( "SHOW TABLES LIKE '$test_name'" ) ) {
+				dbDelta( $sql_create_table2 );
+				$table_name = $wpdb->prefix . 'wpbooklist_jre_user_options';
+				$wpdb->insert( $table_name, array( 'ID' => 1 ) );
+			}
+
+			$sql_create_table3 = "CREATE TABLE {$wpdb->wpbooklist_jre_page_options} 
+			(
+				ID bigint(190) auto_increment,
+				username varchar(190),
+				amazonaff varchar(255) NOT NULL DEFAULT 'wpbooklistid-20',
+				amazonauth varchar(255),
+				barnesaff varchar(255),
+				itunesaff varchar(255) NOT NULL DEFAULT '1010lnPx',
+				enablepurchase bigint(255),
+				hidetitle bigint(255),
+				hidebooktitle bigint(255),
+				hidebookimage bigint(255),
+				hidefinished bigint(255),
+				hideauthor bigint(255),
+				hidefrontendbuyimg bigint(255),
+				hidefrontendbuyprice bigint(255),
+				hidecolorboxbuyimg bigint(255),
+				hidecolorboxbuyprice bigint(255),
+				hidecategory bigint(255),
+				hidepages bigint(255),
+				hidepublisher bigint(255),
+				hidepubdate bigint(255),
+				hidesigned bigint(255),
+				hidesubject bigint(255),
+				hidecountry bigint(255),
+				hidefirstedition bigint(255),
+				hidefinishedsort bigint(255),
+				hidesignedsort bigint(255),
+				hidefirstsort bigint(255),
+				hidesubjectsort bigint(255),
+				hidefacebook bigint(255),
+				hidemessenger bigint(255),
+				hidetwitter bigint(255),
+				hidegoogleplus bigint(255),
+				hidepinterest bigint(255),
+				hideemail bigint(255),
+				hidedescription bigint(255),
+				hidesimilar bigint(255),
+				hideamazonreview bigint(255),
+				hidenotes bigint(255),
+				hidegooglepurchase bigint(255),
+				hidefeaturedtitles bigint(255),
+				hidebnpurchase bigint(255),
+				hideitunespurchase bigint(255),
+				hideamazonpurchase bigint(255),
+				hiderating bigint(255),
+				hidequote bigint(255),
+				hidekindleprev bigint(255),
+				hidegoogleprev bigint(255),
+				hidebampurchase bigint(255),
+				hidekobopurchase bigint(255),
+				amazoncountryinfo varchar(255) NOT NULL DEFAULT 'US',
+				stylepak varchar(255) NOT NULL DEFAULT 'Default',
+				PRIMARY KEY  (ID),
+				KEY username (username)
+			) $charset_collate; ";
+
+			// If table doesn't exist, create table and add initial data to it.
+			$test_name = $wpdb->prefix . 'wpbooklist_jre_page_options';
+			if ( $test_name !== $wpdb->get_var( "SHOW TABLES LIKE '$test_name'" ) ) {
+				dbDelta( $sql_create_table3 );
+				$table_name = $wpdb->prefix . 'wpbooklist_jre_page_options';
+				$wpdb->insert( $table_name, array( 'ID' => 1 ) );
+			}
+
+			$sql_create_table4 = "CREATE TABLE {$wpdb->wpbooklist_jre_post_options} 
+			(
+				ID bigint(190) auto_increment,
+				username varchar(190),
+				amazonaff varchar(255) NOT NULL DEFAULT 'wpbooklistid-20',
+				amazonauth varchar(255),
+				barnesaff varchar(255),
+				itunesaff varchar(255) NOT NULL DEFAULT '1010lnPx',
+				enablepurchase bigint(255),
+				hidetitle bigint(255),
+				hidebooktitle bigint(255),
+				hidebookimage bigint(255),
+				hidefinished bigint(255),
+				hideauthor bigint(255),
+				hidefrontendbuyimg bigint(255),
+				hidefrontendbuyprice bigint(255),
+				hidecolorboxbuyimg bigint(255),
+				hidecolorboxbuyprice bigint(255),
+				hidecategory bigint(255),
+				hidepages bigint(255),
+				hidepublisher bigint(255),
+				hidepubdate bigint(255),
+				hidesigned bigint(255),
+				hidesubject bigint(255),
+				hidecountry bigint(255),
+				hidefirstedition bigint(255),
+				hidefacebook bigint(255),
+				hidemessenger bigint(255),
+				hidetwitter bigint(255),
+				hidegoogleplus bigint(255),
+				hidepinterest bigint(255),
+				hideemail bigint(255),
+				hidedescription bigint(255),
+				hidesimilar bigint(255),
+				hideamazonreview bigint(255),
+				hidenotes bigint(255),
+				hidegooglepurchase bigint(255),
+				hidefeaturedtitles bigint(255),
+				hidebnpurchase bigint(255),
+				hideitunespurchase bigint(255),
+				hideamazonpurchase bigint(255),
+				hiderating bigint(255),
+				hidequote bigint(255),
+				hidekindleprev bigint(255),
+				hidegoogleprev bigint(255),
+				hidebampurchase bigint(255),
+				hidekobopurchase bigint(255),
+				amazoncountryinfo varchar(255) NOT NULL DEFAULT 'US',
+				stylepak varchar(255) NOT NULL DEFAULT 'Default',
+				PRIMARY KEY  (ID),
+				KEY username (username)
+			) $charset_collate; ";
+
+			// If table doesn't exist, create table and add initial data to it.
+			$test_name = $wpdb->prefix . 'wpbooklist_jre_post_options';
+			if ( $test_name !== $wpdb->get_var( "SHOW TABLES LIKE '$test_name'" ) ) {
+				dbDelta( $sql_create_table4 );
+				$table_name = $wpdb->prefix . 'wpbooklist_jre_post_options';
+				$wpdb->insert( $table_name, array( 'ID' => 1 ) );
+			}
+
+			$sql_create_table5 = "CREATE TABLE {$wpdb->wpbooklist_jre_list_dynamic_db_names} 
+			(
+				ID bigint(190) auto_increment,
+				stylepak varchar(190),
+				user_table_name varchar(255) NOT NULL,
+				PRIMARY KEY  (ID),
+				KEY stylepak (stylepak)
+			) $charset_collate; ";
+			dbDelta( $sql_create_table5 );
+
+			$sql_create_table6 = "CREATE TABLE {$wpdb->wpbooklist_jre_book_quotes} 
+			(
+				ID bigint(190) auto_increment,
+				placement varchar(190),
+				quote varchar(255),
+				PRIMARY KEY  (ID),
+				KEY placement (placement)
+			) $charset_collate; ";
+			dbDelta( $sql_create_table6 );
+
+			// Get the default quotes for adding to database.
+			$quote_string = wp_remote_get( QUOTES_DIR . 'defaultquotes.txt' );
+			$quote_array  = explode( ';', $quote_string );
+			$table_name   = $wpdb->prefix . 'wpbooklist_jre_book_quotes';
+			foreach ( $quote_array as $quote ) {
+
+				if ( strlen( $quote ) > 100 ) {
+					$placement = 'ui';
+				} else {
+					$placement = 'book';
+				}
+
+				if ( strlen( $quote ) > 1 ) {
+					$wpdb->insert( $table_name,
+						array(
+							'quote'     => $quote,
+							'placement' => $placement,
+						)
+					);
+				}
+			}
+
+			$sql_create_table7 = "CREATE TABLE {$wpdb->wpbooklist_jre_saved_page_post_log} 
+			(
+				ID bigint(190) auto_increment,
+				book_uid varchar(190),
+				book_title varchar(255),
+				post_id bigint(255),
+				type varchar(255),
+				post_url varchar(255),
+				author bigint(255),
+				active_template varchar(255),
+				PRIMARY KEY  (ID),
+				KEY book_uid (book_uid)
+			) $charset_collate; ";
+			dbDelta( $sql_create_table7 );
+
+			// Creating the table.
+			$sql_create_table8 = "CREATE TABLE {$wpdb->wpbooklist_jre_saved_books_for_featured} 
+			(
+				ID bigint(190) auto_increment,
+				book_title varchar(190),
+				isbn varchar(255),
+				subject varchar(255),
+				country varchar(255),
+				author varchar(255),
+				authorurl varchar(255),
+				purchaseprice varchar(255),
+				currentdate varchar(255),
+				finishedyes varchar(255),
+				finishedno varchar(255),
+				booksignedyes varchar(255),
+				booksignedno varchar(255),
+				firsteditionyes varchar(255),
+				firsteditionno varchar(255),
+				yearfinished bigint(255),
+				coverimage varchar(255),
+				pagenum bigint(255),
+				pubdate bigint(255),
+				publisher varchar(255),
+				weight bigint(255),
+				category varchar(255),
+				description MEDIUMTEXT, 
+				notes MEDIUMTEXT,
+				itunespage varchar(255),
+				googlepreview varchar(255),
+				amazondetailpage varchar(255),
+				bookrating bigint(255),
+				reviewiframe varchar(255),
+				similarproducts MEDIUMTEXT,
+				PRIMARY KEY  (ID),
+				KEY book_title (book_title)
+			) $charset_collate; ";
+			dbDelta( $sql_create_table8 );
+
+			$sql_create_table9 = "CREATE TABLE {$wpdb->wpbooklist_jre_active_extensions} 
+			(
+				ID bigint(190) auto_increment,
+				active varchar(190),
+				extension_name varchar(255),
+				PRIMARY KEY  (ID),
+				KEY active (active)
+			) $charset_collate; ";
+			dbDelta( $sql_create_table9 );
+
+			$sql_create_table10 = "CREATE TABLE {$wpdb->wpbooklist_jre_storytime_stories} 
+			(
+				ID bigint(190) auto_increment,
+				providername varchar(190),
+				providerimg varchar(255),
+				providerbio MEDIUMTEXT,
+				content LONGTEXT,
+				title varchar(255),
+				category varchar(255),
+				pageid bigint(255),
+				postid bigint(255),
+				storydate bigint(255),
+				PRIMARY KEY  (ID),
+				KEY providername (providername)
+			) $charset_collate; ";
+			dbDelta( $sql_create_table10 );
+
+			$sql_create_table11 = "CREATE TABLE {$wpdb->wpbooklist_jre_storytime_stories_settings} 
+			(
+				ID bigint(190) auto_increment,
+				getstories bigint(255),
+				createpost bigint(255),
+				createpage bigint(255),
+				storypersist bigint(255),
+				deletedefault bigint(255),
+				notifydismiss bigint(255) NOT NULL DEFAULT 1,
+				newnotify bigint(255) NOT NULL DEFAULT 1,
+				notifymessage MEDIUMTEXT,
+				storytimestylepak varchar(255) NOT NULL DEFAULT 'default',
+				PRIMARY KEY  (ID),
+				KEY getstories (getstories)
+			) $charset_collate; ";
+			dbDelta( $sql_create_table11 );
+
+			// If table doesn't exist, create table and add initial data to it.
+			$table_name = $wpdb->prefix . 'wpbooklist_jre_storytime_stories_settings';
+			if ( $table_name !== $wpdb->get_var( "SHOW TABLES LIKE '$table_name'" ) ) {
+				dbDelta( $sql_create_table11 );
+				$table_name = $wpdb->prefix . 'wpbooklist_jre_storytime_stories_settings';
+				$wpdb->insert( $table_name, array( 'ID' => 1 ) );
+			}
+
+			// Call the class that will insert default Storytime data into the table we just created. Seperate file simply because of length of content.
+			require_once CLASS_STORYTIME_DIR . 'class-storytime.php';
+			$storytime_class = new WPBookList_Storytime( 'install' );
+		}
+
+/*
+
+
 		public function wpbooklist_form_checks_js( $hook ) {
 			// Loading this up on just the WPBookList admin pages that need it.
 			if ( false !== stripos( $hook, 'WPBookList-Options' ) ) {
@@ -32,10 +667,7 @@ if ( ! class_exists( 'WPBookList_General_Functions', false ) ) :
 			}
 		}
 
-		/** Code for adding the jquery masked input file
-		 *
-		 *  @param string $hook - The string that contains the admin page url info.
-		 */
+
 		public function wpbooklist_jquery_masked_input_js( $hook ) {
 			if ( ! wp_script_is( 'wpbooklist_jquery_masked_input_js' ) && ! wp_script_is( 'wpgamelist_jquery_masked_input_js' ) ) {
 
@@ -46,9 +678,6 @@ if ( ! class_exists( 'WPBookList_General_Functions', false ) ) :
 			}
 		}
 
-		/**
-		 *  Code for adding the jquery readmore file for text blocks like description and notes
-		 */
 		public function wpbooklist_jquery_readmore_js() {
 			if ( ! wp_script_is( 'wpbooklist_jquery_readmore_js' ) && ! wp_script_is( 'wpgamelist_jquery_readmore_js' ) ) {
 				wp_register_script( 'wpbooklist_jquery_readmore_js', JAVASCRIPT_URL . 'jquery-readmore/readmore.min.js', array( 'jquery' ), WPBOOKLIST_VERSION_NUM, true );
@@ -56,10 +685,7 @@ if ( ! class_exists( 'WPBookList_General_Functions', false ) ) :
 			}
 		}
 
-		/** Code for adding the colorbox js file
-		 *
-		 * @param string $hook - The string that contains the admin page url info.
-		 */
+
 		public function wpbooklist_jre_plugin_colorbox_script( $hook ) {
 			// If on an admin page, loading this up on just the WPBookList admin pages that need it. Else, load it on the frontend that has a WPBookList Shortcode.
 			if ( is_admin() ) {
@@ -112,10 +738,7 @@ if ( ! class_exists( 'WPBookList_General_Functions', false ) ) :
 			}
 		}
 
-		/** Code for adding the addthis js file
-		 *
-		 * @param string $hook - The string that contains the admin page url info.
-		 */
+
 		public function wpbooklist_jre_plugin_addthis_script( $hook ) {
 			// If on an admin page, loading this up on just the WPBookList admin pages that need it. Else, load it on the frontend that has a WPBookList Shortcode.
 			if ( is_admin() ) {
@@ -167,6 +790,19 @@ if ( ! class_exists( 'WPBookList_General_Functions', false ) ) :
 				}
 			}
 		}
+
+*/
+
+		/**
+		 * Adding the admin css file
+		 */
+		public function wpbooklist_jre_admin_style() {
+
+			wp_register_style( 'adminui', ROOT_CSS_URL . 'wpbooklist-main-admin.css', null, WPBOOKLIST_VERSION_NUM );
+			wp_enqueue_style( 'adminui' );
+
+		}
+
 
 
 		/**
@@ -351,8 +987,678 @@ if ( ! class_exists( 'WPBookList_General_Functions', false ) ) :
 			}
 		}
 
+		/**
+		 * Code for adding the top admin notice/advert
+		 */
+		public function wpbooklist_jre_admin_notice() {
+			global $wpdb;
+			$table_name  = $wpdb->prefix . 'wpbooklist_jre_user_options';
+			$options_row = $wpdb->get_results( "SELECT * FROM $table_name" );
+			$dismiss     = $options_row[0]->admindismiss;
+
+			if ( 1 === $dismiss ) {
+				$message    = $options_row[0]->adminmessage;
+				$url        = home_url();
+				$newmessage = str_replace( 'alaainqphpaholeechoaholehomeanusurlalparpascaholeainqara', $url, $message );
+				$newmessage = str_replace( 'asq', "'", $newmessage );
+				$newmessage = str_replace( 'hshmrk', '#', $newmessage );
+				$newmessage = str_replace( 'ampersand', '&', $newmessage );
+				$newmessage = str_replace( 'adq', '"', $newmessage );
+				$newmessage = str_replace( 'aco', ':', $newmessage );
+				$newmessage = str_replace( 'asc', ';', $newmessage );
+				$newmessage = str_replace( 'aslash', '/', $newmessage );
+				$newmessage = str_replace( 'ahole', ' ', $newmessage );
+				$newmessage = str_replace( 'ara', '>', $newmessage );
+				$newmessage = str_replace( 'ala', '<', $newmessage );
+				$newmessage = str_replace( 'anem', '!', $newmessage );
+				$newmessage = str_replace( 'dash', '-', $newmessage );
+				$newmessage = str_replace( 'akomma', ', ', $newmessage );
+				$newmessage = str_replace( 'anequal', '=', $newmessage );
+				$newmessage = str_replace( 'dot', '.', $newmessage );
+				$newmessage = str_replace( 'anus', '_', $newmessage );
+				$newmessage = str_replace( 'adollar', '$', $newmessage );
+				$newmessage = str_replace( 'ainq', '?', $newmessage );
+				$newmessage = str_replace( 'alp', '( ', $newmessage );
+				$newmessage = str_replace( 'arp', ')', $newmessage );
+				?>
+				<div class="notice notice-success is-dismissible">
+					<p><?php echo $newmessage; ?></p>
+				</div>
+				<?php
+			}
+		}
+
+		/** Function to allow users to specify which table they want displayed by passing as an argument in the shortcode
+		 *
+		 *  @param array $atts - The array that contains the shortcode attributes/arguments.
+		 */
+		public function wpbooklist_jre_plugin_dynamic_shortcode_function( $atts ) {
+			global $wpdb;
+
+			extract(
+				shortcode_atts(
+					array(
+						'table'  => $wpdb->prefix . "wpbooklist_jre_saved_book_log",
+						'action' => 'colorbox',
+					),
+				$atts )
+			);
+
+			// Set up the table.
+			if ( isset( $atts['table'] ) ) {
+				$which_table = $wpdb->prefix . 'wpbooklist_jre_' . $table;
+			} else {
+				$which_table = $wpdb->prefix . 'wpbooklist_jre_saved_book_log';
+			}
+
+			// Set up the action taken when cover image is clicked on.
+			if ( isset( $atts['action'] ) ) {
+				$action = $atts['action'];
+			} else {
+				$action = 'colorbox';
+			}
+
+			if ( null === $atts ) {
+				$which_table = $wpdb->prefix . 'wpbooklist_jre_saved_book_log';
+				$action      = 'colorbox';
+			}
+
+			$offset = 0;
+
+			ob_start();
+			include_once ROOT_INCLUDES_UI . 'class-frontend-library-ui.php';
+			$front_end_library_ui = new WPBookList_Front_End_Library_UI( $which_table, $action );
+			return ob_get_clean();
+		}
 
 
+		/** The function that determines which template to load for WPBookList Pages/Posts
+		 *
+		 *  @param string $content - Post/Page content.
+		 */
+		public function wpbooklist_set_page_post_template( $content ) {
+			global $wpdb;
+
+			$id          = get_the_id();
+			$blog_url    = get_permalink( get_option( 'page_for_posts' ) );
+			$actual_link = ( isset( $_SERVER['HTTPS'] ) ? 'https' : 'http' ) . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+
+			$table_name = $wpdb->prefix . 'wpbooklist_jre_saved_page_post_log';
+			$page_post_row = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM $table_name WHERE post_id = %d", $id ) );
+
+			// If current page/post is a WPBookList Page or Post...
+			if ( null !== $page_post_row ) {
+
+				if ( 'page' === $page_post_row->type ) {
+					$table_name       = $wpdb->prefix . 'wpbooklist_jre_page_options';
+					$options_page_row = $wpdb->get_row( "SELECT * FROM $table_name" );
+				}
+
+				if ( 'post' === $page_post_row->type ) {
+					$table_name       = $wpdb->prefix . 'wpbooklist_jre_post_options';
+					$options_post_row = $wpdb->get_row( "SELECT * FROM $table_name" );
+				}
+
+				$options_table_name  = $wpdb->prefix . 'wpbooklist_jre_user_options';
+				$options_row         = $wpdb->get_row( "SELECT * FROM $options_table_name" );
+				$amazon_country_info = $options_row->amazoncountryinfo;
+				$table_name          = $wpdb->prefix . 'wpbooklist_jre_saved_book_log';
+				$book_row            = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM $table_name WHERE book_uid = %s", $page_post_row->book_uid ) );
+
+				// If book wasn't found in default library, loop through and search custom libraries.
+				if ( null === $book_row ) {
+					$table_name = $wpdb->prefix . 'wpbooklist_jre_list_dynamic_db_names';
+					$db_row     = $wpdb->get_results( "SELECT * FROM $table_name" );
+
+					foreach ( $db_row as $row ) {
+						$table_name = $wpdb->prefix . 'wpbooklist_jre_' . $row->user_table_name;
+						$book_row = $wpdb->get_row( $wpdb->prepare("SELECT * FROM $table_name WHERE book_uid = %s", $page_post_row->book_uid ) );
+						if ( null === $book_row ) {
+							continue;
+						} else {
+							break;
+						}
+					}
+				}
+
+				switch ( $amazon_country_info ) {
+					case 'au':
+						$book_row->amazon_detail_page = str_replace( '.com', '.com.au', $book_row->amazon_detail_page );
+						$book_row->$review_iframe     = str_replace( '.com', '.com.au', $this->$review_iframe );
+						break;
+					case 'br':
+						$book_row->amazon_detail_page = str_replace( '.com', '.com.br', $book_row->amazon_detail_page );
+						$book_row->review_iframe      = str_replace( '.com', '.com.br', $book_row->review_iframe );
+						break;
+					case 'ca':
+						$book_row->amazon_detail_page = str_replace( '.com', '.ca', $book_row->amazon_detail_page );
+						$book_row->review_iframe      = str_replace( '.com', '.ca', $book_row->review_iframe );
+						break;
+					case 'cn':
+						$book_row->amazon_detail_page = str_replace( '.com', '.cn', $book_row->amazon_detail_page );
+						$book_row->review_iframe      = str_replace( '.com', '.cn', $book_row->review_iframe );
+						break;
+					case 'fr':
+						$book_row->amazon_detail_page = str_replace( '.com', '.fr', $book_row->amazon_detail_page );
+						$book_row->review_iframe      = str_replace( '.com', '.fr', $book_row->review_iframe );
+						break;
+					case 'de':
+						$book_row->amazon_detail_page = str_replace( '.com', '.de', $book_row->amazon_detail_page );
+						$book_row->review_iframe      = str_replace( '.com', '.de', $book_row->review_iframe );
+						break;
+					case 'in':
+						$book_row->amazon_detail_page = str_replace( '.com', '.in', $book_row->amazon_detail_page );
+						$book_row->review_iframe      = str_replace( '.com', '.in', $book_row->review_iframe );
+						break;
+					case 'it':
+						$book_row->amazon_detail_page = str_replace( '.com', '.it', $book_row->amazon_detail_page );
+						$book_row->review_iframe      = str_replace( '.com', '.it', $book_row->review_iframe );
+						break;
+					case 'jp':
+						$book_row->amazon_detail_page = str_replace( '.com', '.co.jp', $book_row->amazon_detail_page );
+						$book_row->review_iframe      = str_replace( '.com', '.co.jp', $book_row->review_iframe );
+						break;
+					case 'mx':
+						$book_row->amazon_detail_page = str_replace( '.com', '.com.mx', $book_row->amazon_detail_page );
+						$book_row->review_iframe      = str_replace( '.com', '.com.mx', $book_row->review_iframe );
+						break;
+					case 'nl':
+						$book_row->amazon_detail_page = str_replace( '.com', '.nl', $book_row->amazon_detail_page );
+						$book_row->review_iframe      = str_replace( '.com', '.nl', $book_row->review_iframe );
+						break;
+					case 'es':
+						$book_row->amazon_detail_page = str_replace( '.com', '.es', $book_row->amazon_detail_page );
+						$book_row->review_iframe      = str_replace( '.com', '.es', $book_row->review_iframe );
+						break;
+					case 'uk':
+						$book_row->amazon_detail_page = str_replace( '.com', '.co.uk', $book_row->amazon_detail_page );
+						$book_row->review_iframe      = str_replace( '.com', '.co.uk', $book_row->review_iframe );
+						break;
+					case 'sg':
+						$this->amazon_detail_page = str_replace( '.com', '.com.sg', $this->amazon_detail_page );
+						$this->review_iframe      = str_replace( '.com', '.com.sg', $this->review_iframe );
+						break;
+					default:
+
+				}
+
+				// Getting/creating quotes.
+				$quotes        = wp_remote_get( QUOTES_DIR . 'defaultquotes.txt' );
+				$quotes_array  = explode( ';', $quotes );
+				$quote         = $quotes_array[ array_rand( $quotes_array ) ];
+				$quote_array_2 = explode( '-', $quote );
+
+				if ( 2 === count( $quote_array_2 ) ) {
+					$quote = '<span id="wpbooklist-quote-italic">' . $quote_array_2[0] . '</span> - <span id="wpbooklist-quote-bold">' . $quote_array_2[1] . '</span>';
+				}
+
+				// Getting Similar titles.
+				if ( 'post' === $page_post_row->type ) {
+					$similar_string = '<span id="wpbooklist-post-span-hidden" style="display:none;"></span>';
+				}
+
+				if ( 'page' === $page_post_row->type ) {
+					$similar_string = '<span id="wpbooklist-page-span-hidden" style="display:none;"></span>';
+				}
+
+				$similarproductsarray   = explode( ';bsp;', $book_row->similar_products );
+				$similarproductsarray   = array_unique( $similarproductsarray );
+				$similar_products_array = array_values( $similarproductsarray );
+
+				foreach ( $similar_products_array as $key => $prod ) {
+					$arr  = explode( '---', $prod, 2 );
+					$asin = $arr[0];
+
+					// Removing my Affiliate ID, as it's only needed for initial API calls when Adding/Editing/Searching for books.
+					if ( $options_row->amazonaff == 'wpbooklistid-20' ) {
+						$options_row->amazonaff = '';
+					}
+
+					$image = 'http://images.amazon.com/images/P/' . $asin . '.01.LZZZZZZZ.jpg';
+					$url   = 'https://www.amazon.com/dp/' . $asin . '?tag=' . $options_row->amazonaff;
+					if ( strlen( $image ) > 51 ) {
+						if ( 'page' === $page_post_row->type ) {
+							$similar_string = $similar_string . '<a class="wpbooklist-similar-link-post" target="_blank" href="' . $url . '"><img class="wpbooklist-similar-image-page" src="' . $image . '" /></a>';
+						}
+
+						if ( 'post' === $page_post_row->type ) {
+							$similar_string = $similar_string . '<a class="wpbooklist-similar-link-post" target="_blank" href="' . $url . '"><img class="wpbooklist-similar-image-post" src="' . $image . '" /></a>';
+						}
+					}
+				}
+
+				$similar_string       = $similar_string . '</div>';
+
+				$table_name_options   = $wpdb->prefix . 'wpbooklist_jre_user_options';
+				$row = $wpdb->get_row( "SELECT * FROM $table_name_options" );
+				$active_post_template = $row->activeposttemplate;
+				$active_page_template = $row->activepagetemplate;
+
+				// Double-check that Amazon review isn't expired.
+				require_once CLASS_DIR . 'class-book.php';
+				$book = new WPBookList_Book( $book_row->ID, $table_name );
+				$book->refresh_amazon_review( $book_row->ID, $table_name );
+
+				// Removing my Affiliate ID, as it's only needed for initial API calls when Adding/Editing/Searching for books.
+				if ( false !== stripos( $book_row->amazon_detail_page, 'tag=wpbooklistid-20' ) ) {
+					$book_row->amazon_detail_page = str_replace( 'tag=wpbooklistid-20', '', $book_row->amazon_detail_page );
+				}
+
+				if ( 'page' === $page_post_row->type ) {
+
+					switch ( $active_page_template ) {
+						case 'Page-Template-1':
+							include PAGE_TEMPLATES_UPLOAD_DIR . 'Page-Template-1.php';
+							return $content . $string1 . $string2 . $string3 . $string4 . $string5 . $string6 . $string7 . $string8 . $string9 . $string10 . $string11 . $string12 . $string13 . $string14 . $string15 . $string16 . $string17 . $string18 . $string19 . $string20 . $string21 . $string22 . $string23 . $string24 . $string25 . $string26 . $string27 . $string28 . $string29 . $string30 . $string31 . $string32 . $string33 . $string34 . $string35 . $string36 . $string37 . $string38 . $string39 . $string40 . $string41 . $string42 . $string43 . $string44 . $string45 . $string46 . $string47;
+						break;
+						case 'Page-Template-2':
+							include PAGE_TEMPLATES_UPLOAD_DIR . 'Page-Template-2.php';
+							return $content . $string1 . $string2 . $string3 . $string4 . $string5 . $string6 . $string7 . $string8 . $string9 . $string10 . $string11 . $string12 . $string13 . $string14 . $string15 . $string16 . $string17 . $string18 . $string19 . $string20 . $string21 . $string22 . $string23 . $string24 . $string25 . $string26 . $string27 . $string28 . $string29 . $string30 . $string31 . $string32 . $string33 . $string34 . $string35 . $string36 . $string37 . $string38 . $string39 . $string40 . $string41 . $string42 . $string43 . $string44 . $string45 . $string46 . $string47;
+						break;
+						case 'Page-Template-3':
+							include PAGE_TEMPLATES_UPLOAD_DIR . 'Page-Template-3.php';
+							return $content . $string1 . $string2 . $string3 . $string4 . $string5 . $string6 . $string7 . $string8 . $string9 . $string10 . $string11 . $string12 . $string13 . $string14 . $string15 . $string16 . $string17 . $string18 . $string19 . $string20 . $string21 . $string22 . $string23 . $string24 . $string25 . $string26 . $string27 . $string28 . $string29 . $string30 . $string31 . $string32 . $string33 . $string34 . $string35 . $string36 . $string37 . $string38 . $string39 . $string40 . $string41 . $string42 . $string43 . $string44 . $string45 . $string46 . $string47;
+						break;
+						case 'Page-Template-4':
+							include PAGE_TEMPLATES_UPLOAD_DIR . 'Page-Template-4.php';
+							return $content . $string1 . $string2 . $string3 . $string4 . $string5 . $string6 . $string7 . $string8 . $string9 . $string10 . $string11 . $string12 . $string13 . $string14 . $string15 . $string16 . $string17 . $string18 . $string19 . $string20 . $string21 . $string22 . $string23 . $string24 . $string25 . $string26 . $string27 . $string28 . $string29 . $string30 . $string31 . $string32 . $string33 . $string34 . $string35 . $string36 . $string37 . $string38 . $string39 . $string40 . $string41 . $string42 . $string43 . $string44 . $string45 . $string46 . $string47;
+						break;
+						case 'Page-Template-5':
+							include PAGE_TEMPLATES_UPLOAD_DIR . 'Page-Template-5.php';
+							return $content . $string1 . $string2 . $string3 . $string4 . $string5 . $string6 . $string7 . $string8 . $string9 . $string10 . $string11 . $string12 . $string13 . $string14 . $string15 . $string16 . $string17 . $string18 . $string19 . $string20 . $string21 . $string22 . $string23 . $string24 . $string25 . $string26 . $string27 . $string28 . $string29 . $string30 . $string31 . $string32 . $string33 . $string34 . $string35 . $string36 . $string37 . $string38 . $string39 . $string40 . $string41 . $string42 . $string43 . $string44 . $string45 . $string46 . $string47;
+						break;
+						default:
+							include PAGE_POST_TEMPLATES_DEFAULT_DIR . 'page-template-default.php';
+							return $content . $string1 . $string2 . $string3 . $string4 . $string5 . $string6 . $string7 . $string8 . $string9 . $string10 . $string11 . $string12 . $string13 . $string14 . $string15 . $string16 . $string17 . $string18 . $string19 . $string20 . $string21 . $string22 . $string23 . $string50 . $string51 . $string24 . $string25 . $string26 . $string27 . $string28 . $string29 . $string30 . $string31 . $string32 . $string33 . $string34 . $string35 . $string36 . $string37 . $string38 . $string39 . $string40 . $string48 . $string49 . $string41 . $string42 . $string43 . $string44 . $string45 . $string46 . $string47;
+						break;
+					}
+				}
+
+				if ( 'post' === $page_post_row->type ) {
+
+					switch ( $active_post_template ) {
+						case 'Post-Template-1':
+							include PAGE_TEMPLATES_UPLOAD_DIR . 'Post-Template-1.php';
+							return $content . $string1 . $string2 . $string3 . $string4 . $string5 . $string6 . $string7 . $string8 . $string9 . $string10 . $string11 . $string12 . $string13 . $string14 . $string15 . $string16 . $string17 . $string18 . $string19 . $string20 . $string21 . $string22 . $string23 . $string24 . $string25 . $string26 . $string27 . $string28 . $string29 . $string30 . $string31 . $string32 . $string33 . $string34 . $string35 . $string36 . $string37 . $string38 . $string39 . $string40 . $string41 . $string42 . $string43 . $string44 . $string45 . $string46 . $string47;
+							break;
+						case 'Post-Template-2':
+							include PAGE_TEMPLATES_UPLOAD_DIR . 'Post-Template-2.php';
+							return $content . $string1 . $string2 . $string3 . $string4 . $string5 . $string6 . $string7 . $string8 . $string9 . $string10 . $string11 . $string12 . $string13 . $string14 . $string15 . $string16 . $string17 . $string18 . $string19 . $string20 . $string21 . $string22 . $string23 . $string24 . $string25 . $string26 . $string27 . $string28 . $string29 . $string30 . $string31 . $string32 . $string33 . $string34 . $string35 . $string36 . $string37 . $string38 . $string39 . $string40 . $string41 . $string42 . $string43 . $string44 . $string45 . $string46 . $string47;
+							break;
+						case 'Post-Template-3':
+							include PAGE_TEMPLATES_UPLOAD_DIR . 'Post-Template-3.php';
+							return $content . $string1 . $string2 . $string3 . $string4 . $string5 . $string6 . $string7 . $string8 . $string9 . $string10 . $string11 . $string12 . $string13 . $string14 . $string15 . $string16 . $string17 . $string18 . $string19 . $string20 . $string21 . $string22 . $string23 . $string24 . $string25 . $string26 . $string27 . $string28 . $string29 . $string30 . $string31 . $string32 . $string33 . $string34 . $string35 . $string36 . $string37 . $string38 . $string39 . $string40 . $string41 . $string42 . $string43 . $string44 . $string45 . $string46 . $string47;
+							break;
+						case 'Post-Template-4':
+							include PAGE_TEMPLATES_UPLOAD_DIR . 'Post-Template-4.php';
+							return $content . $string1 . $string2 . $string3 . $string4 . $string5 . $string6 . $string7 . $string8 . $string9 . $string10 . $string11 . $string12 . $string13 . $string14 . $string15 . $string16 . $string17 . $string18 . $string19 . $string20 . $string21 . $string22 . $string23 . $string24 . $string25 . $string26 . $string27 . $string28 . $string29 . $string30 . $string31 . $string32 . $string33 . $string34 . $string35 . $string36 . $string37 . $string38 . $string39 . $string40 . $string41 . $string42 . $string43 . $string44 . $string45 . $string46 . $string47;
+							break;
+						case 'Post-Template-5':
+							include PAGE_TEMPLATES_UPLOAD_DIR . 'Post-Template-5.php';
+							return $content . $string1 . $string2 . $string3 . $string4 . $string5 . $string6 . $string7 . $string8 . $string9 . $string10 . $string11 . $string12 . $string13 . $string14 . $string15 . $string16 . $string17 . $string18 . $string19 . $string20 . $string21 . $string22 . $string23 . $string24 . $string25 . $string26 . $string27 . $string28 . $string29 . $string30 . $string31 . $string32 . $string33 . $string34 . $string35 . $string36 . $string37 . $string38 . $string39 . $string40 . $string41 . $string42 . $string43 . $string44 . $string45 . $string46 . $string47;
+							break;
+						default:
+							include PAGE_POST_TEMPLATES_DEFAULT_DIR . 'post-template-default.php';
+							return $content . $string1 . $string2 . $string3 . $string4 . $string5 . $string6 . $string7 . $string8 . $string9 . $string10 . $string11 . $string12 . $string13 . $string14 . $string15 . $string16 . $string17 . $string18 . $string19 . $string20 . $string21 . $string22 . $string23 . $string50 . $string51 . $string24 . $string25 . $string26 . $string27 . $string28 . $string29 . $string30 . $string31 . $string32 . $string33 . $string34 . $string35 . $string36 . $string37 . $string38 . $string39 . $string40 . $string48 . $string49 . $string41 . $string42 . $string43 . $string44 . $string45 . $string46 . $string47;
+							break;
+					}
+				}
+
+				switch ( $page_post_row->active_template ) {
+					case 'template1':
+						if ( 'page' === $page_post_row->type ) {
+							include PAGE_TEMPLATES_UPLOAD_DIR . 'page-template-1.php';
+						} else {
+							include PAGE_TEMPLATES_UPLOAD_DIR . 'post-template-1.php';
+						}
+						break;
+					case 'template2':
+						if ( 'page' === $page_post_row->type ) {
+							include PAGE_TEMPLATES_UPLOAD_DIR . 'page-template-2.php';
+						} else {
+							include PAGE_TEMPLATES_UPLOAD_DIR . 'post-template-2.php';
+						}
+						break;
+					case 'default':
+						if ( 'page' === $page_post_row->type ) {
+							include PAGE_TEMPLATES_DEFAULT_DIR . 'page-template-default.php';
+
+							// Double-check that Amazon review isn't expired.
+							require_once CLASS_DIR . 'class-book.php';
+							$book = new WPBookList_Book( $book_row->ID, $table_name );
+							$book->refresh_amazon_review( $book_row->ID, $table_name );
+
+							return $content . $string1 . $string2 . $string3 . $string4 . $string5 . $string6 . $string7 . $string8 . $string9 . $string10 . $string11 . $string12 . $string13 . $string14 . $string15 . $string16 . $string17 . $string18 . $string19 . $string20 . $string21 . $string22 . $string23 . $string24 . $string25 . $string26 . $string27 . $string28 . $string29 . $string30 . $string31 . $string32 . $string33 . $string34 . $string35 . $string36 . $string37 . $string38 . $string39 . $string40 . $string41 . $string42 . $string43 . $string44 . $string45 . $string46 . $string47;
+
+						} else {
+
+							include PAGE_TEMPLATES_DEFAULT_DIR . 'post-template-default.php';
+
+							// Double-check that Amazon review isn't expired.
+							require_once CLASS_DIR . 'class-book.php';
+							$book = new WPBookList_Book( $book_row->ID, $table_name );
+							$book->refresh_amazon_review( $book_row->ID, $table_name );
+
+							return $content . $string1 . $string2 . $string3 . $string4 . $string5 . $string6 . $string7 . $string8 . $string9 . $string10 . $string11 . $string12 . $string13 . $string14 . $string15 . $string16 . $string17 . $string18 . $string19 . $string20 . $string21 . $string22 . $string23 . $string24 . $string25 . $string26 . $string27 . $string28 . $string29 . $string30 . $string31 . $string32 . $string33 . $string34 . $string35 . $string36 . $string37 . $string38 . $string39 . $string40 . $string41 . $string42 . $string43 . $string44 . $string45 . $string46 . $string47;
+						}
+						break;
+					default:
+						break;
+				}
+			}
+
+			// Making double-sure content gets returned.
+			return $content;
+		}
+
+		/** Shortcode function for displaying book cover image/link
+		 *
+		 *  @param array $atts - The array that contains the shortcode attributes/arguments.
+		 */
+		public function wpbooklist_book_cover_shortcode( $atts ) {
+
+			global $wpdb;
+
+			extract(
+				shortcode_atts(
+					array(
+						'table'   => $wpdb->prefix . 'saved_book_log',
+						'isbn'    => '',
+						'width'   => '100',
+						'align'   => 'left',
+						'margin'  => '5px',
+						'action'  => 'bookview',
+						'display' => 'justimage',
+					), $atts
+				)
+			);
+
+			if ( null === $atts ) {
+				$table       = $wpdb->prefix . 'wpbooklist_jre_saved_book_log';
+				$options_row = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM $table  LIMIT %d",1 ) );
+				$isbn        = $options_row[0]->isbn;
+				$width       = '100';
+
+			}
+
+			if ( ! isset( $atts['isbn'] ) && ! isset( $atts['table'] ) ) {
+				$table       = $wpdb->prefix . 'wpbooklist_jre_saved_book_log';
+				$options_row = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM $table LIMIT %d", 1 ) );
+				$isbn        = $options_row[0]->isbn;
+			}
+
+			if ( ! isset( $atts['isbn'] ) && isset( $atts['table'] ) ) {
+				$table       = $wpdb->prefix . 'wpbooklist_jre_' . strtolower( $table );
+				$options_row = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM $table  LIMIT %d", 1 ) );
+				$isbn        = $options_row[0]->isbn;
+
+			}
+
+			if ( isset( $atts['isbn'] ) && ! isset( $atts['table'] ) ) {
+				$table = $wpdb->prefix . 'wpbooklist_jre_saved_book_log';
+			}
+
+			if ( isset( $atts['isbn'] ) && isset( $atts['table'] ) ) {
+				$table = $wpdb->prefix . 'wpbooklist_jre_' . strtolower( $table );
+			}
+
+			$isbn        = str_replace( '-', '', $isbn );
+			$options_row = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM $table WHERE isbn = %s", $isbn ) );
+			if ( 0 === count( $options_row ) ) {
+				echo __( "This book isn't in your Library! Please check the ISBN/ASIN number you provided.", 'wpbooklist' );
+			} else {
+
+				$image              = $options_row[0]->image;
+				$link               = $options_row[0]->amazon_detail_page;
+				$table_name_options = $wpdb->prefix . 'wpbooklist_jre_user_options';
+				$options_results    = $wpdb->get_row( "SELECT * FROM $table_name_options" );
+
+				// Replace with user's affiliate id, if available.
+				$amazonaff = $options_results->amazonaff;
+				$link      = str_replace( 'wpbooklistid-20', $amazonaff, $link );
+
+				$amazoncountryinfo = $options_results->amazoncountryinfo;
+				switch ( $amazoncountryinfo ) {
+					case 'au':
+						$link = str_replace( '.com', '.com.au', $link );
+						break;
+					case 'br':
+						$link = str_replace( '.com', '.com.br', $link );
+						break;
+					case 'ca':
+						$link = str_replace( '.com', '.ca', $link );
+						break;
+					case 'cn':
+						$link = str_replace( '.com', '.cn', $link );
+						break;
+					case 'fr':
+						$link = str_replace( '.com', '.fr', $link );
+						break;
+					case 'de':
+						$link = str_replace( '.com', '.de', $link );
+						break;
+					case 'in':
+						$link = str_replace( '.com', '.in', $link );
+						break;
+					case 'it':
+						$link = str_replace( '.com', '.it', $link );
+						break;
+					case 'jp':
+						$link = str_replace( '.com', '.co.jp', $link );
+						break;
+					case 'mx':
+						$link = str_replace( '.com', '.com.mx', $link );
+						break;
+					case 'nl':
+						$link = str_replace( '.com', '.nl', $link );
+						break;
+					case 'es':
+						$link = str_replace( '.com', '.es', $link );
+						break;
+					case 'uk':
+						$link = str_replace( '.com', '.co.uk', $link );
+						break;
+					default:
+						$link;
+				}
+			}
+
+			$class = 'class="wpbooklist_jre_book_cover_shortcode_link wpbooklist-show-book-colorbox"';
+
+			if ( isset( $atts['action'] ) ) {
+				switch ( $atts['action'] ) {
+					case 'amazon':
+						$class = 'class="wpbooklist_jre_book_cover_shortcode_link"';
+						$link  = $link;
+						break;
+					case 'googlebooks':
+						$class = 'class="wpbooklist_jre_book_cover_shortcode_link"';
+						$link  = $options_row[0]->google_preview;
+						if ( null === $link ) {
+							$link = $options_row[0]->amazon_detail_page;
+						}
+						break;
+					case 'ibooks':
+						$class = 'class="wpbooklist_jre_book_cover_shortcode_link"';
+						$link  = $options_row[0]->itunes_page;
+						if ( null === $link ) {
+							$link = $options_row[0]->amazon_detail_page;
+						}
+						break;
+					case 'booksamillion':
+						$class = 'class="wpbooklist_jre_book_cover_shortcode_link"';
+						$link  = $options_row[0]->bam_link;
+						if ( null === $link ) {
+							$link = $options_row[0]->amazon_detail_page;
+						}
+						break;
+					case 'barnesandnoble':
+						$class = 'class="wpbooklist_jre_book_cover_shortcode_link"';
+						$link  = $options_row[0]->bn_link;
+						if ( null === $link ) {
+							$link = $options_row[0]->amazon_detail_page;
+						}
+						break;
+					case 'kobo':
+						$class = 'class="wpbooklist_jre_book_cover_shortcode_link"';
+						$link  = $options_row[0]->kobo_link;
+						if ( null === $link ) {
+							$link = $options_row[0]->amazon_detail_page;
+						}
+						break;
+					case 'bookview':
+						$class = 'class="wpbooklist_jre_book_cover_shortcode_link wpbooklist-show-book-colorbox"';
+						break;
+					default:
+						$class = 'class="wpbooklist_jre_book_cover_shortcode_link wpbooklist-show-book-colorbox"';
+						$link  = $link;
+						break;
+				}
+			} else {
+				$link  = $link;
+				$class = 'class="wpbooklist_jre_book_cover_shortcode_link wpbooklist-show-book-colorbox"';
+			}
+
+			$final_link = '<div style="float:' . $align . '; margin:' . $margin . '; margin-bottom:50px;" class="wpbooklist-shortcode-entire-container"><a  style="z-index:9; float:' . $align . '; margin:' . $margin . ';" ' . $class . ' data-booktable="' . $table . '" data-bookid="' . $options_row[0]->ID . '" ' . $class . ' target="_blank" href="' . $link . '"><img style="min-width:150px; margin-right: 5px; width:' . $width . 'px!important" src="' . $image . '"/></a>';
+
+			$display = '';
+			if ( isset( $atts['display'] ) ) {
+				switch ( $atts['display'] ) {
+					case 'justimage':
+						$display = '';
+						break;
+					case 'excerpt':
+						$final_link = str_replace( 'float:right', 'float:left', $final_link );
+						$final_link = str_replace( 'float:right', 'float:left', $final_link );
+
+						$text  = $options_row[0]->description;
+						$text  = str_replace( '<br />', ' ', html_entity_decode( $text ) );
+						$text  = str_replace( '<br/>', ' ', html_entity_decode( $text ) );
+						$text  = str_replace( '<div>', '', html_entity_decode( $text ) );
+						$text  = str_replace( '</div>', '', html_entity_decode( $text ) );
+						$limit = 40;
+
+						if ( str_word_count( $text, 0 ) > $limit ) {
+							$words = str_word_count( $text, 2 );
+							$pos   = array_keys( $words );
+							$text  = substr( $text, 0, $pos[ $limit ] ) . '...';
+						}
+
+						$title = $options_row[0]->title;
+						$limit = 10;
+
+						if ( str_word_count( $title, 0 ) > $limit ) {
+							$words = str_word_count( $title, 2 );
+							$pos   = array_keys( $words );
+							$title = substr( $title, 0, $pos[ $limit ] ) . '...';
+						}
+
+						// If the 'allow_url_fopen' directive is allowed, use getimagesize(), otherwise do the roundabout cUrl way to retrieve the remote image and determine the size.
+						if ( ini_get( 'allow_url_fopen' ) ) {
+							$size = getimagesize( $image );
+						} else {
+							$ch      = curl_init();
+							$timeout = 5;
+							curl_setopt ( $ch, CURLOPT_URL, $image );
+							curl_setopt ( $ch, CURLOPT_RETURNTRANSFER, 1 );
+							curl_setopt ( $ch, CURLOPT_CONNECTTIMEOUT, $timeout );
+							$file_contents = curl_exec( $ch );
+							curl_close( $ch );
+
+							$new_image = ImageCreateFromString( $file_contents );
+							imagejpeg( $new_image, 'temp.png', 100 );
+
+							// Get new dimensions.
+							$size = getimagesize( 'temp.png' );
+
+						}
+
+						$origwidth    = $size[0];
+						$origheight   = $size[1];
+						$final_height = ( $origheight * $width ) / $origwidth;
+						$descheight   = $final_height - 90;
+						$string1      = '';
+						$string2      = '';
+						$string3      = '';
+						$string4      = '';
+						$string5      = '';
+						$string6      = '';
+
+						$display = '
+						<div style="display:grid; height:' . $final_height . 'px" class="wpbooklist-shortcode-below-link-div">
+							<h3 class="wpbooklist-shortcode-h3" style="text-align:' . $align . ';">' . $title . '</h3>
+							<div style="text-align:' . $align . '; position:relative; bottom:5px; class="wpbooklist-shortcode-below-link-excerpt">' . $text . '</div>
+							<div class="wpbooklist-shortcode-link-holder-media" style="text-align:' . $align . '; bottom:-10px; class="wpbooklist-shortcode-purchase-links">';
+
+						if ( null !== $options_row[0]->amazon_detail_page ) {
+							$string1 = '
+							<a class="wpbooklist-purchase-img" href="' . $options_row[0]->amazon_detail_page . '" target="_blank">
+								<img src="' . ROOT_IMG_URL . 'amazon . png">
+							</a>';
+						}
+
+						$string2 = '
+						<a class="wpbooklist-purchase-img" href="http://www . barnesandnoble . com/s/' . $options_row[0]->isbn . '" target="_blank">
+							<img src="' . ROOT_IMG_URL . 'bn . png">
+						</a>';
+
+						if ( null !== $options_row[0]->google_preview ) {
+							$string3 = '
+							<a class="wpbooklist-purchase-img" href="' . $options_row[0]->google_preview . '" target="_blank">
+								<img src="' . ROOT_IMG_URL . 'googlebooks . png">
+							</a>';
+						}
+
+						if ( null !== $options_row[0]->itunes_page ) {
+							$string4 =
+							'<a class="wpbooklist-purchase-img" href="' . $options_row[0]->itunes_page . '" target="_blank">
+								<img src="' . ROOT_IMG_URL . 'ibooks . png" id="wpbooklist-itunes-img">
+							</a>';
+						}
+
+						if ( null !== $options_row[0]->bam_link ) {
+							$string5 =
+							'<a class="wpbooklist-purchase-img" href="' . $options_row[0]->bam_link . '" target="_blank">
+								<img src="' . ROOT_IMG_URL . 'bam-icon . jpg">
+							</a>';
+						}
+
+						if ( null !== $options_row[0]->kobo_link ) {
+							$string6 = '<a class="wpbooklist-purchase-img" href="' . $options_row[0]->kobo_link . '" target="_blank">
+								<img src="' . ROOT_IMG_URL . 'kobo-icon . png">
+							</a>';
+						}
+
+						$string7 = '</div></div></div>';
+						$display = $display . $string1 . $string2 . $string3 . $string4 . $string5 . $string6 . $string7;
+
+						break;
+					default:
+						$display = '';
+						break;
+				}
+			}
+			return $final_link . $display;
+		}
+
+		/**
+		 *  Function to run the compatability code in the Compat class for upgrades/updates, if stored version number doesn't match the defined global in wpbooklist.php
+		 */
+		public function wpbooklist_update_upgrade_function() {
+
+			// Get current version #.
+			global $wpdb;
+			$table_name = $wpdb->prefix . 'wpbooklist_jre_user_options';
+			$row        = $wpdb->get_row( "SELECT * FROM $table_name" );
+			$version    = $row->version;
+
+			// If version number does not match the current version number found in wpbooklist.php, call the Compat class and run upgrade functions.
+			if ( WPBOOKLIST_VERSION_NUM !== $version ) {
+				require_once CLASS_COMPAT_DIR . 'class-wpbooklist-compat-functions.php';
+				$storytime_class = new WPBookList_Compat_Functions();
+			}
+
+		}
 
 	}
 endif;

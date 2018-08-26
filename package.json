@@ -1,0 +1,29 @@
+{
+  "name": "wpbooklist",
+  "version": "1.0.0",
+  "description": "",
+  "main": "gulpfile.js",
+  "dependencies": {
+    "gulp-babel": "^7.0.1",
+    "gulp": "^3.9.1",
+    "gulp-concat": "^2.6.1",
+    "gulp-rename": "^1.4.0",
+    "gulp-util": "^3.0.8",
+    "gulp-uglify": "^3.0.1",
+    "gulp-sass": "^4.0.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Jakerevans/WPBookList.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Jakerevans/WPBookList/issues"
+  },
+  "homepage": "https://github.com/Jakerevans/WPBookList#readme"
+}

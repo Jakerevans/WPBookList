@@ -20,25 +20,13 @@
 global $wpdb;
 
 /* REQUIRE STATEMENTS */
-	require_once 'includes/class-wpbooklist-functions.php';
+	require_once 'includes/class-wpbooklist-general-functions.php';
 	require_once 'includes/ajaxfunctions.php';
 	require_once 'includes/classes/rest/class-wpbooklist-rest-functions.php';
+	require_once 'includes/classes/storytime/class-storytime.php';
 /* END REQUIRE STATEMENTS */
 
-/* MISC. INCLUSIONS & DEFINITIONS */
-
-	// Parse the wpbooklistconfig file.
-	$config_array = parse_ini_file( 'wpbooklistconfig.ini' );
-
-	// Loading textdomain.
-	load_plugin_textdomain( 'wpbooklist', false, ROOT_DIR . 'languages' );
-
-/* END MISC. INCLUSIONS & DEFINITIONS */
-
 /* CONSTANT DEFINITIONS */
-
-	// Get the default admin message for inclusion into database.
-	define( 'ADMIN_MESSAGE', $config_array['initial_admin_message'] );
 
 	// Grabbing database prefix.
 	//define( '$WPDB->PREFIX', $wpdb->prefix );
@@ -73,6 +61,15 @@ global $wpdb;
 	// Root Storytime Classes Directory.
 	define( 'CLASS_STORYTIME_DIR', ROOT_DIR . 'includes/classes/storytime/' );
 
+	// Root Compatability Classes Directory.
+	define( 'CLASS_COMPAT_DIR', ROOT_DIR . 'includes/classes/compat/' );
+
+	// Root Book Classes Directory.
+	define( 'CLASS_BOOK_DIR', ROOT_DIR . 'includes/classes/book/' );
+
+	// Root Translations Directory.
+	define( 'CLASS_TRANSLATIONS_DIR', ROOT_DIR . 'includes/classes/translations/' );
+
 	// Root Image URL .
 	define( 'ROOT_IMG_URL', ROOT_URL . 'assets/img/' );
 
@@ -81,6 +78,9 @@ global $wpdb;
 
 	// Root CSS URL .
 	define( 'ROOT_CSS_URL', ROOT_URL . 'assets/css/' );
+
+	// Root JS URL .
+	define( 'ROOT_JS_URL', ROOT_URL . 'assets/js/' );
 
 	// Root UI directory.
 	define( 'ROOT_INCLUDES_UI', ROOT_DIR . 'includes/ui/' );
@@ -127,7 +127,27 @@ global $wpdb;
 	// Define the edit page offset.
 	define( 'EDIT_PAGE_OFFSET', 100 );
 
+	// Nonces array.
+	define( 'WPBOOKLIST_NONCES_ARRAY',
+		wp_json_encode(array(
+			'adminnonce1' => 'wphealthtracker_jre_selecteduser_vitals_enter_action_callback',
+		))
+	);
+
 /* END OF CONSTANT DEFINITIONS */
+
+/* MISC. INCLUSIONS & DEFINITIONS */
+
+	// Parse the wpbooklistconfig file.
+	$config_array = parse_ini_file( 'wpbooklistconfig.ini' );
+
+	// Get the default admin message for inclusion into database.
+	define( 'ADMIN_MESSAGE', $config_array['initial_admin_message'] );
+
+	// Loading textdomain.
+	load_plugin_textdomain( 'wpbooklist', false, ROOT_DIR . 'languages' );
+
+/* END MISC. INCLUSIONS & DEFINITIONS */
 
 
 /* CLASS INSTANTIATIONS */
@@ -138,17 +158,105 @@ global $wpdb;
 	// Call the class found in class-wpbooklist-rest-functions.php.
 	$wp_book_list_rest_functions = new WPBookList_Rest_Functions();
 
+	// Call the class found in class-wpbooklist-rest-functions.php.
+	$wp_book_list_storytime = new WPBookList_StoryTime( null, null, null, null );
+
 
 /* END CLASS INSTANTIATIONS */
+
+/* FUNCTIONS FOUND IN CLASS-WPBOOKLIST-GENERAL-FUNCTIONS.PHP THAT APPLY PLUGIN-WIDE */
+
+	// For the admin pages.
+	add_action( 'admin_menu', array( $wp_book_list_general_functions, 'wpbooklist_jre_my_admin_menu' ) );
+
+	// Adding the function that will take our WPHEALTHTRACKER_NONCES_ARRAY Constant from below and create actual nonces to be passed to Javascript functions.
+	add_action( 'init', array( $wp_book_list_general_functions, 'wpbooklist_jre_create_nonces' ) );
+
+	// Adding Ajax library.
+	add_action( 'wp_head', array( $wp_book_list_general_functions, 'wpbooklist_jre_prem_add_ajax_library' ) );
+
+	// Registers table names.
+	add_action( 'init', array( $wp_book_list_general_functions, 'wpbooklist_jre_register_table_name' ) );
+
+	// Creates tables upon activation.
+	register_activation_hook( __FILE__, array( $wp_book_list_general_functions, 'wpbooklist_jre_create_tables' ) );
+
+	// Adding the front-end library ui css file.
+	add_action( 'wp_enqueue_scripts', array( $wp_book_list_general_functions, 'wpbooklist_jre_frontend_library_ui_default_style' ) );
+
+	// Adding the admin css file.
+	add_action( 'admin_enqueue_scripts', array( $wp_book_list_general_functions, 'wpbooklist_jre_admin_style' ) );
+
+	// Adding the admin js file.
+	add_action( 'admin_enqueue_scripts', array( $wp_book_list_general_functions, 'wpbooklist_jre_admin_js' ) );
+
+	// Adding the frontend js file.
+	add_action( 'wp_enqueue_scripts', array( $wp_book_list_general_functions, 'wpbooklist_jre_frontend_js' ) );
+
+	// Adding the posts & pages css file.
+	add_action( 'wp_enqueue_scripts', array( $wp_book_list_general_functions, 'wpbooklist_jre_posts_pages_default_style' ) );
+
+	// For admin messages.
+	add_action( 'admin_notices', array( $wp_book_list_general_functions, 'wpbooklist_jre_admin_notice' ) );
+
+	// Adding the front-end library shortcode.
+	add_shortcode( 'wpbooklist_shortcode', array( $wp_book_list_general_functions, 'wpbooklist_jre_plugin_dynamic_shortcode_function' ) );
+
+	// Shortcode that allows a book image to be placed on a page.
+	add_shortcode( 'showbookcover', array( $wp_book_list_general_functions, 'wpbooklist_book_cover_shortcode' ) );
+
+	// The function that determines which template to load for WPBookList Pages.
+	add_filter( 'the_content', array( $wp_book_list_general_functions, 'wpbooklist_set_page_post_template' ) );
+
+	// Function to run any code that is needed to modify the plugin between different versions.
+	add_action( 'plugins_loaded', array( $wp_book_list_general_functions, 'wpbooklist_update_upgrade_function' ) );
+
+	
+
+
+
+
+	/*
+	// Adding the form check js file.
+	add_action( 'admin_enqueue_scripts', array( $wp_book_list_general_functions, 'wpbooklist_form_checks_js' ) );
+
+	// Adding the jquery masked js file.
+	add_action( 'admin_enqueue_scripts', array( $wp_book_list_general_functions, 'wpbooklist_jquery_masked_input_js' ) );
+
+	// Code for adding the jquery readmore file for text blocks like description and notes
+	add_action( 'wp_enqueue_scripts', array( $wp_book_list_general_functions, 'wpbooklist_jquery_readmore_js' ) );
+
+	// Adding colorbox JS file on both front-end and dashboard
+	add_action( 'admin_enqueue_scripts', array( $wp_book_list_general_functions, 'wpbooklist_jre_plugin_colorbox_script' ) );
+	add_action( 'wp_enqueue_scripts', array( $wp_book_list_general_functions, 'wpbooklist_jre_plugin_colorbox_script' ) );
+
+	// Adding AddThis sharing JS file
+	add_action( 'admin_enqueue_scripts', array( $wp_book_list_general_functions, 'wpbooklist_jre_plugin_addthis_script' ) );
+	add_action( 'wp_enqueue_scripts', array( $wp_book_list_general_functions, 'wpbooklist_jre_plugin_addthis_script' ) );
+	*/
+
+
+
+/* END OF FUNCTIONS FOUND IN CLASS-WPBOOKLIST-GENERAL-FUNCTIONS.PHP THAT APPLY PLUGIN-WIDE */
+
+/* FUNCTIONS FOUND IN CLASS-WPBOOKLIST-STORYTIME.PHP THAT APPLY PLUGIN-WIDE */
+
+	// For the admin pages.
+	add_action( 'admin_menu', array( $wp_book_list_storytime, 'wpbooklist_jre_storytime_admin_notice' ) );
+	// Function that displays StoryTime on the front end.
+	add_shortcode( 'wpbooklist_storytime', array( $wp_book_list_storytime, 'wpbooklist_jre_storytime_admin_notice' ) );
+
+/* END OF FUNCTIONS FOUND IN CLASS-WPBOOKLIST-STORYTIME.PHP THAT APPLY PLUGIN-WIDE */
+
 
 
 
 /*
 // For admin messages
-add_action( 'admin_notices', 'wpbooklist_jre_for_reviews_and_wpbooklist_admin_notice__success' );
+add_action( 'admin_notices', 'wpbooklist_jre_admin_notice' );
 
 // For admin messages announcing the arrival of a new WPBookList StoryTime Story
-add_action( 'admin_notices', 'wpbooklist_jre_for_storytime_admin_notice__success' );
+add_action( 'admin_notices', 'wpbooklist_jre_storytime_admin_notices' );
 
 // Adding Ajax library
 add_action( 'wp_head', 'wpbooklist_jre_prem_add_ajax_library' );
@@ -168,8 +276,7 @@ add_action( 'admin_footer', 'wpbooklist_exit_survey' );
 // Creates tables upon activation
 register_activation_hook( __FILE__, 'wpbooklist_jre_create_tables' );
 
-// Deletes tables upon plugin deletion
-//register_uninstall_hook( __FILE__, 'wpbooklist_jre_delete_tables' );
+
 
 // Adding the general admin css file
 add_action( 'admin_enqueue_scripts', 'wpbooklist_jre_plugin_general_admin_style' );
