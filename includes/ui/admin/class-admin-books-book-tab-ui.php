@@ -24,7 +24,12 @@ if ( ! class_exists( 'WPBookList_AddABook_Tab', false ) ) :
 		 */
 		public function __construct() {
 			require_once CLASS_DIR . 'class-admin-ui-template.php';
-			require_once CLASS_BOOK_DIR . 'class-add-book-form.php';
+			require_once CLASS_BOOK_DIR . 'class-wpbooklist-add-book-form.php';
+
+			// Get Translations.
+			require_once CLASS_TRANSLATIONS_DIR . 'class-wpbooklist-translations.php';
+			$this->trans = new WPBookList_Translations();
+			$this->trans->trans_strings();
 
 			// Instantiate the class.
 			$this->template = new WPBookList_Admin_UI_Template();
@@ -40,7 +45,7 @@ if ( ! class_exists( 'WPBookList_AddABook_Tab', false ) ) :
 		 */
 		private function output_open_admin_container() {
 			$icon_url = ROOT_IMG_ICONS_URL . 'open-book.svg';
-			$title = __( 'Add a Book','wpbooklist' );
+			$title = $this->trans->trans_82;
 			echo $this->template->output_open_admin_container( $title, $icon_url );
 		}
 

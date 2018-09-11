@@ -84,6 +84,44 @@ if ( ! class_exists( 'WPBookList_Translations', false ) ) :
 			$this->trans_53 = __( 'Select a User', 'wpbooklist' );
 			$this->trans_54 = __( 'Create a New Library Here', 'wpbooklist' );
 			$this->trans_55 = __( 'Loading', 'wpbooklist' );
+			$this->trans_55 = __( 'You\'ve worked hard to add all those books to your website - make sure they\'re backed up! Simply select a Library to backup, click the \'Backup Library\' button below, and', 'wpbooklist' );
+			$this->trans_56 = __( 'You\'ve worked hard to add all those books to your website - make sure they\'re backed up! Simply select a Library to backup, click the \'Backup Library\' button below, and', 'wpbooklist' );
+			$this->trans_57 = __( 'WPBookList', 'wpbooklist' );
+			$this->trans_58 = __( 'will create a Database backup of your library!', 'wpbooklist' );
+			$this->trans_59 = __( 'Select a Library to Backup:', 'wpbooklist' );
+			$this->trans_60 = __( 'Select a Library', 'wpbooklist' );
+			$this->trans_61 = __( 'Default Library', 'wpbooklist' );
+			$this->trans_62 = __( 'Backup Library', 'wpbooklist' );
+			$this->trans_63 = __( 'Here you can restore a library from previously-created', 'wpbooklist' );
+			$this->trans_64 = __( 'backups. Simply select a Library to restore, select a backup to restore from, and click the \'Restore Library\' button below. That\'s it!', 'wpbooklist' );
+			$this->trans_65 = __( 'Select a Library to Restore', 'wpbooklist' );
+			$this->trans_66 = __( 'Select a Backup', 'wpbooklist' );
+			$this->trans_67 = __( 'Restore Library', 'wpbooklist' );
+			$this->trans_68 = __( 'Here you can download a .csv file of ISBN/ASIN numbers from a selected library, which can be very useful in conjunction with the', 'wpbooklist' );
+			$this->trans_69 = __( 'WPBookList Bulk-Upload Extension', 'wpbooklist' );
+			$this->trans_70 = __( 'Simply select a Library, click the \'Create CSV File\' button, and', 'wpbooklist' );
+			$this->trans_71 = __( 'will create .csv file of ISBN/ASIN numbers', 'wpbooklist' );
+			$this->trans_72 = __( 'Create CSV File', 'wpbooklist' );
+			$this->trans_73 = __( 'Backups', 'wpbooklist' );
+
+			$this->trans_74 = __( 'To add a book, simply select a library from the drop-down below, fill out the form, and click the', 'wpbooklist' );
+			$this->trans_75 = __( '\'Add Book\'', 'wpbooklist' );
+			$this->trans_76 = __( 'button. If you choose to gather book info from Amazon', 'wpbooklist' );
+			$this->trans_77 = __( 'the only required field is the ISBN/ASIN number', 'wpbooklist' );
+			$this->trans_78 = __( 'You must check the box below to authorize', 'wpbooklist' );
+			$this->trans_79 = __( 'to gather data from Amazon, otherwise, the only data that will be added for your book is what you fill out on the form below. WPBookList uses it\'s own Amazon Product Advertising API keys to gather book data, but if you happen to have your own API keys, you can use those instead by adding them on the', 'wpbooklist' );
+			$this->trans_80 = __( 'Amazon Settings', 'wpbooklist' );
+			$this->trans_81 = __( 'page', 'wpbooklist' );
+			$this->trans_82 = __( 'Add a Book', 'wpbooklist' );
+
+
+
+
+
+
+
+
+
 
 			// The array of translation strings.
 			$translation_array = array(

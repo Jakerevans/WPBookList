@@ -82,6 +82,9 @@ global $wpdb;
 	// Root Post Directory.
 	define( 'CLASS_POST_DIR', ROOT_DIR . 'includes/classes/post/' );
 
+	// Root Backup Directory.
+	define( 'CLASS_BACKUP_DIR', ROOT_DIR . 'includes/classes/backup/' );
+
 	// Root Image URL .
 	define( 'ROOT_IMG_URL', ROOT_URL . 'assets/img/' );
 
