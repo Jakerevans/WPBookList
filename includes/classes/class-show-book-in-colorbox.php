@@ -129,6 +129,9 @@ class WPBookList_Show_Book_In_Colorbox {
 
 		$this->sortParam = $sortParam;
 
+		// Require the Transients file.
+		require_once CLASS_TRANSIENTS_DIR . 'class-wpbooklist-transients.php';
+		$this->transients = new WPBookList_Transients();
 
 		// Get active plugins to see if any extensions are in play
         $this->active_plugins = (array) get_option('active_plugins', array());
@@ -191,7 +194,16 @@ class WPBookList_Show_Book_In_Colorbox {
 	private function gather_book_info(){
 
 		global $wpdb;
-  		$saved_book = $wpdb->get_row($wpdb->prepare("SELECT * FROM $this->library WHERE ID = %d", $this->book_id));
+
+		$transient_name   = 'wpbl_' . md5( 'SELECT * FROM ' . $this->library . ' WHERE ID = ' . $this->book_id );
+		$transient_exists = $this->transients->existing_transient_check( $transient_name );
+		if ( $transient_exists ) {
+			$saved_book = $transient_exists;
+		} else {
+			$query = $wpdb->prepare("SELECT * FROM $this->library WHERE ID = %d", $this->book_id);
+			$saved_book = $this->transients->create_transient( $transient_name, 'wpdb->get_row', $query, MONTH_IN_SECONDS );
+		}
+
 		$this->isbn = $saved_book->isbn;
 		$this->id = $saved_book->ID;
 		$this->title = $saved_book->title;
@@ -236,9 +248,29 @@ class WPBookList_Show_Book_In_Colorbox {
 
 	private function gather_user_options(){
 		global $wpdb;
-		$options_results = $wpdb->get_row("SELECT * FROM $this->settings_library");
+
+		// Get Options from the Options row specific to the library.
+		$transient_name   = 'wpbl_' . md5( 'SELECT * FROM ' . $this->settings_library );
+		$transient_exists = $this->transients->existing_transient_check( $transient_name );
+		if ( $transient_exists ) {
+			$options_results = $transient_exists;
+		} else {
+			$query = "SELECT * FROM " . $this->settings_library;
+			$options_results = $this->transients->create_transient( $transient_name, 'wpdb->get_row', $query, MONTH_IN_SECONDS );
+		}
+
+		// Get Options from the default Options row.
 		$default_opt_table = $wpdb->prefix.'wpbooklist_jre_user_options';
-		$default_options_results = $wpdb->get_row("SELECT * FROM $default_opt_table");
+		$transient_name   = 'wpbl_' . md5( 'SELECT * FROM ' . $default_opt_table );
+		$transient_exists = $this->transients->existing_transient_check( $transient_name );
+		if ( $transient_exists ) {
+			$default_options_results = $transient_exists;
+		} else {
+			$query = "SELECT * FROM $default_opt_table";
+			$default_options_results = $this->transients->create_transient( $transient_name, 'wpdb->get_row', $query, MONTH_IN_SECONDS );
+		}
+
+
 		$this->enablepurchase = $options_results->enablepurchase;
 		$this->hidefacebook = $options_results->hidefacebook;
 		$this->hidetwitter = $options_results->hidetwitter;
@@ -423,8 +455,17 @@ class WPBookList_Show_Book_In_Colorbox {
 
 	private function gather_featured_titles(){
 		global $wpdb;
+
+		// Get Featured Titles.
 		$table_name_featured = $wpdb->prefix . 'wpbooklist_jre_saved_books_for_featured';
-		$this->featured_results = $wpdb->get_results("SELECT * FROM $table_name_featured");
+		$transient_name   = 'wpbl_' . md5( 'SELECT * FROM ' . $table_name_featured );
+		$transient_exists = $this->transients->existing_transient_check( $transient_name );
+		if ( $transient_exists ) {
+			$this->featured_results = $transient_exists;
+		} else {
+			$query = "SELECT * FROM " . $table_name_featured;
+			$this->featured_results = $this->transients->create_transient( $transient_name, 'wpdb->get_results', $query, MONTH_IN_SECONDS );
+		}
 	}
 
 	private function output_saved_book(){
@@ -991,6 +1032,7 @@ class WPBookList_Show_Book_In_Colorbox {
 													        } 
 														}
 
+														$string70 = '';
 														if(($this->hideamazonreview == null || $this->hideamazonreview == 0) && ($this->review_iframe != null)){
 													            $string70 = '<p class="wpbooklist_description_p" id="wpbooklist-amazon-review-title-id">' . __('Amazon Reviews:', 'wpbooklist') . '</p> 
 													            <p class="wpbooklist_desc_p_class"><iframe id="wpbooklist-review-iframe" src="'.$this->review_iframe.'"></iframe></p>';

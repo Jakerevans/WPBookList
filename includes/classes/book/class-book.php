@@ -113,6 +113,8 @@ class WPBookList_Book {
 	
 	public function __construct($action = null, $book_array = null, $id = null) {
 
+		global $wpdb;
+
 		// Setting up default keys/values for the $whichapifound array
 		$this->whichapifound['title'] = '';
 		$this->whichapifound['image'] = '';
@@ -127,6 +129,21 @@ class WPBookList_Book {
 		$this->whichapifound['category'] = '';
 		$this->whichapifound['google_preview'] = '';
 		$this->whichapifound['itunes_page'] = '';
+
+		// Require the Transients file.
+		require_once CLASS_TRANSIENTS_DIR . 'class-wpbooklist-transients.php';
+		$this->transients = new WPBookList_Transients();
+
+		// Get the user options row for the class.
+		$table_name_options = $wpdb->prefix . 'wpbooklist_jre_user_options';
+		$transient_name   = 'wpbl_' . md5( 'SELECT * FROM ' . $table_name_options );
+		$transient_exists = $this->transients->existing_transient_check( $transient_name );
+		if ( $transient_exists ) {
+			$this->options_results = $transient_exists;
+		} else {
+			$query = "SELECT * FROM ".$table_name_options;
+			$this->options_results = $this->transients->create_transient( $transient_name, 'wpdb->get_row', $query, MONTH_IN_SECONDS );
+		}
 		
 		if(($action == 'add' || $action == 'edit' || $action == 'search' || $action == 'bookfinder-colorbox') && $book_array != null){
 
@@ -555,11 +572,8 @@ class WPBookList_Book {
 	}
 
 	private function gather_amazon_data(){
-		global $wpdb;
 
-		// Get associate tag for creating API call post data
-		$table_name_options = $wpdb->prefix . 'wpbooklist_jre_user_options';
-  		$this->options_results = $wpdb->get_row("SELECT * FROM $table_name_options");
+		global $wpdb;
 
 		$params = array();
 
@@ -655,61 +669,70 @@ class WPBookList_Book {
 			$this->apireport = $this->apireport."Results for Unknown Book: ";
 		}
 
-		
+		// Before we do anything else, let's make sure we don't have a saved transient for this book - if we do, no sense in making a new api call - will cut down on requests.
+		$transient_name   = 'wpbl_' .  md5( $this->isbn . '_amazon' );
+		$transient_exists = $this->transients->existing_transient_check( $transient_name );
+		if ( $transient_exists ) {
+			$this->amazonapiresult = $transient_exists;
+		} else {
 
-		$status = '';
-		$this->amazonapiresult = '';
-    	if(function_exists('file_get_contents')){
-    		$this->amazonapiresult = @file_get_contents('https://sublime-vine-199216.appspot.com/?'.$postdata);
-    		list($version, $status, $text) = explode(' ', $http_response_header[0], 3);
-    		if($status == 200 && $this->amazonapiresult != ''){
-    			$this->apireport = $this->apireport."Amazon API call via file_get_contents looks to be successful. URL Request was: 'https://sublime-vine-199216.appspot.com/?".$postdata."'. ";
-    		} else {
-    			$this->apireport = $this->apireport."Looks like we tried the Amazon file_get_contents function, but something went wrong. Status Code is: ".$status.". URL Request was: 'https://sublime-vine-199216.appspot.com/?".$postdata."'. ";
+			$status = '';
+			$this->amazonapiresult = '';
+	    	if(function_exists('file_get_contents')){
+	    		$this->amazonapiresult = @file_get_contents('https://sublime-vine-199216.appspot.com/?'.$postdata);
+	    		list($version, $status, $text) = explode(' ', $http_response_header[0], 3);
+	    		if($status == 200 && $this->amazonapiresult != ''){
+	    			$this->apireport = $this->apireport."Amazon API call via file_get_contents looks to be successful. URL Request was: 'https://sublime-vine-199216.appspot.com/?".$postdata."'. ";
+	    		} else {
+	    			$this->apireport = $this->apireport."Looks like we tried the Amazon file_get_contents function, but something went wrong. Status Code is: ".$status.". URL Request was: 'https://sublime-vine-199216.appspot.com/?".$postdata."'. ";
 
-    			if($status == 500 || $status == '500'){
-    				$this->apiamazonfailcount++;
-    				$this->amazonfailstatus = '500';
-    			}
-    		}
-    	}
-
-    	if($this->amazonapiresult == ''){
-    		if(function_exists('curl_init')){ 
-				$ch = curl_init();
-				curl_setopt($ch, CURLOPT_HEADER, 0);
-				curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-				$url = 'https://sublime-vine-199216.appspot.com/?'.$postdata;
-				curl_setopt($ch, CURLOPT_URL, $url);
-
-				if($this->options_results->amazonapisecret != null && $this->options_results->amazonapisecret != '' && $this->options_results->amazonapipublic != null && $this->options_results->amazonapipublic != ''){
-					$data = array('api_public'=>$this->options_results->amazonapipublic, 'api_secret'=>$this->options_results->amazonapisecret, 'book_page' => $this->book_page, 'book_title' => $this->title, 'book_author' => $this->author, 'associate_tag' => $this->options_results->amazonaff, 'isbn' => $this->isbn);
-				} else {
-					$data = array('book_title' => $this->title, 'associate_tag' => $this->options_results->amazonaff, 'isbn' => $this->isbn);
-				}
-
-				//curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($data));
-				$this->amazonapiresult = curl_exec($ch);
-				$responsecode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-
-				if($responsecode == 200){
-					$this->apireport = $this->apireport."Amazon API call via cURL looks to be successful. URL Request was: 'https://sublime-vine-199216.appspot.com/?".$postdata."'. ";
-				} else {
-					$this->apireport = $this->apireport."Looks like we tried the Amazon cURL function, but something went wrong. Status Code is: ".$responsecode.". URL Request was: 'https://sublime-vine-199216.appspot.com/?".$postdata."'. ";
-
-					if($status == 500 || $status == '500'){
-    					$this->apiamazonfailcount++;
-    					$this->amazonfailstatus = '500';
-    				}
-
-				}
-				curl_close($ch);
-	    	} else {
-	        	$this->apireport = $this->apireport.'Looks like neither file_get_contents() nor cURL area available! ';
+	    			if($status == 500 || $status == '500'){
+	    				$this->apiamazonfailcount++;
+	    				$this->amazonfailstatus = '500';
+	    			}
+	    		}
 	    	}
-    	}
 
-    	// Convert result from API call to regular ol' array
+	    	if($this->amazonapiresult == ''){
+	    		if(function_exists('curl_init')){ 
+					$ch = curl_init();
+					curl_setopt($ch, CURLOPT_HEADER, 0);
+					curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+					$url = 'https://sublime-vine-199216.appspot.com/?'.$postdata;
+					curl_setopt($ch, CURLOPT_URL, $url);
+
+					if($this->options_results->amazonapisecret != null && $this->options_results->amazonapisecret != '' && $this->options_results->amazonapipublic != null && $this->options_results->amazonapipublic != ''){
+						$data = array('api_public'=>$this->options_results->amazonapipublic, 'api_secret'=>$this->options_results->amazonapisecret, 'book_page' => $this->book_page, 'book_title' => $this->title, 'book_author' => $this->author, 'associate_tag' => $this->options_results->amazonaff, 'isbn' => $this->isbn);
+					} else {
+						$data = array('book_title' => $this->title, 'associate_tag' => $this->options_results->amazonaff, 'isbn' => $this->isbn);
+					}
+
+					//curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($data));
+					$this->amazonapiresult = curl_exec($ch);
+					$responsecode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+
+					if($responsecode == 200){
+						$this->apireport = $this->apireport."Amazon API call via cURL looks to be successful. URL Request was: 'https://sublime-vine-199216.appspot.com/?".$postdata."'. ";
+					} else {
+						$this->apireport = $this->apireport."Looks like we tried the Amazon cURL function, but something went wrong. Status Code is: ".$responsecode.". URL Request was: 'https://sublime-vine-199216.appspot.com/?".$postdata."'. ";
+
+						if($status == 500 || $status == '500'){
+	    					$this->apiamazonfailcount++;
+	    					$this->amazonfailstatus = '500';
+	    				}
+
+					}
+					curl_close($ch);
+		    	} else {
+		        	$this->apireport = $this->apireport.'Looks like neither file_get_contents() nor cURL area available! ';
+		    	}
+	    	}
+
+			$this->transient_create_result = $this->transients->create_api_transient( $transient_name, $this->amazonapiresult, WEEK_IN_SECONDS );
+		}
+
+
+    	// Convert result from API call to regular ol' array.
     	if($this->apiamazonfailcount < 2){
 
 	   		// If we're dealing with the Bookfinder Extension, do not append '</ItemLookupResponse>', otherwise do so
@@ -1035,39 +1058,52 @@ class WPBookList_Book {
 			$google_api = 'AIzaSyBl6KEeKRddmhnK-jX65pGkjBW1Y6Q5_rM';
 		}
 
-		$status = '';
-		$this->googleapiresult = '';
-    	if(function_exists('file_get_contents')){
-    		$this->googleapiresult = @file_get_contents('https://www.googleapis.com/books/v1/volumes?q=isbn:'.$this->isbn.'&key='.$google_api.'&country=US');
-    		list($version, $status, $text) = explode(' ', $http_response_header[0], 3);
-    		if($status == 200 && $this->googleapiresult != ''){
-    			$this->apireport = $this->apireport."Google API call via file_get_contents looks to be successful. URL Request was: 'https://www.googleapis.com/books/v1/volumes?q=isbn:".$this->isbn."&key=".$google_api."&country=US. ";
-    		} else {
-    			$this->apireport = $this->apireport."Looks like we tried the Google file_get_contents function, but something went wrong. Status Code is: ".$status.". URL Request was: 'https://www.googleapis.com/books/v1/volumes?q=isbn:".$this->isbn."&key=".$google_api."&country=US. ";
-    		}
-    	}
 
-    	if($this->googleapiresult == ''){
-    		if (function_exists('curl_init')){ 
-				$ch = curl_init();
-				curl_setopt($ch, CURLOPT_HEADER, 0);
-				curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-				$url = 'https://www.googleapis.com/books/v1/volumes?q=isbn:'.$this->isbn.'&key='.$google_api;
-				curl_setopt($ch, CURLOPT_URL, $url);
-				$this->googleapiresult = curl_exec($ch);
-				$responsecode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-				if($responsecode == 200){
-					$this->apireport = $this->apireport."Google API call via cURL looks to be successful. URL Request was: 'https://www.googleapis.com/books/v1/volumes?q=isbn:".$this->isbn."&key=".$google_api.". ";
-				} else {
-					$this->apireport = $this->apireport."Looks like we tried the Google cURL function, but something went wrong. Status Code is: ".$responsecode.". URL Request was: 'https://www.googleapis.com/books/v1/volumes?q=isbn:".$this->isbn."&key=".$google_api.". ";
-				}
-				curl_close($ch);
-	    	} else {
-	        	$this->apireport = $this->apireport.'Looks like neither file_get_contents() nor cURL area available! ';
+		// Before we do anything else, let's make sure we don't have a saved transient for this book - if we do, no sense in making a new api call - will cut down on requests.
+		$transient_name   = 'wpbl_' .  md5( $this->isbn . '_google' );
+		$transient_exists = $this->transients->existing_transient_check( $transient_name );
+		if ( $transient_exists ) {
+			$this->googleapiresult = $transient_exists;
+		} else {
+
+			$status = '';
+			$this->googleapiresult = '';
+	    	if(function_exists('file_get_contents')){
+	    		$this->googleapiresult = @file_get_contents('https://www.googleapis.com/books/v1/volumes?q=isbn:'.$this->isbn.'&key='.$google_api.'&country=US');
+	    		list($version, $status, $text) = explode(' ', $http_response_header[0], 3);
+	    		if($status == 200 && $this->googleapiresult != ''){
+	    			$this->apireport = $this->apireport."Google API call via file_get_contents looks to be successful. URL Request was: 'https://www.googleapis.com/books/v1/volumes?q=isbn:".$this->isbn."&key=".$google_api."&country=US. ";
+	    		} else {
+	    			$this->apireport = $this->apireport."Looks like we tried the Google file_get_contents function, but something went wrong. Status Code is: ".$status.". URL Request was: 'https://www.googleapis.com/books/v1/volumes?q=isbn:".$this->isbn."&key=".$google_api."&country=US. ";
+	    		}
 	    	}
-    	}
 
-		if($this->googleapiresult != ''){		
+	    	if($this->googleapiresult == ''){
+	    		if (function_exists('curl_init')){ 
+					$ch = curl_init();
+					curl_setopt($ch, CURLOPT_HEADER, 0);
+					curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+					$url = 'https://www.googleapis.com/books/v1/volumes?q=isbn:'.$this->isbn.'&key='.$google_api;
+					curl_setopt($ch, CURLOPT_URL, $url);
+					$this->googleapiresult = curl_exec($ch);
+					$responsecode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+					if($responsecode == 200){
+						$this->apireport = $this->apireport."Google API call via cURL looks to be successful. URL Request was: 'https://www.googleapis.com/books/v1/volumes?q=isbn:".$this->isbn."&key=".$google_api.". ";
+					} else {
+						$this->apireport = $this->apireport."Looks like we tried the Google cURL function, but something went wrong. Status Code is: ".$responsecode.". URL Request was: 'https://www.googleapis.com/books/v1/volumes?q=isbn:".$this->isbn."&key=".$google_api.". ";
+					}
+					curl_close($ch);
+		    	} else {
+		        	$this->apireport = $this->apireport.'Looks like neither file_get_contents() nor cURL area available! ';
+		    	}
+	    	}
+
+	    	$this->transient_create_result = $this->transients->create_api_transient( $transient_name, $this->googleapiresult, WEEK_IN_SECONDS );
+		}
+
+		if(null !== $this->googleapiresult && '' !== $this->googleapiresult){
+
+
 
 	    	// Convert result to array
 	    	$json_output_google = json_decode($this->googleapiresult, true);
@@ -1192,36 +1228,46 @@ class WPBookList_Book {
 		}
 
 
+		// Before we do anything else, let's make sure we don't have a saved transient for this book - if we do, no sense in making a new api call - will cut down on requests.
+		$transient_name   = 'wpbl_' .  md5( $this->isbn . '_openlib' );
+		$transient_exists = $this->transients->existing_transient_check( $transient_name );
+		if ( $transient_exists ) {
+			$this->openlibapiresult = $transient_exists;
+		} else {
 
-    	if(function_exists('file_get_contents')){
-    		$this->openlibapiresult = @file_get_contents("https://openlibrary.org/api/books?bibkeys=ISBN:".$this->isbn."&jscmd=data&format=json");
-    		list($version, $status, $text) = explode(' ', $http_response_header[0], 3);
-    		if($status == 200 && $this->openlibapiresult != ''){
-    			$this->apireport = $this->apireport."OpenLibrary API call via file_get_contents looks to be successful. URL Request was: 'https://openlibrary.org/api/books?bibkeys=ISBN:".$this->isbn."&jscmd=data&format=json'. ";
-    		} else {
-    			$this->apireport = $this->apireport."Looks like we tried the OpenLibrary file_get_contents function, but something went wrong. Status Code is: ".$status.". URL Request was: 'https://openlibrary.org/api/books?bibkeys=ISBN:".$this->isbn."&jscmd=data&format=json'. ";
-    		}
-    	}
-
-    	if($this->openlibapiresult == ''){
-    		if (function_exists('curl_init')){ 
-				$ch = curl_init();
-				curl_setopt($ch, CURLOPT_HEADER, 0);
-				curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-				$url = "https://openlibrary.org/api/books?bibkeys=ISBN:".$this->isbn."&jscmd=data&format=json";
-				curl_setopt($ch, CURLOPT_URL, $url);
-				$this->openlibapiresult = curl_exec($ch);
-				$responsecode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-				if($responsecode == 200){
-					$this->apireport = $this->apireport."OpenLibrary API call via cURL looks to be successful. URL Request was: 'https://openlibrary.org/api/books?bibkeys=ISBN:".$this->isbn."&jscmd=data&format=json".". ";
-				} else {
-					$this->apireport = $this->apireport."Looks like we tried the OpenLibrary cURL function, but something went wrong. Status Code is: ".$responsecode.". URL Request was: 'https://openlibrary.org/api/books?bibkeys=ISBN:".$this->isbn."&jscmd=data&format=json".". ";
-				}
-				curl_close($ch);
-	    	} else {
-	        	$this->apireport = $this->apireport.'Looks like neither file_get_contents() nor cURL area available! ';
+	    	if(function_exists('file_get_contents')){
+	    		$this->openlibapiresult = @file_get_contents("https://openlibrary.org/api/books?bibkeys=ISBN:".$this->isbn."&jscmd=data&format=json");
+	    		list($version, $status, $text) = explode(' ', $http_response_header[0], 3);
+	    		if($status == 200 && $this->openlibapiresult != ''){
+	    			$this->apireport = $this->apireport."OpenLibrary API call via file_get_contents looks to be successful. URL Request was: 'https://openlibrary.org/api/books?bibkeys=ISBN:".$this->isbn."&jscmd=data&format=json'. ";
+	    		} else {
+	    			$this->apireport = $this->apireport."Looks like we tried the OpenLibrary file_get_contents function, but something went wrong. Status Code is: ".$status.". URL Request was: 'https://openlibrary.org/api/books?bibkeys=ISBN:".$this->isbn."&jscmd=data&format=json'. ";
+	    		}
 	    	}
-    	}
+
+	    	if($this->openlibapiresult == ''){
+	    		if (function_exists('curl_init')){ 
+					$ch = curl_init();
+					curl_setopt($ch, CURLOPT_HEADER, 0);
+					curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+					$url = "https://openlibrary.org/api/books?bibkeys=ISBN:".$this->isbn."&jscmd=data&format=json";
+					curl_setopt($ch, CURLOPT_URL, $url);
+					$this->openlibapiresult = curl_exec($ch);
+					$responsecode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+					if($responsecode == 200){
+						$this->apireport = $this->apireport."OpenLibrary API call via cURL looks to be successful. URL Request was: 'https://openlibrary.org/api/books?bibkeys=ISBN:".$this->isbn."&jscmd=data&format=json".". ";
+					} else {
+						$this->apireport = $this->apireport."Looks like we tried the OpenLibrary cURL function, but something went wrong. Status Code is: ".$responsecode.". URL Request was: 'https://openlibrary.org/api/books?bibkeys=ISBN:".$this->isbn."&jscmd=data&format=json".". ";
+					}
+					curl_close($ch);
+		    	} else {
+		        	$this->apireport = $this->apireport.'Looks like neither file_get_contents() nor cURL area available! ';
+		    	}
+	    	}
+
+	    	$this->transient_create_result = $this->transients->create_api_transient( $transient_name, $this->openlibapiresult, WEEK_IN_SECONDS );
+		}
+
 
     	if($this->openlibapiresult != ''){		
 
@@ -1327,40 +1373,45 @@ class WPBookList_Book {
 
 		global $wpdb;
 
-		// Get associate tag for creating API call post data
-		$table_name_options = $wpdb->prefix . 'wpbooklist_jre_user_options';
-  		$this->options_results = $wpdb->get_row("SELECT * FROM $table_name_options");
+		// Before we do anything else, let's make sure we don't have a saved transient for this book - if we do, no sense in making a new api call - will cut down on requests.
+		$transient_name   = 'wpbl_' .  md5( $this->isbn . '_itunes' );
+		$transient_exists = $this->transients->existing_transient_check( $transient_name );
+		if ( $transient_exists ) {
+			$this->itunesapiresult = $transient_exists;
+		} else {
 
-
-    	if(function_exists('file_get_contents')){
-    		$this->itunesapiresult = @file_get_contents('https://itunes.apple.com/lookup?isbn='.$this->isbn.'&at='.$this->options_results->itunesaff);
-    		list($version, $status, $text) = explode(' ', $http_response_header[0], 3);
-    		if($status == 200 && $this->itunesapiresult != ''){
-    			$this->apireport = $this->apireport."iTunes iBooks API call via file_get_contents looks to be successful. URL Request was: 'https://itunes.apple.com/lookup?isbn=".$this->isbn."&at=".$this->options_results->itunesaff.". ";
-    		} else {
-    			$this->apireport = $this->apireport."Looks like we tried the iTunes iBooks file_get_contents function, but something went wrong. Status Code is: ".$status.". URL Request was: 'https://itunes.apple.com/lookup?isbn=".$this->isbn."&at=".$this->options_results->itunesaff.". ";
-    		}
-    	}
-
-    	if($this->itunesapiresult == ''){
-    		if (function_exists('curl_init')){ 
-				$ch = curl_init();
-				curl_setopt($ch, CURLOPT_HEADER, 0);
-				curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-				$url = 'https://itunes.apple.com/lookup?isbn='.$this->isbn.'&at='.$this->options_results->itunesaff;
-				curl_setopt($ch, CURLOPT_URL, $url);
-				$this->itunesapiresult = curl_exec($ch);
-				$responsecode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-				if($responsecode == 200){
-					$this->apireport = $this->apireport."iTunes iBooks API call via cURL looks to be successful. URL Request was: 'https://itunes.apple.com/lookup?isbn=".$this->isbn."&at=".$this->options_results->itunesaff.". ";
-				} else {
-					$this->apireport = $this->apireport."Looks like we tried the iTunes iBooks cURL function, but something went wrong. Status Code is: ".$responsecode.". URL Request was: 'https://itunes.apple.com/lookup?isbn=".$this->isbn."&at=".$this->options_results->itunesaff.". ";
-				}
-				curl_close($ch);
-	    	} else {
-	        	$this->apireport = $this->apireport.'Looks like neither file_get_contents() nor cURL area available! ';
+	    	if(function_exists('file_get_contents')){
+	    		$this->itunesapiresult = @file_get_contents('https://itunes.apple.com/lookup?isbn='.$this->isbn.'&at='.$this->options_results->itunesaff);
+	    		list($version, $status, $text) = explode(' ', $http_response_header[0], 3);
+	    		if($status == 200 && $this->itunesapiresult != ''){
+	    			$this->apireport = $this->apireport."iTunes iBooks API call via file_get_contents looks to be successful. URL Request was: 'https://itunes.apple.com/lookup?isbn=".$this->isbn."&at=".$this->options_results->itunesaff.". ";
+	    		} else {
+	    			$this->apireport = $this->apireport."Looks like we tried the iTunes iBooks file_get_contents function, but something went wrong. Status Code is: ".$status.". URL Request was: 'https://itunes.apple.com/lookup?isbn=".$this->isbn."&at=".$this->options_results->itunesaff.". ";
+	    		}
 	    	}
-    	}
+
+	    	if($this->itunesapiresult == ''){
+	    		if (function_exists('curl_init')){ 
+					$ch = curl_init();
+					curl_setopt($ch, CURLOPT_HEADER, 0);
+					curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+					$url = 'https://itunes.apple.com/lookup?isbn='.$this->isbn.'&at='.$this->options_results->itunesaff;
+					curl_setopt($ch, CURLOPT_URL, $url);
+					$this->itunesapiresult = curl_exec($ch);
+					$responsecode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+					if($responsecode == 200){
+						$this->apireport = $this->apireport."iTunes iBooks API call via cURL looks to be successful. URL Request was: 'https://itunes.apple.com/lookup?isbn=".$this->isbn."&at=".$this->options_results->itunesaff.". ";
+					} else {
+						$this->apireport = $this->apireport."Looks like we tried the iTunes iBooks cURL function, but something went wrong. Status Code is: ".$responsecode.". URL Request was: 'https://itunes.apple.com/lookup?isbn=".$this->isbn."&at=".$this->options_results->itunesaff.". ";
+					}
+					curl_close($ch);
+		    	} else {
+		        	$this->apireport = $this->apireport.'Looks like neither file_get_contents() nor cURL area available! ';
+		    	}
+	    	}
+
+	    	$this->transient_create_result = $this->transients->create_api_transient( $transient_name, $this->itunesapiresult, WEEK_IN_SECONDS );
+		}
 
 	    if($this->itunesapiresult != ''){	
 		  	$json_output_itunes = json_decode($this->itunesapiresult, true);
@@ -1712,13 +1763,13 @@ class WPBookList_Book {
 			$post = $this->post_yes;
 
 			if($this->post_yes == 'true'){
-				require_once(CLASS_DIR.'class-post.php');
+				require_once(CLASS_POST_DIR.'class-post.php');
 				$post = new WPBookList_Post($page_post_array);
 				$post = $post->post_id;
 			}
 
 			if($this->page_yes == 'true'){
-				require_once(CLASS_DIR.'class-page.php');
+				require_once(CLASS_PAGE_DIR.'class-page.php');
 				$page = new WPBookList_Page($page_post_array);
 				$page = $page->create_result;
 			}
@@ -1830,8 +1881,6 @@ class WPBookList_Book {
 		// TODO: Create a log class to record the result of adding the book - or maybe just record an error, if there is one. Make a link for the log file somehwere, on settings page perhaps, for user to download. 
 
 		// Insert the Amazon Authorization into the DB if it's not already set to 'Yes'
-		$table_name_options = $wpdb->prefix . 'wpbooklist_jre_user_options';
-  		$this->options_results = $wpdb->get_row("SELECT * FROM $table_name_options");
   		if($this->options_results->amazonauth != 'true'){
 			$data = array(
 	        	'amazonauth' => $this->amazon_auth_yes
@@ -1848,8 +1897,6 @@ class WPBookList_Book {
 
 		// Perform check for previously-saved Amazon Authorization
 		global $wpdb;
-		$table_name = $wpdb->prefix . 'wpbooklist_jre_user_options';
-		$opt_results = $wpdb->get_row("SELECT * FROM $table_name");
 
 		$table_name = $wpdb->prefix . 'wpbooklist_jre_list_dynamic_db_names';
 		$db_row = $wpdb->get_results("SELECT * FROM $table_name");
@@ -2225,14 +2272,14 @@ class WPBookList_Book {
 			$post = $this->post_id;
 			if($this->page_yes == 'true' && ($this->page_id == 'false' || $this->page_id == 'true')){
 				error_log('entered 2');
-				require_once(CLASS_DIR.'class-page.php');
+				require_once(CLASS_PAGE_DIR.'class-page.php');
 				$page = new WPBookList_Page($page_post_array);
 				$page = $page->create_result;
 			}
 
 			if($this->post_yes == 'true' && ($this->post_id == 'false' || $this->post_id == 'true')){
 				error_log('entered 3');
-				require_once(CLASS_DIR.'class-post.php');
+				require_once(CLASS_POST_DIR.'class-post.php');
 				$post = new WPBookList_Post($page_post_array);
 				$post = $post->post_id;
 			}
@@ -2283,8 +2330,6 @@ class WPBookList_Book {
 
 
 		// Insert the Amazon Authorization into the DB if it's not already set to 'Yes'
-		$table_name_options = $wpdb->prefix . 'wpbooklist_jre_user_options';
-  		$this->options_results = $wpdb->get_row("SELECT * FROM $table_name_options");
   		if($this->options_results->amazonauth != 'true'){
 			$data = array(
 	        	'amazonauth' => $this->amazon_auth_yes

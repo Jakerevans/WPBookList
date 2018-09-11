@@ -18,7 +18,18 @@ if ( ! class_exists( 'WPBookList_Custom_Libraries_Form', false ) ) :
  */
 class WPBookList_Custom_Libraries_Form {
 
-	public static function output_custom_libraries_form(){
+	/**
+	 * Class Constructor - Simply calls the Translations
+	 */
+	public function __construct() {
+
+		// Get Translations.
+		require_once CLASS_TRANSLATIONS_DIR . 'class-wpbooklist-translations.php';
+		$this->trans = new WPBookList_Translations();
+		$this->trans->trans_strings();
+	}
+
+	public function output_custom_libraries_form(){
 		global $wpdb;
 		$table_name = $wpdb->prefix . 'wpbooklist_jre_list_dynamic_db_names';
 		$db_row = $wpdb->get_results("SELECT * FROM $table_name");
@@ -106,7 +117,7 @@ class WPBookList_Custom_Libraries_Form {
 
 							$string4 = '<tr>
 											<td>
-												<input type="text" value="'.__('Create a new Library here...','wpbooklist').'" class= "wpbooklist-dynamic-input" id="wpbooklist-dynamic-input-library" name="wpbooklist-dynamic-input"></input>
+												<input type="text" value="'. $this->trans->trans_54 .'..." class= "wpbooklist-dynamic-input" id="wpbooklist-dynamic-input-library" name="wpbooklist-dynamic-input"></input>
 											</td>
 											<td>
 												<button id="wpbooklist-dynamic-shortcode-button" type="button" disabled="true">'.__('Create New Library','wpbooklist').'</button>

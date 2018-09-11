@@ -108,16 +108,15 @@ if ( ! class_exists( 'WPBookList_General_Functions', false ) ) :
 			$trans = new WPBookList_Translations();
 
 			// Localize the script with the appropriate translation array from the Translations class.
-			$translation_array1 = $trans->admin_js_trans_strings();
-			$translation_array2 = $trans->common_trans_strings();
+			$translation_array1 = $trans->trans_strings();
 
 			// Now grab all of our Nonces to pass to the JavaScript for the Ajax functions and merge with the Translations array.
-			$final_array_of_php_values = array_merge( $translation_array1, $translation_array2 );
-			$final_array_of_php_values = array_merge( $final_array_of_php_values, json_decode( WPBOOKLIST_FINAL_NONCES_ARRAY, true ) );
+			$final_array_of_php_values = array_merge( $translation_array1, json_decode( WPBOOKLIST_FINAL_NONCES_ARRAY, true ) );
 
 			// Adding some other individual values we may need.
-			$final_array_of_php_values['ROOT_IMG_ICONS_URL'] = ROOT_IMG_ICONS_URL;
-			$final_array_of_php_values['FOR_TAB_HIGHLIGHT']  = admin_url() . 'admin.php';
+			$final_array_of_php_values['ROOT_IMG_ICONS_URL']   = ROOT_IMG_ICONS_URL;
+			$final_array_of_php_values['FOR_TAB_HIGHLIGHT']    = admin_url() . 'admin.php';
+			$final_array_of_php_values['SAVED_ATTACHEMENT_ID'] = get_option( 'media_selector_attachment_id', 0 );
 
 			// Now registering/localizing our JavaScript file, passing all the PHP variables we'll need in our $final_array_of_php_values array, to be accessed from 'wphealthtracker_php_variables' object (like wphealthtracker_php_variables.nameofkey, like any other JavaScript object).
 			wp_localize_script( 'adminjs', 'wpbooklistPhpVariables', $final_array_of_php_values );
@@ -140,12 +139,10 @@ if ( ! class_exists( 'WPBookList_General_Functions', false ) ) :
 			$trans = new WPBookList_Translations();
 
 			// Localize the script with the appropriate translation array from the Translations class.
-			$translation_array1 = $trans->frontend_js_trans_strings();
-			$translation_array2 = $trans->common_trans_strings();
+			$translation_array1 = $trans->trans_strings();
 
 			// Now grab all of our Nonces to pass to the JavaScript for the Ajax functions and merge with the Translations array.
-			$final_array_of_php_values = array_merge( $translation_array1, $translation_array2 );
-			$final_array_of_php_values = array_merge( $final_array_of_php_values, json_decode( WPBOOKLIST_FINAL_NONCES_ARRAY, true ) );
+			$final_array_of_php_values = array_merge( $translation_array1, json_decode( WPBOOKLIST_FINAL_NONCES_ARRAY, true ) );
 
 			// Adding some other individual values we may need.
 			$final_array_of_php_values['ROOT_IMG_ICONS_URL'] = ROOT_IMG_ICONS_URL;
@@ -238,7 +235,7 @@ if ( ! class_exists( 'WPBookList_General_Functions', false ) ) :
 			}
 
 			// Call this manually as we may have missed the init hook.
-			wpbooklist_jre_register_table_name();
+			$this->wpbooklist_jre_register_table_name();
 
 			$default_table     = $wpdb->prefix . 'wpbooklist_jre_saved_book_log';
 			$sql_create_table1 = "CREATE TABLE {$wpdb->wpbooklist_jre_saved_book_log} 
@@ -525,9 +522,22 @@ if ( ! class_exists( 'WPBookList_General_Functions', false ) ) :
 			dbDelta( $sql_create_table6 );
 
 			// Get the default quotes for adding to database.
-			$quote_string = wp_remote_get( QUOTES_DIR . 'defaultquotes.txt' );
-			$quote_array  = explode( ';', $quote_string );
-			$table_name   = $wpdb->prefix . 'wpbooklist_jre_book_quotes';
+			$response = wp_remote_get( esc_url_raw( QUOTES_URL . 'defaultquotes.txt' ) );
+
+			// Check the response code.
+			$response_code    = wp_remote_retrieve_response_code( $response );
+			$response_message = wp_remote_retrieve_response_message( $response );
+
+			if ( 200 !== $response_code && ! empty( $response_message ) ) {
+				return new WP_Error( $response_code, $response_message );
+			} elseif ( 200 !== $response_code ) {
+				return new WP_Error( $response_code, 'Unknown error occurred' );
+			} else {
+				$response = wp_remote_retrieve_body( $response );
+			}
+
+			$quote_array = explode( ';', $response );
+			$table_name  = $wpdb->prefix . 'wpbooklist_jre_book_quotes';
 			foreach ( $quote_array as $quote ) {
 
 				if ( strlen( $quote ) > 100 ) {
@@ -647,7 +657,8 @@ if ( ! class_exists( 'WPBookList_General_Functions', false ) ) :
 			$table_name = $wpdb->prefix . 'wpbooklist_jre_storytime_stories_settings';
 			if ( $table_name !== $wpdb->get_var( "SHOW TABLES LIKE '$table_name'" ) ) {
 				dbDelta( $sql_create_table11 );
-				$table_name = $wpdb->prefix . 'wpbooklist_jre_storytime_stories_settings';
+				$wpdb->insert( $table_name, array( 'ID' => 1 ) );
+			} else {
 				$wpdb->insert( $table_name, array( 'ID' => 1 ) );
 			}
 
@@ -1183,8 +1194,21 @@ if ( ! class_exists( 'WPBookList_General_Functions', false ) ) :
 				}
 
 				// Getting/creating quotes.
-				$quotes        = wp_remote_get( QUOTES_DIR . 'defaultquotes.txt' );
-				$quotes_array  = explode( ';', $quotes );
+				$response = wp_remote_get( QUOTES_URL . 'defaultquotes.txt' );
+
+				// Check the response code.
+				$response_code    = wp_remote_retrieve_response_code( $response );
+				$response_message = wp_remote_retrieve_response_message( $response );
+
+				if ( 200 !== $response_code && ! empty( $response_message ) ) {
+					return new WP_Error( $response_code, $response_message );
+				} elseif ( 200 !== $response_code ) {
+					return new WP_Error( $response_code, 'Unknown error occurred' );
+				} else {
+					$response = wp_remote_retrieve_body( $response );
+				}
+
+				$quotes_array  = explode( ';', $response );
 				$quote         = $quotes_array[ array_rand( $quotes_array ) ];
 				$quote_array_2 = explode( '-', $quote );
 
@@ -1235,7 +1259,7 @@ if ( ! class_exists( 'WPBookList_General_Functions', false ) ) :
 				$active_page_template = $row->activepagetemplate;
 
 				// Double-check that Amazon review isn't expired.
-				require_once CLASS_DIR . 'class-book.php';
+				require_once CLASS_BOOK_DIR . 'class-book.php';
 				$book = new WPBookList_Book( $book_row->ID, $table_name );
 				$book->refresh_amazon_review( $book_row->ID, $table_name );
 
@@ -1324,7 +1348,7 @@ if ( ! class_exists( 'WPBookList_General_Functions', false ) ) :
 							include PAGE_TEMPLATES_DEFAULT_DIR . 'page-template-default.php';
 
 							// Double-check that Amazon review isn't expired.
-							require_once CLASS_DIR . 'class-book.php';
+							require_once CLASS_BOOK_DIR . 'class-book.php';
 							$book = new WPBookList_Book( $book_row->ID, $table_name );
 							$book->refresh_amazon_review( $book_row->ID, $table_name );
 
@@ -1335,7 +1359,7 @@ if ( ! class_exists( 'WPBookList_General_Functions', false ) ) :
 							include PAGE_TEMPLATES_DEFAULT_DIR . 'post-template-default.php';
 
 							// Double-check that Amazon review isn't expired.
-							require_once CLASS_DIR . 'class-book.php';
+							require_once CLASS_BOOK_DIR . 'class-book.php';
 							$book = new WPBookList_Book( $book_row->ID, $table_name );
 							$book->refresh_amazon_review( $book_row->ID, $table_name );
 

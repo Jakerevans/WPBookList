@@ -91,7 +91,7 @@ class WPBookList_Page {
 		$error_obj = false;
 		$this->create_result = wp_insert_post( $post_data, $error_obj );
 
-		if ( ! isset( $post ) ) {
+		//if ( ! isset( $post ) ) {
 			add_action( 'admin_init', 'hbt_create_post' );
 			if($error_obj){
 				// TODO:s If there was an error, record it in log file here
@@ -105,7 +105,7 @@ class WPBookList_Page {
 					return $this->create_result;
 				}
 			}
-		} 
+		//} 
 	}
 
 	private function add_to_db(){

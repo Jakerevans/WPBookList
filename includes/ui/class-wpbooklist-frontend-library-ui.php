@@ -110,7 +110,7 @@ if ( ! class_exists( 'WPBookList_Front_End_Library_UI', false ) ) :
 			// Get Translations.
 			require_once CLASS_TRANSLATIONS_DIR . 'class-wpbooklist-translations.php';
 			$this->trans = new WPBookList_Translations();
-			$this->trans->common_trans_strings();
+			$this->trans->trans_strings();
 
 			// Get active plugins to see if any extensions are in play.
 			$this->active_plugins = (array) get_option( 'active_plugins', array() );
@@ -731,7 +731,7 @@ if ( ! class_exists( 'WPBookList_Front_End_Library_UI', false ) ) :
 		private function output_search() {
 
 			if ( '' === $this->searchterm ) {
-				$searchval = $this->trans->common_trans_1 . '...';
+				$searchval = $this->trans->trans_1 . '...';
 			} else {
 				$searchval = $this->searchterm;
 			}
@@ -741,23 +741,23 @@ if ( ! class_exists( 'WPBookList_Front_End_Library_UI', false ) ) :
 							<div id="wpbooklist-sort-search-div">
 								<div id="wpbooklist-select-sort-div">
 							        <select class="wpbooklist-sort-select-box" id="wpbooklist-sort-select-box-' . uniqid() . '" data-table=' . $this->table . '>    
-										<option ' . $this->sortbyselected1 . ' disabled>' . $this->trans->common_trans_2 . '...</option>
-										<option value="default">' . $this->trans->common_trans_3 . '</option>
-										 <option ' . $this->sortbyselected2 . ' value="alphabeticallybytitle">' . $this->trans->common_trans_4 . '</option>
-										<option ' . $this->sortbyselected3 . ' value="alphabeticallybyauthorfirst">' . $this->trans->common_trans_5 . '</option><option ' . $this->sortbyselected4 . ' value="alphabeticallybyauthorlast">' . $this->trans->common_trans_6 . '</option>';
+										<option ' . $this->sortbyselected1 . ' disabled>' . $this->trans->trans_2 . '...</option>
+										<option value="default">' . $this->trans->trans_3 . '</option>
+										 <option ' . $this->sortbyselected2 . ' value="alphabeticallybytitle">' . $this->trans->trans_4 . '</option>
+										<option ' . $this->sortbyselected3 . ' value="alphabeticallybyauthorfirst">' . $this->trans->trans_5 . '</option><option ' . $this->sortbyselected4 . ' value="alphabeticallybyauthorlast">' . $this->trans->trans_6 . '</option>';
 
 			if ( 1 !== $this->display_options_actual->hidefinishedsort ) {
-				$string1 = $string1 . '<option ' . $this->sortbyselected5 . ' value="year_read">' . $this->trans->common_trans_6 . '</option>';
+				$string1 = $string1 . '<option ' . $this->sortbyselected5 . ' value="year_read">' . $this->trans->trans_6 . '</option>';
 			}
 
-			$string1 = $string1 . '<option ' . $this->sortbyselected6 . ' value="pages_desc">' . $this->trans->common_trans_7 . '</option> <option ' . $this->sortbyselected7 . ' value="pages_asc">' . $this->trans->common_trans_8 . '</option>';
+			$string1 = $string1 . '<option ' . $this->sortbyselected6 . ' value="pages_desc">' . $this->trans->trans_7 . '</option> <option ' . $this->sortbyselected7 . ' value="pages_asc">' . $this->trans->trans_8 . '</option>';
 
 			if ( 1 !== $this->display_options_actual->hidesignedsort ) {
-				$string1 = $string1 . '<option ' . $this->sortbyselected8 . ' value="signed">' . $this->trans->common_trans_10 . '</option>';
+				$string1 = $string1 . '<option ' . $this->sortbyselected8 . ' value="signed">' . $this->trans->trans_10 . '</option>';
 			}
 
 			if ( 1 !== $this->display_options_actual->hidefirstsort ) {
-				$string1 = $string1 . '<option ' . $this->sortbyselected9 . ' value="first_edition">' . $this->trans->common_trans_11 . '</option>';
+				$string1 = $string1 . '<option ' . $this->sortbyselected9 . ' value="first_edition">' . $this->trans->trans_11 . '</option>';
 			}
 
 			$string1 = $string1 . '</select>
@@ -766,17 +766,17 @@ if ( ! class_exists( 'WPBookList_Front_End_Library_UI', false ) ) :
 					   	</div>
 					   	<form class="wpbooklist-search-form" id="wpbooklist-search-form-' . uniqid() . '" data-table=' . $this->table . '>
 					    	<div id="wpbooklist-search-checkboxes">
-						        <p>' . $this->trans->common_trans_12 . ':
-						            <input id="wpbooklist-book-title-search" type="checkbox" name="book-title-search" value="book-title-search">' . $this->trans->common_trans_13 . '</input>
-						            <input id="wpbooklist-author-search" type="checkbox" name="author-search" value="author-search">' . $this->trans->common_trans_14 . '</input>
-						            <input id="wpbooklist-cat-search" type="checkbox" name="cat-search" value="author-search">' . $this->trans->common_trans_15 . '</input>
+						        <p>' . $this->trans->trans_12 . ':
+						            <input id="wpbooklist-book-title-search" type="checkbox" name="book-title-search" value="book-title-search">' . $this->trans->trans_13 . '</input>
+						            <input id="wpbooklist-author-search" type="checkbox" name="author-search" value="author-search">' . $this->trans->trans_14 . '</input>
+						            <input id="wpbooklist-cat-search" type="checkbox" name="cat-search" value="author-search">' . $this->trans->trans_15 . '</input>
 						        </p>
 					    	</div>
 					    	<div>
 					    		<input id="wpbooklist-search-text" class="wpbooklist-search-text-class" type="text" name="search-query" value="' . $searchval . '">
 					    	</div>
 						    <div id="wpbooklist-search-submit">
-						        <input data-table="' . $this->table . '" id="wpbooklist-search-sub-button" type="submit" name="search-button" value="' . $this->trans->common_trans_1 . '"></input>
+						        <input data-table="' . $this->table . '" id="wpbooklist-search-sub-button" type="submit" name="search-button" value="' . $this->trans->trans_1 . '"></input>
 						    </div>
 						    </form>
 						</div>';
@@ -1011,7 +1011,7 @@ if ( ! class_exists( 'WPBookList_Front_End_Library_UI', false ) ) :
 							<div id="wpbooklist-filter-author-box">
 								<div id="wpbooklist-select-sort-div">
 							        <select id="wpbooklist-filter-author-box-div" class="wpbooklist-frontend-filter-select" data-table="' . $this->table . '" data-which="author">    
-										<option selected disabled>' . $this->trans->common_trans_16 . '...</option>';
+										<option selected disabled>' . $this->trans->trans_16 . '...</option>';
 
 			$string2 = '';
 			foreach ( $this->final_author_array as $auth ) {
@@ -1028,7 +1028,7 @@ if ( ! class_exists( 'WPBookList_Front_End_Library_UI', false ) ) :
 			$string4 = '<div id="wpbooklist-filter-category-box-div">
 							<div id="wpbooklist-select-sort-div">
 						        <select id="wpbooklist-filter-category-box-div" class="wpbooklist-frontend-filter-select" data-table="' . $this->table . '" data-which="category">    
-						            <option selected disabled>' . $this->trans->common_trans_17 . '</option>';
+						            <option selected disabled>' . $this->trans->trans_17 . '</option>';
 
 			$string5 = '';
 			foreach ( $this->final_category_array as $cat ) {
@@ -1048,7 +1048,7 @@ if ( ! class_exists( 'WPBookList_Front_End_Library_UI', false ) ) :
 			$string7 = '<div id="wpbooklist-filter-subject-box-div">
 							<div id="wpbooklist-select-sort-div">
 						        <select id="wpbooklist-filter-subject-box-div" class="wpbooklist-frontend-filter-select" data-table="' . $this->table . '" data-which="subject">    
-						            <option selected disabled>' . $this->trans->common_trans_18 . '</option>';
+						            <option selected disabled>' . $this->trans->trans_18 . '</option>';
 
 			$string8 = '';
 			foreach ( $this->final_subject_array as $subject ) {
@@ -1064,7 +1064,7 @@ if ( ! class_exists( 'WPBookList_Front_End_Library_UI', false ) ) :
 			$string10 = '<div id="wpbooklist-filter-country-box-div">
 							<div id="wpbooklist-select-sort-div">
 						        <select id="wpbooklist-filter-country-box-div" class="wpbooklist-frontend-filter-select" data-table="' . $this->table . '" data-which="country">    
-						            <option selected disabled>' . $this->trans->common_trans_19 . '</option>';
+						            <option selected disabled>' . $this->trans->trans_19 . '</option>';
 
 			$string11 = '';
 			foreach ( $this->final_country_array as $country ) {
@@ -1079,14 +1079,14 @@ if ( ! class_exists( 'WPBookList_Front_End_Library_UI', false ) ) :
 			$string12 = '</select>
 					    	</div>
 					    	<div id="wpbooklist-filter-between-year-div">
-					    		<p>' . $this->trans->common_trans_20 . '</p>
+					    		<p>' . $this->trans->trans_20 . '</p>
 					    		<select id="wpbooklist-year-range-1-' . $this->table . '">
 					    			' . $pubyearopt1 . '
 					    		</select>
 					    		<select id="wpbooklist-year-range-2-' . $this->table . '">
 					    			' . $pubyearopt2 . '
 					    		</select>
-					    		<span id="wpbooklist-to-span"> ' . $this->trans->common_trans_21 . ' </span>
+					    		<span id="wpbooklist-to-span"> ' . $this->trans->trans_21 . ' </span>
 					    		<select id="wpbooklist-year-range-3-' . $this->table . '">
 					    			' . $pubyearopt3 . '
 					    		</select>
@@ -1094,7 +1094,7 @@ if ( ! class_exists( 'WPBookList_Front_End_Library_UI', false ) ) :
 					    			' . $pubyearopt4 . '
 					    		</select>
 					    	</div>
-					    	<button class="wpbooklist-reset-search-and-filters">' . $this->trans->common_trans_22 . '</button>
+					    	<button class="wpbooklist-reset-search-and-filters">' . $this->trans->trans_22 . '</button>
 					    </div>
 					</div>';
 
@@ -1114,13 +1114,13 @@ if ( ! class_exists( 'WPBookList_Front_End_Library_UI', false ) ) :
 		private function output_stats() {
 
 			// Setting two default variables for the Stats area.
-			$stats_books_string = $this->trans->common_trans_23 . ':';
+			$stats_books_string = $this->trans->trans_23 . ':';
 			$book_count         = $this->total_book_count;
 
 			// This is here to accommodate multiple libraries being displayed on the same page.
 			if ( $this->query_table === $this->table ) {
 				if ( $this->params_true_flag ) {
-					$stats_books_string = $this->trans->common_trans_24 . ':';
+					$stats_books_string = $this->trans->trans_24 . ':';
 					$book_count         = $this->total_book_count;
 				}
 			}
@@ -1156,12 +1156,12 @@ if ( ! class_exists( 'WPBookList_Front_End_Library_UI', false ) ) :
 			$string1 = '
 			<div class="wpbooklist_stats_tdiv">
 				<p class="wpbooklist_control_panel_stat">' . $stats_books_string . ' ' . number_format( $book_count ) . '</p>
-				<p class="wpbooklist_control_panel_stat">' . $this->trans->common_trans_25 . ': ' . number_format( $this->total_book_read_count ) . '</p>
-				<p class="wpbooklist_control_panel_stat">' . $this->trans->common_trans_26 . ': ' . number_format( $this->total_book_signed_count ) . '</p>
-				<p class="wpbooklist_control_panel_stat">' . $this->trans->common_trans_27 . ': ' . number_format( $this->total_book_first_edition_count ) . '</p>
-				<p class="wpbooklist_control_panel_stat">' . $this->trans->common_trans_28 . ': ' . number_format( $this->total_pages_read_count ) . '</p>
-				<p class="wpbooklist_control_panel_stat">' . $this->trans->common_trans_29 . ': ' . number_format( $this->total_category_count ) . '</p>
-				<p class="wpbooklist_control_panel_stat">' . $this->trans->common_trans_30 . ': ';
+				<p class="wpbooklist_control_panel_stat">' . $this->trans->trans_25 . ': ' . number_format( $this->total_book_read_count ) . '</p>
+				<p class="wpbooklist_control_panel_stat">' . $this->trans->trans_26 . ': ' . number_format( $this->total_book_signed_count ) . '</p>
+				<p class="wpbooklist_control_panel_stat">' . $this->trans->trans_27 . ': ' . number_format( $this->total_book_first_edition_count ) . '</p>
+				<p class="wpbooklist_control_panel_stat">' . $this->trans->trans_28 . ': ' . number_format( $this->total_pages_read_count ) . '</p>
+				<p class="wpbooklist_control_panel_stat">' . $this->trans->trans_29 . ': ' . number_format( $this->total_category_count ) . '</p>
+				<p class="wpbooklist_control_panel_stat">' . $this->trans->trans_30 . ': ';
 
 			if ( ( 0 === $this->total_book_read_count ) || ( 0 === $this->total_book_count ) ) {
 				$string2 = '0%';
@@ -1215,7 +1215,7 @@ if ( ! class_exists( 'WPBookList_Front_End_Library_UI', false ) ) :
 
 			// Check for zero results found - if so, display a error message.
 			if ( 0 === $this->total_books_filter || 0 === $this->total_book_count ) {
-				$nobooksmessage = '<p><img class="wpbooklist-storytime-shocked-img-front" src="' . ROOT_IMG_ICONS_URL . 'shocked . svg"/>' . $this->trans->common_trans_31 . '<br/>' . $this->trans->common_trans_32 . '<a href="https://wordpress.org/plugins/wpbooklist/">' . $this->trans->common_trans_33 . '</a><br/>' . $this->trans->common_trans_34 . '<a href="https://wpbooklist . com/">' . $this->trans->common_trans_35 . '</a></p>';
+				$nobooksmessage = '<p><img class="wpbooklist-storytime-shocked-img-front" src="' . ROOT_IMG_ICONS_URL . 'shocked . svg"/>' . $this->trans->trans_31 . '<br/>' . $this->trans->trans_32 . '<a href="https://wordpress.org/plugins/wpbooklist/">' . $this->trans->trans_33 . '</a><br/>' . $this->trans->trans_34 . '<a href="https://wpbooklist . com/">' . $this->trans->trans_35 . '</a></p>';
 			}
 
 			// Add the no books message to the HTML string.
@@ -1434,7 +1434,7 @@ if ( ! class_exists( 'WPBookList_Front_End_Library_UI', false ) ) :
 				<div class="wpbooklist-pagination-div">
 					<div class="wpbooklist-pagination-div-inner">
 						<div class="wpbooklist-pagination-left-div" ' . $styledisableleft . ' data-offset="' . $prevnum . '" data-table="' . $this->table . '">
-							<p><img class="wpbooklist-pagination-prev-img" src="' . ROOT_IMG_URL . 'next-left.png" />' . $this->trans->common_trans_36 . '</p>
+							<p><img class="wpbooklist-pagination-prev-img" src="' . ROOT_IMG_URL . 'next-left.png" />' . $this->trans->trans_36 . '</p>
 						</div>
 						<div class="wpbooklist-pagination-middle-div">
 							<select class="wpbooklist-pagination-middle-div-select" data-table="' . $this->table . '">
@@ -1442,7 +1442,7 @@ if ( ! class_exists( 'WPBookList_Front_End_Library_UI', false ) ) :
 							</select>
 						</div>
 						<div class="wpbooklist-pagination-right-div" ' . $styledisableright . ' data-offset="' . $nextnum . '" data-table="' . $this->table . '">
-							<p>' . $this->trans->common_trans_37 . '<img class="wpbooklist-pagination-prev-img" src="' . ROOT_IMG_URL . 'next-right.png" /></p>
+							<p>' . $this->trans->trans_37 . '<img class="wpbooklist-pagination-prev-img" src="' . ROOT_IMG_URL . 'next-right.png" /></p>
 						</div>
 					</div>
 				</div>';

@@ -21,7 +21,7 @@ global $wpdb;
 
 /* REQUIRE STATEMENTS */
 	require_once 'includes/class-wpbooklist-general-functions.php';
-	require_once 'includes/ajaxfunctions.php';
+	require_once 'includes/class-wpbooklist-ajax-functions.php';
 	require_once 'includes/classes/rest/class-wpbooklist-rest-functions.php';
 	require_once 'includes/classes/storytime/class-storytime.php';
 /* END REQUIRE STATEMENTS */
@@ -46,6 +46,9 @@ global $wpdb;
 	// Quotes Directory.
 	define( 'QUOTES_DIR', ROOT_DIR . 'quotes/' );
 
+	// Quotes URL.
+	define( 'QUOTES_URL', ROOT_URL . 'quotes/' );
+
 	// Root JavaScript Directory.
 	define( 'JAVASCRIPT_URL', ROOT_URL . 'assets/js/' );
 
@@ -69,6 +72,15 @@ global $wpdb;
 
 	// Root Translations Directory.
 	define( 'CLASS_TRANSLATIONS_DIR', ROOT_DIR . 'includes/classes/translations/' );
+
+	// Root Transients Directory.
+	define( 'CLASS_TRANSIENTS_DIR', ROOT_DIR . 'includes/classes/transients/' );
+
+	// Root Page Directory.
+	define( 'CLASS_PAGE_DIR', ROOT_DIR . 'includes/classes/page/' );
+
+	// Root Post Directory.
+	define( 'CLASS_POST_DIR', ROOT_DIR . 'includes/classes/post/' );
 
 	// Root Image URL .
 	define( 'ROOT_IMG_URL', ROOT_URL . 'assets/img/' );
@@ -131,6 +143,9 @@ global $wpdb;
 	define( 'WPBOOKLIST_NONCES_ARRAY',
 		wp_json_encode(array(
 			'adminnonce1' => 'wphealthtracker_jre_selecteduser_vitals_enter_action_callback',
+			'adminnonce2' => 'wpbooklist_dashboard_add_book_action_callback',
+			'adminnonce3' => 'wpbooklist_show_book_in_colorbox_action_callback',
+			'adminnonce4' => 'wpbooklist_new_library_action_callback',
 		))
 	);
 
@@ -154,6 +169,9 @@ global $wpdb;
 
 	// Call the class found in wpbooklist-functions.php.
 	$wp_book_list_general_functions = new WPBookList_General_Functions();
+
+	// Call the class found in wpbooklist-functions.php.
+	$wp_book_list_ajax_functions = new WPBookList_Ajax_Functions();
 
 	// Call the class found in class-wpbooklist-rest-functions.php.
 	$wp_book_list_rest_functions = new WPBookList_Rest_Functions();
@@ -238,6 +256,27 @@ global $wpdb;
 
 
 /* END OF FUNCTIONS FOUND IN CLASS-WPBOOKLIST-GENERAL-FUNCTIONS.PHP THAT APPLY PLUGIN-WIDE */
+
+/* FUNCTIONS FOUND IN CLASS-WPBOOKLIST-AJAX-FUNCTIONS.PHP THAT APPLY PLUGIN-WIDE */
+
+	// For adding a book from the admin dashboard.
+	add_action( 'wp_ajax_wpbooklist_dashboard_add_book_action', array( $wp_book_list_ajax_functions, 'wpbooklist_dashboard_add_book_action_callback' ) );
+	add_action( 'wp_ajax_nopriv_wpbooklist_dashboard_add_book_action', array( $wp_book_list_ajax_functions, 'wpbooklist_dashboard_add_book_action_callback' ) );
+
+	add_action( 'wp_ajax_wpbooklist_show_book_in_colorbox_action', array( $wp_book_list_ajax_functions, 'wpbooklist_show_book_in_colorbox_action_callback' ) );
+	add_action( 'wp_ajax_nopriv_wpbooklist_show_book_in_colorbox_action', array( $wp_book_list_ajax_functions, 'wpbooklist_show_book_in_colorbox_action_callback' ) );
+
+	// For creating custom libraries.
+	add_action( 'wp_ajax_wpbooklist_new_library_action', array( $wp_book_list_ajax_functions, 'wpbooklist_new_library_action_callback' ) );
+	add_action( 'wp_ajax_nopriv_wpbooklist_new_library_action', array( $wp_book_list_ajax_functions, 'wpbooklist_new_library_action_callback' ) );
+
+
+
+
+
+
+
+/* END OF FUNCTIONS FOUND IN CLASS-WPBOOKLIST-AJAX-FUNCTIONS.PHP THAT APPLY PLUGIN-WIDE */
 
 /* FUNCTIONS FOUND IN CLASS-WPBOOKLIST-STORYTIME.PHP THAT APPLY PLUGIN-WIDE */
 
@@ -418,9 +457,9 @@ add_action( 'wp_ajax_wpbooklist_show_book_in_colorbox_action', 'wpbooklist_show_
 add_action( 'wp_ajax_nopriv_wpbooklist_show_book_in_colorbox_action', 'wpbooklist_show_book_in_colorbox_action_callback' );
 
 // For creating/deleting custom libraries
-add_action( 'admin_footer', 'wpbooklist_new_lib_shortcode_action_javascript' );
-add_action( 'wp_ajax_wpbooklist_new_lib_shortcode_action', 'wpbooklist_new_lib_shortcode_action_callback' );
-add_action( 'wp_ajax_nopriv_wpbooklist_new_lib_shortcode_action', 'wpbooklist_new_lib_shortcode_action_callback' );
+add_action( 'admin_footer', 'wpbooklist_new_library_action_javascript' );
+add_action( 'wp_ajax_wpbooklist_new_library_action', 'wpbooklist_new_library_action_callback' );
+add_action( 'wp_ajax_nopriv_wpbooklist_new_library_action', 'wpbooklist_new_library_action_callback' );
 
 // For saving library display options
 add_action( 'admin_footer', 'wpbooklist_dashboard_save_library_display_options_action_javascript' );
