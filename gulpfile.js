@@ -90,7 +90,7 @@ gulp.task('concatFrontendJs', function() {
 gulp.task('watch', function() {
     gulp.watch(sassWatch,['sassWatch']);
     gulp.watch(jsFrontendWatch,['jsFrontendWatch']);
-    gulp.watch(jsBackendWatch,['jsBackendWatch']);
+    gulp.watch(jsBackendWatch,['concatAdminJs']);
 });
 
 // Default gulp task

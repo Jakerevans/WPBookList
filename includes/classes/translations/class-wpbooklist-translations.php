@@ -114,6 +114,24 @@ if ( ! class_exists( 'WPBookList_Translations', false ) ) :
 			$this->trans_81 = __( 'page', 'wpbooklist' );
 			$this->trans_82 = __( 'Add a Book', 'wpbooklist' );
 
+			$this->trans_83 = __( 'You\'ve just edited your book! Remember, to display your library, simply place this shortcode on a page or post', 'wpbooklist' );
+			$this->trans_84 = __( 'Click Here to View Your Edited Book', 'wpbooklist' );
+			$this->trans_85 = __( 'Click Here to View Your Edited Book', 'wpbooklist' );
+			$this->trans_86 = __( 'Whoops! Looks like there was an error trying to edit your book! Please check the information you provided (especially that ISBN number), and try again.', 'wpbooklist' );
+			$this->trans_87 = __( 'Your book was edited, but it looks like there was a problem grabbing book info from Amazon. Try manually entering your book information, or wait a few seconds and try again, as sometimes Amazon gets confused. Remember, you don\'t', 'wpbooklist' );
+			$this->trans_88 = __( 'Title was succesfully deleted!', 'wpbooklist' );
+			$this->trans_89 = __( 'You\'ve added a new StylePak!', 'wpbooklist' );
+			$this->trans_90 = __( 'Uh-Oh!', 'wpbooklist' );
+			$this->trans_91 = __( 'Looks like there was a problem uploading your StylePak! Are you sure you selected the right file? It should start with the word \'StylePak\' and end with either a \'.zip\' or a \'.css\' (example - StylePak1.css or StylePak1.css.zip) - you could also try unzipping the file', 'wpbooklist' );
+			$this->trans_92 = __( 'before', 'wpbooklist' );
+			$this->trans_93 = __( 'uploading it', 'wpbooklist' );
+
+			$this->trans_94 = __( 'You\'ve added a new Template!', 'wpbooklist' );
+			$this->trans_95 = __( 'Looks like there was a problem uploading your Template! Are you sure you selected the right file? It should start with the word \'Post\' and end with either a \'.zip\' or a \'.php\' (example - Post-Template-1.php or Post-Template-1.zip) - you could also try unzipping the file', 'wpbooklist' );
+			$this->trans_96 = __( 'Looks like there was a problem uploading your Template! Are you sure you selected the right file? It should start with the word \'Page\' and end with either a \'.zip\' or a \'.php\' (example - Page-Template-1.php or Page-Template-1.zip) - you could also try unzipping the file', 'wpbooklist' );
+
+
+
 
 
 
@@ -127,7 +145,7 @@ if ( ! class_exists( 'WPBookList_Translations', false ) ) :
 			$translation_array = array(
 				'trans1'  => $this->trans_1,
 				'trans2'  => $this->trans_2,
-				'trans'   => $this->trans_3,
+				'trans3'  => $this->trans_3,
 				'trans4'  => $this->trans_4,
 				'trans5'  => $this->trans_5,
 				'trans6'  => $this->trans_6,
@@ -180,6 +198,50 @@ if ( ! class_exists( 'WPBookList_Translations', false ) ) :
 				'trans53' => $this->trans_53,
 				'trans54' => $this->trans_54,
 				'trans55' => $this->trans_55,
+				'trans56' => $this->trans_56,
+				'trans57' => $this->trans_57,
+				'trans58' => $this->trans_58,
+				'trans59' => $this->trans_59,
+				'trans60' => $this->trans_60,
+				'trans61' => $this->trans_61,
+				'trans62' => $this->trans_62,
+				'trans63' => $this->trans_63,
+				'trans64' => $this->trans_64,
+				'trans65' => $this->trans_65,
+				'trans66' => $this->trans_66,
+				'trans67' => $this->trans_67,
+				'trans68' => $this->trans_68,
+				'trans69' => $this->trans_69,
+				'trans70' => $this->trans_70,
+				'trans71' => $this->trans_71,
+				'trans72' => $this->trans_72,
+				'trans73' => $this->trans_73,
+				'trans74' => $this->trans_74,
+				'trans75' => $this->trans_75,
+				'trans76' => $this->trans_76,
+				'trans77' => $this->trans_77,
+				'trans78' => $this->trans_78,
+				'trans79' => $this->trans_79,
+				'trans80' => $this->trans_80,
+				'trans81' => $this->trans_81,
+				'trans82' => $this->trans_82,
+				'trans83' => $this->trans_83,
+				'trans84' => $this->trans_84,
+				'trans85' => $this->trans_85,
+				'trans86' => $this->trans_86,
+				'trans87' => $this->trans_87,
+				'trans88' => $this->trans_88,
+				'trans89' => $this->trans_89,
+				'trans90' => $this->trans_90,
+				'trans91' => $this->trans_91,
+				'trans92' => $this->trans_92,
+				'trans93' => $this->trans_93,
+				'trans94' => $this->trans_94,
+				'trans95' => $this->trans_95,
+				'trans96' => $this->trans_96,
+				'trans97' => $this->trans_97,
+				'trans98' => $this->trans_98,
+				'trans99' => $this->trans_99,
 			);
 
 			return $translation_array;

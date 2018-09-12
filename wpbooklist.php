@@ -149,6 +149,24 @@ global $wpdb;
 			'adminnonce2' => 'wpbooklist_dashboard_add_book_action_callback',
 			'adminnonce3' => 'wpbooklist_show_book_in_colorbox_action_callback',
 			'adminnonce4' => 'wpbooklist_new_library_action_callback',
+			'adminnonce5' => 'wpbooklist_delete_library_action_callback',
+			'adminnonce6' => 'wpbooklist_dashboard_save_library_display_options_action_callback',
+			'adminnonce7' => 'wpbooklist_dashboard_save_page_display_options_action_callback',
+			'adminnonce8' => 'wpbooklist_dashboard_save_post_display_options_action_callback',
+			'adminnonce9' => 'wpbooklist_change_library_display_options_action_callback',
+			'adminnonce10' => 'wpbooklist_edit_book_show_form_action_callback',
+			'adminnonce11' => 'wpbooklist_edit_book_pagination_action_callback',
+			'adminnonce12' => 'wpbooklist_edit_book_switch_lib_action_callback',
+			'adminnonce13' => 'wpbooklist_edit_book_search_action_callback',
+			'adminnonce14' => 'wpbooklist_edit_book_actual_action_callback',
+			'adminnonce15' => 'wpbooklist_delete_book_action_callback',
+			'adminnonce16' => 'wpbooklist_user_apis_action_callback',
+			'adminnonce17' => 'wpbooklist_upload_new_stylepak_action_callback',
+			'adminnonce18' => 'wpbooklist_assign_stylepak_action_callback',
+			'adminnonce19' => 'wpbooklist_upload_new_post_template_action_callback',
+			'adminnonce20' => 'wpbooklist_assign_post_template_action_callback',
+			'adminnonce21' => 'wpbooklist_upload_new_page_template_action_callback',
+			'adminnonce22' => 'wpbooklist_assign_page_template_action_callback',
 		))
 	);
 
@@ -264,16 +282,66 @@ global $wpdb;
 
 	// For adding a book from the admin dashboard.
 	add_action( 'wp_ajax_wpbooklist_dashboard_add_book_action', array( $wp_book_list_ajax_functions, 'wpbooklist_dashboard_add_book_action_callback' ) );
-	add_action( 'wp_ajax_nopriv_wpbooklist_dashboard_add_book_action', array( $wp_book_list_ajax_functions, 'wpbooklist_dashboard_add_book_action_callback' ) );
 
 	add_action( 'wp_ajax_wpbooklist_show_book_in_colorbox_action', array( $wp_book_list_ajax_functions, 'wpbooklist_show_book_in_colorbox_action_callback' ) );
-	add_action( 'wp_ajax_nopriv_wpbooklist_show_book_in_colorbox_action', array( $wp_book_list_ajax_functions, 'wpbooklist_show_book_in_colorbox_action_callback' ) );
 
 	// For creating custom libraries.
 	add_action( 'wp_ajax_wpbooklist_new_library_action', array( $wp_book_list_ajax_functions, 'wpbooklist_new_library_action_callback' ) );
-	add_action( 'wp_ajax_nopriv_wpbooklist_new_library_action', array( $wp_book_list_ajax_functions, 'wpbooklist_new_library_action_callback' ) );
+
+	// For deleting custom libraries.
+	add_action( 'wp_ajax_wpbooklist_delete_library_action', array( $wp_book_list_ajax_functions, 'wpbooklist_delete_library_action_callback' ) );
+
+	// For saving library display options.
+	add_action( 'wp_ajax_wpbooklist_dashboard_save_library_display_options_action', array( $wp_book_list_ajax_functions, 'wpbooklist_dashboard_save_library_display_options_action_callback' ) );
+
+	// For saving post display options.
+	add_action( 'wp_ajax_wpbooklist_dashboard_save_post_display_options_action', array( $wp_book_list_ajax_functions, 'wpbooklist_dashboard_save_post_display_options_action_callback' ) );
 
 
+	// For saving page display options.
+	add_action( 'wp_ajax_wpbooklist_dashboard_save_page_display_options_action', array( $wp_book_list_ajax_functions, 'wpbooklist_dashboard_save_page_display_options_action_callback' ) );
+
+	// Function for changing the Library on the Library tab of the Display Options menu.
+	add_action( 'wp_ajax_wpbooklist_change_library_display_options_action', array( $wp_book_list_ajax_functions, 'wpbooklist_change_library_display_options_action_callback' ) );
+
+	// For editing a book from the admin dashboard.
+	add_action( 'wp_ajax_wpbooklist_edit_book_show_form_action', array( $wp_book_list_ajax_functions, 'wpbooklist_edit_book_show_form_action_callback' ) );
+
+	// For handling the pagination of the 'Edit & Delete Books' tab.
+	add_action( 'wp_ajax_wpbooklist_edit_book_pagination_action', array( $wp_book_list_ajax_functions, 'wpbooklist_edit_book_pagination_action_callback' ) );
+
+	// For switching libraries on the 'Edit & Delete Books' tab.
+	add_action( 'wp_ajax_wpbooklist_edit_book_switch_lib_action', array( $wp_book_list_ajax_functions, 'wpbooklist_edit_book_switch_lib_action_callback' ) );
+
+	// For searching for a title to edit.
+	add_action( 'wp_ajax_wpbooklist_edit_book_search_action', array( $wp_book_list_ajax_functions, 'wpbooklist_edit_book_search_action_callback' ) );
+
+	// For the saving of edits to existing books.
+	add_action( 'wp_ajax_wpbooklist_edit_book_actual_action', array( $wp_book_list_ajax_functions, 'wpbooklist_edit_book_actual_action_callback' ) );
+
+	// For deleting a book from the 'Edit & Delete Books' tab.
+	add_action( 'wp_ajax_wpbooklist_delete_book_action', array( $wp_book_list_ajax_functions, 'wpbooklist_delete_book_action_callback' ) );
+
+	// For saving a user's own API keys.
+	add_action( 'wp_ajax_wpbooklist_user_apis_action', array( $wp_book_list_ajax_functions, 'wpbooklist_user_apis_action_callback' ) );
+
+	// For uploading a new StylePak after purchase.
+	add_action( 'wp_ajax_wpbooklist_upload_new_stylepak_action', array( $wp_book_list_ajax_functions, 'wpbooklist_upload_new_stylepak_action_callback' ) );
+
+	// For assigning a StylePak to a library.
+	add_action( 'wp_ajax_wpbooklist_assign_stylepak_action', array( $wp_book_list_ajax_functions, 'wpbooklist_assign_stylepak_action_callback' ) );
+
+	// For uploading a new Post Template to a library.
+	add_action( 'wp_ajax_wpbooklist_upload_new_post_template_action', array( $wp_book_list_ajax_functions, 'wpbooklist_upload_new_post_template_action_callback' ) );
+
+	// For uploading a new Page Template to a library.
+	add_action( 'wp_ajax_wpbooklist_upload_new_page_template_action', array( $wp_book_list_ajax_functions, 'wpbooklist_upload_new_page_template_action_callback' ) );
+
+	// For assigning a Post Template to a Post.
+	add_action( 'wp_ajax_wpbooklist_assign_post_template_action', array( $wp_book_list_ajax_functions, 'wpbooklist_assign_post_template_action_callback' ) );
+
+	// For assigning a Page Template to a Page.
+	add_action( 'wp_ajax_wpbooklist_assign_page_template_action', array( $wp_book_list_ajax_functions, 'wpbooklist_assign_page_template_action_callback' ) );
 
 
 

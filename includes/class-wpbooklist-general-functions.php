@@ -1302,23 +1302,23 @@ if ( ! class_exists( 'WPBookList_General_Functions', false ) ) :
 
 					switch ( $active_post_template ) {
 						case 'Post-Template-1':
-							include PAGE_TEMPLATES_UPLOAD_DIR . 'Post-Template-1.php';
+							include POST_TEMPLATES_UPLOAD_DIR . 'Post-Template-1.php';
 							return $content . $string1 . $string2 . $string3 . $string4 . $string5 . $string6 . $string7 . $string8 . $string9 . $string10 . $string11 . $string12 . $string13 . $string14 . $string15 . $string16 . $string17 . $string18 . $string19 . $string20 . $string21 . $string22 . $string23 . $string24 . $string25 . $string26 . $string27 . $string28 . $string29 . $string30 . $string31 . $string32 . $string33 . $string34 . $string35 . $string36 . $string37 . $string38 . $string39 . $string40 . $string41 . $string42 . $string43 . $string44 . $string45 . $string46 . $string47;
 							break;
 						case 'Post-Template-2':
-							include PAGE_TEMPLATES_UPLOAD_DIR . 'Post-Template-2.php';
+							include POST_TEMPLATES_UPLOAD_DIR . 'Post-Template-2.php';
 							return $content . $string1 . $string2 . $string3 . $string4 . $string5 . $string6 . $string7 . $string8 . $string9 . $string10 . $string11 . $string12 . $string13 . $string14 . $string15 . $string16 . $string17 . $string18 . $string19 . $string20 . $string21 . $string22 . $string23 . $string24 . $string25 . $string26 . $string27 . $string28 . $string29 . $string30 . $string31 . $string32 . $string33 . $string34 . $string35 . $string36 . $string37 . $string38 . $string39 . $string40 . $string41 . $string42 . $string43 . $string44 . $string45 . $string46 . $string47;
 							break;
 						case 'Post-Template-3':
-							include PAGE_TEMPLATES_UPLOAD_DIR . 'Post-Template-3.php';
+							include POST_TEMPLATES_UPLOAD_DIR . 'Post-Template-3.php';
 							return $content . $string1 . $string2 . $string3 . $string4 . $string5 . $string6 . $string7 . $string8 . $string9 . $string10 . $string11 . $string12 . $string13 . $string14 . $string15 . $string16 . $string17 . $string18 . $string19 . $string20 . $string21 . $string22 . $string23 . $string24 . $string25 . $string26 . $string27 . $string28 . $string29 . $string30 . $string31 . $string32 . $string33 . $string34 . $string35 . $string36 . $string37 . $string38 . $string39 . $string40 . $string41 . $string42 . $string43 . $string44 . $string45 . $string46 . $string47;
 							break;
 						case 'Post-Template-4':
-							include PAGE_TEMPLATES_UPLOAD_DIR . 'Post-Template-4.php';
+							include POST_TEMPLATES_UPLOAD_DIR . 'Post-Template-4.php';
 							return $content . $string1 . $string2 . $string3 . $string4 . $string5 . $string6 . $string7 . $string8 . $string9 . $string10 . $string11 . $string12 . $string13 . $string14 . $string15 . $string16 . $string17 . $string18 . $string19 . $string20 . $string21 . $string22 . $string23 . $string24 . $string25 . $string26 . $string27 . $string28 . $string29 . $string30 . $string31 . $string32 . $string33 . $string34 . $string35 . $string36 . $string37 . $string38 . $string39 . $string40 . $string41 . $string42 . $string43 . $string44 . $string45 . $string46 . $string47;
 							break;
 						case 'Post-Template-5':
-							include PAGE_TEMPLATES_UPLOAD_DIR . 'Post-Template-5.php';
+							include POST_TEMPLATES_UPLOAD_DIR . 'Post-Template-5.php';
 							return $content . $string1 . $string2 . $string3 . $string4 . $string5 . $string6 . $string7 . $string8 . $string9 . $string10 . $string11 . $string12 . $string13 . $string14 . $string15 . $string16 . $string17 . $string18 . $string19 . $string20 . $string21 . $string22 . $string23 . $string24 . $string25 . $string26 . $string27 . $string28 . $string29 . $string30 . $string31 . $string32 . $string33 . $string34 . $string35 . $string36 . $string37 . $string38 . $string39 . $string40 . $string41 . $string42 . $string43 . $string44 . $string45 . $string46 . $string47;
 							break;
 						default:
@@ -1333,14 +1333,14 @@ if ( ! class_exists( 'WPBookList_General_Functions', false ) ) :
 						if ( 'page' === $page_post_row->type ) {
 							include PAGE_TEMPLATES_UPLOAD_DIR . 'page-template-1.php';
 						} else {
-							include PAGE_TEMPLATES_UPLOAD_DIR . 'post-template-1.php';
+							include POST_TEMPLATES_UPLOAD_DIR . 'post-template-1.php';
 						}
 						break;
 					case 'template2':
 						if ( 'page' === $page_post_row->type ) {
 							include PAGE_TEMPLATES_UPLOAD_DIR . 'page-template-2.php';
 						} else {
-							include PAGE_TEMPLATES_UPLOAD_DIR . 'post-template-2.php';
+							include POST_TEMPLATES_UPLOAD_DIR . 'post-template-2.php';
 						}
 						break;
 					case 'default':
@@ -1356,7 +1356,7 @@ if ( ! class_exists( 'WPBookList_General_Functions', false ) ) :
 
 						} else {
 
-							include PAGE_TEMPLATES_DEFAULT_DIR . 'post-template-default.php';
+							include POST_TEMPLATES_DEFAULT_DIR . 'post-template-default.php';
 
 							// Double-check that Amazon review isn't expired.
 							require_once CLASS_BOOK_DIR . 'class-book.php';

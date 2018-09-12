@@ -478,6 +478,7 @@ class WPBookList_Show_Book_In_Colorbox {
 			                        <div id="wpbooklist_display_image_container">';
 
 			                        // Determine which image to use for the title
+			                        $string2 = '';
 			                       if($this->hidebookimage == null || $this->hidebookimage == 0){
 			                            if($this->image == null){
 											$string2 = '<img id="wpbooklist_cover_image_popup" src="'.ROOT_IMG_URL.'image_unavaliable.png"/>';

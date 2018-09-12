@@ -37,10 +37,10 @@ if ( ! class_exists( 'WPBookList_Add_Book_Form', false ) ) :
 			// Perform check for previously-saved Amazon Authorization.
 			global $wpdb;
 			$table_name = $wpdb->prefix . 'wpbooklist_jre_user_options';
-			$opt_results = $wpdb->get_row( 'SELECT * FROM $table_name' );
+			$opt_results = $wpdb->get_row( 'SELECT * FROM '.$table_name );
 
 			$table_name = $wpdb->prefix . 'wpbooklist_jre_list_dynamic_db_names';
-			$db_row = $wpdb->get_results( 'SELECT * FROM $table_name' );
+			$db_row = $wpdb->get_results( 'SELECT * FROM '.$table_name);
 
 			// For grabbing an image from media library.
 			wp_enqueue_media();

@@ -20,7 +20,7 @@ class WPBookList_Pages_Display_Options_Tab {
 
     public function __construct() {
     	require_once(CLASS_DIR.'class-admin-ui-template.php');
-    	require_once(CLASS_DIR.'class-pages-display-options-form.php');
+    	require_once(CLASS_PAGE_DIR.'class-pages-display-options-form.php');
     	// Instantiate the class
 		$this->template = new WPBookList_Admin_UI_Template;
 		$this->form = new WPBookList_Pages_Display_Options_Form;
