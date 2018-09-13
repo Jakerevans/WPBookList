@@ -414,12 +414,23 @@ global $wpdb;
 	// For the admin pages.
 	add_action( 'admin_menu', array( $wp_book_list_storytime, 'wpbooklist_jre_storytime_admin_notice' ) );
 	// Function that displays StoryTime on the front end.
-	add_shortcode( 'wpbooklist_storytime', array( $wp_book_list_storytime, 'wpbooklist_jre_storytime_admin_notice' ) );
+	add_shortcode( 'wpbooklist_storytime', array( $wp_book_list_storytime, 'wpbooklist_storytime_shortcode' ) );
 
 /* END OF FUNCTIONS FOUND IN CLASS-WPBOOKLIST-STORYTIME.PHP THAT APPLY PLUGIN-WIDE */
 
 
 
+/* REST FUNCTIONS FOUND IN CLASS-WPBOOKLIST-REST-FUNCTIONS.PHP THAT APPLY PLUGIN-WIDE */
+
+	// For the REST API update for validating patreon.
+	add_action( 'rest_api_init', function () {
+	  register_rest_route( 'wpbooklist/v1', '/firstkey/(?P<firstkey>[a-z0-9\-]+)/secondkey/(?P<secondkey>[a-z0-9\-]+)', array(
+	    'methods' => 'GET',
+	    'callback' => array( $wp_book_list_rest_functions, 'wpbooklist_jre_storytime_patreon_validate_rest_api_notice' ),
+	  ) );
+	});
+
+/* END OF REST FUNCTIONS FOUND IN CLASS-WPBOOKLIST-REST-FUNCTIONS.PHP THAT APPLY PLUGIN-WIDE */
 
 /*
 // For admin messages

@@ -18,6 +18,44 @@ if ( ! class_exists( 'WPBookList_Rest_Functions', false ) ) :
 	 */
 	class WPBookList_Rest_Functions {
 
+		/**
+		 * Class Constructor - Simply calls the Translations
+		 */
+		public function __construct() {
+
+				// For the REST API update for validating patreon.
+				add_action( 'rest_api_init', function () {
+					register_rest_route( 'wpbooklist/v1', '/firstkey/(?P<firstkey>[a-z0-9\-]+)/secondkey/(?P<secondkey>[a-z0-9\-]+)', array(
+						'methods'  => 'GET',
+						'callback' => array( $this, 'wpbooklist_jre_storytime_patreon_validate_rest_api_notice' ),
+					) );
+				});
+
+				// For the REST API update for dashboard messages.
+				add_action( 'rest_api_init', function () {
+					register_rest_route( 'wpbooklist/v1', '/notice/(?P<notice>[a-z0-9\-]+)', array(
+						'methods'  => 'GET',
+						'callback' => array( $this, 'wpbooklist_jre_rest_api_notice' ),
+					) );
+				});
+
+				// For the REST API update for adding new StoryTime Stories.
+				add_action( 'rest_api_init', function () {
+					register_rest_route( 'wpbooklist/v1', '/storytime', array(
+						'methods'  => 'POST',
+						'callback' => array( $this, 'wpbooklist_jre_storytime_rest_api_notice' ),
+					) );
+				});
+
+				// For the REST API for deleting StoryTime Stories.
+				add_action( 'rest_api_init', function () {
+					register_rest_route( 'wpbooklist/v1', '/storytimedelete', array(
+						'methods'  => 'POST',
+						'callback' => array( $this, 'wpbooklist_jre_storytime_delete_rest_api_notice' ),
+					) );
+				});
+		}
+
 
 		/** For pushing a new message to the admin notice area
 		 *
@@ -30,7 +68,7 @@ if ( ! class_exists( 'WPBookList_Rest_Functions', false ) ) :
 			$newmessage  = $data['notice'];
 			$dismiss     = $options_row[0]->admindismiss;
 
-			if ( 0 === $dismiss ) {
+			if ( '0' === $dismiss ) {
 				$data         = array(
 					'admindismiss' => 1,
 					'adminmessage' => $newmessage,

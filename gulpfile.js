@@ -88,8 +88,8 @@ gulp.task('concatFrontendJs', function() {
 
 // Task to watch for changes in our file sources
 gulp.task('watch', function() {
-    gulp.watch(sassWatch,['sassWatch']);
-    gulp.watch(jsFrontendWatch,['jsFrontendWatch']);
+    gulp.watch(sassWatch,['sassFrontendSource', 'sassBackendSource']);
+    gulp.watch(jsFrontendWatch,['concatFrontendJs']);
     gulp.watch(jsBackendWatch,['concatAdminJs']);
 });
 

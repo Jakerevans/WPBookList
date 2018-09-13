@@ -84,7 +84,6 @@ if ( ! class_exists( 'WPBookList_Translations', false ) ) :
 			$this->trans_53  = __( 'Select a User', 'wpbooklist' );
 			$this->trans_54  = __( 'Create a New Library Here', 'wpbooklist' );
 			$this->trans_55  = __( 'Loading', 'wpbooklist' );
-			$this->trans_55  = __( 'You\'ve worked hard to add all those books to your website - make sure they\'re backed up! Simply select a Library to backup, click the \'Backup Library\' button below, and', 'wpbooklist' );
 			$this->trans_56  = __( 'You\'ve worked hard to add all those books to your website - make sure they\'re backed up! Simply select a Library to backup, click the \'Backup Library\' button below, and', 'wpbooklist' );
 			$this->trans_57  = __( 'WPBookList', 'wpbooklist' );
 			$this->trans_58  = __( 'will create a Database backup of your library!', 'wpbooklist' );

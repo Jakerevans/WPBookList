@@ -1755,72 +1755,6 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 			wp_die();
 		}
 
-
-
-		// For creating a DB backup of a Library
-		public function wpbooklist_create_db_library_backup_action_javascript() { 
-
-			$trans1 = __("Success!", 'wpbooklist');
-			$trans2 = __("You've Created a New Backup! You can", 'wpbooklist');
-			$trans6 = __("Thanks for using WPBookList, and", 'wpbooklist');
-			$trans7 = __("be sure to check out the WPBookList Extensions!", 'wpbooklist');
-			$trans8 = __("If you happen to be thrilled with WPBookList, then by all means,", 'wpbooklist');
-			$trans9 = __("Feel Free to Leave a 5-Star Review Here!", 'wpbooklist');
-			$trans14 = __("download your backup here", 'wpbooklist');
-			
-
-			?>
-		  	<script type="text/javascript" >
-		  	"use strict";
-		  	jQuery(document).ready(function($) {
-
-		  		
-
-		  		$(document).on("click","#wpbooklist-apply-library-backup", function(event){
-
-		  			$('#wpbooklist-spinner-backup').animate({'opacity':'1'}, 500);
-
-		  			var library = $('#wpbooklist-backup-select-library').val();
-
-				  	var data = {
-						'action': 'wpbooklist_create_db_library_backup_action',
-						'security': '<?php echo wp_create_nonce( "wpbooklist_create_db_library_backup_action_callback" ); ?>',
-						'library':library
-					};
-					console.log(data);
-
-			     	var request = $.ajax({
-					    url: ajaxurl,
-					    type: "POST",
-					    data:data,
-					    timeout: 0,
-					    success: function(response) {
-					    	response = response.split(',');
-					    	if(response[0] == '1'){
-					    		$('#wpbooklist-spinner-backup').animate({'opacity':'0'}, 500);
-					    		$('#wpbooklist-addbackup-success-div').html("<span id='wpbooklist-add-book-success-span'><?php echo $trans1 ?></span><br/><br/> <?php echo $trans2 ?> <a href='<?php echo LIBRARY_DB_BACKUPS_UPLOAD_URL; ?>"+response[1]+".zip'><?php echo $trans14 ?>.</a><div id='wpbooklist-addstylepak-success-thanks'><?php echo $trans6 ?> <a href='http://wpbooklist.com/index.php/extensions/'><?php echo $trans7 ?></a><br/><br/> <?php echo $trans8 ?> <a id='wpbooklist-addbook-success-review-link' href='https://wordpress.org/support/plugin/wpbooklist/reviews/?filter=5'><?php echo $trans9 ?></a><img id='wpbooklist-smile-icon-1' src='http://evansclienttest.com/wp-content/plugins/wpbooklist/assets/img/icons/happy.svg'></div>");
-
-								$('html, body').animate({
-							        scrollTop: $("#wpbooklist-addbackup-success-div").offset().top-100
-							    }, 1000);
-
-					    	}
-			
-					    },
-						error: function(jqXHR, textStatus, errorThrown) {
-							console.log(errorThrown);
-				            console.log(textStatus);
-				            console.log(jqXHR);
-						}
-					});
-
-					event.preventDefault ? event.preventDefault() : event.returnValue = false;
-			  	});
-			});
-			</script>
-			<?php
-		}
-
 		// Callback function for creating a DB backup of a Library
 		public function wpbooklist_create_db_library_backup_action_callback(){
 			global $wpdb;
@@ -2244,7 +2178,7 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 				$wpdb->update( $stories_table, $data, $where, $format, $where_format );
 			} 
 
-			// Adding primary key back to database 
+			// Adding primary key back to database.
 			$wpdb->query("ALTER TABLE $stories_table ADD PRIMARY KEY (`ID`)");    
 			$wpdb->query("ALTER TABLE $stories_table MODIFY ID bigint(190) AUTO_INCREMENT");
 
@@ -2254,59 +2188,5 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 
 			wp_die();
 		}
-
-		/*
-		// For adding a book from the admin dashboard
-		add_action( 'admin_footer', 'wpbooklist_boilerplate_action_javascript' );
-		add_action( 'wp_ajax_wpbooklist_boilerplate_action', 'wpbooklist_boilerplate_action_callback' );
-		add_action( 'wp_ajax_nopriv_wpbooklist_boilerplate_action', 'wpbooklist_boilerplate_action_callback' );
-
-
-		public function wpbooklist_boilerplate_action_javascript() { 
-			?>
-		  	<script type="text/javascript" >
-		  	"use strict";
-		  	jQuery(document).ready(function($) {
-		  		$(document).on("click","#wpbooklist-select-sort-div", function(event){
-
-				  	var data = {
-						'action': 'wpbooklist_boilerplate_action',
-						'security': '<?php echo wp_create_nonce( "wpbooklist_boilerplate_action_callback" ); ?>',
-					};
-					console.log(data);
-
-			     	var request = $.ajax({
-					    url: ajaxurl,
-					    type: "POST",
-					    data:data,
-					    timeout: 0,
-					    success: function(response) {
-					    	console.log(response);
-					    },
-						error: function(jqXHR, textStatus, errorThrown) {
-							console.log(errorThrown);
-				            console.log(textStatus);
-				            console.log(jqXHR);
-						}
-					});
-
-					event.preventDefault ? event.preventDefault() : event.returnValue = false;
-			  	});
-			});
-			</script>
-			<?php
-		}
-
-		// Callback function for creating backups
-		public function wpbooklist_boilerplate_action_callback(){
-			global $wpdb;
-			check_ajax_referer( 'wpbooklist_boilerplate_action_callback', 'security' );
-			//$var1 = filter_var($_POST['var'],FILTER_SANITIZE_STRING);
-			//$var2 = filter_var($_POST['var'],FILTER_SANITIZE_NUMBER_INT);
-			echo 'hi';
-			wp_die();
-		}*/
-
-
 	}
 endif;

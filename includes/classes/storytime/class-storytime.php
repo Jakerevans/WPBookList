@@ -716,7 +716,7 @@ class  WPBookList_Storytime {
 			global $wpdb;
 
 			ob_start();
-			require_once STORYTIME_CLASS_DIR . 'class-storytime.php';
+			require_once CLASS_STORYTIME_DIR . 'class-storytime.php';
 			$storytime_class = new WPBookList_Storytime( 'frontend_shortcode_output' );
 			echo $storytime_class->reader_shortcode_output;
 			return ob_get_clean();
