@@ -674,7 +674,10 @@ class WPBookList_Book {
 		$transient_exists = $this->transients->existing_transient_check( $transient_name );
 		if ( $transient_exists ) {
 			$this->amazonapiresult = $transient_exists;
+			$this->amazon_transient_use = 'Yes';
 		} else {
+
+			$this->amazon_transient_use = 'No';
 
 			$status = '';
 			$this->amazonapiresult = '';

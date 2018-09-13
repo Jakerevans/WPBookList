@@ -337,7 +337,7 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 		  			$posturl = $post_results->post_url;
 		  		}
 
-		  		echo $insert_result[0].'--sep--'.$id_result.'--sep--'.$library.'--sep--'.$page_yes.'--sep--'.$post_yes.'--sep--'.$pageurl.'--sep--'.$posturl.'--sep--'.$book_class->apireport.'--sep--'.json_encode($book_class->whichapifound).'--sep--'.$book_class->apiamazonfailcount;
+		  		echo $insert_result[0].'--sep--'.$id_result.'--sep--'.$library.'--sep--'.$page_yes.'--sep--'.$post_yes.'--sep--'.$pageurl.'--sep--'.$posturl.'--sep--'.$book_class->apireport.'--sep--'.json_encode($book_class->whichapifound).'--sep--'.$book_class->apiamazonfailcount.'---sep--'.$book_class->amazon_transient_use;
 			} else {
 				echo $insert_result[0].'--sep--'.$insert_result[1];
 			}
@@ -647,180 +647,6 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 			$query5 = str_replace('\'', '`', $query5);
 			$wpdb->query($query5);
 		  	wp_die();
-		}
-
-		// function for saving library display options
-		public function wpbooklist_dashboard_save_library_display_options_action_javascript() { 
-			?>
-		  	<script type="text/javascript" >
-		  	"use strict";
-		  	jQuery(document).ready(function($) {
-			  	$("#wpbooklist-save-backend").click(function(event){
-
-			  		var enablepurchase = $("input[name='enable-purchase-link']" ).prop('checked');
-					var hidesearch = $("input[name='hide-search']" ).prop('checked');
-					var hidefacebook = $("input[name='hide-facebook']" ).prop('checked');
-					var hidetwitter = $("input[name='hide-twitter']" ).prop('checked');
-					var hidegoogleplus = $("input[name='hide-googleplus']" ).prop('checked');
-					var hidemessenger = $("input[name='hide-messenger']" ).prop('checked');
-					var hidepinterest = $("input[name='hide-pinterest']" ).prop('checked');
-					var hideemail = $("input[name='hide-email']" ).prop('checked');
-					var hidestats = $("input[name='hide-stats']" ).prop('checked');
-					var hidefilter = $("input[name='hide-filter']" ).prop('checked');
-					var hidegoodreadswidget = $("input[name='hide-goodreads']" ).prop('checked');
-					var hideamazonreview = $("input[name='hide-amazon-review']" ).prop('checked');
-					var hidedescription = $("input[name='hide-description']" ).prop('checked');
-					var hidesimilar = $("input[name='hide-similar']" ).prop('checked');
-					var hidebooktitle = $("input[name='hide-book-title']" ).prop('checked');
-					var hidebookimage = $("input[name='hide-book-image']" ).prop('checked');
-					var hidefinished = $("input[name='hide-finished']" ).prop('checked');
-					var hidefinishedsort = $("input[name='hide-finished-sort']" ).prop('checked');
-					var hidesignedsort = $("input[name='hide-signed-sort']" ).prop('checked');
-					var hidefirstsort = $("input[name='hide-first-sort']" ).prop('checked');
-					var hidesubjectsort = $("input[name='hide-subject-sort']" ).prop('checked');
-					var hidelibrarytitle = $("input[name='hide-library-title']" ).prop('checked');
-					var hideauthor = $("input[name='hide-author']" ).prop('checked');
-					var hidecategory = $("input[name='hide-category']" ).prop('checked');
-					var hidepages = $("input[name='hide-pages']" ).prop('checked');
-					var hidebookpage = $("input[name='hide-book-page']" ).prop('checked');
-					var hidebookpost = $("input[name='hide-book-post']" ).prop('checked');
-					var hidepublisher = $("input[name='hide-publisher']" ).prop('checked');
-					var hidepubdate = $("input[name='hide-pub-date']" ).prop('checked');
-					var hidesigned = $("input[name='hide-signed']" ).prop('checked');
-					var hidesubject = $("input[name='hide-subject']" ).prop('checked');
-					var hidecountry = $("input[name='hide-country']" ).prop('checked');
-					var hidefirstedition = $("input[name='hide-first-edition']" ).prop('checked');
-					var hidefeaturedtitles = $("input[name='hide-featured-titles']" ).prop('checked');
-					var hidenotes = $("input[name='hide-notes']" ).prop('checked');
-					var hidequotebook = $("input[name='hide-quote-book']" ).prop('checked');
-					var hidequote = $("input[name='hide-quote']" ).prop('checked');
-					var hideratingbook = $("input[name='hide-rating-book']" ).prop('checked');
-					var hiderating = $("input[name='hide-rating']" ).prop('checked');
-					var hidegooglepurchase = $("input[name='hide-google-purchase']" ).prop('checked');
-					var hideamazonpurchase = $("input[name='hide-amazon-purchase']" ).prop('checked');
-					var hidebnpurchase = $("input[name='hide-bn-purchase']" ).prop('checked');
-					var hideitunespurchase = $("input[name='hide-itunes-purchase']" ).prop('checked');
-					var hidefrontendbuyimg = $("input[name='hide-frontend-buy-img']" ).prop('checked');
-					var hidefrontendbuyprice = $("input[name='hide-frontend-buy-price']" ).prop('checked');
-					var hidecolorboxbuyimg = $("input[name='hide-colorbox-buy-img']" ).prop('checked');
-					var hidecolorboxbuyprice = $("input[name='hide-colorbox-buy-price']" ).prop('checked');
-					var hidekindleprev = $("input[name='hide-frontend-kindle-preview']" ).prop('checked');
-					var hidegoogleprev = $("input[name='hide-frontend-google-preview']" ).prop('checked');
-					var hidebampurchase = $("input[name='hide-bam-purchase']" ).prop('checked');
-					var hidekobopurchase = $("input[name='hide-kobo-purchase']" ).prop('checked');
-					var sortoption = $("#wpbooklist-jre-sorting-select" ).val();
-					var booksonpage = $("input[name='books-per-page']").val();
-					var library = $("#wpbooklist-library-settings-select").val();
-
-					// Setting some variables to '' if they weren't found in DOM, due to not having an active WPBookList Extension
-					if(hidegoogleprev == '' || hidegoogleprev == undefined){
-						hidegoogleprev = '';
-					}
-
-					if(enablepurchase == '' || enablepurchase == undefined){
-						enablepurchase = '';
-					}
-
-					if(hidefrontendbuyimg == '' || hidefrontendbuyimg == undefined){
-						hidefrontendbuyimg = '';
-					}
-
-					if(hidecolorboxbuyimg == '' || hidecolorboxbuyimg == undefined){
-						hidecolorboxbuyimg = '';
-					}
-
-					if(hidecolorboxbuyprice == '' || hidecolorboxbuyprice == undefined){
-						hidecolorboxbuyprice = '';
-					}
-
-					if(hidefrontendbuyprice == '' || hidefrontendbuyprice == undefined){
-						hidefrontendbuyprice = '';
-					}
-
-					if(hidekindleprev == '' || hidekindleprev == undefined){
-						hidekindleprev = '';
-					}
-
-				  	var data = {
-						'action': 'wpbooklist_dashboard_save_library_display_options_action',
-						'security': '<?php echo wp_create_nonce( "wpbooklist_dashboard_save_library_display_options_action_callback" ); ?>',
-						'enablepurchase' : enablepurchase,
-						'hidesearch' : hidesearch,
-						'hidefacebook' : hidefacebook,
-						'hidetwitter' : hidetwitter,
-						'hidegoogleplus' : hidegoogleplus,
-						'hidemessenger' : hidemessenger,
-						'hidepinterest' : hidepinterest,
-						'hideemail' : hideemail,
-						'hidestats' : hidestats,
-						'hidefilter' : hidefilter,
-						'hidegoodreadswidget' : hidegoodreadswidget,
-						'hideamazonreview' : hideamazonreview,
-						'hidedescription' : hidedescription,
-						'hidesimilar' : hidesimilar,
-						'hidebooktitle': hidebooktitle,
-						'hidebookimage' : hidebookimage,
-						'hidefinished': hidefinished,
-						'hidefinishedsort' : hidefinishedsort,
-						'hidesignedsort': hidesignedsort,
-						'hidefirstsort' : hidefirstsort,
-						'hidesubjectsort': hidesubjectsort,
-						'hidelibrarytitle': hidelibrarytitle,
-						'hideauthor': hideauthor,
-						'hidecategory': hidecategory,
-						'hidepages': hidepages,
-						'hidebookpage': hidebookpage,
-						'hidebookpost': hidebookpost,
-						'hidepublisher': hidepublisher,
-						'hidepubdate': hidepubdate,
-						'hidesigned': hidesigned,
-						'hidesubject': hidesubject,
-						'hidecountry': hidecountry,
-						'hidefirstedition': hidefirstedition,
-						'hidefeaturedtitles' : hidefeaturedtitles,
-						'hidenotes' : hidenotes,
-						'hidequotebook' : hidequotebook,
-						'hidequote' : hidequote,
-						'hideratingbook' : hideratingbook,
-						'hiderating' : hiderating,
-						'hidegooglepurchase' : hidegooglepurchase,
-						'hideamazonpurchase' : hideamazonpurchase,
-						'hidebnpurchase' : hidebnpurchase,
-						'hideitunespurchase' : hideitunespurchase,
-						'hidefrontendbuyimg' : hidefrontendbuyimg,
-						'hidecolorboxbuyimg' : hidecolorboxbuyimg,
-						'hidecolorboxbuyprice' : hidecolorboxbuyprice,
-						'hidefrontendbuyprice' : hidefrontendbuyprice,
-						'hidekindleprev': hidekindleprev,
-						'hidegoogleprev': hidegoogleprev,
-						'hidekobopurchase': hidekobopurchase,
-						'hidebampurchase': hidebampurchase,
-						'sortoption' : sortoption,
-						'booksonpage' : booksonpage,
-						'library': library
-					};
-					console.log(data);
-
-			     	var request = $.ajax({
-					    url: ajaxurl,
-					    type: "POST",
-					    data:data,
-					    timeout: 0,
-					    success: function(response) {
-					    	document.location.reload(true);
-					    },
-						error: function(jqXHR, textStatus, errorThrown) {
-							console.log(errorThrown);
-				            console.log(textStatus);
-				            console.log(jqXHR);
-						}
-					});
-
-					event.preventDefault ? event.preventDefault() : event.returnValue = false;
-			  	});
-			});
-			</script>
-			<?php
 		}
 
 		// Callback function for saving library display options
@@ -1668,7 +1494,7 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 		  			$post_url = '';
 		  		}
 
-		  		echo $edit_result.'--sep--'.$book_id.'--sep--'.$library.'--sep--'.$page_yes.'--sep--'.$post_yes.'--sep--'.$page_url.'--sep--'.$post_url.'--sep--'.$wpdb->prefix.'--sep--'.$book_class->apireport.'--sep--'.json_encode($book_class->whichapifound).'--sep--'.$book_class->apiamazonfailcount;
+		  		echo $edit_result.'--sep--'.$book_id.'--sep--'.$library.'--sep--'.$page_yes.'--sep--'.$post_yes.'--sep--'.$page_url.'--sep--'.$post_url.'--sep--'.$wpdb->prefix.'--sep--'.$book_class->apireport.'--sep--'.json_encode($book_class->whichapifound).'--sep--'.$book_class->apiamazonfailcount.'---sep--'.$book_class->amazon_transient_use;
 
 
 		  	} else {
@@ -1948,10 +1774,7 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 		  	"use strict";
 		  	jQuery(document).ready(function($) {
 
-		  		// Enabling the 'Backup Library' button when first drop-down is changed
-				$(document).on("change","#wpbooklist-backup-select-library", function(event){
-					$('#wpbooklist-apply-library-backup').prop('disabled', false);
-				});
+		  		
 
 		  		$(document).on("click","#wpbooklist-apply-library-backup", function(event){
 
@@ -2004,173 +1827,23 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 			check_ajax_referer( 'wpbooklist_create_db_library_backup_action_callback', 'security' );
 			$library = filter_var($_POST['library'],FILTER_SANITIZE_STRING);
 
-			require_once(CLASS_DIR.'class-backup.php');
+			require_once(CLASS_BACKUP_DIR.'class-wpbooklist-backup.php');
 			$backup_class = new WPBookList_Backup('library_database_backup', $library);
 			echo $backup_class->create_backup_result; 
 			wp_die();
 		}
 
-		// For restoring a backup of a Library
-		public function wpbooklist_restore_db_library_backup_action_javascript() { 
-
-			$trans1 = __("Success!", 'wpbooklist');
-			$trans2 = __("You've Restored Your Library!", 'wpbooklist');
-			$trans6 = __("Thanks for using WPBookList, and", 'wpbooklist');
-			$trans7 = __("be sure to check out the WPBookList Extensions!", 'wpbooklist');
-			$trans8 = __("If you happen to be thrilled with WPBookList, then by all means,", 'wpbooklist');
-			$trans9 = __("Feel Free to Leave a 5-Star Review Here!", 'wpbooklist');
-			$trans14 = __("download your backup here", 'wpbooklist');
-
-			?>
-		  	<script type="text/javascript" >
-		  	"use strict";
-		  	jQuery(document).ready(function($) {
-
-			  	// Enabling the 'Select a Backup' drop-down when first drop-down is changed
-				$(document).on("change","#wpbooklist-select-library-backup", function(event){
-					var table = $(this).val();
-					$('#wpbooklist-select-actual-backup').val('Select a Backup...')
-					$('#wpbooklist-apply-library-restore').prop('disabled', true)
-					$('.wpbooklist-backup-actual-option').each(function(){
-						if( $(this).attr('data-table') != table){
-							$(this).css({'display':'none'});
-						} else {
-							$(this).css({'display':'block'});
-						}
-					})
-					$('#wpbooklist-select-actual-backup').prop('disabled', false);
-				});
-
-				// Enabling the 'Restore Library' button when 'select a backup' drop-down is changed
-				$(document).on("change","#wpbooklist-select-actual-backup", function(event){
-					$('#wpbooklist-apply-library-restore').prop('disabled', false);
-				});
-
-
-		  		$(document).on("click","#wpbooklist-apply-library-restore", function(event){
-
-		  			$('#wpbooklist-spinner-restore-backup').animate({'opacity':'1'}, 500);
-
-		  			var table = $('#wpbooklist-select-library-backup').val();
-		  			var backup = $('#wpbooklist-select-actual-backup').val();
-
-				  	var data = {
-						'action': 'wpbooklist_restore_db_library_backup_action',
-						'security': '<?php echo wp_create_nonce( "wpbooklist_restore_db_library_backup_action_callback" ); ?>',
-						'table':table,
-						'backup':backup
-					};
-					console.log(data);
-
-			     	var request = $.ajax({
-					    url: ajaxurl,
-					    type: "POST",
-					    data:data,
-					    timeout: 0,
-					    success: function(response) {
-					    	$('#wpbooklist-spinner-restore-backup').animate({'opacity':'0'}, 500);
-					    	$('#wpbooklist-addbackup-success-div').html("<span id='wpbooklist-add-book-success-span'><?php echo $trans1; ?></span><br/><br/> <?php echo $trans2; ?><div id='wpbooklist-addstylepak-success-thanks'><?php echo $trans6; ?> <a href='http://wpbooklist.com/index.php/extensions/'><?php echo $trans7; ?></a><br/><br/> <?php echo $trans8; ?> <a id='wpbooklist-addbook-success-review-link' href='https://wordpress.org/support/plugin/wpbooklist/reviews/?filter=5'><?php echo $trans9; ?></a><img id='wpbooklist-smile-icon-1' src='http://evansclienttest.com/wp-content/plugins/wpbooklist/assets/img/icons/happy.svg'></div>");
-
-							$('html, body').animate({
-						        scrollTop: $("#wpbooklist-addbackup-success-div").offset().top-100
-						    }, 1000);
-				    		console.log(response);
-					    },
-						error: function(jqXHR, textStatus, errorThrown) {
-							console.log(errorThrown);
-				            console.log(textStatus);
-				            console.log(jqXHR);
-						}
-					});
-
-					event.preventDefault ? event.preventDefault() : event.returnValue = false;
-			  	});
-			});
-			</script>
-			<?php
-		}
-
-		// Callback function for restoring a backup of a Library
+		// Callback function for restoring a backup of a Library.
 		public function wpbooklist_restore_db_library_backup_action_callback(){
 			global $wpdb;
 			check_ajax_referer( 'wpbooklist_restore_db_library_backup_action_callback', 'security' );
 			$table = filter_var($_POST['table'],FILTER_SANITIZE_STRING);
 			$backup = filter_var($_POST['backup'],FILTER_SANITIZE_STRING);
 
-			require_once(CLASS_DIR.'class-backup.php');
+			require_once(CLASS_BACKUP_DIR.'class-wpbooklist-backup.php');
 			$backup_class = new WPBookList_Backup('library_database_restore', $table, $backup);
 
 			wp_die();
-		}
-
-
-		// For creating a .csv file of ISBN/ASIN numbers
-		public function wpbooklist_create_csv_action_javascript() { 
-
-			$trans1 = __("Success!", 'wpbooklist');
-			$trans2 = __("You've Created a CSV file of ISBN/ASIN numbers! You can", 'wpbooklist');
-			$trans6 = __("Thanks for using WPBookList, and", 'wpbooklist');
-			$trans7 = __("be sure to check out the WPBookList Extensions!", 'wpbooklist');
-			$trans8 = __("If you happen to be thrilled with WPBookList, then by all means,", 'wpbooklist');
-			$trans9 = __("Feel Free to Leave a 5-Star Review Here!", 'wpbooklist');
-			$trans14 = __("download your file here", 'wpbooklist');
-			$trans15 = __("Remember, your new file will come in handy when using the", 'wpbooklist');
-			$trans16 = __("WPBookList Bulk-Upload Extension!", 'wpbooklist');
-
-			
-
-			?>
-		  	<script type="text/javascript" >
-		  	"use strict";
-		  	jQuery(document).ready(function($) {
-
-		  		// Enabling the 'Restore Library' button when 'select a backup' drop-down is changed
-				$(document).on("change","#wpbooklist-backup-csv-select-library", function(event){
-					$('#wpbooklist-apply-library-backup-csv').prop('disabled', false);
-				});
-
-
-		  		$(document).on("click","#wpbooklist-apply-library-backup-csv", function(event){
-
-				  	$('#wpbooklist-spinner-backup-csv').animate({'opacity':'1'}, 500);
-
-		  			var table = $('#wpbooklist-backup-csv-select-library').val();
-
-				  	var data = {
-						'action': 'wpbooklist_create_csv_action',
-						'security': '<?php echo wp_create_nonce( "wpbooklist_create_csv_action_callback" ); ?>',
-						'table':table
-					};
-
-			     	var request = $.ajax({
-					    url: ajaxurl,
-					    type: "POST",
-					    data:data,
-					    timeout: 0,
-					    success: function(response) {
-					    	response = response.split(',');
-					    	if(response[0] == '1'){
-					    		$('#wpbooklist-spinner-backup-csv').animate({'opacity':'0'}, 500);
-					    		$('#wpbooklist-addbackup-success-div').html("<span id='wpbooklist-add-book-success-span'><?php echo $trans1; ?></span><br/><br/> <?php echo $trans2; ?> <a href='<?php echo LIBRARY_DB_BACKUPS_UPLOAD_URL; ?>"+response[1]+".zip'><?php echo $trans14; ?>.</a> <?php echo $trans15; ?> <a href='https://wpbooklist.com/index.php/downloads/bulk-upload-extension/'><?php echo $trans16; ?></a> <div id='wpbooklist-addstylepak-success-thanks'><?php echo $trans6; ?> <a href='http://wpbooklist.com/index.php/extensions/'><?php echo $trans7; ?></a><br/><br/> <?php echo $trans8; ?> <a id='wpbooklist-addbook-success-review-link' href='https://wordpress.org/support/plugin/wpbooklist/reviews/?filter=5'><?php echo $trans9; ?></a><img id='wpbooklist-smile-icon-1' src='http://evansclienttest.com/wp-content/plugins/wpbooklist/assets/img/icons/happy.svg'></div>");
-
-								$('html, body').animate({
-							        scrollTop: $("#wpbooklist-addbackup-success-div").offset().top-100
-							    }, 1000);
-					    		console.log('success!)');
-					    	}
-					    },
-						error: function(jqXHR, textStatus, errorThrown) {
-							console.log(errorThrown);
-				            console.log(textStatus);
-				            console.log(jqXHR);
-						}
-					});
-
-					event.preventDefault ? event.preventDefault() : event.returnValue = false;
-			  	});
-			});
-			</script>
-			<?php
 		}
 
 		// Callback function for creating a .csv file of ISBN/ASIN numbers
@@ -2179,63 +1852,14 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 			check_ajax_referer( 'wpbooklist_create_csv_action_callback', 'security' );
 			$table = filter_var($_POST['table'],FILTER_SANITIZE_STRING);
 			
-			require_once(CLASS_DIR.'class-backup.php');
+			require_once(CLASS_BACKUP_DIR.'class-wpbooklist-backup.php');
 			$backup_class = new WPBookList_Backup('create_csv_file', $table);
 
 			echo $backup_class->create_csv_result;
 			wp_die();
 		}
 
-
-
-
-
-		// For setting the Amazon Localization
-		public function wpbooklist_amazon_localization_action_javascript() { 
-			?>
-		  	<script type="text/javascript" >
-		  	"use strict";
-		  	jQuery(document).ready(function($) {
-		  		$(document).on("click","#wpbooklist-save-localization", function(event){
-
-		  			var country;
-				    var boxes = jQuery(".wpbooklist-localization-checkbox");
-				    for (var i=0; i<boxes.length; i++) {
-					    if (boxes[i].checked) {
-					    	country = boxes[i].value;
-					    }
-				    }
-
-				  	var data = {
-						'action': 'wpbooklist_amazon_localization_action',
-						'security': '<?php echo wp_create_nonce( "wpbooklist_amazon_localization_action_callback" ); ?>',
-						'country':country
-					};
-					console.log(data);
-
-			     	var request = $.ajax({
-					    url: ajaxurl,
-					    type: "POST",
-					    data:data,
-					    timeout: 0,
-					    success: function(response) {
-					    	document.location.reload();
-					    },
-						error: function(jqXHR, textStatus, errorThrown) {
-							console.log(errorThrown);
-				            console.log(textStatus);
-				            console.log(jqXHR);
-						}
-					});
-
-					event.preventDefault ? event.preventDefault() : event.returnValue = false;
-			  	});
-			});
-			</script>
-			<?php
-		}
-
-		// Callback function for setting the Amazon Localization
+		// Callback function for setting the Amazon Localization.
 		public function wpbooklist_amazon_localization_action_callback(){
 			global $wpdb;
 			check_ajax_referer( 'wpbooklist_amazon_localization_action_callback', 'security' );
@@ -2252,257 +1876,74 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 			wp_die();
 		}
 
-		// For deleting books in bulk
-		public function wpbooklist_delete_book_bulk_action_javascript() { 
-			?>
-		  	<script type="text/javascript" >
-		  	"use strict";
-		  	jQuery(document).ready(function($) {
+	
+		// Callback function for deleting all books in library.
+		public function wpbooklist_delete_all_books_in_library_action_callback(){
 
-		  		// For switching into bulk delete mode
-		  		$(document).on("click","#wpbooklist-bulk-edit-mode-on-button", function(event){
-		  			$('#wpbooklist-reorder-button').css({'pointer-events':'none', 'opacity':'0.7'});
-		  			$('#wpbooklist-bulk-edit-div').animate({'height':'185px'})
-		  			$('.wpbooklist-edit-actions-edit-button').css({'opacity':'0.2', 'pointer-events':'none'});
-		  			$('.wpbooklist-edit-actions-delete-button').css({'opacity':'0.2', 'pointer-events':'none'});
-		  			$('.wpbooklist-edit-img-author-div').css({'opacity':'0.2', 'pointer-events':'none'});
-		  			$('.wpbooklist-bulk-delete-checkbox-div').css({'display':'block'})
-		  		});
-
-		  		// For cancelling bulk delete mode
-		  		$(document).on("click","#wpbooklist-bulk-edit-mode-delete-all-in-lib-cancel", function(event){
-		  			$('#wpbooklist-reorder-button').css({'pointer-events':'all', 'opacity':'1'});
-		  			$('#wpbooklist-bulk-edit-div').animate({'height':'60px'})
-		  			$('.wpbooklist-edit-actions-div').animate({'opacity':'1'})
-		  			$('.wpbooklist-edit-actions-edit-button').css({'opacity':'1', 'pointer-events':'all'});
-		  			$('.wpbooklist-edit-actions-delete-button').css({'opacity':'1', 'pointer-events':'all'});
-		  			$('.wpbooklist-edit-img-author-div').css({'opacity':'1', 'pointer-events':'all'});
-		  			$('.wpbooklist-bulk-delete-checkbox-div').css({'display':'none'})
-		  			$('#wpbooklist-reorder-button').prop('disabled', false)
-		  		});
-
-		  		// For enabling/disabling the 'Delete Checked Books' button
-		  		$(document).on("change",".wpbooklist-bulk-delete-checkbox", function(event){
-		  			$('#wpbooklist-bulk-edit-mode-delete-checked').attr('disabled', true);
-		  			$('.wpbooklist-bulk-delete-checkbox').each(function(){
-		  				if($(this).prop('checked') == true){
-		  					$('#wpbooklist-bulk-edit-mode-delete-checked').removeAttr('disabled');
-		  				}
-		  			})
-		  		});
-
-		  		// For deleting all books in library
-		  		$(document).on("click","#wpbooklist-bulk-edit-mode-delete-all-in-lib", function(event){
-
-		  			$('#wpbooklist-spinner-edit-change-lib').animate({'opacity':'1'}, 500);
-
-		  			var library = $('#wpbooklist-editbook-select-library').val();
-
-		  			var data = {
-						'action': 'wpbooklist_delete_book_bulk_action',
-						'security': '<?php echo wp_create_nonce( "wpbooklist_delete_book_bulk_action_callback" ); ?>',
-						'library':library,
-						'deleteallbooks':true
-					};
-
-					var request = $.ajax({
-					    url: ajaxurl,
-					    type: "POST",
-					    data:data,
-					    timeout: 0,
-					    success: function(response) {
-					    	document.location.reload();
-					    },
-						error: function(jqXHR, textStatus, errorThrown) {
-							console.log(errorThrown);
-				            console.log(textStatus);
-				            console.log(jqXHR);
-						}
-					});
-
-		  		});
-
-		  		// For deleting all books, pages, and posts in library
-		  		$(document).on("click","#wpbooklist-bulk-edit-mode-delete-all-plus-pp-in-lib", function(event){
-
-		  			$('#wpbooklist-spinner-edit-change-lib').animate({'opacity':'1'}, 500);
-
-		  			var library = $('#wpbooklist-editbook-select-library').val();
-
-		  			var data = {
-						'action': 'wpbooklist_delete_book_bulk_action',
-						'security': '<?php echo wp_create_nonce( "wpbooklist_delete_book_bulk_action_callback" ); ?>',
-						'library':library,
-						'deleteallbooksandpostandpages':true
-					};
-
-					var request = $.ajax({
-					    url: ajaxurl,
-					    type: "POST",
-					    data:data,
-					    timeout: 0,
-					    success: function(response) {
-					    	document.location.reload();
-					    },
-						error: function(jqXHR, textStatus, errorThrown) {
-							console.log(errorThrown);
-				            console.log(textStatus);
-				            console.log(jqXHR);
-						}
-					});
-
-		  		});
-		  		
-		  		// For deleting all titles that are checked
-		  		$(document).on("click","#wpbooklist-bulk-edit-mode-delete-checked", function(event){
-
-		  			$('#wpbooklist-spinner-edit-change-lib').animate({'opacity':'1'}, 500);
-
-		  			var bookId = '';
-		  			var library = '';
-		  			var deleteString = '';
-		  			$('.wpbooklist-bulk-delete-checkbox').each(function(){
-		  				if($(this).prop('checked') == true){
-		  					bookId = bookId+'sep'+$(this).attr('data-book-id');
-
-		  					// Grabbing the post and page ID's, if they exist
-				  			$(this).parent().parent().parent().find('.wpbooklist-edit-actions-div .wpbooklist-edit-book-delete-page-post-div input').each(function(index){
-				  				if($(this).prop('checked')){
-				  					if($(this).attr('data-id') != undefined && $(this).attr('data-id') != null){
-				  						deleteString = deleteString+'-'+$(this).attr('data-id');
-				  					}
-				  				}
-				  			});
-
-				  			deleteString = deleteString+'sep';
-
-		  				}
-		  			})
-
-		  			var library = $('#wpbooklist-editbook-select-library').val();
-
-				  	var data = {
-						'action': 'wpbooklist_delete_book_bulk_action',
-						'security': '<?php echo wp_create_nonce( "wpbooklist_delete_book_bulk_action_callback" ); ?>',
-						'deleteString':deleteString,
-						'bookId':bookId,
-						'library':library,
-						'deletechecked':true
-					};
-
-			     	var request = $.ajax({
-					    url: ajaxurl,
-					    type: "POST",
-					    data:data,
-					    timeout: 0,
-					    success: function(response) {
-					    	document.location.reload();
-					    	console.log(response);
-					    },
-						error: function(jqXHR, textStatus, errorThrown) {
-							console.log(errorThrown);
-				            console.log(textStatus);
-				            console.log(jqXHR);
-						}
-					});
-
-					event.preventDefault ? event.preventDefault() : event.returnValue = false;
-			  	});
-			});
-			</script>
-			<?php
-		}
-
-		// Callback function for deleting books in bulk
-		public function wpbooklist_delete_book_bulk_action_callback(){
-			global $wpdb;
+			check_ajax_referer( 'wpbooklist_delete_all_books_in_library_action_callback', 'security' );
 			require_once(CLASS_BOOK_DIR.'class-book.php');
 			$book_class = new WPBookList_Book;
-			check_ajax_referer( 'wpbooklist_delete_book_bulk_action_callback', 'security' );
 
-			if(isset($_POST['deletechecked'])){
-				$library = filter_var($_POST['library'],FILTER_SANITIZE_STRING);
-				$delete_string = filter_var($_POST['deleteString'],FILTER_SANITIZE_STRING);
-				$book_id = filter_var($_POST['bookId'],FILTER_SANITIZE_STRING);
-				$book_id = ltrim($book_id, 'sep');
-
-				// Creating array of IDs to delete.
-				$delete_array = explode('sep', $book_id);
-
-				// Creating array of Page/Post IDs to delete
-				if($delete_string != null && $delete_string != ''){
-					$delete_string = ltrim($delete_string, 'sep');
-					$delete_page_post_array = explode('sep', $delete_string);
-				}	
-
-
-				// Required to delete the correct book, update the IDs, then delete the next correct book
-				$delete_array = array_reverse($delete_array);
-
-				// The loop that will send each book ID and Page/Post ID to class-book.php to be deleted.
-				foreach($delete_array as $key=>$delete){
-
-					// Send page/post IDs to delete to class-book.php if they exist, otherwise don't send
-					if($delete_string != null && $delete_string != ''){
-						$delete_result = $book_class->delete_book($library, $delete, $delete_page_post_array[$key]);
-					} else {
-						$delete_result = $book_class->delete_book($library, $delete, null);
-					}	
-				}
-			}
-
-			if(isset($_POST['deleteallbooks'])){
-
-				$library = filter_var($_POST['library'],FILTER_SANITIZE_STRING);
-				$delete_result = $book_class->empty_table($library);
-			}
-
-			if(isset($_POST['deleteallbooksandpostandpages'])){
-
-				$library = filter_var($_POST['library'],FILTER_SANITIZE_STRING);
-				$delete_result = $book_class->empty_everything($library);
-			}
+			$library = filter_var($_POST['library'],FILTER_SANITIZE_STRING);
+			$delete_result = $book_class->empty_table($library);
 
 			wp_die();
 		}
 
-		// For dismissing the admin notice forever
-		public function wpbooklist_jre_dismiss_prem_notice_forever_action_javascript(){
-		?>
-		<script>
+		// Callback function for deleting all books, pages, and posts in library.
+		public function wpbooklist_delete_all_books_pages_and_posts_action_callback(){
 
-		  jQuery(".wpbooklist-my-notice-dismiss-forever").click(function(){
+			check_ajax_referer( 'wpbooklist_delete_all_books_pages_and_posts_action_callback', 'security' );
+			require_once(CLASS_BOOK_DIR.'class-book.php');
+			$book_class = new WPBookList_Book;
 
-		  	var id = $(this).attr('id');
+			$library = filter_var($_POST['library'],FILTER_SANITIZE_STRING);
+			$delete_result = $book_class->empty_everything($library);
 
-		    var data = {
-		      'action': 'wpbooklist_jre_dismiss_prem_notice_forever_action',
-		      'security': '<?php echo wp_create_nonce( "wpbooklist_jre_dismiss_prem_notice_forever_action" ); ?>',
-		      'id':id,
-		    };
-
-		    var request = $.ajax({
-			    url: ajaxurl,
-			    type: "POST",
-			    data:data,
-			    timeout: 0,
-			    success: function(response) {
-			    	document.location.reload();
-			    },
-				error: function(jqXHR, textStatus, errorThrown) {
-					console.log(errorThrown);
-		            console.log(textStatus);
-		            console.log(jqXHR);
-				}
-			});
-
-
-		  });
-
-		  </script> <?php
+			wp_die();
 		}
 
-		// Callback function for dismissing the admin notice forever
+		// Callback function for deleting all checked books.
+		public function wpbooklist_delete_all_checked_books_action_callback(){
+			require_once(CLASS_BOOK_DIR.'class-book.php');
+			$book_class = new WPBookList_Book;
+			check_ajax_referer( 'wpbooklist_delete_all_checked_books_action_callback', 'security' );
+
+			$library = filter_var($_POST['library'],FILTER_SANITIZE_STRING);
+			$delete_string = filter_var($_POST['deleteString'],FILTER_SANITIZE_STRING);
+			$book_id = filter_var($_POST['bookId'],FILTER_SANITIZE_STRING);
+			$book_id = ltrim($book_id, 'sep');
+
+			// Creating array of IDs to delete.
+			$delete_array = explode('sep', $book_id);
+
+			// Creating array of Page/Post IDs to delete
+			if($delete_string != null && $delete_string != ''){
+				$delete_string = ltrim($delete_string, 'sep');
+				$delete_page_post_array = explode('sep', $delete_string);
+			}	
+
+
+			// Required to delete the correct book, update the IDs, then delete the next correct book
+			$delete_array = array_reverse($delete_array);
+
+			// The loop that will send each book ID and Page/Post ID to class-book.php to be deleted.
+			foreach($delete_array as $key=>$delete){
+
+				// Send page/post IDs to delete to class-book.php if they exist, otherwise don't send
+				if($delete_string != null && $delete_string != ''){
+					$delete_result = $book_class->delete_book($library, $delete, $delete_page_post_array[$key]);
+				} else {
+					$delete_result = $book_class->delete_book($library, $delete, null);
+				}	
+			}
+
+			
+
+			wp_die();
+		}
+
+		// Callback function for dismissing the admin notice forever.
 		public function wpbooklist_jre_dismiss_prem_notice_forever_action_callback(){
 			
 			global $wpdb; // this is how you get access to the database
@@ -2539,243 +1980,7 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 			}
 		}
 
-		// For re-ordering books on the 'Edit & Delete Books' tab
-		public function wpbooklist_reorder_action_javascript() { 
-			?>
-		  	<script type="text/javascript" >
-		  	"use strict";
-		  	jQuery(document).ready(function($) {
-
-		  		var book;
-		  		var origNode;
-		  		var mousedown = false;
-		  		var direction = "";
-		  		var oldx = 0
-
-		  		// Disable the edit & Delete buttons, change UI to reflect 'reorder mode'.
-		  		$(document).on("click","#wpbooklist-reorder-button", function(){
-		  			$('.wpbooklist-edit-actions-edit-button, .wpbooklist-edit-actions-delete-button, .wpbooklist-edit-book-title, .wpbooklist-edit-book-cover-img').css({'pointer-events':'none'})
-		  			$('#wpbooklist-reorder-button').prop('disabled', true)
-		  			$('#wpbooklist-bulk-edit-mode-on-button').animate({'top':'60px'})
-		  			$('#wpbooklist-cancel-reorder-button').animate({'opacity':'1'})
-		  			$('#wpbooklist-cancel-reorder-button').css({'z-index':'1'})
-		  			$('.wpbooklist-edit-actions-div').css({'opacity':'0.3'})
-		  			$('.wpbooklist-show-book-colorbox').css({'cursor':'move'})
-		  			$('.wpbooklist-edit-book-icon').css({'cursor':'move'})
-		  			$('.wpbooklist-search-indiv-container').css({'cursor':'move'})
-
-		  			$('.wpbooklist-search-indiv-container').each(function(){
-		  				$(this).addClass('wpbooklist-search-indiv-container-reorder');
-		  			})
-		  		});
-
-		  		// Enable the reorder button again immediately upon clicking 'Cancel'
-		  		$(document).on("mousedown","#wpbooklist-cancel-reorder-button", function(){
-		  			$('#wpbooklist-reorder-button').prop('disabled', false);
-		  		});
-
-		  		// Undo UI changes from 'reorder mode'.
-		  		$(document).on("click","#wpbooklist-cancel-reorder-button", function(){
-		  			$('.wpbooklist-edit-actions-edit-button, .wpbooklist-edit-actions-delete-button, .wpbooklist-edit-book-title, .wpbooklist-edit-book-cover-img').css({'pointer-events':'all'})
-		  			$('#wpbooklist-bulk-edit-mode-on-button').animate({'top':'31px'})
-		  			$('#wpbooklist-cancel-reorder-button').animate({'opacity':'0'})
-		  			$('#wpbooklist-cancel-reorder-button').css({'z-index':'-9'})
-		  			$('.wpbooklist-edit-actions-div').css({'opacity':'1'})
-		  			$('.wpbooklist-show-book-colorbox').css({'cursor':'pointer'})
-		  			$('.wpbooklist-edit-book-icon').css({'cursor':'auto'})
-		  			$('.wpbooklist-search-indiv-container').css({'cursor':'auto'})
-
-		  			$('.wpbooklist-search-indiv-container').each(function(){
-		  				$(this).removeClass('wpbooklist-search-indiv-container-reorder');
-		  			})
-
-		  		});
-
-		  		// Determining if user is scrolling
-		  		window.isScrolling = false;
-				$(window).scroll(function() {
-				    window.isScrolling = true;
-				    clearTimeout($.data(this, "scrollTimer"));
-				    $.data(this, "scrollTimer", setTimeout(function() {
-				        // If the window didn't scroll for 250ms
-				        window.isScrolling = false;
-				    }, 500));
-				});
-
-			  	// disable mousewheel
-		  		function wpbookliststopmousewheel(){
-		  			if(mousedown == true){
-		             return false;
-		         	}
-		        }
-
-				$(document).mousemove(wpbooklistmousemove);
-
-		  		$(document).on('mouseup', function(e){
-		 			// If Reorder mode is active...
-		 			console.log($('#wpbooklist-reorder-button').attr('disabled'));
-		  			if($('#wpbooklist-reorder-button').attr('disabled') == 'disabled'){
-
-		  				$(document).unbind("mouseenter", wpbooklistmouseenter);
-			  			$(document).unbind("mousedown", wpbooklistmousedown);
-			  			$(document).unbind("mousemove", wpbooklistmousemove);
-			  			$(document).unbind("mousemove", wpbooklistmousemove);
-			  			$(document).unbind("onmousewheel", wpbookliststopmousewheel);
-
-		  				$('#clone').remove();
-		  				$('#book-in-movement .wpbooklist-spinner').animate({'opacity':'1'})
-			  			
-			  			// Get the ids of books
-			  			var idarray = [];
-			  			$('.wpbooklist-edit-book-indiv-div-class .wpbooklist-edit-title-div .wpbooklist-edit-img-author-div .wpbooklist-edit-book-cover-img').each(function(){
-			  				var id = $(this).attr('data-bookuid');
-			  				idarray.push(id);
-			  			})
-
-			  			var idarray = JSON.stringify(idarray);
-			  			var table = $("#wpbooklist-editbook-select-library").val();
-
-			  			var data = {
-							'action': 'wpbooklist_reorder_action',
-							'security': '<?php echo wp_create_nonce( "wpbooklist_reorder_action_callback" ); ?>',
-							'idarray':idarray,
-							'table':table
-						};
-						console.log(data);
-
-				     	var request = $.ajax({
-						    url: ajaxurl,
-						    type: "POST",
-						    data:data,
-						    timeout: 0,
-						    success: function(response) {
-						    	//if(response == 1){
-						    		console.log(response);
-						    		mousedown = false;
-						  			$('.wpbooklist-search-indiv-container-reorder').css({'pointer-events':'all'})
-						  			$('#book-in-movement .wpbooklist-spinner').animate({'opacity':'0'})
-						  			$('.wpbooklist-edit-book-indiv-div-class').css({'opacity':'1'})
-						  			$('.wpbooklist-edit-book-title, .wpbooklist-edit-book-cover-img, .wpbooklist-edit-book-icon, .wpbooklist-edit-book-author').css({'pointer-events':'all', 'opacity':'1'})
-						  			$('.wpbooklist-edit-book-indiv-div-class').css({'border':'1px solid #e5e5e5', 'pointer-events':'all'});
-						  			$('.wpbooklist-edit-actions-div').css({'opacity':'0.3'})
-						  			$('#book-in-movement').removeAttr('id');
-
-						  			// re-bind events
-						  			$(document).mousemove(wpbooklistmousemove);
-						  			$(document).on("mousedown",".wpbooklist-search-indiv-container-reorder", wpbooklistmousedown)
-						  			$(document).mousemove(wpbooklistmousemove);
-						  			$(document).on("mouseenter",".wpbooklist-search-indiv-container-reorder", wpbooklistmouseenter);
-								//}
-						    },
-							error: function(jqXHR, textStatus, errorThrown) {
-								console.log(errorThrown);
-					            console.log(textStatus);
-					            console.log(jqXHR);
-							}
-						});
-
-			  			}
-		  		});
-
-
-				document.addEventListener('mousemove', wpbooklistmousemove);
-
-		  		function wpbooklistmousedown(){
-			  		mousedown = true;
-		            document.onmousewheel = wpbookliststopmousewheel;
-
-			  		if($('#wpbooklist-reorder-button').attr('disabled') == 'disabled'){
-			  			//$('.wpbooklist-edit-book-indiv-div-class').css({'opacity':'0.2'})
-			  			$('.wpbooklist-edit-book-title, .wpbooklist-edit-book-cover-img, .wpbooklist-edit-book-icon, .wpbooklist-edit-book-author, .wpbooklist-edit-actions-div').css({'pointer-events':'none'})
-			  			$(this).css({'opacity':'1', 'pointer-events':'none'})
-
-			  			book = $(this).attr('id');
-			  			origNode = $(this);
-			  			$(this).attr('id', 'book-in-movement');
-			  			console.log(book);
-			  			var clone = $(this).clone();
-			  			clone.attr('id', 'clone');
-			  			$(this).parent().append(clone);
-			  			$('#book-in-movement img, #book-in-movement p, #book-in-movement .wpbooklist-edit-actions-div').css({'opacity':'0'})
-			  			$('#book-in-movement .wpbooklist-edit-book-indiv-div-class').css({'border-color':'black', 'border':'1px dashed black'});
-			  		}
-				}
-
-				function wpbooklistmousemove(e){
-
-					if (e.pageY < oldx) {
-			            direction = "up"
-			        } else if (e.pageY > oldx) {
-			            direction = "down"
-			        }
-			        oldx = e.pageY;
-
-			        $('#clone .wpbooklist-edit-book-indiv-div-class').css({
-			        	border:'none'
-			       	});
-
-				    $('#clone').css({
-				       left:  e.pageX-250,
-				       top:   e.pageY-250,
-				       position: 'absolute',
-					   float: 'left',
-				       backgroundColor: 'white',
-				       zIndex: '999',
-				       pointerEvents: 'none',
-				       border: '1px solid #e5e5e5'
-				    });
-				}
-
-				function wpbooklistmouseenter(e){
-					if (window.isScrolling) return;
-					if($(this).attr('id') != 'book-in-movement'){
-						if(mousedown){
-							if(direction == 'up'){
-								console.log(origNode.prev().attr('class'))
-								if(origNode.prev().attr('class') == 'wpbooklist-search-indiv-container wpbooklist-search-indiv-container-reorder'){
-									origNode.prev().insertAfter(origNode);
-									// Scrolls back to the top of the title 
-									var scrollTop = ($("#book-in-movement").offset().top + $("#book-in-movement").height() / 2) - document.documentElement.clientHeight/2;
-								    if(scrollTop != 0){
-								      $('html, body').animate({
-								        scrollTop: scrollTop
-								      }, 500);
-								      scrollTop = 0;
-								    }
-									return;
-								}
-								return;
-							}
-
-							if(direction == 'down'){
-								if(origNode.next().attr('class') == 'wpbooklist-search-indiv-container wpbooklist-search-indiv-container-reorder'){
-									origNode.next().insertBefore(origNode);
-									var scrollTop = ($("#book-in-movement").offset().top + $("#book-in-movement").height() / 2) - document.documentElement.clientHeight/2
-								    if(scrollTop != 0){
-								      $('html, body').animate({
-								        scrollTop: scrollTop
-								      }, 500);
-								      scrollTop = 0;
-								    }
-									return;
-								}
-								return;
-							}
-							
-						}
-					}
-				}
-
-				// Registering the various listeners for 'Reorder' mode.
-				$(document).on("mousedown",".wpbooklist-search-indiv-container-reorder", wpbooklistmousedown)
-				$(document).on("mouseenter",".wpbooklist-search-indiv-container-reorder", wpbooklistmouseenter);
-
-			});
-			</script>
-			<?php
-		}
-
-		// Callback function for re-ordering books on the 'Edit & Delete Books' tab
+		// Callback function for re-ordering books on the 'Edit & Delete Books' tab.
 		public function wpbooklist_reorder_action_callback(){
 			global $wpdb;
 			check_ajax_referer( 'wpbooklist_reorder_action_callback', 'security' );
@@ -2815,96 +2020,7 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 			wp_die();
 		}
 
-		// For the exit survey triggered when user deactivates WPBookList
-		public function wpbooklist_exit_results_action_javascript() { 
-			?>
-		  	<script type="text/javascript" >
-		  	"use strict";
-		  	jQuery(document).ready(function($) {
-		  		$(document).on("click","#wpbooklist-modal-submit, #wpbooklist-modal-close", function(event){
-
-
-
-		  			var id = '';
-		  			if($(this).attr('id') == 'wpbooklist-modal-close' ){
-		  				var id = 'wpbooklist-modal-close';
-		  			} else {
-		  				var id = 'wpbooklist-modal-submit';
-		  			}
-
-		  			var reasonEmail = $('#wpbooklist-modal-email').val()
-		  			console.log(reasonEmail)
-		  			if(reasonEmail != ''){
-		  				var reasonEmailInput = document.getElementById('wpbooklist-modal-email');
-			  			var filter = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
-					    if (!filter.test(reasonEmailInput.value)) {
-					    	alert('Whoops! Looks like that might not be a valid E-mail address!');
-					    	reasonEmailInput.focus;
-					    	return false;
-						}
-					}	
-
-		  			var reason1 = $('#wpbooklist-modal-reason1').prop('checked')
-		  			var reason2 = $('#wpbooklist-modal-reason2').prop('checked')
-		  			var reason3 = $('#wpbooklist-modal-reason3').prop('checked')
-		  			var reason4 = $('#wpbooklist-modal-reason4').prop('checked')
-		  			var reason5 = $('#wpbooklist-modal-reason5').prop('checked')
-		  			var reason6 = $('#wpbooklist-modal-reason6').prop('checked')
-		  			var reason7 = $('#wpbooklist-modal-reason7').prop('checked')
-		  			var reason8 = $('#wpbooklist-modal-reason8').prop('checked')
-		  			var reason9 = $('#wpbooklist-modal-reason9').prop('checked')
-		  			var reasonOther = $('#wpbooklist-modal-textarea').val()
-		  			var reasonEmail = $('#wpbooklist-modal-email').val()
-		  			var featureSuggestion = $('#wpbooklist-modal-textarea-suggest-feature').val()
-
-
-				  	var data = {
-						'action': 'wpbooklist_exit_results_action',
-						'security': '<?php echo wp_create_nonce( "wpbooklist_exit_results_action_callback" ); ?>',
-						'reason1':reason1,
-						'reason2':reason2,
-						'reason3':reason3,
-						'reason4':reason4,
-						'reason5':reason5,
-						'reason6':reason6,
-						'reason7':reason7,
-						'reason8':reason8,
-						'reason9':reason9,
-						'reasonOther':reasonOther,
-						'reasonEmail':reasonEmail,
-						'featureSuggestion':featureSuggestion,
-						'id':id
-					};
-					console.log(data);
-
-			     	var request = $.ajax({
-					    url: ajaxurl,
-					    type: "POST",
-					    data:data,
-					    timeout: 0,
-					    success: function(response) {
-
-					    	document.location.reload(true);
-
-
-
-					    	console.log(response);
-					    },
-						error: function(jqXHR, textStatus, errorThrown) {
-							console.log(errorThrown);
-				            console.log(textStatus);
-				            console.log(jqXHR);
-						}
-					});
-
-					event.preventDefault ? event.preventDefault() : event.returnValue = false;
-			  	});
-			});
-			</script>
-			<?php
-		}
-
-		// Callback function for the exit survey triggered when user deactivates WPBookList
+		// Callback function for the exit survey triggered when user deactivates WPBookList.
 		public function wpbooklist_exit_results_action_callback(){
 			global $wpdb;
 			check_ajax_referer( 'wpbooklist_exit_results_action_callback', 'security' );
@@ -2937,210 +2053,18 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 			wp_die();
 		}
 
-		// For retrieving the WPBookList StoryTime Stories from the server when the 'Select a Category' drop-down changes.
-		public function wpbooklist_storytime_select_category_action_javascript() { 
-			?>
-		  	<script type="text/javascript" >
-		  	"use strict";
-		  	jQuery(document).ready(function($) {
-		  		$(document).on("change","#wpbooklist-storytime-category-select", function(event){
-
-		  			var category = $(this).val();
-		  			$('#wpbooklist-storytime-reader-selection-div-1-inner-1').animate({'opacity':0})
-
-				  	var data = {
-						'action': 'wpbooklist_storytime_select_category_action',
-						'security': '<?php echo wp_create_nonce( "wpbooklist_storytime_select_category_action_callback" ); ?>',
-						'category':category
-					};
-					console.log(data);
-
-			     	var request = $.ajax({
-					    url: ajaxurl,
-					    type: "POST",
-					    data:data,
-					    timeout: 0,
-					    success: function(response) {
-					    	console.log(response);
-
-
-					    	$('#wpbooklist-storytime-reader-selection-div-1-inner-1').html(response).animate({'opacity':1})
-					    },
-						error: function(jqXHR, textStatus, errorThrown) {
-							console.log(errorThrown);
-				            console.log(textStatus);
-				            console.log(jqXHR);
-						}
-					});
-
-					event.preventDefault ? event.preventDefault() : event.returnValue = false;
-			  	});
-			});
-			</script>
-			<?php
-		}
-
 		// Callback function for retrieving the WPBookList StoryTime Stories from the server when the 'Select a Category' drop-down changes.
 		public function wpbooklist_storytime_select_category_action_callback(){
 			global $wpdb;
 			check_ajax_referer( 'wpbooklist_storytime_select_category_action_callback', 'security' );
 			$category = filter_var($_POST['category'],FILTER_SANITIZE_STRING);
 
-			require_once(CLASS_DIR.'class-storytime.php');
+			require_once(CLASS_STORYTIME_DIR.'class-storytime.php');
 		  	$storytime_class = new WPBookList_Storytime('categorychange', $category );
 
 
 			echo $storytime_class->category_change_output;
 			wp_die();
-		}
-
-		// For retreiving a WPBookList StoryTime Story from the server, once the user has selected one in the reader
-		public function wpbooklist_storytime_get_story_action_javascript() { 
-
-			$trans1 = __('Delete This Story','wpbooklist');
-
-			?>
-		  	<script type="text/javascript" >
-		  	"use strict";
-		  	jQuery(document).ready(function($) {
-		  		$(document).on("click",".wpbooklist-storytime-listed-story", function(event){
-
-		  			var title = $(this).text();
-		  			$('#wpbooklist-storytime-reader-titlebar-div-2 h2').animate({
-		               opacity: 0
-		            }, {
-		               duration: 500,
-		               complete: function() { 
-		               		$('#wpbooklist-storytime-reader-titlebar-div-2 h2').text(title)
-		               		$('#wpbooklist-storytime-reader-titlebar-div-2 h2').animate({'opacity':1})
-		               }
-		           });
-
-		  			$('#wpbooklist-storytime-reader-selection-div-1-inner-1').animate({
-		               height: 0,
-		               opacity: 0
-		            }, {
-		               duration: 500,
-		               complete: function() { 
-			                $('#wpbooklist-storytime-reader-selection-div-1-inner-2').animate({
-				               height: 48,
-				               opacity: 1
-				            }, {
-				               duration: 500,
-				               complete: function() { 
-				                	$('#wpbooklist-storytime-reader-pagination-div').animate({
-						               height: 45,
-						               opacity: 1
-						            }, {
-						               duration: 500,
-						               complete: function() { 
-						                	//$('#wpbooklist-storytime-reader-pagination-div')
-						               } 
-						            }); 	
-				               } 
-				            });
-		               } 
-		            });
-
-
-		  			var dataId = $(this).attr('data-id')
-
-				  	var data = {
-						'action': 'wpbooklist_storytime_get_story_action',
-						'security': '<?php echo wp_create_nonce( "wpbooklist_storytime_get_story_action_callback" ); ?>',
-						'dataId':dataId
-					};
-					console.log(data);
-
-			     	var request = $.ajax({
-					    url: ajaxurl,
-					    type: "POST",
-					    data:data,
-					    timeout: 0,
-					    success: function(response) {
-
-					    	response = JSON.parse(response);
-
-					    	$('#wpbooklist-storytime-reader-provider-div-1 img').animate({
-				               opacity: 0
-				            }, {
-				               duration: 500,
-				               complete: function() { 
-				               		$(this).attr('src', response.providerimg)
-				               		setTimeout(function(){ $('#wpbooklist-storytime-reader-provider-div-1 img').animate({'opacity':1}) }, 2000);
-				               }
-				           	});
-
-					    	$('#wpbooklist-storytime-reader-provider-p-1').animate({
-				               opacity: 0
-				            }, {
-				               duration: 500,
-				               complete: function() { 
-				               		$(this).text(response.providername)
-				               		setTimeout(function(){ $('#wpbooklist-storytime-reader-provider-p-1').animate({'opacity':1}) }, 2000);
-				               }
-				           	});
-
-				           	$('#wpbooklist-storytime-reader-provider-p-2').animate({
-				               opacity: 0
-				            }, {
-				               duration: 500,
-				               complete: function() { 
-				               		$(this).html(response.providerbio)
-				               		setTimeout(function(){ $('#wpbooklist-storytime-reader-provider-p-2').animate({'opacity':1}) }, 2000);
-				               }
-				           	});
-
-					    	var content = $('#wpbooklist-storytime-reader-content-div').html(response.content);
-					    	var contentLocation = content.attr('data-location');
-					    	var contentHeight = content.height();
-
-					    	if(contentLocation == 'backend'){
-					    		content.css({'height':'337px', 'overflow':'auto'});
-					    		var totalPages = Math.trunc(Math.ceil(contentHeight/337));
-					    	} else {
-					    		content.css({'height':'370px', 'overflow':'auto'});
-					    		var totalPages = Math.trunc(Math.ceil(contentHeight/370));
-					    	}
-
-					    	setTimeout(function(){ $('#wpbooklist-storytime-reader-content-div').animate({'opacity':1}) }, 2000);
-
-					    	if(contentLocation == 'backend'){
-						    	// Add in the HTML for deleting the selected Story
-						    	$("#wpbooklist-storytime-reader-provider-div-delete").html('<p id="wpbooklist-storytime-reader-provider-div-delete-p" data-id="'+dataId+'"><?php echo $trans1; ?></p>');
-						    	setTimeout(function(){ 
-
-						    		$('#wpbooklist-storytime-reader-provider-div-delete').animate({
-						               opacity: 1
-						            }, {
-						               duration: 500,
-						               complete: function() { 
-						               		$('#wpbooklist-storytime-reader-provider-div-delete-p').css({'pointer-events':'all'})
-						               }
-						           	}); 
-						    	}, 2500);
-					    	}
-
-
-					    	$('#wpbooklist-storytime-reader-pagination-div-2-span-3').text(totalPages)
-
-					    	console.log(contentHeight)
-					    	console.log(totalPages)
-
-					    	console.log(response);
-					    },
-						error: function(jqXHR, textStatus, errorThrown) {
-							console.log(errorThrown);
-				            console.log(textStatus);
-				            console.log(jqXHR);
-						}
-					});
-
-					event.preventDefault ? event.preventDefault() : event.returnValue = false;
-			  	});
-			});
-			</script>
-			<?php
 		}
 
 		// Callback function for retreiving a WPBookList StoryTime Story from the server, once the user has selected one in the reader
@@ -3149,7 +2073,7 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 			check_ajax_referer( 'wpbooklist_storytime_get_story_action_callback', 'security' );
 			$dataId = filter_var($_POST['dataId'],FILTER_SANITIZE_NUMBER_INT);
 			
-			require_once(CLASS_DIR.'class-storytime.php');
+			require_once(CLASS_STORYTIME_DIR.'class-storytime.php');
 		  	$storytime_class = new WPBookList_Storytime('getcontent', null, $dataId);
 
 		  	echo json_encode($storytime_class->stories_db_data);
@@ -3157,142 +2081,12 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 			wp_die();
 		}
 
-		// For expanding the 'Browse Stories' section again once a Story has already been selected
-		public function wpbooklist_storytime_expand_browse_action_javascript() { 
-			?>
-		  	<script type="text/javascript" >
-		  	"use strict";
-		  	jQuery(document).ready(function($) {
-		  		$(document).on("click","#wpbooklist-storytime-reader-selection-div-1-inner-2", function(event){
-
-		  			var contentLocation = $(this).attr('data-location');
-
-		  			if(contentLocation == 'backend'){
-			  			$('#wpbooklist-storytime-reader-provider-div-delete').animate({
-			               opacity: 0
-			            }, {
-			               duration: 500,
-			               complete: function() { 
-			               		$('#wpbooklist-storytime-reader-provider-div-delete-p').css({'pointer-events':'none'})
-			               }
-			           	}); 
-		  			}
-
-		  			$('#wpbooklist-storytime-reader-content-div').animate({
-		               opacity: 0
-		            }, {
-		               duration: 500,
-		               complete: function() { 
-		               		$('#wpbooklist-storytime-reader-content-div').css({'height':''})
-		               }
-		           });
-
-		  			$('#wpbooklist-storytime-reader-titlebar-div-2 h2').animate({
-		               opacity: 0
-		            }, {
-		               duration: 500,
-		               complete: function() { 
-		               		$('#wpbooklist-storytime-reader-titlebar-div-2 h2').text('Select a Story...')
-		               		$('#wpbooklist-storytime-reader-titlebar-div-2 h2').animate({'opacity':1})
-		               }
-		           });
-
-		  			$('#wpbooklist-storytime-reader-selection-div-1-inner-2').animate({
-		               height: 0,
-		               opacity: 0
-		            }, {
-		               duration: 500,
-		               complete: function() { 
-			                $('#wpbooklist-storytime-reader-pagination-div').animate({
-				               height: 0,
-				               opacity: 0
-				            }, {
-				               duration: 500,
-				               complete: function() { 
-				                		
-				               } 
-				            });
-		               } 
-		            });
-
-				  	var data = {
-						'action': 'wpbooklist_storytime_expand_browse_action',
-						'security': '<?php echo wp_create_nonce( "wpbooklist_storytime_expand_browse_action_callback" ); ?>',
-					};
-					console.log(data);
-
-			     	var request = $.ajax({
-					    url: ajaxurl,
-					    type: "POST",
-					    data:data,
-					    timeout: 0,
-					    success: function(response) {
-					    	console.log(response);
-
-					    	$('#wpbooklist-storytime-reader-provider-div-1 img').animate({
-				               opacity: 0
-				            }, {
-				               duration: 500,
-				               complete: function() { 
-				               		$(this).attr('src', "<?php echo ROOT_IMG_URL; ?>icon-256x256.png")
-				               		setTimeout(function(){ $('#wpbooklist-storytime-reader-provider-div-1 img').animate({'opacity':1}) }, 1000);
-				               }
-				           	});
-
-					    	$('#wpbooklist-storytime-reader-provider-p-1').animate({
-				               opacity: 0
-				            }, {
-				               duration: 500,
-				               complete: function() { 
-				               		$(this).text('Discover new Authors and Publishers!')
-				               		setTimeout(function(){ $('#wpbooklist-storytime-reader-provider-p-1').animate({'opacity':1}) }, 1000);
-				               }
-				           	});
-
-				           	$('#wpbooklist-storytime-reader-provider-p-2').animate({
-				               opacity: 0
-				            }, {
-				               duration: 500,
-				               complete: function() { 
-				               		$(this).text("WPBookList StoryTime is WPBooklist's Content-Delivery System, providing you and your website visitors with Sample Chapters, Short Stories, News, Interviews and more!")
-				               		setTimeout(function(){ $('#wpbooklist-storytime-reader-provider-p-2').animate({'opacity':1}) }, 1000);
-				               }
-				           	});
-
-
-
-					    	$('#wpbooklist-storytime-reader-selection-div-1-inner-1').html(response)
-					    	$('#wpbooklist-storytime-reader-selection-div-1-inner-1').animate({
-				               height: '466px',
-		       				   opacity: 1
-				            }, {
-				               duration: 500,
-				               complete: function() { 
-				                	//$('#wpbooklist-storytime-reader-pagination-div')
-				               } 
-				            }); 
-
-					    },
-						error: function(jqXHR, textStatus, errorThrown) {
-							console.log(errorThrown);
-				            console.log(textStatus);
-				            console.log(jqXHR);
-						}
-					});
-
-					event.preventDefault ? event.preventDefault() : event.returnValue = false;
-			  	});
-			});
-			</script>
-			<?php
-		}
-
 		// Callback function for expanding the 'Browse Stories' section again once a Story has already been selected
 		public function wpbooklist_storytime_expand_browse_action_callback(){
 			global $wpdb;
 			check_ajax_referer( 'wpbooklist_storytime_expand_browse_action_callback', 'security' );
 
-			require_once(CLASS_DIR.'class-storytime.php');
+			require_once(CLASS_STORYTIME_DIR.'class-storytime.php');
 		  	$storytime_class = new WPBookList_Storytime('categorychange', 'Recent Additions' );
 
 
@@ -3300,57 +2094,7 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 			wp_die();
 		}
 
-		// For saving the StoryTime Settings
-		public function wpbooklist_storytime_save_settings_action_javascript() { 
-			?>
-		  	<script type="text/javascript" >
-		  	"use strict";
-		  	jQuery(document).ready(function($) {
-		  		$(document).on("click","#wpbooklist-storytime-settings-save", function(event){
-
-		  			$('#wpbooklist-spinner-storytime-settings').animate({'opacity':1})
-
-		  			var input1 = $('#wpbooklist-storytime-settings-input-1').prop('checked')
-		  			var input2 = $('#wpbooklist-storytime-settings-input-2').prop('checked')
-		  			var input3 = $('#wpbooklist-storytime-settings-input-3').prop('checked')
-		  			var input4 = $('#wpbooklist-storytime-settings-input-4').prop('checked')
-		  			var input5 = $('#wpbooklist-storytime-settings-input-5').prop('checked')
-		  			var input6 = $('#wpbooklist-storytime-settings-input-6').val();
-
-				  	var data = {
-						'action': 'wpbooklist_storytime_save_settings_action',
-						'security': '<?php echo wp_create_nonce( "wpbooklist_storytime_save_settings_action_callback" ); ?>',
-						'input1':input1,
-						'input2':input2,
-						'input3':input3,
-						'input4':input4,
-						'input5':input5,
-						'input6':input6,
-					};
-					console.log(data);
-
-			     	var request = $.ajax({
-					    url: ajaxurl,
-					    type: "POST",
-					    data:data,
-					    timeout: 0,
-					    success: function(response) {
-					    	document.location.reload(true);
-					    	console.log(response);
-					    },
-						error: function(jqXHR, textStatus, errorThrown) {
-							console.log(errorThrown);
-				            console.log(textStatus);
-				            console.log(jqXHR);
-						}
-					});
-
-					event.preventDefault ? event.preventDefault() : event.returnValue = false;
-			  	});
-			});
-			</script>
-			<?php
-		}
+		
 
 		// Callback function for saving the StoryTime Settings
 		public function wpbooklist_storytime_save_settings_action_callback(){
@@ -3471,47 +2215,7 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 			wp_die();
 		}
 
-		// For deleting a Story
-		public function wpbooklist_delete_story_action_javascript() { 
-			?>
-		  	<script type="text/javascript" >
-		  	"use strict";
-		  	jQuery(document).ready(function($) {
-		  		$(document).on("click","#wpbooklist-storytime-reader-provider-div-delete-p", function(event){
-
-		  			var dataId = $(this).attr('data-id')
-
-				  	var data = {
-						'action': 'wpbooklist_delete_story_action',
-						'security': '<?php echo wp_create_nonce( "wpbooklist_delete_story_action_callback" ); ?>',
-						'dataId':dataId
-					};
-					console.log(data);
-
-			     	var request = $.ajax({
-					    url: ajaxurl,
-					    type: "POST",
-					    data:data,
-					    timeout: 0,
-					    success: function(response) {
-					    	console.log(response);
-					    	document.location.reload(true);
-					    },
-						error: function(jqXHR, textStatus, errorThrown) {
-							console.log(errorThrown);
-				            console.log(textStatus);
-				            console.log(jqXHR);
-						}
-					});
-
-					event.preventDefault ? event.preventDefault() : event.returnValue = false;
-			  	});
-			});
-			</script>
-			<?php
-		}
-
-		// Callback function for deleting a Story
+		// Callback function for deleting a Story.
 		public function wpbooklist_delete_story_action_callback(){
 			global $wpdb;
 			check_ajax_referer( 'wpbooklist_delete_story_action_callback', 'security' );

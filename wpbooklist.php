@@ -167,6 +167,24 @@ global $wpdb;
 			'adminnonce20' => 'wpbooklist_assign_post_template_action_callback',
 			'adminnonce21' => 'wpbooklist_upload_new_page_template_action_callback',
 			'adminnonce22' => 'wpbooklist_assign_page_template_action_callback',
+			'adminnonce23' => 'wpbooklist_create_db_library_backup_action_callback',
+			'adminnonce24' => 'wpbooklist_restore_db_library_backup_action_callback',
+			'adminnonce25' => 'wpbooklist_create_csv_action_callback',
+			'adminnonce26' => 'wpbooklist_amazon_localization_action_callback',
+			'adminnonce27' => 'wpbooklist_delete_all_books_in_library_action_callback',
+			'adminnonce28' => 'wpbooklist_delete_all_books_pages_and_posts_action_callback',
+			'adminnonce29' => 'wpbooklist_delete_all_checked_books_action_callback',
+			'adminnonce30' => 'wpbooklist_jre_dismiss_prem_notice_forever_action',
+			'adminnonce31' => 'wpbooklist_reorder_action_callback',
+			'adminnonce32' => 'wpbooklist_exit_results_action_callback',
+			'adminnonce33' => 'wpbooklist_storytime_select_category_action_callback',
+			'adminnonce34' => 'wpbooklist_storytime_get_story_action_callback',
+			'adminnonce35' => 'wpbooklist_storytime_expand_browse_action_callback',
+			'adminnonce36' => 'wpbooklist_storytime_save_settings_action_callback',
+			'adminnonce37' => 'wpbooklist_delete_story_action_callback',
+
+
+
 		))
 	);
 
@@ -343,8 +361,50 @@ global $wpdb;
 	// For assigning a Page Template to a Page.
 	add_action( 'wp_ajax_wpbooklist_assign_page_template_action', array( $wp_book_list_ajax_functions, 'wpbooklist_assign_page_template_action_callback' ) );
 
+	// For creating a backup of a Library.
+	add_action( 'wp_ajax_wpbooklist_create_db_library_backup_action', array( $wp_book_list_ajax_functions, 'wpbooklist_create_db_library_backup_action_callback' ) );
 
+	// For restoring a backup of a Library.
+	add_action( 'wp_ajax_wpbooklist_restore_db_library_backup_action', array( $wp_book_list_ajax_functions, 'wpbooklist_restore_db_library_backup_action_callback' ) );
 
+	// For creating a .csv file of ISBN/ASIN numbers.
+	add_action( 'wp_ajax_wpbooklist_create_csv_action', array( $wp_book_list_ajax_functions, 'wpbooklist_create_csv_action_callback' ) );
+
+	// For setting the Amazon Localization.
+	add_action( 'wp_ajax_wpbooklist_amazon_localization_action', array( $wp_book_list_ajax_functions, 'wpbooklist_amazon_localization_action_callback' ) );
+
+	// For deleting all books in library.
+	add_action( 'wp_ajax_wpbooklist_delete_all_books_in_library_action', array( $wp_book_list_ajax_functions, 'wpbooklist_delete_all_books_in_library_action_callback' ) );
+
+	// For deleting all books, pages, and posts in library.
+	add_action( 'wp_ajax_wpbooklist_delete_all_books_pages_and_posts_action', array( $wp_book_list_ajax_functions, 'wpbooklist_delete_all_books_pages_and_posts_action_callback' ) );
+
+	// For deleting all checked books.
+	add_action( 'wp_ajax_wpbooklist_delete_all_checked_books_action', array( $wp_book_list_ajax_functions, 'wpbooklist_delete_all_checked_books_action_callback' ) );
+
+	// For dismissing notice.
+	add_action( 'wp_ajax_wpbooklist_jre_dismiss_prem_notice_forever_action', array( $wp_book_list_ajax_functions, 'wpbooklist_jre_dismiss_prem_notice_forever_action_callback' ) );
+
+	// For reordering books.
+	add_action( 'wp_ajax_wpbooklist_reorder_action', array( $wp_book_list_ajax_functions, 'wpbooklist_reorder_action_callback' ) );
+
+	// For receiving user feedback upon deactivation & deletion.
+	add_action( 'wp_ajax_wpbooklist_exit_results_action', array( $wp_book_list_ajax_functions, 'wpbooklist_exit_results_action_callback' ) );
+
+	// For retrieving the WPBookList StoryTime Stories from the server when the 'Select a Category' drop-down changes.
+	add_action( 'wp_ajax_wpbooklist_storytime_select_category_action', array( $wp_book_list_ajax_functions, 'wpbooklist_storytime_select_category_action_callback' ) );
+
+	// For retreiving a WPBookList StoryTime Story from the server, once the user has selected one in the reader.
+	add_action( 'wp_ajax_wpbooklist_storytime_get_story_action', array( $wp_book_list_ajax_functions, 'wpbooklist_storytime_get_story_action_callback' ) );
+
+	// For expanding the 'Browse Stories' section again once a Story has already been selected.
+	add_action( 'wp_ajax_wpbooklist_storytime_expand_browse_action', array( $wp_book_list_ajax_functions, 'wpbooklist_storytime_expand_browse_action_callback' ) );
+
+	// For saving the StoryTime Settings.
+	add_action( 'wp_ajax_wpbooklist_storytime_save_settings_action', array( $wp_book_list_ajax_functions, 'wpbooklist_storytime_save_settings_action_callback' ) );
+
+	// For deleting a StoryTime Settings.
+	add_action( 'wp_ajax_wpbooklist_delete_story_action', array( $wp_book_list_ajax_functions, 'wpbooklist_delete_story_action_callback' ) );
 
 
 /* END OF FUNCTIONS FOUND IN CLASS-WPBOOKLIST-AJAX-FUNCTIONS.PHP THAT APPLY PLUGIN-WIDE */

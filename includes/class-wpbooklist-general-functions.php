@@ -115,8 +115,14 @@ if ( ! class_exists( 'WPBookList_General_Functions', false ) ) :
 
 			// Adding some other individual values we may need.
 			$final_array_of_php_values['ROOT_IMG_ICONS_URL']   = ROOT_IMG_ICONS_URL;
+			$final_array_of_php_values['ROOT_IMG_URL']   = ROOT_IMG_URL;
+			$final_array_of_php_values['EDIT_PAGE_OFFSET']   = EDIT_PAGE_OFFSET;
 			$final_array_of_php_values['FOR_TAB_HIGHLIGHT']    = admin_url() . 'admin.php';
 			$final_array_of_php_values['SAVED_ATTACHEMENT_ID'] = get_option( 'media_selector_attachment_id', 0 );
+			$final_array_of_php_values['LIBRARY_DB_BACKUPS_UPLOAD_URL'] = LIBRARY_DB_BACKUPS_UPLOAD_URL;
+
+
+
 
 			// Now registering/localizing our JavaScript file, passing all the PHP variables we'll need in our $final_array_of_php_values array, to be accessed from 'wphealthtracker_php_variables' object (like wphealthtracker_php_variables.nameofkey, like any other JavaScript object).
 			wp_localize_script( 'adminjs', 'wpbooklistPhpVariables', $final_array_of_php_values );
@@ -1007,7 +1013,7 @@ if ( ! class_exists( 'WPBookList_General_Functions', false ) ) :
 			$options_row = $wpdb->get_results( "SELECT * FROM $table_name" );
 			$dismiss     = $options_row[0]->admindismiss;
 
-			if ( 1 === $dismiss ) {
+			if ( '1' === $dismiss ) {
 				$message    = $options_row[0]->adminmessage;
 				$url        = home_url();
 				$newmessage = str_replace( 'alaainqphpaholeechoaholehomeanusurlalparpascaholeainqara', $url, $message );
