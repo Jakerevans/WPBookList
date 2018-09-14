@@ -39,13 +39,13 @@ if ( ! class_exists( 'WPBookList_Backup_Settings_Form', false ) ) :
 		public function output_backup_settings_form() {
 			global $wpdb;
 
-			$table_name = $wpdb->prefix . 'wpbooklist_jre_list_dynamic_db_names';
+			$table_name       = $wpdb->prefix . 'wpbooklist_jre_list_dynamic_db_names';
 			$transient_name   = 'wpbl_' . md5( 'SELECT * FROM ' . $table_name );
 			$transient_exists = $this->transients->existing_transient_check( $transient_name );
 			if ( $transient_exists ) {
 				$db_row = $transient_exists;
 			} else {
-				$query                 = 'SELECT * FROM ' . $table_name;
+				$query  = 'SELECT * FROM ' . $table_name;
 				$db_row = $this->transients->create_transient( $transient_name, 'wpdb->get_results', $query, MONTH_IN_SECONDS );
 			}
 
