@@ -188,41 +188,31 @@ if ( ! class_exists( 'WPBookList_Backup', false ) ) :
 
 			$templine  = '';
 			$set_error = 0;
-			$lines = $wp_filesystem->get_contents(LIBRARY_DB_BACKUPS_UPLOAD_DIR.$this->backup_file );
-			//error_log(print_r($lines,true));
+			$lines     = $wp_filesystem->get_contents( LIBRARY_DB_BACKUPS_UPLOAD_DIR . $this->backup_file );
 
-$lines = explode("\n", $lines);
+			$lines = explode( "\n", $lines );
 
-
-			//if(true === is_resource($lines)){
-				// Loop through each line
-				foreach($lines as $line) {
-					//$line = fgets($lines);
-
-					// Skip it if it's a comment
-					if (substr($line, 0, 2) == '--' || $line == ''){
-						continue;
-					}
-
-					// Add this line to the current segment
-					$templine .= $line;
-					// If it has a semicolon at the end, it's the end of the query
-					if (substr(trim($line), -1, 1) == ';'){
-						// Perform the query
-						$result = $wpdb->query($templine);
-
-						// Reset temp variable to empty
-						$templine = '';
-					}
-
+			// Loop through each line.
+			foreach ( $lines as $line ) {
+				// Skip it if it's a comment.
+				if ( '--' === substr( $line, 0, 2 ) || '' === $line ) {
+					continue;
 				}
-			//}
 
+				// Add this line to the current segment.
+				$templine .= $line;
+
+				// If it has a semicolon at the end, it's the end of the query.
+				if ( ';' === substr( trim( $line ), -1, 1 ) ) {
+
+					// Perform the query.
+					$result = $wpdb->query( $templine );
+
+					// Reset temp variable to empty.
+					$templine = '';
+				}
+			}
 		}
-
-		
-
-
 	}
 
 endif;

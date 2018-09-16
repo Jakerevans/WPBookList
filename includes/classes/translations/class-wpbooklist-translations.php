@@ -159,6 +159,10 @@ if ( ! class_exists( 'WPBookList_Translations', false ) ) :
 			$this->trans_125 = __( 'Submit - And Thanks For Trying WPBookList!', 'wpbooklist' );
 			$this->trans_126 = __( 'Nah - Just Deactivate WPBookList!', 'wpbooklist' );
 			$this->trans_127 = __( 'Delete This Story', 'wpbooklist' );
+			$this->trans_128 = __( 'WPBookList StoryTime is WPBooklist\'s Content-Delivery System, providing you and your website visitors with Sample Chapters, Short Stories, News, Interviews and more!', 'wpbooklist' );
+
+
+
 
 
 
@@ -291,6 +295,7 @@ if ( ! class_exists( 'WPBookList_Translations', false ) ) :
 				'trans125' => $this->trans_125,
 				'trans126' => $this->trans_126,
 				'trans127' => $this->trans_127,
+				'trans128' => $this->trans_128,
 
 
 
