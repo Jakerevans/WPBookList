@@ -39,7 +39,7 @@ gulp.task( 'default', function() {
 
 // Task to compile Frontend SASS file.
 gulp.task( 'sassFrontendSource', function() {
-	gulp.src( sassFrontendSource );
+	gulp.src( sassFrontendSource )
 		.pipe(sass({
 			outputStyle: 'compressed'
 		})
