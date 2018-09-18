@@ -36,7 +36,7 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 			global $wpdb;
 			check_ajax_referer( 'wpbooklist_dashboard_add_book_action_callback', 'security' );
 
-			// First set the variables we'll be passing to class-book.php to ''.
+			// First set the variables we'll be passing to class-wpbooklist-book.php to ''.
 			$amazon_auth_yes = '';
 			$library = '';
 			$use_amazon_yes = '';
@@ -312,7 +312,7 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 				'upsells' => $upsells,
 			);
 
-			require_once(CLASS_BOOK_DIR.'class-book.php');
+			require_once(CLASS_BOOK_DIR.'class-wpbooklist-book.php');
 			$book_class = new WPBookList_Book('add', $book_array, null);
 			$insert_result = explode(',',$book_class->add_result);
 			// If book added succesfully, get the ID of the book we just inserted, and return the result and that ID
@@ -356,7 +356,7 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 			$sortParam = filter_var($_POST['sortParam'],FILTER_SANITIZE_STRING);
 
 			// Double-check that Amazon review isn't expired
-			require_once(CLASS_BOOK_DIR.'class-book.php');
+			require_once(CLASS_BOOK_DIR.'class-wpbooklist-book.php');
 			$book = new WPBookList_Book($book_id, $book_table);
 			$book->refresh_amazon_review($book_id, $book_table);
 
@@ -1034,7 +1034,7 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 				$product = json_encode($product);
 			}
 
-			require_once(CLASS_BOOK_DIR.'class-book.php');
+			require_once(CLASS_BOOK_DIR.'class-wpbooklist-book.php');
 			$form = new WPBookList_Book;
 			$edit_form = $form->display_edit_book_form();
 
@@ -1129,7 +1129,7 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 			global $wpdb;
 			check_ajax_referer( 'wpbooklist_edit_book_actual_action_callback', 'security' );
 			
-			// First set the variables we'll be passing to class-book.php to ''
+			// First set the variables we'll be passing to class-wpbooklist-book.php to ''
 			$amazon_auth_yes = '';    
 			$library = '';    
 			$use_amazon_yes = '';    
@@ -1467,7 +1467,7 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 				'kobobuylink' => $kobobuylink
 			);
 
-			require_once(CLASS_BOOK_DIR.'class-book.php');
+			require_once(CLASS_BOOK_DIR.'class-wpbooklist-book.php');
 			$book_class = new WPBookList_Book('edit', $book_array, $book_id);
 
 			$edit_result = $book_class->edit_result;
@@ -1513,7 +1513,7 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 			$book_id = filter_var($_POST['bookId'],FILTER_SANITIZE_NUMBER_INT);
 
 
-			require_once(CLASS_BOOK_DIR.'class-book.php');
+			require_once(CLASS_BOOK_DIR.'class-wpbooklist-book.php');
 			$book_class = new WPBookList_Book;
 			$delete_result = $book_class->delete_book($library, $book_id, $delete_string);
 			echo $delete_result;
@@ -1815,7 +1815,7 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 		public function wpbooklist_delete_all_books_in_library_action_callback(){
 
 			check_ajax_referer( 'wpbooklist_delete_all_books_in_library_action_callback', 'security' );
-			require_once(CLASS_BOOK_DIR.'class-book.php');
+			require_once(CLASS_BOOK_DIR.'class-wpbooklist-book.php');
 			$book_class = new WPBookList_Book;
 
 			$library = filter_var($_POST['library'],FILTER_SANITIZE_STRING);
@@ -1828,7 +1828,7 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 		public function wpbooklist_delete_all_books_pages_and_posts_action_callback(){
 
 			check_ajax_referer( 'wpbooklist_delete_all_books_pages_and_posts_action_callback', 'security' );
-			require_once(CLASS_BOOK_DIR.'class-book.php');
+			require_once(CLASS_BOOK_DIR.'class-wpbooklist-book.php');
 			$book_class = new WPBookList_Book;
 
 			$library = filter_var($_POST['library'],FILTER_SANITIZE_STRING);
@@ -1839,7 +1839,7 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 
 		// Callback function for deleting all checked books.
 		public function wpbooklist_delete_all_checked_books_action_callback(){
-			require_once(CLASS_BOOK_DIR.'class-book.php');
+			require_once(CLASS_BOOK_DIR.'class-wpbooklist-book.php');
 			$book_class = new WPBookList_Book;
 			check_ajax_referer( 'wpbooklist_delete_all_checked_books_action_callback', 'security' );
 
@@ -1861,10 +1861,10 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 			// Required to delete the correct book, update the IDs, then delete the next correct book
 			$delete_array = array_reverse($delete_array);
 
-			// The loop that will send each book ID and Page/Post ID to class-book.php to be deleted.
+			// The loop that will send each book ID and Page/Post ID to class-wpbooklist-book.php to be deleted.
 			foreach($delete_array as $key=>$delete){
 
-				// Send page/post IDs to delete to class-book.php if they exist, otherwise don't send
+				// Send page/post IDs to delete to class-wpbooklist-book.php if they exist, otherwise don't send
 				if($delete_string != null && $delete_string != ''){
 					$delete_result = $book_class->delete_book($library, $delete, $delete_page_post_array[$key]);
 				} else {

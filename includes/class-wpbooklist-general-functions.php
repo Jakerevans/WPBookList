@@ -1268,7 +1268,7 @@ if ( ! class_exists( 'WPBookList_General_Functions', false ) ) :
 				$active_page_template = $row->activepagetemplate;
 
 				// Double-check that Amazon review isn't expired.
-				require_once CLASS_BOOK_DIR . 'class-book.php';
+				require_once CLASS_BOOK_DIR . 'class-wpbooklist-book.php';
 				$book = new WPBookList_Book( $book_row->ID, $table_name );
 				$book->refresh_amazon_review( $book_row->ID, $table_name );
 
@@ -1357,7 +1357,7 @@ if ( ! class_exists( 'WPBookList_General_Functions', false ) ) :
 							include PAGE_TEMPLATES_DEFAULT_DIR . 'page-template-default.php';
 
 							// Double-check that Amazon review isn't expired.
-							require_once CLASS_BOOK_DIR . 'class-book.php';
+							require_once CLASS_BOOK_DIR . 'class-wpbooklist-book.php';
 							$book = new WPBookList_Book( $book_row->ID, $table_name );
 							$book->refresh_amazon_review( $book_row->ID, $table_name );
 
@@ -1368,7 +1368,7 @@ if ( ! class_exists( 'WPBookList_General_Functions', false ) ) :
 							include POST_TEMPLATES_DEFAULT_DIR . 'post-template-default.php';
 
 							// Double-check that Amazon review isn't expired.
-							require_once CLASS_BOOK_DIR . 'class-book.php';
+							require_once CLASS_BOOK_DIR . 'class-wpbooklist-book.php';
 							$book = new WPBookList_Book( $book_row->ID, $table_name );
 							$book->refresh_amazon_review( $book_row->ID, $table_name );
 
