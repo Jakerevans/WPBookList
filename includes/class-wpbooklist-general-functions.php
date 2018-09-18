@@ -120,6 +120,7 @@ if ( ! class_exists( 'WPBookList_General_Functions', false ) ) :
 			$final_array_of_php_values['FOR_TAB_HIGHLIGHT']    = admin_url() . 'admin.php';
 			$final_array_of_php_values['SAVED_ATTACHEMENT_ID'] = get_option( 'media_selector_attachment_id', 0 );
 			$final_array_of_php_values['LIBRARY_DB_BACKUPS_UPLOAD_URL'] = LIBRARY_DB_BACKUPS_UPLOAD_URL;
+			$final_array_of_php_values['SOUNDS_URL'] = SOUNDS_URL;
 
 
 
@@ -152,6 +153,8 @@ if ( ! class_exists( 'WPBookList_General_Functions', false ) ) :
 
 			// Adding some other individual values we may need.
 			$final_array_of_php_values['ROOT_IMG_ICONS_URL'] = ROOT_IMG_ICONS_URL;
+			$final_array_of_php_values['ROOT_IMG_URL']       = ROOT_IMG_URL;
+			$final_array_of_php_values['SOUNDS_URL']         = SOUNDS_URL;
 
 			// Now registering/localizing our JavaScript file, passing all the PHP variables we'll need in our $final_array_of_php_values array, to be accessed from 'wphealthtracker_php_variables' object (like wphealthtracker_php_variables.nameofkey, like any other JavaScript object).
 			wp_localize_script( 'frontendjs', 'wpbooklistPhpVariables', $final_array_of_php_values );

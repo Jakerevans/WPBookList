@@ -182,7 +182,9 @@ global $wpdb;
 			'adminnonce35' => 'wpbooklist_storytime_expand_browse_action_callback',
 			'adminnonce36' => 'wpbooklist_storytime_save_settings_action_callback',
 			'adminnonce37' => 'wpbooklist_delete_story_action_callback',
-
+			'adminnonce38' => 'wpbooklist_storytime_select_category_action_callback',
+			'adminnonce39' => 'wpbooklist_storytime_get_story_action_callback',
+			'adminnonce40' => 'wpbooklist_storytime_expand_browse_action_callback',
 
 
 		))
