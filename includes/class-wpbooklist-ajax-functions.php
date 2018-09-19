@@ -337,7 +337,7 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 		  			$posturl = $post_results->post_url;
 		  		}
 
-		  		echo $insert_result[0].'--sep--'.$id_result.'--sep--'.$library.'--sep--'.$page_yes.'--sep--'.$post_yes.'--sep--'.$pageurl.'--sep--'.$posturl.'--sep--'.$book_class->apireport.'--sep--'.json_encode($book_class->whichapifound).'--sep--'.$book_class->apiamazonfailcount.'---sep--'.$book_class->amazon_transient_use;
+		  		echo $insert_result[0].'--sep--'.$id_result.'--sep--'.$library.'--sep--'.$page_yes.'--sep--'.$post_yes.'--sep--'.$pageurl.'--sep--'.$posturl.'--sep--'.$book_class->apireport.'--sep--'.json_encode($book_class->whichapifound).'--sep--'.$book_class->apiamazonfailcount.'--sep--'.$book_class->amazon_transient_use.'--sep--'.$book_class->google_transient_use.'--sep--'.$book_class->openlib_transient_use.'--sep--'.$book_class->itunes_transient_use.'--sep--'.$book_class->itunes_audio_transient_use;
 			} else {
 				echo $insert_result[0].'--sep--'.$insert_result[1];
 			}
