@@ -4,77 +4,6 @@
     padding: 2px 0 0!important;
 }
 
-#wpbooklist-addbook-form input[type="text"], #wpbooklist-addbook-form input[type="number"], #wpbooklist-editbook-form input[type="text"], #wpbooklist-editbook-form input[type="number"]{
-    width: 85%;
-    margin: 5px;
-}
-
-#wpbooklist-addbook-form input[type="checkbox"], #wpbooklist-editbook-form input[type="checkbox"]{
-    margin-left: 5px;
-}
-
-#wpbooklist-addbook-form textarea, #wpbooklist-editbook-form textarea{
-    width: 93%;
-    margin: 5px;
-}
-
-#wpbooklist-addbook-form .wpbooklist-addbook-select-default, .wpbooklist-editbook-select-default{
-    margin-left: auto!important;
-    margin-right: auto!important;
-    display: block;
-}
-
-#wpbooklist-addbook-rating, #wpbooklist-editbook-rating{
-    width: 94%;
-    margin: 5px;
-}
-
-#wpbooklist-addbook-signed-first-table, #wpbooklist-editbook-signed-first-table{
-    width:100%;
-    margin-top:20px;
-    margin-bottom:40px;
-}
-
-#wpbooklist-addbook-form #wpbooklist-addbook-signed-first-table label, #wpbooklist-addbook-page-post-row .wpbooklist-addbook-post-page-checkboxes label, #wpbooklist-editbook-form #wpbooklist-editbook-signed-first-table label, #wpbooklist-editbook-page-post-row .wpbooklist-editbook-post-page-checkboxes label{
-    top: 0px;
-    margin: 0;
-    margin-left: 5px;
-    margin-top: 10px;
-    position:relative;
-}
-
-.wpbooklist-addbook-post-page-checkboxes, .wpbooklist-editbook-post-page-checkboxes{
-    padding-bottom: 20px;
-    text-align:center;
-    position: relative;
-    right: 5px;
-}
-
-#wpbooklist-addbook-page-post-create-label-row, #wpbooklist-editbook-page-post-create-label-row{
-    text-align:center;
-}
-
-#wpbooklist-addbook-form #wpbooklist-addbook-image, #wpbooklist-editbook-form #wpbooklist-editbook-image{
-    width:58%;
-    vertical-align: top;
-    margin-bottom:25px;
-}
-
-#wpbooklist-addbook-form #wpbooklist-addbook-date-finished, 
-#wpbooklist-editbook-form #wpbooklist-editbook-date-finished{
-    position: absolute;
-    width: 155px;
-    opacity:0;
-}
-
-#wpbooklist-admin-addbook-button, #wpbooklist-admin-editbook-button{
-    margin-left: auto;
-    margin-right: auto;
-    display: block;
-    margin-top: 5px;
-    margin-bottom:20px;
-}
-
 #wpbooklist-admin-editbook-button, #wpbooklist-admin-cancel-button{
     margin-left: auto;
     margin-right: auto;
@@ -158,17 +87,6 @@
     margin-right: 0px;
 }
 
-#wpbooklist-addbook-select-library-label, #wpbooklist-editbook-select-library-label{
-    margin-left: auto;
-    margin-right: auto;
-    width: 400px;
-    text-align: center;
-    margin-bottom: 5px;
-    margin-top: 0px;
-    font-weight:bold;
-    font-size:14px;
-}
-
 #wpbooklist-color-red-italic{
     color:red;
     font-style:italic;
@@ -182,46 +100,6 @@
 .wpbooklist-color-orange-bold{
     color:#F05A1A;
     font-weight:bold;
-}
-
-#wpbooklist-addbook-upload_image_button, #wpbooklist-editbook-upload_image_button{
-    margin-left: 5px;
-    position: relative;
-    top: 2px;
-}
-
-#wpbooklist-addbook-preview-img, #wpbooklist-editbook-preview-img{
-    width: 50px;
-    position: absolute;
-    top: -28px;
-    right: 15%;
-}
-
-#wpbooklist-addbook-signed-question, #wpbooklist-addbook-signed-td, #wpbooklist-editbook-signed-question, #wpbooklist-editbook-signed-td{
-    position:relative;
-    right:50px;
-}
-
-#wpbooklist-addbook-first-edition-question, #wpbooklist-addbook-firstedition-td, #wpbooklist-editbook-first-edition-question, #wpbooklist-editbook-firstedition-td{
-    position:relative;
-    right:80px;
-}
-
-#wpbooklist-addbook-rating-img, #wpbooklist-editbook-rating-img{
-    width: 65px;
-    position: relative;
-    top: 4px;
-    right: 2px;
-}
-
-#wpbooklist-addbook-form #wpbooklist-addbook-sale-author-link, #wpbooklist-editbook-form #wpbooklist-editbook-sale-author-link, #wpbooklist-editbook-form #wpbooklist-editbook-amazon-buy-link, #wpbooklist-editbook-form #wpbooklist-editbook-google-play-buy-link, #wpbooklist-editbook-form #wpbooklist-editbook-books-a-million-buy-link{
-    width: 93%;
-}
-
-.wpbooklist-addbook-page-post-label, .wpbooklist-editbook-page-post-label{
-    display:inline-block;
-    text-align:center;
-    padding-top:10px;
 }
 
 .wpbooklist-spinner{
@@ -259,20 +137,8 @@
     position: relative;
 }
 
-#wpbooklist-addbook-date-finished-td, #wpbooklist-editbook-date-finished-td{
-    position:relative;
-}
-
 .wpbooklist-success{
     cursor:pointer;
-}
-
-#wpbooklist-addbook-success-div, #wpbooklist-editbook-success-div, #wpbooklist-addstylepak-success-div, #wpbooklist-addbackup-success-div, #wpbooklist-addtemplate-success-div{
-    text-align:center;
-    width: 65%;
-    margin-left: 17.5%;
-    margin-right: 17.5%;
-    line-height:1.5;
 }
 
 #wpbooklist-addbackup-success-div{
@@ -324,12 +190,6 @@
     opacity:0;
 }
 
-#wpbooklist-addbook-success-shortcode, #wpbooklist-editbook-success-shortcode{
-    font-weight: bold;
-    margin-bottom: 20px;
-    display: inline-block;
-}
-
 #wpbooklist-add-book-success-span{
     font-style:italic;
     color:#F05A1A;
@@ -343,22 +203,9 @@
     left:5px;
 }
 
-#wpbooklist-addbook-success-thanks, #wpbooklist-editbook-success-thanks{
-    margin-top:34px;
-    line-height:1.5;
-}
-
 #wpbooklist-addstylepak-success-thanks{
     margin-top:10px;
     line-height:1.5;
-}
-
-#wpbooklist-addbook-success-review-link, #wpbooklist-editbook-success-review-link{
-    color:#F05A1A;
-}
-
-#wpbooklist-addbook-container p, #wpbooklist-editbook-container p{
-    text-align:center;
 }
 
 .wpbooklist-jre-cover-shortcode-class, .wpbooklist-jre-cover-shortcode-class-orange{

@@ -161,6 +161,20 @@ if ( ! class_exists( 'WPBookList_Translations', false ) ) :
 			$this->trans_127 = __( 'Delete This Story', 'wpbooklist' );
 			$this->trans_128 = __( 'WPBookList StoryTime is WPBooklist\'s Content-Delivery System, providing you and your website visitors with Sample Chapters, Short Stories, News, Interviews and more!', 'wpbooklist' );
 			$this->trans_129 = __( 'Discover new Authors and Publishers!', 'wpbooklist' );
+			$this->trans_130 = __( 'Authorize Amazon Usage', 'wpbooklist' );
+			$this->trans_131 = __( 'Yes', 'wpbooklist' );
+			$this->trans_132 = __( 'No', 'wpbooklist' );
+			$this->trans_133 = __( 'Select The Libraries to Add This Book To', 'wpbooklist' );
+			$this->trans_134 = __( 'Automatically Gather Book Info From Amazon (ISBN/ASIN number required)?', 'wpbooklist' );
+			$this->trans_135 = __( 'ISBN 10', 'wpbooklist' );
+			$this->trans_136 = __( 'ISBN 13', 'wpbooklist' );
+			$this->trans_137 = __( 'ASIN', 'wpbooklist' );
+			$this->trans_138 = __( 'Book Title', 'wpbooklist' );
+			$this->trans_139 = __( 'Original Title', 'wpbooklist' );
+
+
+
+
 
 
 			// The array of translation strings.

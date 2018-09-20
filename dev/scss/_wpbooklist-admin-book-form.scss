@@ -1,0 +1,35 @@
+.wpbooklist-book-form-indiv-attribute-container{
+    display:inline-block;
+    margin:5px;
+}
+
+.wpbooklist-book-form-indiv-attribute-container label{
+    display: inline-block;
+}
+
+
+.wpbooklist-book-form-container input[type="text"]{
+    width: 100px;
+    display: block;
+}
+
+#wpbooklist-addbook-select-library-label{
+    margin-left: auto;
+    margin-right: auto;
+    width: 400px;
+    text-align: center;
+    margin-bottom: 5px;
+    margin-top: 0px;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.wpbooklist-libraries-dropdown-container{
+    text-align:center;
+}
+
+.wphealthtracker-icon-image-question{
+    width: 12px;
+    display: inline-block;
+    cursor: pointer;
+}

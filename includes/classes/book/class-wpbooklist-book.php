@@ -956,6 +956,8 @@ if ( ! class_exists( 'WPBookList_Book', false ) ) :
 			if ( null !== $this->similar_products && '' !== $this->similar_products ) {
 				$this->whichapifound['similar_products'] = 'Amazon';
 			}
+
+			error_log(print_r($this->amazonapiresult,true));
 		}
 
 		/**
@@ -1824,7 +1826,7 @@ if ( ! class_exists( 'WPBookList_Book', false ) ) :
 						<div id="wpbooklist-use-amazon-container">
 							<table>
 								<tr>
-									<td><p id="use-amazon-question-label">Automatically Gather Book Info From Amazon ( isBN/ASIN number required )?</p></td>
+									<td><p id="use-amazon-question-label">Automatically Gather Book Info From Amazon ( ISBN/ASIN number required )?</p></td>
 								</tr>
 								<tr>
 									<td style="text-align:center;">
@@ -2023,7 +2025,7 @@ if ( ! class_exists( 'WPBookList_Book', false ) ) :
 								</td>
 								</tr>';
 
-			// This filter allows the addition of one or more rows of items into the 'Add A Book' form. 
+			// This filter allows the addition of one or more rows of items into the 'Add A Book' form.
 			$string6 = '';
 			if ( has_filter( 'wpbooklist_append_to_editbook_form' ) ) {
 				$string6 = apply_filters( 'wpbooklist_append_to_editbook_form', $string6 );
@@ -2263,9 +2265,9 @@ if ( ! class_exists( 'WPBookList_Book', false ) ) :
 		public function delete_book( $library, $book_id, $delete_string = null ) {
 			global $wpdb;
 
-			// Delete the associated post and page
+			// Delete the associated post and page.
 			$post_delete = '';
-			if ( $delete_string != null ) {
+			if ( null !== $delete_string ) {
 				$delete_array = explode( '-', $delete_string );
 				foreach ( $delete_array as $delete ) {
 					$delete_result = wp_delete_post( $delete, true );
@@ -2273,109 +2275,119 @@ if ( ! class_exists( 'WPBookList_Book', false ) ) :
 					if ( $delete_result ) {
 						$d_result = 1;
 					}
-					
-					$post_delete = $post_delete. '-' . $d_result;
+
+					$post_delete = $post_delete . '-' . $d_result;
 				}
 			}
 
-			// Deleting book from saved_page_post_log
+			// Deleting book from saved_page_post_log.
 			$book_row = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM $library WHERE ID = %d", $book_id ) );
-			if ( is_object( $book_row) ) {
-				$uid = $book_row->book_uid;
+			if ( is_object( $book_row ) ) {
+				$uid      = $book_row->book_uid;
 				$pp_table = $wpdb->prefix . 'wpbooklist_jre_saved_page_post_log';
 				$wpdb->delete( $pp_table, array( 'book_uid' => $uid ) );
 			}
 
-			// Deleting the actual book row
+			// Deleting the actual book row.
 			$book_delete = $wpdb->delete( $library, array( 'ID' => $book_id ) );
 
-			// Dropping primary key in database to alter the IDs and the AUTO_INCREMENT value
-			$wpdb->query( "ALTER TABLE $library MODIFY ID BIGINT(190) NOT NULL");
-			$wpdb->query( "ALTER TABLE $library DROP PRIMARY KEY");
+			// Dropping primary key in database to alter the IDs and the AUTO_INCREMENT value.
+			$wpdb->query( "ALTER TABLE $library MODIFY ID BIGINT(190) NOT NULL" );
+			$wpdb->query( "ALTER TABLE $library DROP PRIMARY KEY" );
 
-			// Adjusting ID values of remaining entries in database
-			$title_count = $wpdb->get_var( "SELECT COUNT(*) FROM $library");
+			// Adjusting ID values of remaining entries in database.
+			$title_count = $wpdb->get_var( "SELECT COUNT(*) FROM $library" );
 			for ( $x = $book_id; $x <= $title_count; $x++) {
 				$data = array(
-					'ID' => $book_id
+					'ID' => $book_id,
 				);
-				$format = array( '%d' ); 
-				$book_id++;  
-				$where = array( 'ID' => ( $book_id ) );
+				$book_id++;
+				$format       = array( '%d' );
+				$where        = array( 'ID' => ( $book_id ) );
 				$where_format = array( '%d' );
 				$wpdb->update( $library, $data, $where, $format, $where_format );
-			}  
+			}
 
-			// Adding primary key back to database 
-			$wpdb->query( "ALTER TABLE $library ADD PRIMARY KEY (`ID`)");	
-			$wpdb->query( "ALTER TABLE $library MODIFY ID BIGINT(190) AUTO_INCREMENT");
+			// Adding primary key back to database.
+			$wpdb->query( "ALTER TABLE $library ADD PRIMARY KEY (`ID`)" );
+			$wpdb->query( "ALTER TABLE $library MODIFY ID BIGINT(190) AUTO_INCREMENT" );
 
-			// Setting the AUTO_INCREMENT value based on number of remaining entries
+			// Setting the AUTO_INCREMENT value based on number of remaining entries.
 			$title_count++;
 			$wpdb->query( $wpdb->prepare( "ALTER TABLE $library AUTO_INCREMENT = %d", $title_count ) );
 
-			return $book_delete. '-' . $post_delete;
-			
+			return $book_delete . '-' . $post_delete;
 		}
 
-	/**
-		 * Function to handle actually editing a book.
+		/** Function to handle refreshing of Amazon review.
+		 *
+		 *  @param int    $id - The ID of the book to refresh.
+		 *  @param string $library - The library.
 		 */
-	public function refresh_amazon_review( $id, $library) {
-		global $wpdb;
+		public function refresh_amazon_review( $id, $library ) {
+			global $wpdb;
 
-		// Build options table
-		if ( strpos( $library, 'wpbooklist_jre_saved_book_log' ) !== false ) {
-			$table_name_options = $wpdb->prefix . 'wpbooklist_jre_user_options';
-		} else {
-			$table = explode( 'wpbooklist_jre_', $library);
-			$table_name_options = $wpdb->prefix . 'wpbooklist_jre_settings_' . $table[1];
-		}
+			// Build options table.
+			if ( strpos( $library, 'wpbooklist_jre_saved_book_log' ) !== false ) {
+				$table_name_options = $wpdb->prefix . 'wpbooklist_jre_user_options';
+			} else {
+				$table              = explode( 'wpbooklist_jre_', $library );
+				$table_name_options = $wpdb->prefix . 'wpbooklist_jre_settings_' . $table[1];
+			}
 
-		// Get options for amazon affiliate id and hideamazonreview
-		$this->options_results = $wpdb->get_row( "SELECT * FROM $table_name_options");
+			// Get options for amazon affiliate id and hideamazonreview.
+			$this->options_results = $wpdb->get_row( "SELECT * FROM $table_name_options" );
 
-		// Get book by id
-		$this->get_book_by_id( $id, $library);
+			// Get book by id.
+			$this->get_book_by_id( $id, $library );
 
-		// Set isbn for gather Amazon data function
-		$this->isbn = $this->retrieved_book->isbn;
+			// Set isbn for gather Amazon data function.
+			$this->isbn = $this->retrieved_book->isbn;
 
-		// Check and see if Amazon review URL is expired. If so, make a new api call, get URL, saved in DB.
-		if ( $this->options_results->hideamazonreview == null || $this->options_results->hideamazonreview == 0) {
-			parse_str( $this->retrieved_book->review_iframe, $output );
-			if ( $output != null && $output != '' && isset( $output['exp'] ) ) {
-				$expire_date = substr( $output['exp'], 0, 10);
-				$today_date = date( "Y-m-d");
+			// Check and see if Amazon review URL is expired. If so, make a new api call, get URL, saved in DB.
+			if ( null === $this->options_results->hideamazonreview || 0 === $this->options_results->hideamazonreview ) {
+				parse_str( $this->retrieved_book->review_iframe, $output );
+				if ( null !== $output && '' !== $output && isset( $output['exp'] ) ) {
+					$expire_date = substr( $output['exp'], 0, 10 );
+					$today_date  = date( 'Y-m-d' );
 
-				if ( $today_date == $expire_date || $today_date > $expire_date ) {
+					if ( $today_date === $expire_date || $today_date > $expire_date ) {
 
-					$this->isbn = $this->retrieved_book->isbn;
-					$this->title = $this->retrieved_book->title;
+						$date                = new DateTime( 'tomorrow' );
+						$newdate             = $date->format( 'Y-m-d' );
+						$this->review_iframe = str_replace( $expire_date, $newdate, $this->retrieved_book->review_iframe );
 
-					// Gather Amazon data
-					$this->gather_amazon_data();
+						/*
+						// Used to make API call every time colorbox was opened, then discovered I can simply change the expiration date in the url above.
+						$this->isbn = $this->retrieved_book->isbn;
+						$this->title = $this->retrieved_book->title;
 
-					// Save new iframe url
-					$data = array(
-					'review_iframe' => $this->review_iframe
-					);
-					$format = array( '%s' ); 
-					$where = array( 'ID' => $this->retrieved_book->ID );
-					$where_format = array( '%d' );
-					$wpdb->update( $library, $data, $where, $format, $where_format );
+						// Gather Amazon data
+						$this->gather_amazon_data();
+						*/
+
+						// Save new iframe url.
+						$data         = array(
+							'review_iframe' => $this->review_iframe,
+						);
+						$format       = array( '%s' );
+						$where        = array( 'ID' => $this->retrieved_book->ID );
+						$where_format = array( '%d' );
+						$wpdb->update( $library, $data, $where, $format, $where_format );
+					}
 				}
 			}
 		}
+
+		/** Function to handle retreiving a book by it's ID.
+		 *
+		 *  @param int    $id - The ID of the book to refresh.
+		 *  @param string $library - The library.
+		 */
+		private function get_book_by_id( $id, $library ) {
+			global $wpdb;
+			$this->retrieved_book = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM $library WHERE ID = %d", $id ) );
+		}
 	}
-
-	private function get_book_by_id( $id, $library) {
-		global $wpdb;
-		$this->retrieved_book = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM $library WHERE ID = %d", $id ) );
-	}
-
-
-
-}
 
 endif;
