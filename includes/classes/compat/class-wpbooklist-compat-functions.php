@@ -47,6 +47,7 @@ if ( ! class_exists( 'WPBookList_Compat_Functions', false ) ) :
 			$this->wpbooklist_upgrade_change_admin_message();
 			$this->wpbooklist_add_author_first_last_default_table();
 			$this->wpbooklist_add_author_first_last_dynamic_table();
+			$this->wpbooklist_upgrade_modify_add_users_table();
 
 			// Now call the function that will update the version number, which will ensure none of these function ever run again until the next update/upgrade.
 			$this->wpbooklist_update_version_number_function();
@@ -460,6 +461,99 @@ if ( ! class_exists( 'WPBookList_Compat_Functions', false ) ) :
 			}
 		}
 
+		/**
+		 *  Function that adds the WPBookList Users table, introduced in 6.0.0.
+		 */
+		public function wpbooklist_upgrade_modify_add_users_table() {
+
+			global $wpdb;
+
+			// If version number does not match the current version number found in wpbooklist.php.
+			if ( WPBOOKLIST_VERSION_NUM !== $this->version ) {
+
+				// If table doesn't exist, create table.
+				$test_name = $wpdb->prefix . 'wpbooklist_jre_users_table';
+				if ( $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $test_name ) ) !== $test_name ) {
+
+					// This is the table that holds static data about users - things like username, password, height, gender...
+					$sql_create_table = "CREATE TABLE {$wpdb->wpbooklist_jre_users_table} 
+						(
+				            ID smallint(190) auto_increment,
+				            firstname varchar(190),
+				            lastname varchar(255),
+				            datecreated varchar(255),
+				            wpuserid smallint(6),
+				            email varchar(255),
+				            username varchar(255),
+				            role varchar(255),
+				            permissions varchar(255),
+				            country varchar(255),
+				            streetaddress1 varchar(255),
+							streetaddress2 varchar(255),
+							city varchar(255),
+							state varchar(255),
+							zip varchar(255),
+							phone varchar(255),
+				            profileimage varchar(255),
+				            height varchar(255),
+				            age varchar(255),
+				            birthday varchar(255),
+				            gender varchar(255),
+				            bio MEDIUMTEXT,
+							website varchar(255),
+							facebook varchar(255),
+							twitter varchar(255),
+							instagram varchar(255),
+							googleplus varchar(255),
+							snapchat varchar(255),
+				            PRIMARY KEY  (ID),
+				              KEY firstname (firstname)
+	     				) $charset_collate; ";
+
+					// If table doesn't exist, create table and add initial data to it.
+					$test_name = $wpdb->prefix . 'wpbooklist_jre_users_table';
+					if ( $test_name !== $wpdb->get_var( "SHOW TABLES LIKE '$test_name'" ) ) {
+						$db_delta_result = dbDelta( $sql_create_table );
+						$table_name      = $wpdb->prefix . 'wpbooklist_jre_users_table';
+						$current_user    = wp_get_current_user();
+						if ( ! ( $current_user instanceof WP_User ) ) {
+							return;
+						}
+
+						$firstname = '';
+						$lastname  = '';
+						if ( '' === $current_user->user_firstname || null === $current_user->user_firstname ) {
+
+							if ( '' === $current_user->display_name || null === $current_user->display_name ) {
+								$firstname = 'Admin';
+								$lastname  = '';
+							} else {
+								$firstname = $current_user->display_name;
+								$lastname  = '';
+							}
+						} else {
+							$firstname = $current_user->user_firstname;
+							$lastname  = $current_user->user_lastname;
+						}
+
+						$wpdb->insert( $table_name,
+							array(
+								'role'      => 'godmode',
+								'username'  => $current_user->user_login,
+								'email'     => $current_user->user_email,
+								'firstname' => $firstname,
+								'lastname'  => $lastname,
+								'wpuserid'  => $current_user->ID,
+							)
+						);
+					}
+					$key = $wpdb->prefix . 'wpbooklist_jre_users_table';
+					return $db_delta_result[ $key ];
+				} else {
+					return 'Table already exists';
+				}
+			}
+		}
 
 		/**
 		 *  Function that updates the Admin message if needed

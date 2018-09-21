@@ -237,8 +237,41 @@ global $wpdb;
 	// Registers table names.
 	add_action( 'init', array( $wp_book_list_general_functions, 'wpbooklist_jre_register_table_name' ) );
 
-	// Creates tables upon activation.
-	register_activation_hook( __FILE__, array( $wp_book_list_general_functions, 'wpbooklist_jre_create_tables' ) );
+	// Records the user's url upon activation.
+	register_activation_hook( __FILE__, array( $wp_book_list_general_functions, 'wpbooklist_jre_record_user_url' ) );
+
+	// Creates default table upon activation.
+	register_activation_hook( __FILE__, array( $wp_book_list_general_functions, 'wpbooklist_jre_create_default_lib' ) );
+
+	// Creates the one master display options table.
+	register_activation_hook( __FILE__, array( $wp_book_list_general_functions, 'wpbooklist_jre_create_superadmin_display_options_table' ) );
+
+	// Creates the one master display options table.
+	register_activation_hook( __FILE__, array( $wp_book_list_general_functions, 'wpbooklist_jre_create_superadmin_post_options_table' ) );
+
+	// Creates the one master display options table.
+	register_activation_hook( __FILE__, array( $wp_book_list_general_functions, 'wpbooklist_jre_create_superadmin_page_options_table' ) );
+
+	// Creates the one master display options table.
+	register_activation_hook( __FILE__, array( $wp_book_list_general_functions, 'wpbooklist_jre_record_dynamic_tablenames_table' ) );
+
+	// Creates the one master display options table.
+	register_activation_hook( __FILE__, array( $wp_book_list_general_functions, 'wpbooklist_jre_create_book_quotes_table' ) );
+
+	// Creates the one master display options table.
+	register_activation_hook( __FILE__, array( $wp_book_list_general_functions, 'wpbooklist_jre_create_page_post_log_table' ) );
+
+	// Creates the one master display options table.
+	register_activation_hook( __FILE__, array( $wp_book_list_general_functions, 'wpbooklist_jre_create_featured_books_table' ) );
+
+	// Creates the one master display options table.
+	register_activation_hook( __FILE__, array( $wp_book_list_general_functions, 'wpbooklist_jre_create_storytime_stories_table' ) );
+
+	// Creates the one master display options table.
+	register_activation_hook( __FILE__, array( $wp_book_list_general_functions, 'wpbooklist_jre_create_storytime_stories_settings_table' ) );
+
+	// Creates the WPBookList Users table.
+	register_activation_hook( __FILE__, array( $wp_book_list_general_functions, 'wpbooklist_jre_create_user_table' ) );
 
 	// Adding the front-end library ui css file.
 	add_action( 'wp_enqueue_scripts', array( $wp_book_list_general_functions, 'wpbooklist_jre_frontend_library_ui_default_style' ) );

@@ -1,10 +1,10 @@
 <?php
 /**
- * WPBackupList Backup Class
+ * WPBackupList Backup Class - class-wpbooklist-backup.php
  *
  * @author   Jake Evans
- * @category Root Product
- * @package  Includes/Classes
+ * @category Settings
+ * @package  Includes/Classes/Backup
  * @version  6.0.0
  */
 

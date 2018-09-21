@@ -1,10 +1,10 @@
 <?php
 /**
- * WPBookList Backup Settings Form Tab Class
+ * WPBookList Backup Settings Form Tab Class - class-wpbooklist-backup-settings-form.php
  *
  * @author   Jake Evans
- * @category Admin
- * @package  Includes/Classes
+ * @category Settings
+ * @package  Includes/Classes/Backup
  * @version  6.0.0
  */
 

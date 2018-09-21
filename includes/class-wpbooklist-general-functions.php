@@ -183,12 +183,13 @@ if ( ! class_exists( 'WPBookList_General_Functions', false ) ) :
 			$wpdb->wpbooklist_jre_active_extensions          = "{$wpdb->prefix}wpbooklist_jre_active_extensions";
 			$wpdb->wpbooklist_jre_storytime_stories          = "{$wpdb->prefix}wpbooklist_jre_storytime_stories";
 			$wpdb->wpbooklist_jre_storytime_stories_settings = "{$wpdb->prefix}wpbooklist_jre_storytime_stories_settings";
+			$wpdb->wpbooklist_jre_users_table                = "{$wpdb->prefix}wpbooklist_jre_users_table";
 		}
 
 		/**
-		 *  Runs once upon plugin activation and creates tables
+		 *  Runs once upon plugin activation and records the user's url.
 		 */
-		public function wpbooklist_jre_create_tables() {
+		public function wpbooklist_jre_record_user_url() {
 			require_once ABSPATH . 'wp-admin/includes/upgrade.php';
 			global $wpdb;
 			global $charset_collate;
@@ -242,6 +243,15 @@ if ( ! class_exists( 'WPBookList_General_Functions', false ) ) :
 					curl_close( $ch );
 				}
 			}
+		}
+
+		/**
+		 *  Runs once upon plugin activation and creates default table
+		 */
+		public function wpbooklist_jre_create_default_lib() {
+			require_once ABSPATH . 'wp-admin/includes/upgrade.php';
+			global $wpdb;
+			global $charset_collate;
 
 			// Call this manually as we may have missed the init hook.
 			$this->wpbooklist_jre_register_table_name();
@@ -294,6 +304,18 @@ if ( ! class_exists( 'WPBookList_General_Functions', false ) ) :
 				KEY isbn (isbn)
 			) $charset_collate; ";
 			dbDelta( $sql_create_table1 );
+		}
+
+		/**
+		 *  Runs once upon plugin activation and creates the master display options table.
+		 */
+		public function wpbooklist_jre_create_superadmin_display_options_table() {
+			require_once ABSPATH . 'wp-admin/includes/upgrade.php';
+			global $wpdb;
+			global $charset_collate;
+
+			// Call this manually as we may have missed the init hook.
+			$this->wpbooklist_jre_register_table_name();
 
 			$sql_create_table2 = "CREATE TABLE {$wpdb->wpbooklist_jre_user_options} 
 			(
@@ -383,6 +405,19 @@ if ( ! class_exists( 'WPBookList_General_Functions', false ) ) :
 				$table_name = $wpdb->prefix . 'wpbooklist_jre_user_options';
 				$wpdb->insert( $table_name, array( 'ID' => 1 ) );
 			}
+		}
+
+
+		/**
+		 *  Runs once upon plugin activation and creates the master page display options table.
+		 */
+		public function wpbooklist_jre_create_superadmin_page_options_table() {
+			require_once ABSPATH . 'wp-admin/includes/upgrade.php';
+			global $wpdb;
+			global $charset_collate;
+
+			// Call this manually as we may have missed the init hook.
+			$this->wpbooklist_jre_register_table_name();
 
 			$sql_create_table3 = "CREATE TABLE {$wpdb->wpbooklist_jre_page_options} 
 			(
@@ -448,6 +483,18 @@ if ( ! class_exists( 'WPBookList_General_Functions', false ) ) :
 				$table_name = $wpdb->prefix . 'wpbooklist_jre_page_options';
 				$wpdb->insert( $table_name, array( 'ID' => 1 ) );
 			}
+		}
+
+		/**
+		 *  Runs once upon plugin activation and creates the master post display options table.
+		 */
+		public function wpbooklist_jre_create_superadmin_post_options_table() {
+			require_once ABSPATH . 'wp-admin/includes/upgrade.php';
+			global $wpdb;
+			global $charset_collate;
+
+			// Call this manually as we may have missed the init hook.
+			$this->wpbooklist_jre_register_table_name();
 
 			$sql_create_table4 = "CREATE TABLE {$wpdb->wpbooklist_jre_post_options} 
 			(
@@ -509,6 +556,18 @@ if ( ! class_exists( 'WPBookList_General_Functions', false ) ) :
 				$table_name = $wpdb->prefix . 'wpbooklist_jre_post_options';
 				$wpdb->insert( $table_name, array( 'ID' => 1 ) );
 			}
+		}
+
+		/**
+		 *  Runs once upon plugin activation and creates the table the records info about the user-created libraries.
+		 */
+		public function wpbooklist_jre_record_dynamic_tablenames_table() {
+			require_once ABSPATH . 'wp-admin/includes/upgrade.php';
+			global $wpdb;
+			global $charset_collate;
+
+			// Call this manually as we may have missed the init hook.
+			$this->wpbooklist_jre_register_table_name();
 
 			$sql_create_table5 = "CREATE TABLE {$wpdb->wpbooklist_jre_list_dynamic_db_names} 
 			(
@@ -519,6 +578,18 @@ if ( ! class_exists( 'WPBookList_General_Functions', false ) ) :
 				KEY stylepak (stylepak)
 			) $charset_collate; ";
 			dbDelta( $sql_create_table5 );
+		}
+
+		/**
+		 *  Runs once upon plugin activation and creates the table that holds the book quotes.
+		 */
+		public function wpbooklist_jre_create_book_quotes_table() {
+			require_once ABSPATH . 'wp-admin/includes/upgrade.php';
+			global $wpdb;
+			global $charset_collate;
+
+			// Call this manually as we may have missed the init hook.
+			$this->wpbooklist_jre_register_table_name();
 
 			$sql_create_table6 = "CREATE TABLE {$wpdb->wpbooklist_jre_book_quotes} 
 			(
@@ -564,6 +635,18 @@ if ( ! class_exists( 'WPBookList_General_Functions', false ) ) :
 					);
 				}
 			}
+		}
+
+		/**
+		 *  Runs once upon plugin activation and creates the table that holds info on WPBookList Pages & Posts.
+		 */
+		public function wpbooklist_jre_create_page_post_log_table() {
+			require_once ABSPATH . 'wp-admin/includes/upgrade.php';
+			global $wpdb;
+			global $charset_collate;
+
+			// Call this manually as we may have missed the init hook.
+			$this->wpbooklist_jre_register_table_name();
 
 			$sql_create_table7 = "CREATE TABLE {$wpdb->wpbooklist_jre_saved_page_post_log} 
 			(
@@ -579,6 +662,19 @@ if ( ! class_exists( 'WPBookList_General_Functions', false ) ) :
 				KEY book_uid (book_uid)
 			) $charset_collate; ";
 			dbDelta( $sql_create_table7 );
+
+		}
+
+		/**
+		 *  Runs once upon plugin activation and creates the table that holds info on WPBookList Pages & Posts.
+		 */
+		public function wpbooklist_jre_create_featured_books_table() {
+			require_once ABSPATH . 'wp-admin/includes/upgrade.php';
+			global $wpdb;
+			global $charset_collate;
+
+			// Call this manually as we may have missed the init hook.
+			$this->wpbooklist_jre_register_table_name();
 
 			// Creating the table.
 			$sql_create_table8 = "CREATE TABLE {$wpdb->wpbooklist_jre_saved_books_for_featured} 
@@ -617,16 +713,19 @@ if ( ! class_exists( 'WPBookList_General_Functions', false ) ) :
 				KEY book_title (book_title)
 			) $charset_collate; ";
 			dbDelta( $sql_create_table8 );
+		}
 
-			$sql_create_table9 = "CREATE TABLE {$wpdb->wpbooklist_jre_active_extensions} 
-			(
-				ID bigint(190) auto_increment,
-				active varchar(190),
-				extension_name varchar(255),
-				PRIMARY KEY  (ID),
-				KEY active (active)
-			) $charset_collate; ";
-			dbDelta( $sql_create_table9 );
+
+		/**
+		 *  Runs once upon plugin activation and creates the table that holds the actual Storytime Stories.
+		 */
+		public function wpbooklist_jre_create_storytime_stories_table() {
+			require_once ABSPATH . 'wp-admin/includes/upgrade.php';
+			global $wpdb;
+			global $charset_collate;
+
+			// Call this manually as we may have missed the init hook.
+			$this->wpbooklist_jre_register_table_name();
 
 			$sql_create_table10 = "CREATE TABLE {$wpdb->wpbooklist_jre_storytime_stories} 
 			(
@@ -645,6 +744,19 @@ if ( ! class_exists( 'WPBookList_General_Functions', false ) ) :
 			) $charset_collate; ";
 			dbDelta( $sql_create_table10 );
 
+		}
+
+		/**
+		 *  Runs once upon plugin activation and creates the table that holds info on WPBookList Pages & Posts.
+		 */
+		public function wpbooklist_jre_create_storytime_stories_settings_table() {
+			require_once ABSPATH . 'wp-admin/includes/upgrade.php';
+			global $wpdb;
+			global $charset_collate;
+
+			// Call this manually as we may have missed the init hook.
+			$this->wpbooklist_jre_register_table_name();
+
 			$sql_create_table11 = "CREATE TABLE {$wpdb->wpbooklist_jre_storytime_stories_settings} 
 			(
 				ID bigint(190) auto_increment,
@@ -662,19 +774,108 @@ if ( ! class_exists( 'WPBookList_General_Functions', false ) ) :
 			) $charset_collate; ";
 			dbDelta( $sql_create_table11 );
 
-			// If table doesn't exist, create table and add initial data to it.
-			$table_name = $wpdb->prefix . 'wpbooklist_jre_storytime_stories_settings';
-			if ( $table_name !== $wpdb->get_var( "SHOW TABLES LIKE '$table_name'" ) ) {
-				dbDelta( $sql_create_table11 );
-				$wpdb->insert( $table_name, array( 'ID' => 1 ) );
+			// Call the class that will insert default Storytime data into the table we just created. Seperate file simply because of length of content.
+			//require_once CLASS_STORYTIME_DIR . 'class-storytime.php';
+			//$storytime_class = new WPBookList_Storytime( 'install' );
+		}
+
+		/**
+		 *  Runs once upon plugin activation and creates the Users tables
+		 */
+		public function wpbooklist_jre_create_user_table() {
+			require_once ABSPATH . 'wp-admin/includes/upgrade.php';
+			global $wpdb;
+			global $charset_collate;
+
+			// Call this manually as we may have missed the init hook.
+			$this->wpbooklist_jre_register_table_name();
+
+			// If table doesn't exist, create table.
+			$test_name = $wpdb->prefix . 'wpbooklist_jre_users_table';
+			if ( $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $test_name ) ) !== $test_name ) {
+
+				// This is the table that holds static data about users - things like username, password, height, gender...
+				$sql_create_table = "CREATE TABLE {$wpdb->wpbooklist_jre_users_table} 
+					(
+			            ID smallint(190) auto_increment,
+			            firstname varchar(190),
+			            lastname varchar(255),
+			            datecreated varchar(255),
+			            wpuserid smallint(6),
+			            email varchar(255),
+			            username varchar(255),
+			            role varchar(255),
+			            permissions varchar(255),
+			            country varchar(255),
+			            streetaddress1 varchar(255),
+						streetaddress2 varchar(255),
+						city varchar(255),
+						state varchar(255),
+						zip varchar(255),
+						phone varchar(255),
+			            profileimage varchar(255),
+			            height varchar(255),
+			            age varchar(255),
+			            birthday varchar(255),
+			            gender varchar(255),
+			            bio MEDIUMTEXT,
+						website varchar(255),
+						facebook varchar(255),
+						twitter varchar(255),
+						instagram varchar(255),
+						googleplus varchar(255),
+						snapchat varchar(255),
+			            PRIMARY KEY  (ID),
+			              KEY firstname (firstname)
+     				) $charset_collate; ";
+
+				// If table doesn't exist, create table and add initial data to it.
+				$test_name = $wpdb->prefix . 'wpbooklist_jre_users_table';
+				if ( $test_name !== $wpdb->get_var( "SHOW TABLES LIKE '$test_name'" ) ) {
+					$db_delta_result = dbDelta( $sql_create_table );
+					$table_name      = $wpdb->prefix . 'wpbooklist_jre_users_table';
+					$current_user    = wp_get_current_user();
+					if ( ! ( $current_user instanceof WP_User ) ) {
+						return;
+					}
+
+					$firstname = '';
+					$lastname  = '';
+					if ( '' === $current_user->user_firstname || null === $current_user->user_firstname ) {
+
+						if ( '' === $current_user->display_name || null === $current_user->display_name ) {
+							$firstname = 'Admin';
+							$lastname  = '';
+						} else {
+							$firstname = $current_user->display_name;
+							$lastname  = '';
+						}
+					} else {
+						$firstname = $current_user->user_firstname;
+						$lastname  = $current_user->user_lastname;
+					}
+
+					$wpdb->insert( $table_name,
+						array(
+							'role'      => 'godmode',
+							'username'  => $current_user->user_login,
+							'email'     => $current_user->user_email,
+							'firstname' => $firstname,
+							'lastname'  => $lastname,
+							'wpuserid'  => $current_user->ID,
+						)
+					);
+				}
+				$key = $wpdb->prefix . 'wpbooklist_jre_users_table';
+				return $db_delta_result[ $key ];
 			} else {
-				$wpdb->insert( $table_name, array( 'ID' => 1 ) );
+				return 'Table already exists';
 			}
 
-			// Call the class that will insert default Storytime data into the table we just created. Seperate file simply because of length of content.
-			require_once CLASS_STORYTIME_DIR . 'class-storytime.php';
-			$storytime_class = new WPBookList_Storytime( 'install' );
 		}
+
+
+
 
 /*
 
