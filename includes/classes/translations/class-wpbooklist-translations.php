@@ -171,7 +171,20 @@ if ( ! class_exists( 'WPBookList_Translations', false ) ) :
 			$this->trans_137 = __( 'ASIN', 'wpbooklist' );
 			$this->trans_138 = __( 'Book Title', 'wpbooklist' );
 			$this->trans_139 = __( 'Original Title', 'wpbooklist' );
-
+			$this->trans_140 = __( 'Illustrator', 'wpbooklist' );
+			$this->trans_141 = __( 'Publisher', 'wpbooklist' );
+			$this->trans_142 = __( 'Pages', 'wpbooklist' );
+			$this->trans_143 = __( 'Publication Year', 'wpbooklist' );
+			$this->trans_144 = __( 'Call Number', 'wpbooklist' );
+			$this->trans_145 = __( 'Original Publication Year', 'wpbooklist' );
+			$this->trans_146 = __( 'Genre(s)', 'wpbooklist' );
+			$this->trans_147 = __( 'Sub-Genre(s)', 'wpbooklist' );
+			$this->trans_148 = __( 'Similar Books', 'wpbooklist' );
+			$this->trans_149 = __( 'Keywords', 'wpbooklist' );
+			$this->trans_150 = __( 'Other Editions', 'wpbooklist' );
+			$this->trans_151 = __( 'Short Description', 'wpbooklist' );
+			$this->trans_152 = __( 'Full Description', 'wpbooklist' );
+			$this->trans_153 = __( 'Notes', 'wpbooklist' );
 
 
 

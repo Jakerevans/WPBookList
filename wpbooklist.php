@@ -185,6 +185,7 @@ global $wpdb;
 			'adminnonce38' => 'wpbooklist_storytime_select_category_action_callback',
 			'adminnonce39' => 'wpbooklist_storytime_get_story_action_callback',
 			'adminnonce40' => 'wpbooklist_storytime_expand_browse_action_callback',
+			'adminnonce41' => 'wpbooklist_seed_book_form_autocomplete_action_callback',
 
 
 		))
@@ -434,6 +435,9 @@ global $wpdb;
 
 	// For expanding the 'Browse Stories' section again once a Story has already been selected.
 	add_action( 'wp_ajax_wpbooklist_storytime_expand_browse_action', array( $wp_book_list_ajax_functions, 'wpbooklist_storytime_expand_browse_action_callback' ) );
+
+	// Makes a call to get every single book saved on website to seed the Book form for Autocomplete stuff.
+	add_action( 'wp_ajax_wpbooklist_seed_book_form_autocomplete_action', array( $wp_book_list_ajax_functions, 'wpbooklist_seed_book_form_autocomplete_action_callback' ) );
 
 	// For saving the StoryTime Settings.
 	add_action( 'wp_ajax_wpbooklist_storytime_save_settings_action', array( $wp_book_list_ajax_functions, 'wpbooklist_storytime_save_settings_action_callback' ) );

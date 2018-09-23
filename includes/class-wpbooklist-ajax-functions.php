@@ -2188,5 +2188,40 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 
 			wp_die();
 		}
+
+
+		// Makes a call to get every single book saved on website to seed the Book form for Autocomplete stuff.
+		public function wpbooklist_seed_book_form_autocomplete_action_callback() {
+			global $wpdb;
+			check_ajax_referer( 'wpbooklist_seed_book_form_autocomplete_action_callback', 'security' );
+
+			// Get all books from default Library, and push into our final array to return to the javascript.
+			$final_total_array  = array();
+			$default_table_name = $wpdb->prefix . 'wpbooklist_jre_saved_book_log';
+			$default_results = $wpdb->get_results( "SELECT * FROM $default_table_name" );
+			array_push( $final_total_array, $default_results );
+
+			// Get all books from all user-created libraries.
+			$dynamic_table_name  = $wpdb->prefix . 'wpbooklist_jre_list_dynamic_db_names';
+			$dynamic_name_db_row = $wpdb->get_results( "SELECT * FROM $dynamic_table_name" );
+
+			foreach ( $dynamic_name_db_row as $db ) {
+				if ( ( '' !== $db->user_table_name ) || ( null !== $db->user_table_name ) ) {
+
+					$user_created_lib_name = $wpdb->prefix . 'wpbooklist_jre_' . $db->user_table_name;
+					$dynamic_results = $wpdb->get_results( "SELECT * FROM $user_created_lib_name" );
+					array_push( $final_total_array, $dynamic_results );
+				}
+			}
+
+			echo json_encode( $final_total_array );
+
+			wp_die();
+		}
+
+
+
+
+
 	}
 endif;

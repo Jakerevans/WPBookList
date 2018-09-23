@@ -55,6 +55,8 @@ if ( ! class_exists( 'WPBookList_Book_Form', false ) ) :
 			$table_name         = $wpdb->prefix . 'wpbooklist_jre_list_dynamic_db_names';
 			$this->dynamic_libs = $wpdb->get_results( 'SELECT * FROM ' . $table_name );
 
+			// Get every single saved book...
+
 			// For grabbing an image from media library.
 			wp_enqueue_media();
 
@@ -147,33 +149,169 @@ if ( ! class_exists( 'WPBookList_Book_Form', false ) ) :
 			$string_book_form = '
 				<div class="wpbooklist-book-form-container">
 					<div class="wpbooklist-book-form-inner-container">
-						<div class="wpbooklist-book-form-indiv-attribute-container">
-							<img class="wphealthtracker-icon-image-question" data-label="book-form-isbn10" src="' . ROOT_IMG_ICONS_URL . 'question-black.svg">
-							<label for="book-isbn10">' . $this->trans->trans_135 . '</label>
-							<input type="text" id="wpbooklist-addbook-isbn10" name="book-isbn10">
-						</div>
-						<div class="wpbooklist-book-form-indiv-attribute-container">
-							<img class="wphealthtracker-icon-image-question" data-label="book-form-isbn13" src="' . ROOT_IMG_ICONS_URL . 'question-black.svg">
-							<label for="book-isbn13">' . $this->trans->trans_136 . '</label>
-							<input type="text" id="wpbooklist-addbook-isbn13" name="book-isbn13">
-						</div>
-						<div class="wpbooklist-book-form-indiv-attribute-container">
-							<img class="wphealthtracker-icon-image-question" data-label="book-form-asin" src="' . ROOT_IMG_ICONS_URL . 'question-black.svg">
-							<label for="book-asin">' . $this->trans->trans_137 . '</label>
-							<input type="text" id="wpbooklist-addbook-asin" name="book-asin">
-						</div>
-						<div class="wpbooklist-book-form-indiv-attribute-container">
-							<img class="wphealthtracker-icon-image-question" data-label="book-form-title" src="' . ROOT_IMG_ICONS_URL . 'question-black.svg">
-							<label for="book-title">' . $this->trans->trans_138 . '</label>
-							<input type="text" id="wpbooklist-addbook-title" name="book-title">
-						</div>
-						<div class="wpbooklist-book-form-indiv-attribute-container">
-							<img class="wphealthtracker-icon-image-question" data-label="book-form-originaltitle" src="' . ROOT_IMG_ICONS_URL . 'question-black.svg">
-							<label for="book-originaltitle">' . $this->trans->trans_139 . '</label>
-							<input type="text" id="wpbooklist-addbook-originialtitle" name="book-originaltitle">
+						<div class="wpbooklist-book-form-inner-container-basic-fields">
+							<div class="wpbooklist-book-form-indiv-attribute-container">
+								<img class="wphealthtracker-icon-image-question" data-label="book-form-isbn10" src="' . ROOT_IMG_ICONS_URL . 'question-black.svg">
+								<label for="book-isbn10">' . $this->trans->trans_135 . '</label>
+								<input type="text" id="wpbooklist-addbook-isbn10" name="book-isbn10">
+							</div>
+							<div class="wpbooklist-book-form-indiv-attribute-container">
+								<img class="wphealthtracker-icon-image-question" data-label="book-form-isbn13" src="' . ROOT_IMG_ICONS_URL . 'question-black.svg">
+								<label for="book-isbn13">' . $this->trans->trans_136 . '</label>
+								<input type="text" id="wpbooklist-addbook-isbn13" name="book-isbn13">
+							</div>
+							<div class="wpbooklist-book-form-indiv-attribute-container">
+								<img class="wphealthtracker-icon-image-question" data-label="book-form-asin" src="' . ROOT_IMG_ICONS_URL . 'question-black.svg">
+								<label for="book-asin">' . $this->trans->trans_137 . '</label>
+								<input type="text" id="wpbooklist-addbook-asin" name="book-asin">
+							</div>
+							<div class="wpbooklist-book-form-indiv-attribute-container">
+								<img class="wphealthtracker-icon-image-question" data-label="book-form-title" src="' . ROOT_IMG_ICONS_URL . 'question-black.svg">
+								<label for="book-title">' . $this->trans->trans_138 . '</label>
+								<input type="text" id="wpbooklist-addbook-title" name="book-title">
+							</div>
+							<div class="wpbooklist-book-form-indiv-attribute-container">
+								<img class="wphealthtracker-icon-image-question" data-label="book-form-originaltitle" src="' . ROOT_IMG_ICONS_URL . 'question-black.svg">
+								<label for="book-originaltitle">' . $this->trans->trans_139 . '</label>
+								<input type="text" id="wpbooklist-addbook-originialtitle" name="book-originaltitle">
+							</div>
+
+							<div class="wpbooklist-book-form-indiv-attribute-container">
+								<img class="wphealthtracker-icon-image-question" data-label="book-form-publisher" src="' . ROOT_IMG_ICONS_URL . 'question-black.svg">
+								<label for="book-publisher">' . $this->trans->trans_141 . '</label>
+								<input type="text" id="wpbooklist-addbook-originialtitle" name="book-publisher">
+							</div>
+							<div class="wpbooklist-book-form-indiv-attribute-container">
+								<img class="wphealthtracker-icon-image-question" data-label="book-form-publicationyear" src="' . ROOT_IMG_ICONS_URL . 'question-black.svg">
+								<label for="book-publicationyear">' . $this->trans->trans_143 . '</label>
+								<input type="text" id="wpbooklist-addbook-originialtitle" name="book-publicationyear">
+							</div>
+							<div class="wpbooklist-book-form-indiv-attribute-container">
+								<img class="wphealthtracker-icon-image-question" data-label="book-form-originalpublicationyear" src="' . ROOT_IMG_ICONS_URL . 'question-black.svg">
+								<label for="book-originalpublicationyear">' . $this->trans->trans_145 . '</label>
+								<input type="text" id="wpbooklist-addbook-originialtitle" name="book-originalpublicationyear">
+							</div>
+
+							<div class="wpbooklist-book-form-indiv-attribute-container">
+								<img class="wphealthtracker-icon-image-question" data-label="book-form-illustrator" src="' . ROOT_IMG_ICONS_URL . 'question-black.svg">
+								<label for="book-illustrator">' . $this->trans->trans_140 . '</label>
+								<input type="text" id="wpbooklist-addbook-originialtitle" name="book-illustrator">
+							</div>
+
+							<div class="wpbooklist-book-form-indiv-attribute-container">
+								<img class="wphealthtracker-icon-image-question" data-label="book-form-pages" src="' . ROOT_IMG_ICONS_URL . 'question-black.svg">
+								<label for="book-pages">' . $this->trans->trans_142 . '</label>
+								<input type="text" id="wpbooklist-addbook-originialtitle" name="book-pages">
+							</div>
+
+							<div class="wpbooklist-book-form-indiv-attribute-container">
+								<img class="wphealthtracker-icon-image-question" data-label="book-form-callnumber" src="' . ROOT_IMG_ICONS_URL . 'question-black.svg">
+								<label for="book-callnumber">' . $this->trans->trans_144 . '</label>
+								<input type="text" id="wpbooklist-addbook-originialtitle" name="book-callnumber">
+							</div>
+
+							<div class="wpbooklist-book-form-indiv-attribute-container">
+								<img class="wphealthtracker-icon-image-question" data-label="book-form-author1" src="' . ROOT_IMG_ICONS_URL . 'question-black.svg">
+								<label for="book-author1">' . $this->trans->trans_14 . ' 1</label>
+								<input type="text" id="wpbooklist-addbook-originialtitle" name="book-author1">
+							</div>
+
+							<div class="wpbooklist-book-form-indiv-attribute-container">
+								<img class="wphealthtracker-icon-image-question" data-label="book-form-author2" src="' . ROOT_IMG_ICONS_URL . 'question-black.svg">
+								<label for="book-author2">' . $this->trans->trans_14 . ' 2</label>
+								<input type="text" id="wpbooklist-addbook-originialtitle" name="book-author2">
+							</div>
+
+							<div class="wpbooklist-book-form-indiv-attribute-container">
+								<img class="wphealthtracker-icon-image-question" data-label="book-form-author3" src="' . ROOT_IMG_ICONS_URL . 'question-black.svg">
+								<label for="book-author3">' . $this->trans->trans_14 . ' 3</label>
+								<input type="text" id="wpbooklist-addbook-originialtitle" name="book-author3">
+							</div>';
+
+			// This filter allows the addition of one or more rows of items into the Basic Fields section of the 'Book' form.
+			$string_insert = '';
+			if ( has_filter( 'wpbooklist_append_to_book_form_basic_fields' ) ) {
+				$string_insert = apply_filters( 'wpbooklist_append_to_book_form_basic_fields', $string_insert );
+			}
+
+						$string_book_form = $string_book_form . $string_insert . '</div>
+						<div class="wpbooklist-book-form-inner-container-multiple-fields">
+							<div class="wpbooklist-book-form-inner-container-multiple-fields-row">
+								<div class="wpbooklist-book-form-indiv-attribute-container">
+									<img class="wphealthtracker-icon-image-question" data-label="book-form-genre" src="' . ROOT_IMG_ICONS_URL . 'question-black.svg">
+									<label for="book-genre">' . $this->trans->trans_146 . '</label>
+									<input type="text" id="wpbooklist-addbook-originialtitle" name="book-genre">
+								</div>
+								<div class="wpbooklist-book-form-indiv-attribute-container">
+									<img class="wphealthtracker-icon-image-question" data-label="book-form-subgenre" src="' . ROOT_IMG_ICONS_URL . 'question-black.svg">
+									<label for="book-subgenre">' . $this->trans->trans_147 . '</label>
+									<input type="text" id="wpbooklist-addbook-originialtitle" name="book-subgenre">
+								</div>
+							</div>
+							<div class="wpbooklist-book-form-inner-container-multiple-fields-row">
+								<div class="wpbooklist-book-form-indiv-attribute-container">
+									<img class="wphealthtracker-icon-image-question" data-label="book-form-similarbooks" src="' . ROOT_IMG_ICONS_URL . 'question-black.svg">
+									<label for="book-similarbooks">' . $this->trans->trans_148 . '</label>
+									<input type="text" id="wpbooklist-addbook-originialtitle" name="book-similarbooks">
+								</div>
+								<div class="wpbooklist-book-form-indiv-attribute-container">
+									<img class="wphealthtracker-icon-image-question" data-label="book-form-subgenre" src="' . ROOT_IMG_ICONS_URL . 'question-black.svg">
+									<label for="book-subgenre">' . $this->trans->trans_150 . '</label>
+									<input type="text" id="wpbooklist-addbook-originialtitle" name="book-subgenre">
+								</div>
+							</div>
+							<div class="wpbooklist-book-form-inner-container-multiple-fields-row">
+								<div class="wpbooklist-book-form-indiv-attribute-container">
+									<img class="wphealthtracker-icon-image-question" data-label="book-form-keywords" src="' . ROOT_IMG_ICONS_URL . 'question-black.svg">
+									<label for="book-keywords">' . $this->trans->trans_149 . '</label>
+									<input type="text" id="wpbooklist-addbook-originialtitle" name="book-keywords">
+								</div>
+							</div>';
+
+			// This filter allows the addition of one or more rows of items into the Multiple Fields section of the 'Book' form.
+			$string_insert = '';
+			if ( has_filter( 'wpbooklist_append_to_book_form_multiple_fields' ) ) {
+				$string_insert = apply_filters( 'wpbooklist_append_to_book_form_multiple_fields', $string_insert );
+			}
+
+						$string_book_form = $string_book_form . $string_insert . '</div>
+						<div class="wpbooklist-book-form-inner-container-textarea-fields">
+							<div class="wpbooklist-book-form-inner-container-textarea-fields-row">
+								<div class="wpbooklist-book-form-indiv-attribute-container">
+									<img class="wphealthtracker-icon-image-question" data-label="book-form-shortdescription" src="' . ROOT_IMG_ICONS_URL . 'question-black.svg">
+									<label for="book-shortdescription">' . $this->trans->trans_151 . '</label>
+									<textarea id="wpbooklist-addbook-originialtitle" name="book-shortdescription"></textarea>
+								</div>
+								<div class="wpbooklist-book-form-indiv-attribute-container">
+									<img class="wphealthtracker-icon-image-question" data-label="book-form-fulldescription" src="' . ROOT_IMG_ICONS_URL . 'question-black.svg">
+									<label for="book-fulldescription">' . $this->trans->trans_152 . '</label>
+									<textarea id="wpbooklist-addbook-originialtitle" name="book-fulldescription"></textarea>
+								</div>
+							</div>
+							<div class="wpbooklist-book-form-inner-container-textarea-fields-row">
+								<div class="wpbooklist-book-form-indiv-attribute-container">
+									<img class="wphealthtracker-icon-image-question" data-label="book-form-notes" src="' . ROOT_IMG_ICONS_URL . 'question-black.svg">
+									<label for="book-notes">' . $this->trans->trans_153 . '</label>
+									<textarea id="wpbooklist-addbook-originialtitle" name="book-notes"></textarea>
+								</div>
+							</div>
 						</div>
 					</div>
 				</div>';
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 			$closing_string = '</form>
 					<div id="wpbooklist-add-book-error-check" data-add-book-form-error="true" style="display:none" data-></div>
