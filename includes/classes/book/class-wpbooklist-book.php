@@ -522,7 +522,6 @@ if ( ! class_exists( 'WPBookList_Book', false ) ) :
 				$this->create_author_first_last();
 				$this->add_to_db();
 			} else {
-
 				// If $this->go_amazon is false, query the other apis and add the provided data to database.
 				$this->go_amazon = false;
 				$this->gather_google_data();
@@ -956,8 +955,6 @@ if ( ! class_exists( 'WPBookList_Book', false ) ) :
 			if ( null !== $this->similar_products && '' !== $this->similar_products ) {
 				$this->whichapifound['similar_products'] = 'Amazon';
 			}
-
-			error_log(print_r($this->amazonapiresult,true));
 		}
 
 		/**

@@ -280,6 +280,9 @@ global $wpdb;
 	// Adding the admin css file.
 	add_action( 'admin_enqueue_scripts', array( $wp_book_list_general_functions, 'wpbooklist_jre_admin_style' ) );
 
+	// Adding the jQuery Autocomplete that ships with WordPress.
+	add_action( 'admin_enqueue_scripts', array( $wp_book_list_general_functions, 'wpbooklist_jre_add_core_jquery_ui' ) );
+
 	// Adding the admin js file.
 	add_action( 'admin_enqueue_scripts', array( $wp_book_list_general_functions, 'wpbooklist_jre_admin_js' ) );
 

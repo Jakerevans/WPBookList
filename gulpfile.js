@@ -7,6 +7,8 @@ npm install --save-dev gulp-uglify
 npm install --save-dev gulp-util
 npm install --save-dev gulp-rename
 npm install --save-dev gulp-babel
+npm install --save-dev gulp-zip
+npm install --save-dev del
  */
 
 // First require gulp.
@@ -129,7 +131,7 @@ gulp.task( 'watch', function() {
 });
 
 // Default gulp task
-gulp.task( 'default', [ 'sassFrontendSource', 'sassBackendSource', 'sassPostPagesSource', 'concatAdminJs', 'concatFrontendJs', 'watch' ]);
+//gulp.task( 'default', [ 'sassFrontendSource', 'sassBackendSource', 'sassPostPagesSource', 'concatAdminJs', 'concatFrontendJs', 'watch' ]);
 
 
 
@@ -137,4 +139,4 @@ gulp.task( 'default', [ 'sassFrontendSource', 'sassBackendSource', 'sassPostPage
 
 //gulp.task( 'default', [ 'zip' ]);
 
-//gulp.task( 'default', [ 'clean' ]);
+gulp.task( 'default', [ 'clean' ]);

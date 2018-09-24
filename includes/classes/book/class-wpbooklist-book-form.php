@@ -55,7 +55,69 @@ if ( ! class_exists( 'WPBookList_Book_Form', false ) ) :
 			$table_name         = $wpdb->prefix . 'wpbooklist_jre_list_dynamic_db_names';
 			$this->dynamic_libs = $wpdb->get_results( 'SELECT * FROM ' . $table_name );
 
-			// Get every single saved book...
+			// Get every single book, period.
+			$this->all_books_array = array();
+			$table_name            = $wpdb->prefix . 'wpbooklist_jre_saved_book_log';
+			$default_array         = $wpdb->get_results( 'SELECT * FROM ' . $table_name );
+			$this->all_books_array = array_merge( $this->all_books_array, $default_array );
+			foreach ( $this->dynamic_libs as $db ) {
+				if ( ( '' !== $db->user_table_name ) || ( null !== $db->user_table_name ) ) {
+					$table_name            = $wpdb->prefix . 'wpbooklist_jre_' . $db->user_table_name;
+					$dyn_array             = $wpdb->get_results( 'SELECT * FROM ' . $table_name );
+					$this->all_books_array = array_merge( $this->all_books_array, $dyn_array );
+				}
+			}
+
+			// Now build a unique Array of Genres, derived from Genre, Sub-Genre, Category, and Subject.
+			$this->genre_array = array();
+			foreach ( $this->all_books_array as $key => $book ) {
+				array_push( $this->genre_array, $book->genre );
+				array_push( $this->genre_array, $book->subgenre );
+				array_push( $this->genre_array, $book->subject );
+				array_push( $this->genre_array, $book->category );
+			}
+			$this->genre_array = array_unique( $this->genre_array );
+
+			// Now build a unique Array of Similar Books.
+			$this->similar_books_array = array();
+			$this->keywords_uid_array  = array();
+			foreach ( $this->all_books_array as $key => $book ) {
+
+				$identifier = '';
+				if ( null !== $book->isbn && '' !== $book->isbn ) {
+					$identifier = $book->isbn;
+				} elseif ( null !== $book->isbn13 && '' !== $book->isbn13 ) {
+					$identifier = $book->isbn13;
+				} else {
+					$identifier = $book->asin;
+				}
+
+				if ( '' !== $book->title && null !== $book->title && '' !== $identifier ) {
+					$final_string = $book->title . ' (' . $identifier . ')';
+					array_push( $this->similar_books_array, $final_string );
+					array_push( $this->keywords_uid_array, $book->book->uid );
+				}
+			}
+			$this->similar_books_array = array_unique( $this->similar_books_array );
+
+			// Now build a unique Array of Keywords.
+			$this->keywords_array = array();
+			foreach ( $this->all_books_array as $key => $book ) {
+
+				// If there are saved keywords...
+				if ( null !== $book->keywords && '' !== $book->keywords ) {
+					// If there are multiple saved keywords for a book.
+					if ( false !== stripos( $book->keywords, ';' ) ) {
+						$keywords = explode( ';', $book->keywords );
+						foreach ( $keywords as $key => $value ) {
+							array_push( $this->keywords_array, $value );
+						}
+					} else {
+						array_push( $this->keywords_array, $book->keywords );
+					}
+				}
+			}
+			$this->keywords_array = array_unique( $this->keywords_array );
 
 			// For grabbing an image from media library.
 			wp_enqueue_media();
@@ -114,7 +176,7 @@ if ( ! class_exists( 'WPBookList_Book_Form', false ) ) :
 						</div>
 						<div id="wpbooklist-addbook-select-library-label" for="wpbooklist-addbook-select-library">' . $this->trans->trans_133 . '</div>
 						<div class="wpbooklist-libraries-dropdown-container">
-							<select class="wpbooklist-addbook-select-default select2-input" id="wpbooklist-addbook-select-library" name="libraries[]" multiple="multiple">
+							<select class="wpbooklist-addbook-select-default select2-input-libraries" id="wpbooklist-addbook-select-library" name="libraries[]" multiple="multiple">
 							<option selected default value="' . $wpdb->prefix . 'wpbooklist_jre_saved_book_log">' . $this->trans->trans_61 . '</option> ';
 
 			// Building drop-down of all libraries.
@@ -240,31 +302,91 @@ if ( ! class_exists( 'WPBookList_Book_Form', false ) ) :
 								<div class="wpbooklist-book-form-indiv-attribute-container">
 									<img class="wphealthtracker-icon-image-question" data-label="book-form-genre" src="' . ROOT_IMG_ICONS_URL . 'question-black.svg">
 									<label for="book-genre">' . $this->trans->trans_146 . '</label>
-									<input type="text" id="wpbooklist-addbook-originialtitle" name="book-genre">
+									<div class="wpbooklist-libraries-dropdown-container">
+										<select class="wpbooklist-addbook-select-default select2-input" id="wpbooklist-addbook-select-genres" name="genres[]" multiple="multiple">';
+
+			// Building drop-down of all genres from Genre, Subject, Category, and Sub-Genre.
+			$string8 = '';
+			foreach ( $this->genre_array as $genre ) {
+				if ( ( '' !== $genre ) && ( null !== $genre ) ) {
+					$string8 = $string8 . '<option value="' . $genre . '">' . ucfirst( $genre ) . '</option>';
+				}
+			}
+
+										$string_book_form = $string_book_form . $string8 . '</select>
+				  					</div>
 								</div>
 								<div class="wpbooklist-book-form-indiv-attribute-container">
 									<img class="wphealthtracker-icon-image-question" data-label="book-form-subgenre" src="' . ROOT_IMG_ICONS_URL . 'question-black.svg">
 									<label for="book-subgenre">' . $this->trans->trans_147 . '</label>
-									<input type="text" id="wpbooklist-addbook-originialtitle" name="book-subgenre">
+									<div class="wpbooklist-libraries-dropdown-container">
+										<select class="wpbooklist-addbook-select-default select2-input" id="wpbooklist-addbook-select-subgenres" name="subgenres[]" multiple="multiple">';
+
+			// Building drop-down of all subgenres from Genre, Subject, Category, and Sub-Genre.
+			$string9 = '';
+			foreach ( $this->genre_array as $genre ) {
+				if ( ( '' !== $genre ) && ( null !== $genre ) ) {
+					$string9 = $string9 . '<option value="' . $genre . '">' . ucfirst( $genre ) . '</option>';
+				}
+			}
+
+										$string_book_form = $string_book_form . $string9 . '</select>
+				  					</div>
 								</div>
 							</div>
 							<div class="wpbooklist-book-form-inner-container-multiple-fields-row">
 								<div class="wpbooklist-book-form-indiv-attribute-container">
 									<img class="wphealthtracker-icon-image-question" data-label="book-form-similarbooks" src="' . ROOT_IMG_ICONS_URL . 'question-black.svg">
 									<label for="book-similarbooks">' . $this->trans->trans_148 . '</label>
-									<input type="text" id="wpbooklist-addbook-originialtitle" name="book-similarbooks">
+									<div class="wpbooklist-libraries-dropdown-container">
+										<select class="wpbooklist-addbook-select-default select2-input-similar-books" id="wpbooklist-addbook-select-similarbooks" name="similarbooks[]" multiple="multiple">';
+
+			// Building drop-down of all similarbooks from All book's Titles and ISBNs/ASINs.
+			$string10 = '';
+			foreach ( $this->similar_books_array as $similar_book ) {
+				if ( ( '' !== $similar_book ) && ( null !== $similar_book ) ) {
+					$string10 = $string10 . '<option value="' . $similar_book . '">' . ucfirst( $similar_book ) . '</option>';
+				}
+			}
+
+										$string_book_form = $string_book_form . $string10 . '</select>
+				  					</div>
 								</div>
 								<div class="wpbooklist-book-form-indiv-attribute-container">
 									<img class="wphealthtracker-icon-image-question" data-label="book-form-subgenre" src="' . ROOT_IMG_ICONS_URL . 'question-black.svg">
 									<label for="book-subgenre">' . $this->trans->trans_150 . '</label>
-									<input type="text" id="wpbooklist-addbook-originialtitle" name="book-subgenre">
+									<div class="wpbooklist-libraries-dropdown-container">
+										<select class="wpbooklist-addbook-select-default select2-input-similar-books" id="wpbooklist-addbook-select-similarbooks" name="similarbooks[]" multiple="multiple">';
+
+			// Building drop-down of all similarbooks from All book's Titles and ISBNs/ASINs.
+			$string11 = '';
+			foreach ( $this->similar_books_array as $key => $similar_book ) {
+				if ( ( '' !== $similar_book ) && ( null !== $similar_book ) ) {
+					$string11 = $string11 . '<option value="' . $this->keywords_uid_array[ $key ] . '">' . ucfirst( $similar_book ) . '</option>';
+				}
+			}
+
+										$string_book_form = $string_book_form . $string11 . '</select>
+				  					</div>
 								</div>
 							</div>
 							<div class="wpbooklist-book-form-inner-container-multiple-fields-row">
 								<div class="wpbooklist-book-form-indiv-attribute-container">
 									<img class="wphealthtracker-icon-image-question" data-label="book-form-keywords" src="' . ROOT_IMG_ICONS_URL . 'question-black.svg">
 									<label for="book-keywords">' . $this->trans->trans_149 . '</label>
-									<input type="text" id="wpbooklist-addbook-originialtitle" name="book-keywords">
+									<div class="wpbooklist-libraries-dropdown-container">
+										<select class="wpbooklist-addbook-select-default select2-input" id="wpbooklist-addbook-select-similarbooks" name="similarbooks[]" multiple="multiple">';
+
+			// Building drop-down of all keywords from All book's Titles and ISBNs/ASINs.
+			$string12 = '';
+			foreach ( $this->keywords_array as $key => $keyword ) {
+				if ( ( '' !== $keyword ) && ( null !== $keyword ) ) {
+					$string12 = $string12 . '<option value="' . $keyword . '">' . ucfirst( $keyword ) . '</option>';
+				}
+			}
+
+										$string_book_form = $string_book_form . $string12 . '</select>
+				  					</div>
 								</div>
 							</div>';
 

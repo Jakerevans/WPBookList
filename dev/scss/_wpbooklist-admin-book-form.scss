@@ -58,3 +58,15 @@
 .wpbooklist-book-form-inner-container-textarea-fields-row textarea{
     display: block;
 }
+
+.wpbooklist-addbook-select-default{
+    max-width:95%;
+}
+
+.ui-autocomplete {
+    max-height: 400px;
+    max-width:350px;
+   /*  overflow-y: auto;   /* prevent horizontal scrollbar */
+    overflow-x: hidden; /* add padding to account for vertical scrollbar */
+    z-index:1000 !important;
+}
