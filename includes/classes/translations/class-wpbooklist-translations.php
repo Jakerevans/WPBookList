@@ -102,10 +102,10 @@ if ( ! class_exists( 'WPBookList_Translations', false ) ) :
 			$this->trans_71  = __( 'will create .csv file of ISBN/ASIN numbers', 'wpbooklist' );
 			$this->trans_72  = __( 'Create CSV File', 'wpbooklist' );
 			$this->trans_73  = __( 'Backups', 'wpbooklist' );
-			$this->trans_74  = __( 'To add a book, simply select a library from the drop-down below, fill out the form, and click the', 'wpbooklist' );
+			$this->trans_74  = __( 'To add a book, select a library in the text box directly below, fill out the form, and click the', 'wpbooklist' );
 			$this->trans_75  = __( '\'Add Book\'', 'wpbooklist' );
 			$this->trans_76  = __( 'button. If you choose to gather book info from Amazon', 'wpbooklist' );
-			$this->trans_77  = __( 'the only required field is the ISBN/ASIN number', 'wpbooklist' );
+			$this->trans_77  = __( 'the only required field is the one of the ISBN 10, ISBN 13, or ASIN Fields', 'wpbooklist' );
 			$this->trans_78  = __( 'You must check the box below to authorize', 'wpbooklist' );
 			$this->trans_79  = __( 'to gather data from Amazon, otherwise, the only data that will be added for your book is what you fill out on the form below. WPBookList uses it\'s own Amazon Product Advertising API keys to gather book data, but if you happen to have your own API keys, you can use those instead by adding them on the', 'wpbooklist' );
 			$this->trans_80  = __( 'Amazon Settings', 'wpbooklist' );
@@ -131,11 +131,8 @@ if ( ! class_exists( 'WPBookList_Translations', false ) ) :
 			$this->trans_100 = __( 'You\'ve Created a CSV file of ISBN/ASIN numbers! You can', 'wpbooklist' );
 			$this->trans_101 = __( 'download your file here', 'wpbooklist' );
 			$this->trans_102 = __( 'Remember, your new file will come in handy when using the', 'wpbooklist' );
-
-
 			$this->trans_103 = __( 'Whoa, Wait a sec!', 'wpbooklist' );
 			$this->trans_104 = __( 'Tell me why you\'re getting rid of WPBookList', 'wpbooklist' );
-
 			$this->trans_105 = __( 'and I\'ll do my best to fix the issue!', 'wpbooklist' );
 			$this->trans_106 = __( 'I Can\'t Add Any Books!', 'wpbooklist' );
 			$this->trans_107 = __( 'It\'s Ugly!', 'wpbooklist' );
@@ -165,7 +162,7 @@ if ( ! class_exists( 'WPBookList_Translations', false ) ) :
 			$this->trans_131 = __( 'Yes', 'wpbooklist' );
 			$this->trans_132 = __( 'No', 'wpbooklist' );
 			$this->trans_133 = __( 'Select The Libraries to Add This Book To', 'wpbooklist' );
-			$this->trans_134 = __( 'Automatically Gather Book Info From Amazon (ISBN/ASIN number required)?', 'wpbooklist' );
+			$this->trans_134 = __( 'Grab Book Info From Amazon (ISBN 10, ISBN 13, or ASIN number required)?', 'wpbooklist' );
 			$this->trans_135 = __( 'ISBN 10', 'wpbooklist' );
 			$this->trans_136 = __( 'ISBN 13', 'wpbooklist' );
 			$this->trans_137 = __( 'ASIN', 'wpbooklist' );
@@ -185,7 +182,28 @@ if ( ! class_exists( 'WPBookList_Translations', false ) ) :
 			$this->trans_151 = __( 'Short Description', 'wpbooklist' );
 			$this->trans_152 = __( 'Full Description', 'wpbooklist' );
 			$this->trans_153 = __( 'Notes', 'wpbooklist' );
-
+			$this->trans_154 = __( 'Language', 'wpbooklist' );
+			$this->trans_155 = __( 'Edition', 'wpbooklist' );
+			$this->trans_156 = __( 'Series', 'wpbooklist' );
+			$this->trans_157 = __( 'Number In Series', 'wpbooklist' );
+			$this->trans_158 = __( 'Format', 'wpbooklist' );
+			$this->trans_159 = __( 'Amazon Link', 'wpbooklist' );
+			$this->trans_160 = __( 'Barnes & Noble', 'wpbooklist' );
+			$this->trans_161 = __( 'Google Books Link', 'wpbooklist' );
+			$this->trans_162 = __( 'Apple iBooks Link', 'wpbooklist' );
+			$this->trans_163 = __( 'Goodreads Link', 'wpbooklist' );
+			$this->trans_164 = __( 'Books-A-Million Link', 'wpbooklist' );
+			$this->trans_165 = __( 'Kobo Link', 'wpbooklist' );
+			$this->trans_166 = __( 'Author\'s Link', 'wpbooklist' );
+			$this->trans_167 = __( 'Front Cover Image', 'wpbooklist' );
+			$this->trans_168 = __( 'Back Cover Image', 'wpbooklist' );
+			$this->trans_169 = __( 'Choose Image', 'wpbooklist' );
+			$this->trans_170 = __( 'Additional Image 1', 'wpbooklist' );
+			$this->trans_171 = __( 'Additional Image 2', 'wpbooklist' );
+			$this->trans_172 = __( 'Enter Image URL', 'wpbooklist' );
+			$this->trans_173 = __( 'Here you\'ll  enter the ISBN 10 number for this book. This is only required if you choose to gather book information from Amazon, and don\'t enter an ISBN 13 or ASIN number.' , 'wpbooklist' );
+			$this->trans_174 = __( 'Here you\'ll  enter the ISBN 13 number for this book. This is only required if you choose to gather book information from Amazon, and don\'t enter an ISBN 10 or ASIN number.' , 'wpbooklist' );
+			$this->trans_175 = __( 'Here you\'ll  enter the ASIN number for this book. This is only required if you choose to gather book information from Amazon, and don\'t enter an ISBN 10 or ISBN 13 number.' , 'wpbooklist' );
 
 
 
@@ -321,6 +339,52 @@ if ( ! class_exists( 'WPBookList_Translations', false ) ) :
 				'trans127' => $this->trans_127,
 				'trans128' => $this->trans_128,
 				'trans129' => $this->trans_129,
+				'trans130' => $this->trans_130,
+				'trans131' => $this->trans_131,
+				'trans132' => $this->trans_132,
+				'trans133' => $this->trans_133,
+				'trans134' => $this->trans_134,
+				'trans135' => $this->trans_135,
+				'trans136' => $this->trans_136,
+				'trans137' => $this->trans_137,
+				'trans138' => $this->trans_138,
+				'trans139' => $this->trans_139,
+				'trans140' => $this->trans_140,
+				'trans141' => $this->trans_141,
+				'trans142' => $this->trans_142,
+				'trans143' => $this->trans_143,
+				'trans144' => $this->trans_144,
+				'trans145' => $this->trans_145,
+				'trans146' => $this->trans_146,
+				'trans147' => $this->trans_147,
+				'trans148' => $this->trans_148,
+				'trans149' => $this->trans_149,
+				'trans150' => $this->trans_150,
+				'trans151' => $this->trans_151,
+				'trans152' => $this->trans_152,
+				'trans153' => $this->trans_153,
+				'trans154' => $this->trans_154,
+				'trans155' => $this->trans_155,
+				'trans156' => $this->trans_156,
+				'trans157' => $this->trans_157,
+				'trans158' => $this->trans_158,
+				'trans159' => $this->trans_159,
+				'trans160' => $this->trans_160,
+				'trans161' => $this->trans_161,
+				'trans162' => $this->trans_162,
+				'trans163' => $this->trans_163,
+				'trans164' => $this->trans_164,
+				'trans165' => $this->trans_165,
+				'trans166' => $this->trans_166,
+				'trans167' => $this->trans_167,
+				'trans168' => $this->trans_168,
+				'trans169' => $this->trans_169,
+				'trans170' => $this->trans_170,
+				'trans171' => $this->trans_171,
+				'trans172' => $this->trans_172,
+				'trans173' => $this->trans_173,
+				'trans174' => $this->trans_174,
+				'trans175' => $this->trans_175,
 
 			);
 

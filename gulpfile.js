@@ -119,6 +119,10 @@ gulp.task( 'zip', function () {
 		.pipe(gulp.dest( '../wpbooklist_dist/WPBookList-Distribution' ) );
 });
 
+gulp.task( 'cleanzip', function(cb) {
+	del([ '../wpbooklist_dist/WPBookList-Distribution/**/*' ], {force: true}, cb);
+});
+
 gulp.task( 'clean', function(cb) {
 	del([ '../wpbooklist_dist/WPBookList-Distribution/**/*', '!../wpbooklist_dist/WPBookList-Distribution/wpbooklist.zip' ], {force: true}, cb);
 });
@@ -131,12 +135,13 @@ gulp.task( 'watch', function() {
 });
 
 // Default gulp task
-//gulp.task( 'default', [ 'sassFrontendSource', 'sassBackendSource', 'sassPostPagesSource', 'concatAdminJs', 'concatFrontendJs', 'watch' ]);
+gulp.task( 'default', [ 'sassFrontendSource', 'sassBackendSource', 'sassPostPagesSource', 'concatAdminJs', 'concatFrontendJs', 'watch' ]);
 
 
+//gulp.task( 'default', [ 'cleanzip' ]);
 
 //gulp.task( 'default', [ 'copyassets', 'copyincludes', 'copyquotes', 'copyconfig', 'copyreadme', 'copylang', 'copymainfile' ]);
 
 //gulp.task( 'default', [ 'zip' ]);
 
-gulp.task( 'default', [ 'clean' ]);
+//gulp.task( 'default', [ 'clean' ]);

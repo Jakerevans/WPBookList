@@ -3,11 +3,6 @@
     margin:5px;
 }
 
-.wpbooklist-book-form-indiv-attribute-container label{
-    display: inline-block;
-}
-
-
 .wpbooklist-book-form-container input[type="text"]{
     width: 175px;
     display: block;
@@ -28,26 +23,29 @@
     text-align:center;
 }
 
-.wphealthtracker-icon-image-question{
+.wpbooklist-icon-image-question{
     width: 12px;
     display: inline-block;
     cursor: pointer;
+    padding-left: 10px;
+    position: relative;
+    right: 10px;
 }
 
-.wpbooklist-book-form-inner-container-multiple-fields-row, .wpbooklist-book-form-inner-container-textarea-fields-row{
+.wpbooklist-book-form-inner-container-multiple-fields-row, .wpbooklist-book-form-inner-container-textarea-fields-row, , .wpbooklist-book-form-inner-container-image-fields-row{
     display:block;
     width:100%;
 }
 
-.wpbooklist-book-form-inner-container-basic-fields, .wpbooklist-book-form-inner-container-multiple-fields, .wpbooklist-book-form-inner-container-textarea-fields{
+.wpbooklist-book-form-inner-container-basic-fields, .wpbooklist-book-form-inner-container-multiple-fields, .wpbooklist-book-form-inner-container-textarea-fields, .wpbooklist-book-form-inner-container-image-fields, .wpbooklist-book-form-inner-container-textarea-fields{
     text-align:center;
 }
 
-.wpbooklist-book-form-inner-container-multiple-fields, .wpbooklist-book-form-inner-container-textarea-fields{
-    margin-top:40px;
+.wpbooklist-book-form-inner-container-multiple-fields, .wpbooklist-book-form-inner-container-textarea-fields, .wpbooklist-book-form-inner-container-image-fields{
+    margin-top:70px;
 }
 
-.wpbooklist-book-form-inner-container-multiple-fields .wpbooklist-book-form-indiv-attribute-container, .wpbooklist-book-form-inner-container-textarea-fields .wpbooklist-book-form-indiv-attribute-container{
+.wpbooklist-book-form-inner-container-multiple-fields .wpbooklist-book-form-indiv-attribute-container, .wpbooklist-book-form-inner-container-textarea-fields .wpbooklist-book-form-indiv-attribute-container, .wpbooklist-book-form-inner-container-image-fields .wpbooklist-book-form-indiv-attribute-container{
     width:45%;
 }
 
@@ -69,4 +67,36 @@
    /*  overflow-y: auto;   /* prevent horizontal scrollbar */
     overflow-x: hidden; /* add padding to account for vertical scrollbar */
     z-index:1000 !important;
+}
+
+.wpbooklist-book-form-indiv-attribute-image-controls-container{
+    position: relative;
+}
+
+.wpbooklist-book-form-indiv-attribute-image-controls-container input{
+    display:block;
+    margin-top: 4px;
+    margin-bottom: 4px;
+}
+
+.wpbooklist-addbook-preview-img{
+    position: absolute;
+    left: 175px;
+    top: 0px;
+    max-width: 50px;
+    padding-left: 4px;
+}
+
+.wpbooklist-book-form-indiv-attribute-container label{
+    position:relative;
+    right:10px;
+}
+
+.wpbooklist-book-form-inner-container-image-fields .wpbooklist-book-form-indiv-attribute-container{
+    text-align:left;
+    width:235px;
+}
+
+.wpbooklist-book-form-inner-container-image-fields-row{
+    margin-top:25px;
 }

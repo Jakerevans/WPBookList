@@ -1925,5 +1925,14 @@ if ( ! class_exists( 'WPBookList_General_Functions', false ) ) :
 
 		}
 
+		/**
+		 *  Function that calls the Style and Scripts needed for displaying of admin pointer messages.
+		 */
+		public function wpbooklist_jre_admin_pointers_javascript() {
+			wp_enqueue_style( 'wp-pointer' );
+			wp_enqueue_script( 'wp-pointer' );
+			wp_enqueue_script( 'utils' );
+		}
+
 	}
 endif;

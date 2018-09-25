@@ -307,10 +307,8 @@ global $wpdb;
 	// Function to run any code that is needed to modify the plugin between different versions.
 	add_action( 'plugins_loaded', array( $wp_book_list_general_functions, 'wpbooklist_update_upgrade_function' ) );
 
-	
-
-
-
+	// Adding the function that will allow the displaying of the Adminpointers when question marks are hovered over.
+	add_action( 'admin_footer', array( $wp_book_list_general_functions, 'wpbooklist_jre_admin_pointers_javascript' ) );
 
 	/*
 	// Adding the form check js file.
