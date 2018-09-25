@@ -187,7 +187,7 @@ if ( ! class_exists( 'WPBookList_Rest_Functions', false ) ) :
 								$where_format        = array( '%d' );
 								$admin_notice_result = $wpdb->update( $table_name_settings, $data, $where, $format, $where_format );
 
-								if ( $admin_notice_result == 1) {
+								if ( 1 === $admin_notice_result ) {
 									$result = $result . ' - Also added new Dashboard Notification Message - ';
 								} else {
 									$result = $result . ' - Possible problem adding a Dashboard Notification Message - ';
@@ -332,15 +332,14 @@ if ( ! class_exists( 'WPBookList_Rest_Functions', false ) ) :
 		 */
 		public function wpbooklist_jre_storytime_patreon_validate_rest_api_notice( $data ) {
 			global $wpdb;
-			$table_name = $wpdb->prefix . 'wpbooklist_jre_user_options';
-			//$data['firstkey'];
 
+			$table_name   = $wpdb->prefix . 'wpbooklist_jre_user_options';
 			$data         = array(
 				'patreonaccess'  => urldecode( $data['firstkey'] ),
 				'patreonrefresh' => urldecode( $data['secondkey'] ),
 				'patreonack'     => time(),
 			);
-			$format       = array( '%s', '%s', '%s');
+			$format       = array( '%s', '%s', '%s' );
 			$where        = array( 'ID' => 1 );
 			$where_format = array( '%d' );
 			$result       = $wpdb->update( $table_name, $data, $where, $format, $where_format );
@@ -348,10 +347,5 @@ if ( ! class_exists( 'WPBookList_Rest_Functions', false ) ) :
 
 			return ( $result );
 		}
-
-
-
-
-
 	}
 endif;

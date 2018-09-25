@@ -1,10 +1,10 @@
 <?php
 /**
- * Class WPBookList_Page - class-wpbooklist-page.php
+ * Class WPBookList_Post - class-wpbooklist-post.php
  *
  * @author   Jake Evans
  * @category Admin
- * @package  Includes/Classes/Page
+ * @package  Includes/Classes/Post
  * @version  6.0.0
  */
 
@@ -12,11 +12,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-if ( ! class_exists( 'WPBookList_Page', false ) ) :
+if ( ! class_exists( 'WPBookList_Post', false ) ) :
+
 	/**
-	 * WPBookList_Page Class.
+	 * WPBookList_Post Class.
 	 */
-	class WPBookList_Page {
+	class WPBookList_Post {
+
 
 		/** Class Constructor
 		 *
@@ -52,22 +54,58 @@ if ( ! class_exists( 'WPBookList_Page', false ) ) :
 			$this->review_iframe      = $book_array['review_iframe'];
 			$this->similar_products   = $book_array['similar_products'];
 			$this->book_uid           = $book_array['book_uid'];
-			$this->page_type          = 'page';
-			$this->page_name          = $this->title;
-			$this->page_template      = null;
-			$this->page_author_id     = get_current_user_id();
-			$this->page_status        = 'publish';
+
+			// Get author id.
+			$this->page_author_id = get_current_user_id();
 
 			// Create the WPBookList Post Category.
-			$cat_id = $this->create_page_category();
-			$this->create_the_page();
-
+			$cat_id = $this->create_post_category();
+			$this->create_book_post();
+			$this->add_to_db();
 		}
 
 		/**
-		 *  Function to actually create the page.
+		 *  Function to create the WPBookList page category.
 		 */
-		private function create_the_page() {
+		private function create_post_category() {
+
+			// Create default WPBookList Book Post Category if it doesn't already exist.
+			$create_cat = true;
+			$cat_id     = 0;
+			foreach ( ( get_categories() ) as $category ) {
+				if ( 'WPBookList Book Post' === $category->cat_name ) {
+					$cat_id     = get_cat_ID( 'WPBookList Book Post' );
+					$create_cat = false;
+				}
+			}
+
+			if ( false === $create_cat ) {
+				return $cat_id;
+			} else {
+				$result = wp_insert_term(
+					'WPBookList Book Post',
+					'category',
+					array(
+						'description' => 'This is a category created by WPBookList to display a book in it\'s very own individual post',
+						'slug'        => 'wpbooklist-book-post-cat',
+					)
+				);
+
+				if ( is_object( $result ) ) {
+					$this->cat_create_result = $result;
+				} else {
+					$this->cat_create_result = $result['term_id'];
+				}
+			}
+		}
+
+		/**
+		 *  Function to actually create the post.
+		 */
+		private function create_book_post() {
+
+			// Initialize the page ID to -1. This indicates no action has been taken.
+			$this->post_id = -1;
 
 			$excerpt = $this->description;
 
@@ -79,60 +117,37 @@ if ( ! class_exists( 'WPBookList_Page', false ) ) :
 				$excerpt = 'No excerpt available';
 			}
 
-			$post = get_page_by_title( $this->page_name, 'OBJECT', $this->page_type );
-
-			$post_data = array(
-				'post_title'   => wp_strip_all_tags( $this->page_name ),
-				'post_name'    => $this->page_name . ' (page)',
-				'post_status'  => $this->page_status,
-				'post_type'    => $this->page_type,
-				'post_author'  => $this->page_author_id,
-				'post_excerpt' => $excerpt,
+			// Set the post ID so that we know the post was created successfully.
+			$this->post_id = wp_insert_post(
+				array(
+					'comment_status' => 'open',
+					'ping_status'    => 'closed',
+					'post_author'    => get_current_user_id(),
+					'post_name'      => $this->title . ' (post)',
+					'post_title'     => wp_strip_all_tags( $this->title ),
+					'post_status'    => 'publish',
+					'post_type'      => 'post',
+					'post_content'   => '<div class="wpbooklist-page-content">DO NOT DELETE</div>',
+					'post_excerpt'   => $excerpt,
+				)
 			);
 
-			$error_obj           = false;
-			$this->create_result = wp_insert_post( $post_data, $error_obj );
+			// Assign the category to our new post.
+			$get_cat_id = get_cat_ID( 'WPBookList Book Post' );
+			$cat_slug   = 'wpbooklist-book-post-cat';
+			if ( $this->post_id > 0 ) {
 
-			add_action( 'admin_init', 'hbt_create_post' );
-
-			if ( ! $error_obj ) {
-				$db_result = $this->add_to_db();
-				$this->create_page_image( $this->image, $this->create_result );
-
-				if ( 1 === $db_result ) {
-					return $this->create_result;
-				}
+				$this->create_post_image( $this->image, $this->post_id );
+				wp_set_post_terms( $this->post_id, array( $get_cat_id ), 'category' );
 			}
 		}
 
-		/**
-		 *  Function to record the page's creation and details..
-		 */
-		private function add_to_db() {
-			global $wpdb;
-
-			$table_name = $wpdb->prefix . 'wpbooklist_jre_saved_page_post_log';
-
-			$insert_array = array(
-				'book_uid'        => $this->book_uid,
-				'book_title'      => $this->title,
-				'post_id'         => $this->create_result,
-				'type'            => $this->page_type,
-				'post_url'        => get_permalink( $this->create_result ),
-				'author'          => $this->page_author_id,
-				'active_template' => 'default',
-			);
-
-			return $wpdb->insert( $table_name, $insert_array );
-		}
-
-
-		/** Function to create the image for the page.
+		/** Function to create the image for the post.
 		 *
 		 *  @param string $image_url - The url of the image.
 		 *  @param int    $post_id - The post ID.
 		 */
-		private function create_page_image( $image_url, $post_id ) {
+		private function create_post_image( $image_url, $post_id ) {
 			$upload_dir = wp_upload_dir();
 
 			$image_data = wp_remote_get( $image_url );
@@ -144,7 +159,7 @@ if ( ! class_exists( 'WPBookList_Page', false ) ) :
 			if ( 200 !== $response_code && ! empty( $response_message ) ) {
 				return new WP_Error( $response_code, $response_message );
 			} elseif ( 200 !== $response_code ) {
-				return new WP_Error( $response_code, 'Unknown error occurred with wp_remote_get() trying to get an image url in the create_page_image() function' );
+				return new WP_Error( $response_code, 'Unknown error occurred with wp_remote_get() trying to get an image url in the create_post_image() function' );
 			} else {
 				$image_data = wp_remote_retrieve_body( $image_data );
 			}
@@ -157,19 +172,12 @@ if ( ! class_exists( 'WPBookList_Page', false ) ) :
 				$file = $upload_dir['basedir'] . '/' . $filename;
 			}
 
-			// Initialize the WP filesystem.
-			global $wp_filesystem;
-			if ( empty( $wp_filesystem ) ) {
-				require_once ABSPATH . '/wp-admin/includes/file.php';
-				WP_Filesystem();
-			}
-
 			$result      = $wp_filesystem->put_contents( $file, $image_data );
 			$wp_filetype = wp_check_filetype( $filename, null );
 			$attachment  = array(
 				'post_mime_type' => $wp_filetype['type'],
 				'post_title'     => sanitize_file_name( $filename ),
-				'post_content'   => '<div class="wpbooklist-page-content">DO NOT DELETE</div>',
+				'post_content'   => '',
 				'post_status'    => 'inherit',
 			);
 
@@ -181,39 +189,24 @@ if ( ! class_exists( 'WPBookList_Page', false ) ) :
 		}
 
 		/**
-		 *  Function to create the WPBookList page category.
+		 *  Function to record the post's creation and details..
 		 */
-		private function create_page_category() {
+		private function add_to_db() {
+			global $wpdb;
 
-			// Create default WPBookList Book Page Category if it doesn't already exist.
-			$create_cat = true;
-			$cat_id     = 0;
+			$table_name = $wpdb->prefix . 'wpbooklist_jre_saved_page_post_log';
 
-			foreach ( ( get_categories() ) as $category ) {
-				if ( 'WPBookList Book Page' === $category->cat_name ) {
-					$cat_id     = get_cat_ID( 'WPBookList Book Page' );
-					$create_cat = false;
-				}
-			}
+			$insert_array = array(
+				'book_uid'        => $this->book_uid,
+				'book_title'      => $this->title,
+				'post_id'         => $this->post_id,
+				'type'            => 'post',
+				'post_url'        => get_permalink( $this->post_id ),
+				'author'          => $this->page_author_id,
+				'active_template' => 'default',
+			);
 
-			if ( false === $create_cat ) {
-				return $cat_id;
-			} else {
-				$result = wp_insert_term(
-					'WPBookList Book Page',
-					'category',
-					array(
-						'description' => 'This is a category created by WPBookList to display a book in it\'s very own individual page',
-						'slug'        => 'wpbooklist-book-page-cat',
-					)
-				);
-
-				if ( is_object( $result ) ) {
-					$this->cat_create_result = $result;
-				} else {
-					$this->cat_create_result = $result['term_id'];
-				}
-			}
+			return $wpdb->insert( $table_name, $insert_array);
 		}
 	}
 
