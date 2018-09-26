@@ -453,6 +453,7 @@ if ( ! class_exists( 'WPBookList_Translations', false ) ) :
 				'trans207' => $this->trans_207,
 				'trans208' => $this->trans_208,
 				'trans209' => $this->trans_209,
+				/*
 				'trans210' => $this->trans_210,
 				'trans211' => $this->trans_211,
 				'trans212' => $this->trans_212,
@@ -462,7 +463,7 @@ if ( ! class_exists( 'WPBookList_Translations', false ) ) :
 				'trans216' => $this->trans_216,
 				'trans217' => $this->trans_217,
 				'trans218' => $this->trans_218,
-
+*/
 			);
 
 			return $translation_array;

@@ -17,6 +17,11 @@
  * Author URI: https://www.jakerevans.com
  */
 
+// Exit if accessed directly.
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 global $wpdb;
 
 /* REQUIRE STATEMENTS */
@@ -27,9 +32,6 @@ global $wpdb;
 /* END REQUIRE STATEMENTS */
 
 /* CONSTANT DEFINITIONS */
-
-	// Grabbing database prefix.
-	//define( '$WPDB->PREFIX', $wpdb->prefix );
 
 	// Root plugin folder directory.
 	define( 'WPBOOKLIST_VERSION_NUM', '6.0.0' );
@@ -145,15 +147,14 @@ global $wpdb;
 	// Nonces array.
 	define( 'WPBOOKLIST_NONCES_ARRAY',
 		wp_json_encode(array(
-			'adminnonce1' => 'wphealthtracker_jre_selecteduser_vitals_enter_action_callback',
-			'adminnonce2' => 'wpbooklist_dashboard_add_book_action_callback',
-			'adminnonce3' => 'wpbooklist_show_book_in_colorbox_action_callback',
-			'adminnonce4' => 'wpbooklist_new_library_action_callback',
-			'adminnonce5' => 'wpbooklist_delete_library_action_callback',
-			'adminnonce6' => 'wpbooklist_dashboard_save_library_display_options_action_callback',
-			'adminnonce7' => 'wpbooklist_dashboard_save_page_display_options_action_callback',
-			'adminnonce8' => 'wpbooklist_dashboard_save_post_display_options_action_callback',
-			'adminnonce9' => 'wpbooklist_change_library_display_options_action_callback',
+			'adminnonce2'  => 'wpbooklist_dashboard_add_book_action_callback',
+			'adminnonce3'  => 'wpbooklist_show_book_in_colorbox_action_callback',
+			'adminnonce4'  => 'wpbooklist_new_library_action_callback',
+			'adminnonce5'  => 'wpbooklist_delete_library_action_callback',
+			'adminnonce6'  => 'wpbooklist_dashboard_save_library_display_options_action_callback',
+			'adminnonce7'  => 'wpbooklist_dashboard_save_page_display_options_action_callback',
+			'adminnonce8'  => 'wpbooklist_dashboard_save_post_display_options_action_callback',
+			'adminnonce9'  => 'wpbooklist_change_library_display_options_action_callback',
 			'adminnonce10' => 'wpbooklist_edit_book_show_form_action_callback',
 			'adminnonce11' => 'wpbooklist_edit_book_pagination_action_callback',
 			'adminnonce12' => 'wpbooklist_edit_book_switch_lib_action_callback',

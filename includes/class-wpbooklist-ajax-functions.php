@@ -14,7 +14,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 	/**
-	 * WPBookList_General_Functions class. Here we'll do things like enqueue scripts/css, set up menus, etc.
+	 * WPBookList_Ajax_Functions class. Here we'll do things like enqueue scripts/css, set up menus, etc.
 	 */
 	class WPBookList_Ajax_Functions {
 

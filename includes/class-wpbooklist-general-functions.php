@@ -1921,9 +1921,8 @@ if ( ! class_exists( 'WPBookList_General_Functions', false ) ) :
 			// If version number does not match the current version number found in wpbooklist.php, call the Compat class and run upgrade functions.
 			if ( WPBOOKLIST_VERSION_NUM !== $version ) {
 				require_once CLASS_COMPAT_DIR . 'class-wpbooklist-compat-functions.php';
-				$storytime_class = new WPBookList_Compat_Functions();
+				$compat_class = new WPBookList_Compat_Functions();
 			}
-
 		}
 
 		/**
