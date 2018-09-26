@@ -105,7 +105,7 @@ if ( ! class_exists( 'WPBookList_Translations', false ) ) :
 			$this->trans_74  = __( 'To add a book, select a library in the text box directly below, fill out the form, and click the', 'wpbooklist' );
 			$this->trans_75  = __( '\'Add Book\'', 'wpbooklist' );
 			$this->trans_76  = __( 'button. If you choose to gather book info from Amazon', 'wpbooklist' );
-			$this->trans_77  = __( 'the only required field is the one of the ISBN 10, ISBN 13, or ASIN Fields', 'wpbooklist' );
+			$this->trans_77  = __( 'the only required field is one of the ISBN 10, ISBN 13, or ASIN Fields', 'wpbooklist' );
 			$this->trans_78  = __( 'You must check the box below to authorize', 'wpbooklist' );
 			$this->trans_79  = __( 'to gather data from Amazon, otherwise, the only data that will be added for your book is what you fill out on the form below. WPBookList uses it\'s own Amazon Product Advertising API keys to gather book data, but if you happen to have your own API keys, you can use those instead by adding them on the', 'wpbooklist' );
 			$this->trans_80  = __( 'Amazon Settings', 'wpbooklist' );
@@ -162,7 +162,7 @@ if ( ! class_exists( 'WPBookList_Translations', false ) ) :
 			$this->trans_131 = __( 'Yes', 'wpbooklist' );
 			$this->trans_132 = __( 'No', 'wpbooklist' );
 			$this->trans_133 = __( 'Select The Libraries to Add This Book To', 'wpbooklist' );
-			$this->trans_134 = __( 'Grab Book Info From Amazon (ISBN 10, ISBN 13, or ASIN number required)?', 'wpbooklist' );
+			$this->trans_134 = __( 'Gather Book Info From Amazon?', 'wpbooklist' );
 			$this->trans_135 = __( 'ISBN 10', 'wpbooklist' );
 			$this->trans_136 = __( 'ISBN 13', 'wpbooklist' );
 			$this->trans_137 = __( 'ASIN', 'wpbooklist' );
@@ -201,10 +201,44 @@ if ( ! class_exists( 'WPBookList_Translations', false ) ) :
 			$this->trans_170 = __( 'Additional Image 1', 'wpbooklist' );
 			$this->trans_171 = __( 'Additional Image 2', 'wpbooklist' );
 			$this->trans_172 = __( 'Enter Image URL', 'wpbooklist' );
-			$this->trans_173 = __( 'Here you\'ll  enter the ISBN 10 number for this book. This is only required if you choose to gather book information from Amazon, and don\'t enter an ISBN 13 or ASIN number.' , 'wpbooklist' );
-			$this->trans_174 = __( 'Here you\'ll  enter the ISBN 13 number for this book. This is only required if you choose to gather book information from Amazon, and don\'t enter an ISBN 10 or ASIN number.' , 'wpbooklist' );
-			$this->trans_175 = __( 'Here you\'ll  enter the ASIN number for this book. This is only required if you choose to gather book information from Amazon, and don\'t enter an ISBN 10 or ISBN 13 number.' , 'wpbooklist' );
+			$this->trans_173 = __( 'Here you\'ll  enter the ISBN 10 number for this book. This is only required if you choose to gather book information from Amazon, and don\'t enter an ISBN 13 or ASIN number' , 'wpbooklist' );
+			$this->trans_174 = __( 'Here you\'ll  enter the ISBN 13 number for this book. This is only required if you choose to gather book information from Amazon, and don\'t enter an ISBN 10 or ASIN number. This can be entered with or without a dash' , 'wpbooklist' );
+			$this->trans_175 = __( 'Here you\'ll enter the ASIN number for this book. This is only required if you choose to gather book information from Amazon, and don\'t enter an ISBN 10 or ISBN 13 number' , 'wpbooklist' );
+			$this->trans_176 = __( 'Here you\'ll enter the Title for this book. If you choose to not gather book information from Amazon, then this becomes the only required field on this entire page' , 'wpbooklist' );
+			$this->trans_177 = __( 'Here you\'ll enter the Original Title for this book' , 'wpbooklist' );
+			$this->trans_178 = __( 'Here you\'ll enter the Publisher and/or Publishing Company for this book.' , 'wpbooklist' );
+			$this->trans_179 = __( 'Here you\'ll enter the Illustrator for this book, if there is one, or perhaps use this field for the Book Cover Artist' , 'wpbooklist' );
+			$this->trans_180 = __( 'This is not a required field', 'wpbooklist' );
+			$this->trans_181 = __( 'Here you\'ll enter the number of Pages for this book', 'wpbooklist' );
+			$this->trans_182 = __( 'Here you\'ll enter the Call Number that your Library or Organization uses for this book', 'wpbooklist' );
+			$this->trans_183 = __( 'Here you\'ll enter the Author for this book', 'wpbooklist' );
+			$this->trans_184 = __( 'Here you can enter the name of a second Author for this book', 'wpbooklist' );
+			$this->trans_185 = __( 'Here you can enter the name of a third Author for this book', 'wpbooklist' );
+			$this->trans_186 = __( 'Simply type the name of the Author in a normal, first-name last-name format, followed by any available credentials. Examples: Jake R. Evans, Ph.D., or David McCullough', 'wpbooklist' );
+			$this->trans_187 = __( 'Second Author', 'wpbooklist' );
+			$this->trans_188 = __( 'Third Author', 'wpbooklist' );
+			$this->trans_189 = __( 'Here you can enter the Language this book is written in. If this book comes in multiple Languages, consider adding an individual book for each Language - usually, if the same book is translated into multiple languages, each one of those language-specific versions will have it\'s own unique ISBN number', 'wpbooklist' );
+			$this->trans_190 = __( 'Here you can specify the Edition of this book', 'wpbooklist' );
+			$this->trans_191 = __( 'Here you\'ll enter the name of the Series this book is a member of, if applicable. For example, if I were adding the book "Harry Potter and the Goblet of Fire," I would enter "Harry Potter" in this field', 'wpbooklist' );
+			$this->trans_192 = __( 'Here you can enter what number within a series this book is, if applicable. For example, if I were adding the book "Harry Potter and the Goblet of Fire," I would enter "4," as it\'s the 4th book in the "Harry Potter" Series', 'wpbooklist' );
+			$this->trans_193 = __( 'Here you\'ll enter the format this book is in. Use this creatively to suite your needs - specify whether this is a Paperback book or a Hardcover, or if it\'s a Chapter Book, a Choose-Your-Adventure Book, a Graphic Novel, an E-Book, etc', 'wpbooklist' );
+			$this->trans_194 = __( 'Here you can enter the link to this book\'s Amazon page', 'wpbooklist' );
+			$this->trans_195 = __( 'Here you can enter the link to this book\'s Barnes & Noble page', 'wpbooklist' );
+			$this->trans_196 = __( 'Here you can enter the link to this book\'s Google Books page', 'wpbooklist' );
+			$this->trans_197 = __( 'Here you can enter the link to this book\'s Apple iBooks page', 'wpbooklist' );
+			$this->trans_198 = __( 'Here you can enter the link to this book\'s Goodreads page', 'wpbooklist' );
+			$this->trans_199 = __( 'Here you can enter the link to this book\'s Books-a-Million page', 'wpbooklist' );
+			$this->trans_200 = __( 'Here you can enter the link to this book\'s Kobo page', 'wpbooklist' );
+			$this->trans_201 = __( 'It\'s best to enter the full link, copied straight from your browser. For example: https://www.booklink.com/', 'wpbooklist' );
+			$this->trans_202 = __( 'Here you can enter the link to the Author\'s website, if one exists, or maybe a link to the website for this book itself, if it has one', 'wpbooklist' );
+			$this->trans_203 = __( 'Select WPBookList Libraries', 'wpbooklist' );
+			$this->trans_204 = __( 'Here you\'ll select which WPBookList Library(s) to add this book to. You can select multiple libraries, or leave this field as it is to add this book to only the Default WPBookList Library. Create your own custom WPBookList Libraries towards the bottom of the <a href="', 'wpbooklist' );
+			$this->trans_205 = __( '">WPBookList Settings Page</a>', 'wpbooklist' );
+			$this->trans_206 = __( 'By checking yes, WPBookList will try and grab as much info as possible for this book from Amazon, but you\'ll have to provide either an ISBN or ASIN number to do so. WPBookList uses it\'s own Amazon API keys to do this, but if have your own API keys and would like to use those instead, you can do so on the <a href="', 'wpbooklist' );
 
+			$this->trans_207 = __( '&tab=api">API Settings Tab of the WPBookList Settings Page</a>', 'wpbooklist' );
+			$this->trans_208 = __( 'If you check no, WPBookList will still try and grab book info from other sources such as Google, OpenLibrary, and iBooks. In this case, the Title field is the only required field. Either way, whatever values you enter into the fields below will override what WPBookList finds out on the Internet', 'wpbooklist' );
+			$this->trans_209 = __( 'Grab Amazon Info?', 'wpbooklist' );
 
 
 
@@ -385,6 +419,49 @@ if ( ! class_exists( 'WPBookList_Translations', false ) ) :
 				'trans173' => $this->trans_173,
 				'trans174' => $this->trans_174,
 				'trans175' => $this->trans_175,
+				'trans176' => $this->trans_176,
+				'trans177' => $this->trans_177,
+				'trans178' => $this->trans_178,
+				'trans179' => $this->trans_179,
+				'trans180' => $this->trans_180,
+				'trans181' => $this->trans_181,
+				'trans182' => $this->trans_182,
+				'trans183' => $this->trans_183,
+				'trans184' => $this->trans_184,
+				'trans185' => $this->trans_185,
+				'trans186' => $this->trans_186,
+				'trans187' => $this->trans_187,
+				'trans188' => $this->trans_188,
+				'trans189' => $this->trans_189,
+				'trans190' => $this->trans_190,
+				'trans191' => $this->trans_191,
+				'trans192' => $this->trans_192,
+				'trans193' => $this->trans_193,
+				'trans194' => $this->trans_194,
+				'trans195' => $this->trans_195,
+				'trans196' => $this->trans_196,
+				'trans197' => $this->trans_197,
+				'trans198' => $this->trans_198,
+				'trans199' => $this->trans_199,
+				'trans200' => $this->trans_200,
+				'trans201' => $this->trans_201,
+				'trans202' => $this->trans_202,
+				'trans203' => $this->trans_203,
+				'trans204' => $this->trans_204,
+				'trans205' => $this->trans_205,
+				'trans206' => $this->trans_206,
+				'trans207' => $this->trans_207,
+				'trans208' => $this->trans_208,
+				'trans209' => $this->trans_209,
+				'trans210' => $this->trans_210,
+				'trans211' => $this->trans_211,
+				'trans212' => $this->trans_212,
+				'trans213' => $this->trans_213,
+				'trans214' => $this->trans_214,
+				'trans215' => $this->trans_214,
+				'trans216' => $this->trans_216,
+				'trans217' => $this->trans_217,
+				'trans218' => $this->trans_218,
 
 			);
 

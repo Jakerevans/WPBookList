@@ -174,7 +174,7 @@ if ( ! class_exists( 'WPBookList_Book_Form', false ) ) :
 
 			$string5 = '</table>
 						</div>
-						<div id="wpbooklist-addbook-select-library-label" for="wpbooklist-addbook-select-library">' . $this->trans->trans_133 . '</div>
+						<div id="wpbooklist-addbook-select-library-label" for="wpbooklist-addbook-select-library"><p><img class="wpbooklist-icon-image-question-with-link" data-label="book-form-libraries" src="' . ROOT_IMG_ICONS_URL . 'question-black.svg"/>' . $this->trans->trans_133 . '</p></div>
 						<div class="wpbooklist-libraries-dropdown-container">
 							<select class="wpbooklist-addbook-select-default select2-input-libraries" id="wpbooklist-addbook-select-library" name="libraries[]" multiple="multiple">
 							<option selected default value="' . $wpdb->prefix . 'wpbooklist_jre_saved_book_log">' . $this->trans->trans_61 . '</option> ';
@@ -194,7 +194,7 @@ if ( ! class_exists( 'WPBookList_Book_Form', false ) ) :
 				  		<div id="wpbooklist-use-amazon-container">
 							<table>
 								<tr>
-									<td><p id="use-amazon-question-label">' . $this->trans->trans_134 . '</p></td>
+									<td><p id="use-amazon-question-label"><img class="wpbooklist-icon-image-question-with-link" data-label="book-form-amazonyesno" src="' . ROOT_IMG_ICONS_URL . 'question-black.svg"/>' . $this->trans->trans_134 . '</p></td>
 								</tr>
 								<tr>
 									<td style="text-align:center;">

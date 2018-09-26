@@ -121,6 +121,7 @@ if ( ! class_exists( 'WPBookList_General_Functions', false ) ) :
 			$final_array_of_php_values['SAVED_ATTACHEMENT_ID'] = get_option( 'media_selector_attachment_id', 0 );
 			$final_array_of_php_values['LIBRARY_DB_BACKUPS_UPLOAD_URL'] = LIBRARY_DB_BACKUPS_UPLOAD_URL;
 			$final_array_of_php_values['SOUNDS_URL'] = SOUNDS_URL;
+			$final_array_of_php_values['SETTINGS_PAGE_URL'] = menu_page_url( 'WPBookList-Options-settings', false );
 
 
 
