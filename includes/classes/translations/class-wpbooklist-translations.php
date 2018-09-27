@@ -239,6 +239,7 @@ if ( ! class_exists( 'WPBookList_Translations', false ) ) :
 			$this->trans_207 = __( '&tab=api">API Settings Tab of the WPBookList Settings Page</a>', 'wpbooklist' );
 			$this->trans_208 = __( 'If you check no, WPBookList will still try and grab book info from other sources such as Google, OpenLibrary, and iBooks. In this case, the Title field is the only required field. Either way, whatever values you enter into the fields below will override what WPBookList finds out on the Internet', 'wpbooklist' );
 			$this->trans_209 = __( 'Grab Amazon Info?', 'wpbooklist' );
+			$this->trans_210 = __( 'Add Book', 'wpbooklist' );
 
 
 

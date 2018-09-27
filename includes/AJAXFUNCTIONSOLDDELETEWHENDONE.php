@@ -2488,7 +2488,7 @@ function wpbooklist_edit_book_pagination_action_javascript() {
   	jQuery(document).ready(function($) {
 
   		// Set initial offset in dom
-  		$('.wpbooklist-admin-tp-top-title').attr('data-offset', 0);
+  		$('.wpbooklist-admin-top-title').attr('data-offset', 0);
 		
 		// Get offset value from wpbooklist.php, convert to int
 		var offset = '<?php echo EDIT_PAGE_OFFSET; ?>';
@@ -2501,7 +2501,7 @@ function wpbooklist_edit_book_pagination_action_javascript() {
 			var library =  $("#wpbooklist-editbook-select-library").val();
 
 			// Grabbing offset from dom
-			var currentOffset = parseInt($('.wpbooklist-admin-tp-top-title').attr('data-offset'));
+			var currentOffset = parseInt($('.wpbooklist-admin-top-title').attr('data-offset'));
 
 			// Grabbing total number of books in library
 			var limit = parseInt($(this).attr('data-limit'));
@@ -2531,10 +2531,10 @@ function wpbooklist_edit_book_pagination_action_javascript() {
 
 			if(direction == 'forward'){
 				currentOffset = currentOffset+offset;
-				$('.wpbooklist-admin-tp-top-title').attr('data-offset', currentOffset);
+				$('.wpbooklist-admin-top-title').attr('data-offset', currentOffset);
 			} else {
 				currentOffset = currentOffset-offset;
-				$('.wpbooklist-admin-tp-top-title').attr('data-offset', currentOffset);
+				$('.wpbooklist-admin-top-title').attr('data-offset', currentOffset);
 			}
 
 			var data = {
@@ -2558,8 +2558,8 @@ function wpbooklist_edit_book_pagination_action_javascript() {
 					$('#wpbooklist-spinner-pagination').animate({'opacity':'0'},500);
 
 			    	// Clear existing books and replace with the response
-			    	$('.wpbooklist-admin-tp-inner-container').html('');
-			    	$('.wpbooklist-admin-tp-inner-container').html(response[0]);
+			    	$('.wpbooklist-admin-top-inner-container').html('');
+			    	$('.wpbooklist-admin-top-inner-container').html(response[0]);
 
 			    	// Resetting table drop-down
 			    	$("#wpbooklist-editbook-select-library").val(response[1]);
@@ -2620,7 +2620,7 @@ function wpbooklist_edit_book_switch_lib_action_javascript() {
   			window.history.pushState(null,null,newUrl);
 
   			// Reset offset
-  			$('.wpbooklist-admin-tp-top-title').attr('data-offset', 0);
+  			$('.wpbooklist-admin-top-title').attr('data-offset', 0);
 
   			// Initial UI Stuff
   			$('#wpbooklist-search-results-info').css({'opacity':'0'});
@@ -2645,8 +2645,8 @@ function wpbooklist_edit_book_switch_lib_action_javascript() {
 			    	$('#wpbooklist-spinner-edit-change-lib').animate({'opacity':'1'},500);
 
 			    	// Clear existing books and replace with the response
-			    	$('.wpbooklist-admin-tp-inner-container').html('');
-			    	$('.wpbooklist-admin-tp-inner-container').html(response[0]);
+			    	$('.wpbooklist-admin-top-inner-container').html('');
+			    	$('.wpbooklist-admin-top-inner-container').html(response[0]);
 			    	$("#wpbooklist-editbook-select-library").val(response[1]);
 			    },
 				error: function(jqXHR, textStatus, errorThrown) {
@@ -2714,8 +2714,8 @@ function wpbooklist_edit_book_search_action_javascript() {
 			    	$('#wpbooklist-spinner-edit-change-lib').animate({'opacity':'1'},500);
 
 			    	// Clear existing books and replace with the response
-			    	$('.wpbooklist-admin-tp-inner-container').html('');
-			    	$('.wpbooklist-admin-tp-inner-container').html(response[0]);
+			    	$('.wpbooklist-admin-top-inner-container').html('');
+			    	$('.wpbooklist-admin-top-inner-container').html(response[0]);
 			    	$("#wpbooklist-editbook-select-library").val(response[1]);
 
 			    	// UI Stuff

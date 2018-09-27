@@ -425,7 +425,9 @@ if ( ! class_exists( 'WPBookList_General_Functions', false ) ) :
 				patreonaccess varchar(255),
 				patreonrefresh varchar(255),
 				patreonack varchar(255),
+				extensionversions MEDIUMTEXT,
 				adminmessage varchar(10000) NOT NULL DEFAULT '" . ADMIN_MESSAGE . "',
+				customfields MEDIUMTEXT,
 				PRIMARY KEY  (ID),
 				KEY username (username)
 			) $charset_collate; ";

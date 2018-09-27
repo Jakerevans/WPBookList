@@ -1,3 +1,12 @@
+/**
+ * SCSS - _wpbooklist-admin-book-form.scss - Hold CSS specific to the Book Form for adding and editing books.
+ *
+ * @author   Jake Evans
+ * @category SCSS
+ * @package  Includes/Assets/CSS
+ * @version  6.0.0
+ */
+
 .wpbooklist-book-form-indiv-attribute-container{
     display:inline-block;
     margin:5px;
@@ -76,11 +85,6 @@
     top: 0px;
     max-width: 50px;
     padding-left: 4px;
-}
-
-.wpbooklist-book-form-indiv-attribute-container label{
-    position:relative;
-    right:10px;
 }
 
 .wpbooklist-book-form-inner-container-image-fields .wpbooklist-book-form-indiv-attribute-container{
