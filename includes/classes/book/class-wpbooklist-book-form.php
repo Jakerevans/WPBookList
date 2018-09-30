@@ -152,14 +152,14 @@ if ( ! class_exists( 'WPBookList_Book_Form', false ) ) :
 				<tr style="display:none;"">
 					<td>
 						<input checked type="checkbox" name="authorize-amazon-yes" />
-						<label class="wpbooklist-question-icon-label" for="authorize-amazon-yes">' . $this->trans->trans_131 . '</label>
+						<label for="authorize-amazon-yes">' . $this->trans->trans_131 . '</label>
 						<input type="checkbox" name="authorize-amazon-no" />
-						<label class="wpbooklist-question-icon-label" for="authorize-amazon-no">' . $this->trans->trans_132 . '</label>
+						<label for="authorize-amazon-no">' . $this->trans->trans_132 . '</label>
 					</td>
 				</tr>';
 			} else {
 				$string4 = '<tr>
-					<td><p id="auth-amazon-question-label">' . $this->trans->trans_130 . '</p></td>
+					<td><p id="auth-amazon-question-label"><img class="wpbooklist-icon-image-question" data-label="book-form-authorizeamazon" src="' . ROOT_IMG_ICONS_URL . 'question-black.svg"/>' . $this->trans->trans_130 . '?</p></td>
 				</tr>
 				<tr>
 					<td>
