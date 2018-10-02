@@ -67,14 +67,14 @@ if ( ! class_exists( 'WPBookList_Translations', false ) ) :
 			$this->trans_36  = __( 'Previous', 'wpbooklist-textdomain' );
 			$this->trans_37  = __( 'Next Page', 'wpbooklist-textdomain' );
 			$this->trans_38  = __( 'Success!', 'wpbooklist' );
-			$this->trans_39  = __( 'You\'ve just added a new book to your library! Remember, to display your library, simply place this shortcode on a page or post:', 'wpbooklist' );
+			$this->trans_39  = __( 'You\'ve just added a new book to your library! Remember, to display your library, simply place these shortcode(s) on a page or post:', 'wpbooklist' );
 			$this->trans_40  = __( 'Click Here to View Your New Book', 'wpbooklist' );
 			$this->trans_41  = __( 'Click Here to View This Book\'s Post', 'wpbooklist' );
 			$this->trans_42  = __( 'Click Here to View This Book\'s Page', 'wpbooklist' );
 			$this->trans_43  = __( 'Thanks for using WPBookList, and', 'wpbooklist' );
 			$this->trans_44  = __( 'be sure to check out the WPBookList Extensions!', 'wpbooklist' );
 			$this->trans_45  = __( 'If you happen to be thrilled with WPBookList, then by all means,', 'wpbooklist' );
-			$this->trans_46  = __( 'Feel Free to Leave a 5-Star Review Here!', 'wpbooklist' );
+			$this->trans_46  = __( 'Leave a 5-Star Review Here!', 'wpbooklist' );
 			$this->trans_47  = __( 'Whoops! Looks like there was an error trying to add your book! Here is some developer/code info you might provide to', 'wpbooklist' );
 			$this->trans_48  = __( 'WPBookList Tech Support at TechSupport@WPBookList.com:', 'wpbooklist' );
 			$this->trans_49  = __( 'Hmmm...', 'wpbooklist' );
@@ -240,6 +240,26 @@ if ( ! class_exists( 'WPBookList_Translations', false ) ) :
 			$this->trans_208 = __( 'If you check no, WPBookList will still try and grab book info from other sources such as Google, OpenLibrary, and iBooks. In this case, the Title field is the only required field. Either way, whatever values you enter into the fields below will override what WPBookList finds out on the Internet', 'wpbooklist' );
 			$this->trans_209 = __( 'Grab Amazon Info?', 'wpbooklist' );
 			$this->trans_210 = __( 'Add Book', 'wpbooklist' );
+			$this->trans_211 = __( 'Star Rating', 'wpbooklist' );
+			$this->trans_212 = __( 'Select a Rating...', 'wpbooklist' );
+			$this->trans_213 = __( '5', 'wpbooklist' );
+			$this->trans_214 = __( '4', 'wpbooklist' );
+			$this->trans_215 = __( '3', 'wpbooklist' );
+			$this->trans_216 = __( '2', 'wpbooklist' );
+			$this->trans_217 = __( '1', 'wpbooklist' );
+			$this->trans_218 = __( '1/2', 'wpbooklist' );
+			$this->trans_219 = __( 'Stars', 'wpbooklist' );
+			$this->trans_220 = __( 'Star', 'wpbooklist' );
+			$this->trans_221 = __( 'N/A', 'wpbooklist' );
+			$this->trans_222 = __( 'Out of Print?', 'wpbooklist' );
+			$this->trans_223 = __( 'Finished?', 'wpbooklist' );
+			$this->trans_224 = __( 'Signed Copy?', 'wpbooklist' );
+			$this->trans_225 = __( 'Create a Page?', 'wpbooklist' );
+			$this->trans_226 = __( 'Create a Post?', 'wpbooklist' );
+			$this->trans_227 = __( 'Link Text', 'wpbooklist' );
+			$this->trans_228 = __( 'Link URL', 'wpbooklist' );
+			$this->trans_229 = __( 'Select an Option...', 'wpbooklist' );
+
 
 
 

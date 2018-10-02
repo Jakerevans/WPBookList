@@ -146,6 +146,22 @@ $lightgray: #CCCCCC;
     line-height: 0.9;
 }
 
+%wpbooklist-bold-shortcode{
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+%wpbooklist-bold-shortcode-orange{
+    @extend %wpbooklist-bold-shortcode;
+    color: $primary-color;
+}
+
+%wpbooklist-bold-li-heading{
+    font-weight: bold;
+    display: inline-block;
+    margin-bottom:5px;
+}
+
 
 
 

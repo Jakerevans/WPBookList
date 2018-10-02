@@ -10,9 +10,10 @@
 .wpbooklist-book-form-indiv-attribute-container{
     display:inline-block;
     margin:5px;
+    vertical-align:top;
 }
 
-.wpbooklist-book-form-container input[type="text"]{
+.wpbooklist-book-form-container input[type="text"], .wpbooklist-book-form-indiv-attribute-container select{
     width: 175px;
     display: block;
 }
@@ -37,11 +38,11 @@
     width:100%;
 }
 
-.wpbooklist-book-form-inner-container-basic-fields, .wpbooklist-book-form-inner-container-multiple-fields, .wpbooklist-book-form-inner-container-textarea-fields, .wpbooklist-book-form-inner-container-image-fields, .wpbooklist-book-form-inner-container-textarea-fields{
+.wpbooklist-book-form-inner-container-basic-fields, .wpbooklist-book-form-inner-container-multiple-fields, .wpbooklist-book-form-inner-container-textarea-fields, .wpbooklist-book-form-inner-container-image-fields, .wpbooklist-book-form-inner-container-textarea-fields, .wpbooklist-book-form-inner-container-dropdown-fields{
     text-align:center;
 }
 
-.wpbooklist-book-form-inner-container-multiple-fields, .wpbooklist-book-form-inner-container-textarea-fields, .wpbooklist-book-form-inner-container-image-fields{
+.wpbooklist-book-form-inner-container-multiple-fields, .wpbooklist-book-form-inner-container-textarea-fields, .wpbooklist-book-form-inner-container-image-fields, .wpbooklist-book-form-inner-container-dropdown-fields{
     margin-top:70px;
 }
 
@@ -53,12 +54,13 @@
     width:100%;
 }
 
-.wpbooklist-book-form-inner-container-textarea-fields-row textarea{
+.wpbooklist-book-form-inner-container-textarea-fields-row textarea, .wpbooklist-book-form-inner-container-dropdown-fields-row select{
     display: block;
 }
 
 .wpbooklist-addbook-select-default{
     max-width:95%;
+    @extend %wpbooklist-margin-auto-centered;
 }
 
 .ui-autocomplete {
@@ -118,4 +120,13 @@
 
 #auth-amazon-question-label img{
     right:2px;
+}
+
+#wpbooklist-addbook-success-thanks{
+    margin-top: 34px;
+    line-height: 1.5;
+}
+
+#wpbooklist-addbook-success-review-link{
+    color: $primary-color;
 }

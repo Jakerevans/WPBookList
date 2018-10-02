@@ -1,5 +1,10 @@
 jQuery( function ( $ ) { 
   "use strict";
+
+
+
+
+  /*
   var amazonAuthYes = $("input[name='authorize-amazon-yes']");
   var amazonAuthNo = $("input[name='authorize-amazon-no']");
   var title = $( "input[name='book-title']" );
@@ -417,7 +422,6 @@ function wpbooklist_add_book_validator(){
 
     // DOM element that reports back on the form error state
     $('#wpbooklist-add-book-error-check').attr('data-add-book-form-error', errorFlag);
+*/
+});
 
-  });
-
-}

@@ -93,6 +93,11 @@
     @extend %wpbooklist-tab-intro-para;
 }
 
+.wpbooklist-tab-intro-para-left{
+    @extend %wpbooklist-tab-intro-para;
+    text-align: left;
+}
+
 .wpbooklist-icon-image-question, .wpbooklist-icon-image-question-with-link{
    @extend %wpbooklist-icon-image-question;
 }
@@ -125,7 +130,49 @@
     @extend %wpbooklist-addition-div-p;
 }
 
+#wpbooklist-smile-icon-1{
+    @extend %wpbooklist-margin-auto-centered;
+    width: 30px;
+    display: block;
+    margin-top: 20px;
+    margin-bottom: 15px;
+}
 
+#wpbooklist-success-span{
+    font-style: italic;
+    color: $primary-color;
+    font-size: 16px;
+}
+
+.wpbooklist-show-book-colorbox {
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.wpbooklist-bold-shortcode{
+    @extend %wpbooklist-bold-shortcode;
+}
+
+.wpbooklist-bold-shortcode-orange{
+    @extend %wpbooklist-bold-shortcode-orange;
+}
+
+.wpbooklist-bold-li-heading{
+   @extend %wpbooklist-bold-li-heading;
+}
+
+#wpbooklist-dynamic-input-library{
+    min-width: 300px;
+    margin-bottom:50px;
+}
+
+#wpbooklist-dynamic-shortcode-button{
+    margin-bottom:50px;
+}
+
+#wpbooklist-dynamic-shortcode-button, .wpbooklist_delete_custom_lib{
+    width: 200px;
+}
 
 /*
  * END COMMON ELEMENTS INSIDE OF TOP ADMIN CONTAINERS

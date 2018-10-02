@@ -312,6 +312,34 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 				'upsells' => $upsells,
 			);
 
+			// Now adding in any custom fields to above arrays for insertion into DB.
+			$this->user_options = $wpdb->get_row( 'SELECT * FROM ' . $wpdb->prefix . 'wpbooklist_jre_user_options' );
+			$this->user_options->customfields;
+
+			// Loop through the Custom Fields.
+			if ( false !== stripos( $this->user_options->customfields, '--' ) ) {
+				$fields = explode( '--', $this->user_options->customfields );
+
+				// Loop through each custom field entry.
+				foreach ( $fields as $key => $entry ) {
+
+					if ( false !== stripos( $entry, ';' ) ) {
+						$entry_details = explode( ';', $entry );
+
+						// All kinds of checks to make sure good value exists.
+						if ( array_key_exists( 0, $entry_details ) && isset( $entry_details[0] ) && '' !== $entry_details[0] && null !== $entry_details[0] ) {
+
+							// Add new value with key into DB array.
+							if ( isset($_POST[ $entry_details[0] ] ) ) {
+								$book_array[ $entry_details[0] ] = filter_var($_POST[ $entry_details[0] ], FILTER_SANITIZE_STRING );
+							}	
+						}
+					}
+				}
+			}
+
+			error_log(print_r($book_array,true));
+
 			require_once(CLASS_BOOK_DIR.'class-wpbooklist-book.php');
 			$book_class = new WPBookList_Book('add', $book_array, null);
 			$insert_result = explode(',',$book_class->add_result);

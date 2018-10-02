@@ -475,6 +475,11 @@ if ( ! class_exists( 'WPBookList_Compat_Functions', false ) ) :
 				$test_name = $wpdb->prefix . 'wpbooklist_jre_users_table';
 				if ( $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $test_name ) ) !== $test_name ) {
 
+					// Include everything needed to add a table, and register the table name.
+					global $charset_collate;
+					require_once ABSPATH . 'wp-admin/includes/upgrade.php';
+					$wpdb->wpbooklist_jre_users_table = "{$wpdb->prefix}wpbooklist_jre_users_table";
+
 					// This is the table that holds static data about users - things like username, password, height, gender...
 					$sql_create_table = "CREATE TABLE {$wpdb->wpbooklist_jre_users_table} 
 						(

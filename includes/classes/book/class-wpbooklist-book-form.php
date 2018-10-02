@@ -354,12 +354,82 @@ if ( ! class_exists( 'WPBookList_Book_Form', false ) ) :
 							</div>';
 
 			// This filter allows the addition of one or more rows of items into the Basic Fields section of the 'Book' form.
-			$string_insert = '';
 			if ( has_filter( 'wpbooklist_append_to_book_form_basic_fields' ) ) {
-				$string_insert = apply_filters( 'wpbooklist_append_to_book_form_basic_fields', $string_insert );
+				$string_book_form = apply_filters( 'wpbooklist_append_to_book_form_basic_fields', $string_book_form );
 			}
 
-						$string_book_form = $string_book_form . $string_insert . '</div>
+						$string_book_form = $string_book_form . '</div>
+						<div class="wpbooklist-book-form-inner-container-dropdown-fields">
+							<div class="wpbooklist-book-form-inner-container-dropdown-fields-row">
+								<div class="wpbooklist-book-form-indiv-attribute-container">
+									<img class="wpbooklist-icon-image-question" data-label="book-form-genre" src="' . ROOT_IMG_ICONS_URL . 'question-black.svg">
+									<label class="wpbooklist-question-icon-label" for="book-genre">' . $this->trans->trans_211 . '</label>
+									<select class="wpbooklist-addbook-select-default" id="wpbooklist-addbook-select-default" >
+										<option selected disabled default>' . $this->trans->trans_212 . '</option>
+										<option>' . $this->trans->trans_213 . ' ' . $this->trans->trans_219 . '</option>
+										<option>' . $this->trans->trans_214 . ' <span>' . $this->trans->trans_218 . '</span> ' . $this->trans->trans_219 . '  </option>
+										<option>' . $this->trans->trans_214 . ' ' . $this->trans->trans_219 . '</option>
+										<option>' . $this->trans->trans_215 . ' <span>' . $this->trans->trans_218 . '</span> ' . $this->trans->trans_219 . '  </option>
+										<option>' . $this->trans->trans_215 . ' ' . $this->trans->trans_219 . '</option>
+										<option>' . $this->trans->trans_216 . ' <span>' . $this->trans->trans_218 . '</span> ' . $this->trans->trans_219 . '  </option>
+										<option>' . $this->trans->trans_216 . ' ' . $this->trans->trans_219 . '</option>
+										<option>' . $this->trans->trans_217 . ' <span>' . $this->trans->trans_218 . '</span> ' . $this->trans->trans_219 . '  </option>
+										<option>' . $this->trans->trans_217 . ' ' . $this->trans->trans_220 . '</option>
+									</select>
+								</div>
+								<div class="wpbooklist-book-form-indiv-attribute-container">
+									<img class="wpbooklist-icon-image-question" data-label="book-form-genre" src="' . ROOT_IMG_ICONS_URL . 'question-black.svg">
+									<label class="wpbooklist-question-icon-label" for="book-genre">' . $this->trans->trans_222 . '</label>
+									<select class="wpbooklist-addbook-select-default" id="wpbooklist-addbook-select-default" >
+										<option>' . $this->trans->trans_221 . '</option>
+										<option>' . $this->trans->trans_131 . '</option>
+										<option>' . $this->trans->trans_132 . '</option>
+									</select>
+								</div>
+								<div class="wpbooklist-book-form-indiv-attribute-container">
+									<img class="wpbooklist-icon-image-question" data-label="book-form-genre" src="' . ROOT_IMG_ICONS_URL . 'question-black.svg">
+									<label class="wpbooklist-question-icon-label" for="book-genre">' . $this->trans->trans_223 . '</label>
+									<select class="wpbooklist-addbook-select-default" id="wpbooklist-addbook-select-default" >
+										<option>' . $this->trans->trans_221 . '</option>
+										<option>' . $this->trans->trans_131 . '</option>
+										<option>' . $this->trans->trans_132 . '</option>
+									</select>
+								</div>
+								<div class="wpbooklist-book-form-indiv-attribute-container">
+									<img class="wpbooklist-icon-image-question" data-label="book-form-genre" src="' . ROOT_IMG_ICONS_URL . 'question-black.svg">
+									<label class="wpbooklist-question-icon-label" for="book-genre">' . $this->trans->trans_224 . '</label>
+									<select class="wpbooklist-addbook-select-default" id="wpbooklist-addbook-select-default" >
+										<option>' . $this->trans->trans_221 . '</option>
+										<option>' . $this->trans->trans_131 . '</option>
+										<option>' . $this->trans->trans_132 . '</option>
+									</select>
+								</div>
+								<div class="wpbooklist-book-form-indiv-attribute-container">
+									<img class="wpbooklist-icon-image-question" data-label="book-form-genre" src="' . ROOT_IMG_ICONS_URL . 'question-black.svg">
+									<label class="wpbooklist-question-icon-label" for="book-genre">' . $this->trans->trans_225 . '</label>
+									<select class="wpbooklist-addbook-select-default" id="wpbooklist-addbook-select-default" >
+										<option>' . $this->trans->trans_221 . '</option>
+										<option>' . $this->trans->trans_131 . '</option>
+										<option>' . $this->trans->trans_132 . '</option>
+									</select>
+								</div>
+								<div class="wpbooklist-book-form-indiv-attribute-container">
+									<img class="wpbooklist-icon-image-question" data-label="book-form-genre" src="' . ROOT_IMG_ICONS_URL . 'question-black.svg">
+									<label class="wpbooklist-question-icon-label" for="book-genre">' . $this->trans->trans_226 . '</label>
+									<select class="wpbooklist-addbook-select-default" id="wpbooklist-addbook-select-default" >
+										<option>' . $this->trans->trans_221 . '</option>
+										<option>' . $this->trans->trans_131 . '</option>
+										<option>' . $this->trans->trans_132 . '</option>
+									</select>
+								</div>
+							</div>';
+
+			// This filter allows the addition of one or more rows of items into the Dropdown Fields section of the 'Book' form.
+			if ( has_filter( 'wpbooklist_append_to_book_form_dropdown_fields' ) ) {
+				$string_book_form = apply_filters( 'wpbooklist_append_to_book_form_dropdown_fields', $string_book_form );
+			}
+
+						$string_book_form = $string_book_form . '</div>
 						<div class="wpbooklist-book-form-inner-container-image-fields">
 							<div class="wpbooklist-book-form-inner-container-image-fields-row">
 								<div class="wpbooklist-book-form-indiv-attribute-container">
@@ -411,13 +481,12 @@ if ( ! class_exists( 'WPBookList_Book_Form', false ) ) :
 							</div>
 						';
 
-			// This filter allows the addition of one or more rows of items into the Basic Fields section of the 'Book' form.
-			$string_insert = '';
+			// This filter allows the addition of one or more rows of items into the Image Fields section of the 'Book' form.
 			if ( has_filter( 'wpbooklist_append_to_book_form_image_fields' ) ) {
-				$string_insert = apply_filters( 'wpbooklist_append_to_book_form_image_fields', $string_insert );
+				$string_book_form = apply_filters( 'wpbooklist_append_to_book_form_image_fields', $string_book_form );
 			}
 
-						$string_book_form = $string_book_form . $string_insert . '</div>
+						$string_book_form = $string_book_form . '</div>
 						<div class="wpbooklist-book-form-inner-container-multiple-fields">
 							<div class="wpbooklist-book-form-inner-container-multiple-fields-row">
 								<div class="wpbooklist-book-form-indiv-attribute-container">
@@ -512,14 +581,12 @@ if ( ! class_exists( 'WPBookList_Book_Form', false ) ) :
 							</div>';
 
 			// This filter allows the addition of one or more rows of items into the Multiple Fields section of the 'Book' form.
-			$string_insert = '';
 			if ( has_filter( 'wpbooklist_append_to_book_form_multiple_fields' ) ) {
-				$string_insert = apply_filters( 'wpbooklist_append_to_book_form_multiple_fields', $string_insert );
+				$string_book_form = apply_filters( 'wpbooklist_append_to_book_form_multiple_fields', $string_book_form );
 			}
 
 						$string_book_form = $string_book_form . $string_insert . '</div>
 						<div class="wpbooklist-book-form-inner-container-textarea-fields">
-							<div class="wpbooklist-book-form-inner-container-textarea-fields-row">
 								<div class="wpbooklist-book-form-indiv-attribute-container">
 									<img class="wpbooklist-icon-image-question" data-label="book-form-shortdescription" src="' . ROOT_IMG_ICONS_URL . 'question-black.svg">
 									<label class="wpbooklist-question-icon-label" for="book-shortdescription">' . $this->trans->trans_151 . '</label>
@@ -530,18 +597,19 @@ if ( ! class_exists( 'WPBookList_Book_Form', false ) ) :
 									<label class="wpbooklist-question-icon-label" for="book-fulldescription">' . $this->trans->trans_152 . '</label>
 									<textarea id="wpbooklist-addbook-fulldescription" name="book-fulldescription"></textarea>
 								</div>
-							</div>
-							<div class="wpbooklist-book-form-inner-container-textarea-fields-row">
 								<div class="wpbooklist-book-form-indiv-attribute-container">
 									<img class="wpbooklist-icon-image-question" data-label="book-form-notes" src="' . ROOT_IMG_ICONS_URL . 'question-black.svg">
 									<label class="wpbooklist-question-icon-label" for="book-notes">' . $this->trans->trans_153 . '</label>
 									<textarea id="wpbooklist-addbook-notes" name="book-notes"></textarea>
 								</div>
-							</div>
-						</div>
-					</div>';
+						';
 
-			$closing_string = '</form>
+			// This filter allows the addition of one or more rows of items into the Paragraph Fields section of the 'Book' form.
+			if ( has_filter( 'wpbooklist_append_to_book_form_paragraph_fields' ) ) {
+				$string_book_form = apply_filters( 'wpbooklist_append_to_book_form_paragraph_fields', $string_book_form );
+			}
+
+			$closing_string = '</div></div></form>
 					<div class="wpbooklist-response-success-fail-container">
 			    		<button class="wpbooklist-response-success-fail-button" type="button" id="wpbooklist-admin-addbook-create-button">' . $this->trans->trans_210 . '</button>
 			    		<div class="wpbooklist-spinner" id="wpbooklist-spinner-1"></div>

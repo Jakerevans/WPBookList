@@ -101,6 +101,8 @@ if ( ! class_exists( 'WPBookList_General_Functions', false ) ) :
 		 */
 		public function wpbooklist_jre_admin_js() {
 
+			global $wpdb;
+
 			wp_register_script( 'adminjs', ROOT_JS_URL . 'wpbooklist_admin.min.js', array( 'jquery' ), WPBOOKLIST_VERSION_NUM, true );
 
 			// Next 4-5 lines are required to allow translations of strings that would otherwise live in the wpbooklist-admin-js.js JavaScript File.
@@ -122,9 +124,11 @@ if ( ! class_exists( 'WPBookList_General_Functions', false ) ) :
 			$final_array_of_php_values['LIBRARY_DB_BACKUPS_UPLOAD_URL'] = LIBRARY_DB_BACKUPS_UPLOAD_URL;
 			$final_array_of_php_values['SOUNDS_URL'] = SOUNDS_URL;
 			$final_array_of_php_values['SETTINGS_PAGE_URL'] = menu_page_url( 'WPBookList-Options-settings', false );
+			$final_array_of_php_values['DB_PREFIX'] = $wpdb->prefix;
 
-
-
+			// Adding the Custom Fields String.
+			$this->user_options = $wpdb->get_row( 'SELECT * FROM ' . $wpdb->prefix . 'wpbooklist_jre_user_options' );
+			$final_array_of_php_values['CUSTOM_FIELDS_STRING'] = $this->user_options->customfields;
 
 			// Now registering/localizing our JavaScript file, passing all the PHP variables we'll need in our $final_array_of_php_values array, to be accessed from 'wphealthtracker_php_variables' object (like wphealthtracker_php_variables.nameofkey, like any other JavaScript object).
 			wp_localize_script( 'adminjs', 'wpbooklistPhpVariables', $final_array_of_php_values );

@@ -108,6 +108,8 @@ if ( ! class_exists( 'WPBookList_Book', false ) ) :
 
 			global $wpdb;
 
+			$this->book_array = $book_array;
+
 			// Setting up default keys/values for the $whichapifound array.
 			$this->whichapifound['title']            = '';
 			$this->whichapifound['image']            = '';
@@ -1328,7 +1330,7 @@ if ( ! class_exists( 'WPBookList_Book', false ) ) :
 
 					$status                           = '';
 					$this->itunesapiresult            = '';
-					$this->itunesapiresult            = wp_remote_get( 'https://itunes.apple.com/search?term=' . $title . '&at=' . $this->options_results->itunesaff );
+					$this->itunesapiresult            = wp_remote_get( 'https://itunes.apple.com/search?term=' . $this->title . '&at=' . $this->options_results->itunesaff );
 					$this->itunes_audio_transient_use = 'No';
 
 					// Check the response code.
@@ -1336,13 +1338,13 @@ if ( ! class_exists( 'WPBookList_Book', false ) ) :
 					$response_message = wp_remote_retrieve_response_message( $this->itunesapiresult );
 
 					if ( 200 !== $response_code && ! empty( $response_message ) ) {
-						$this->apireport = $this->apireport . 'Looks like we tried the itunes audiobook wp_remote_get function, but something went wrong .  Status Code is: ' . $response_code . ' and Response Message is: ' . $response_message . ' .  URL Request was: https://itunes.apple.com/search?term=' . $title . '&at=' . $this->options_results->itunesaff;
+						$this->apireport = $this->apireport . 'Looks like we tried the itunes audiobook wp_remote_get function, but something went wrong .  Status Code is: ' . $response_code . ' and Response Message is: ' . $response_message . ' .  URL Request was: https://itunes.apple.com/search?term=' . $this->title . '&at=' . $this->options_results->itunesaff;
 						return new WP_Error( $response_code, $response_message );
 					} elseif ( 200 !== $response_code ) {
 						$this->apireport = $this->apireport . 'Unknown error occurred with the itunes audiobook wp_remote_get function';
 						return new WP_Error( $response_code, 'Unknown error occurred with the itunes audiobook wp_remote_get function' );
 					} else {
-						$this->apireport       = $this->apireport . 'iTunes audiobook API call via wp_remote_get looks to be successful.  URL Request was: https://itunes.apple.com/search?term=' . $title . '&at=' . $this->options_results->itunesaff;
+						$this->apireport       = $this->apireport . 'iTunes audiobook API call via wp_remote_get looks to be successful.  URL Request was: https://itunes.apple.com/search?term=' . $this->title . '&at=' . $this->options_results->itunesaff;
 						$this->itunesapiresult = wp_remote_retrieve_body( $this->itunesapiresult );
 					}
 
@@ -1666,82 +1668,117 @@ if ( ! class_exists( 'WPBookList_Book', false ) ) :
 				}
 			}
 
+			// Building array to add to DB.
+			$db_insert_array = array(
+				'title'              => $this->title,
+				'isbn'               => $this->isbn,
+				'author'             => $this->author,
+				'author_url'         => $this->author_url,
+				'price'              => $this->price,
+				'finished'           => $this->finished,
+				'date_finished'      => $this->date_finished,
+				'signed'             => $this->signed,
+				'first_edition'      => $this->first_edition,
+				'image'              => $this->image,
+				'pages'              => $this->pages,
+				'pub_year'           => $this->pub_year,
+				'publisher'          => $this->publisher,
+				'category'           => $this->category,
+				'subject'            => $this->subject,
+				'country'            => $this->country,
+				'description'        => $this->description,
+				'notes'              => $this->notes,
+				'rating'             => $this->rating,
+				'page_yes'           => $page,
+				'post_yes'           => $post,
+				'itunes_page'        => $this->itunes_page,
+				'google_preview'     => $this->google_preview,
+				'amazon_detail_page' => $this->amazon_detail_page,
+				'review_iframe'      => $this->review_iframe,
+				'similar_products'   => $this->similar_products,
+				'book_uid'           => $this->book_uid,
+				'lendable'           => $this->lendable,
+				'copies'             => $this->copies,
+				'kobo_link'          => $this->kobo_link,
+				'bam_link'           => $this->bam_link,
+				'woocommerce'        => $this->wooid,
+				'authorfirst'        => $this->finalauthorfirstnames,
+				'authorlast'         => $this->finalauthorlastnames,
+			);
+
+			// Building mask array to add to DB.
+			$db_mask_insert_array = array(
+				'%s',
+				'%s',
+				'%s',
+				'%s',
+				'%s',
+				'%s',
+				'%s',
+				'%s',
+				'%s',
+				'%s',
+				'%s',
+				'%s',
+				'%s',
+				'%s',
+				'%s',
+				'%s',
+				'%s',
+				'%s',
+				'%s',
+				'%s',
+				'%s',
+				'%s',
+				'%s',
+				'%s',
+				'%s',
+				'%s',
+				'%s',
+				'%s',
+				'%d',
+				'%s',
+				'%s',
+				'%s',
+				'%s',
+				'%s',
+			);
+
+			//--Test1;Plain Text Entry;NA--TextLinkTest1;Text Link;NA--Dropdown_Test;Drop-Down;Option 1;Option 2--Dropdown_2;Drop-Down;Stuff;Stuff 2;My Shit;Awesome Yo;Yup--Image_Test;Image Link;NA--Image_Test2;Image Link;NA--ParaTest1;Paragraph;NA--Teser_2;Plain Text Entry;NA--Linker_55_yo;Text Link;NA--pare_98_yo;Paragraph;NA
+
+			// Now adding in any custom fields to above arrays for insertion into DB.
+			global $wpdb;
+			$this->user_options = $wpdb->get_row( 'SELECT * FROM ' . $wpdb->prefix . 'wpbooklist_jre_user_options' );
+			$this->user_options->customfields;
+
+			// Loop through the Custom Fields.
+			if ( false !== stripos( $this->user_options->customfields, '--' ) ) {
+				$fields = explode( '--', $this->user_options->customfields );
+
+				// Loop through each custom field entry.
+				foreach ( $fields as $key => $entry ) {
+
+					if ( false !== stripos( $entry, ';' ) ) {
+						$entry_details = explode( ';', $entry );
+
+						// All kinds of checks to make sure good value exists.
+						if ( array_key_exists( 0, $entry_details ) && isset( $entry_details[0] ) && '' !== $entry_details[0] && null !== $entry_details[0] ) {
+
+							// Add new value with key into DB array.
+							$db_insert_array[ $entry_details[0] ] = $this->book_array[ $entry_details[0] ];
+
+							// Adding a mask for new value.
+							array_push( $db_mask_insert_array, '%s' );
+						}
+					}
+				}
+			}
+
+			//error_log(print_r($book_array,true));
+
 			// Adding submitted values to the DB.
 			global $wpdb;
-			$result = $wpdb->insert( $this->library,
-				array(
-					'title'              => $this->title,
-					'isbn'               => $this->isbn,
-					'author'             => $this->author,
-					'author_url'         => $this->author_url,
-					'price'              => $this->price,
-					'finished'           => $this->finished,
-					'date_finished'      => $this->date_finished,
-					'signed'             => $this->signed,
-					'first_edition'      => $this->first_edition,
-					'image'              => $this->image,
-					'pages'              => $this->pages,
-					'pub_year'           => $this->pub_year,
-					'publisher'          => $this->publisher,
-					'category'           => $this->category,
-					'subject'            => $this->subject,
-					'country'            => $this->country,
-					'description'        => $this->description,
-					'notes'              => $this->notes,
-					'rating'             => $this->rating,
-					'page_yes'           => $page,
-					'post_yes'           => $post,
-					'itunes_page'        => $this->itunes_page,
-					'google_preview'     => $this->google_preview,
-					'amazon_detail_page' => $this->amazon_detail_page,
-					'review_iframe'      => $this->review_iframe,
-					'similar_products'   => $this->similar_products,
-					'book_uid'           => $this->book_uid,
-					'lendable'           => $this->lendable,
-					'copies'             => $this->copies,
-					'kobo_link'          => $this->kobo_link,
-					'bam_link'           => $this->bam_link,
-					'woocommerce'        => $this->wooid,
-					'authorfirst'        => $this->finalauthorfirstnames,
-					'authorlast'         => $this->finalauthorlastnames,
-				),
-				array(
-					'%s',
-					'%s',
-					'%s',
-					'%s',
-					'%s',
-					'%s',
-					'%s',
-					'%s',
-					'%s',
-					'%s',
-					'%s',
-					'%s',
-					'%s',
-					'%s',
-					'%s',
-					'%s',
-					'%s',
-					'%s',
-					'%s',
-					'%s',
-					'%s',
-					'%s',
-					'%s',
-					'%s',
-					'%s',
-					'%s',
-					'%s',
-					'%s',
-					'%d',
-					'%s',
-					'%s',
-					'%s',
-					'%s',
-					'%s',
-				)
-			);
+			$result = $wpdb->insert( $this->library, $db_insert_array, $db_mask_insert_array );
 
 			$this->add_result = $result;
 			if ( 1 === $result ) {

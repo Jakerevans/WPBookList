@@ -290,12 +290,12 @@ function wpbooklist_dashboard_add_book_action_javascript() {
 
 				    		if(useAmazonYes){
 				    			if(amazonapifailcount == 2 || amazonapifailcount == '2'){
-				    				var addBookSuccess1 = "<p><span id='wpbooklist-add-book-success-span'><?php echo $trans12; ?></span><br/> <?php echo $trans13; ?><em> <?php echo $trans14; ?> </em><?php echo $trans15; ?>";
+				    				var addBookSuccess1 = "<p><span id='wpbooklist-success-span'><?php echo $trans12; ?></span><br/> <?php echo $trans13; ?><em> <?php echo $trans14; ?> </em><?php echo $trans15; ?>";
 					    		} else {
-					    			var addBookSuccess1 = "<p><span id='wpbooklist-add-book-success-span'><?php echo $trans1; ?></span><br/> <?php echo $trans2; ?> <span id='wpbooklist-addbook-success-shortcode'>";
+					    			var addBookSuccess1 = "<p><span id='wpbooklist-success-span'><?php echo $trans1; ?></span><br/> <?php echo $trans2; ?> <span class='wpbooklist-bold-shortcode'>";
 					    		}
 				    		} else {
-				    			var addBookSuccess1 = "<p><span id='wpbooklist-add-book-success-span'><?php echo $trans1; ?></span><br/> <?php echo $trans2; ?> <span id='wpbooklist-addbook-success-shortcode'>"; 
+				    			var addBookSuccess1 = "<p><span id='wpbooklist-success-span'><?php echo $trans1; ?></span><br/> <?php echo $trans2; ?> <span class='wpbooklist-bold-shortcode'>"; 
 				    		}
 
 				    		
@@ -3047,12 +3047,12 @@ function wpbooklist_edit_book_actual_action_javascript() {
 
 				    		if(useAmazonYes){
 				    			if(amazonapifailcount == 2 || amazonapifailcount == '2'){
-				    				var editbookSuccess1 = "<p><span id='wpbooklist-add-book-success-span'><?php echo $trans12; ?></span><br/> <?php echo $trans13; ?><em> <?php echo $trans14; ?> </em><?php echo $trans15; ?>";
+				    				var editbookSuccess1 = "<p><span id='wpbooklist-success-span'><?php echo $trans12; ?></span><br/> <?php echo $trans13; ?><em> <?php echo $trans14; ?> </em><?php echo $trans15; ?>";
 					    		} else {
-					    			var editbookSuccess1 = "<p><span id='wpbooklist-add-book-success-span'><?php echo $trans1; ?></span><br/>&nbsp;<?php echo $trans2 ; ?>&nbsp;<span id='wpbooklist-editbook-success-shortcode'>"; 
+					    			var editbookSuccess1 = "<p><span id='wpbooklist-success-span'><?php echo $trans1; ?></span><br/>&nbsp;<?php echo $trans2 ; ?>&nbsp;<span id='wpbooklist-editbook-success-shortcode'>"; 
 					    		}
 				    		} else {
-				    			var editbookSuccess1 = "<p><span id='wpbooklist-add-book-success-span'><?php echo $trans1; ?></span><br/>&nbsp;<?php echo $trans2 ; ?>&nbsp;<span id='wpbooklist-editbook-success-shortcode'>"; 
+				    			var editbookSuccess1 = "<p><span id='wpbooklist-success-span'><?php echo $trans1; ?></span><br/>&nbsp;<?php echo $trans2 ; ?>&nbsp;<span id='wpbooklist-editbook-success-shortcode'>"; 
 				    		}
 
 
@@ -3725,7 +3725,7 @@ function wpbooklist_upload_new_stylepak_action_javascript() {
 						response = response.split('sep');
 						if(response[2] == 1){
 							$('.wpbooklist-spinner').animate({'opacity':'0'});
-							$('#wpbooklist-addstylepak-success-div').html("<span id='wpbooklist-add-book-success-span'><?php echo $trans1 ?></span><br/><br/><?php echo $trans2 ?><div id='wpbooklist-addstylepak-success-thanks'><?php echo $trans6 ?>&nbsp;<a href='http://wpbooklist.com/index.php/extensions/'><?php echo $trans7 ?></a><br/><br/><?php echo $trans8 ?>&nbsp;<a id='wpbooklist-addbook-success-review-link' href='https://wordpress.org/support/plugin/wpbooklist/reviews/?filter=5'><?php echo $trans9 ?></a><img id='wpbooklist-smile-icon-1' src='http://evansclienttest.com/wp-content/plugins/wpbooklist/assets/img/icons/happy.svg'></div>");
+							$('#wpbooklist-addstylepak-success-div').html("<span id='wpbooklist-success-span'><?php echo $trans1 ?></span><br/><br/><?php echo $trans2 ?><div id='wpbooklist-addstylepak-success-thanks'><?php echo $trans6 ?>&nbsp;<a href='http://wpbooklist.com/index.php/extensions/'><?php echo $trans7 ?></a><br/><br/><?php echo $trans8 ?>&nbsp;<a id='wpbooklist-addbook-success-review-link' href='https://wordpress.org/support/plugin/wpbooklist/reviews/?filter=5'><?php echo $trans9 ?></a><img id='wpbooklist-smile-icon-1' src='http://evansclienttest.com/wp-content/plugins/wpbooklist/assets/img/icons/happy.svg'></div>");
 
 							$('html, body').animate({
 						        scrollTop: $("#wpbooklist-addstylepak-success-div").offset().top-100
@@ -3744,7 +3744,7 @@ function wpbooklist_upload_new_stylepak_action_javascript() {
 			} else {
 				// If the file isn't a zip or css file...
 				$('.wpbooklist-spinner').animate({'opacity':'0'});
-				$('#wpbooklist-addstylepak-success-div').html("<span id='wpbooklist-add-book-success-span'><?php echo $trans10 ?></span><br/><br/><?php echo $trans11 ?> <em><?php echo $trans12 ?></em> <?php echo $trans13 ?>.");
+				$('#wpbooklist-addstylepak-success-div').html("<span id='wpbooklist-success-span'><?php echo $trans10 ?></span><br/><br/><?php echo $trans11 ?> <em><?php echo $trans12 ?></em> <?php echo $trans13 ?>.");
 
 				$('html, body').animate({
 			        scrollTop: $("#wpbooklist-addstylepak-success-div").offset().top-100
@@ -3919,7 +3919,7 @@ function wpbooklist_upload_new_post_template_action_javascript() {
 						response = response.split('sep');
 						if(response[2] == 1){
 							$('.wpbooklist-spinner').animate({'opacity':'0'});
-							$('#wpbooklist-addtemplate-success-div').html("<span id='wpbooklist-add-book-success-span'><?php echo $trans1 ?></span><br/><br/>&nbsp;<?php echo $trans2 ?><div id='wpbooklist-addtemplate-success-thanks'><?php echo $trans6 ?>&nbsp;<a href='http://wpbooklist.com/index.php/extensions/'><?php echo $trans7 ?></a><br/><br/>&nbsp;<?php echo $trans8 ?> &nbsp;<a id='wpbooklist-addbook-success-review-link' href='https://wordpress.org/support/plugin/wpbooklist/reviews/?filter=5'><?php echo $trans9 ?></a><img id='wpbooklist-smile-icon-1' src='http://evansclienttest.com/wp-content/plugins/wpbooklist/assets/img/icons/happy.svg'></div>");
+							$('#wpbooklist-addtemplate-success-div').html("<span id='wpbooklist-success-span'><?php echo $trans1 ?></span><br/><br/>&nbsp;<?php echo $trans2 ?><div id='wpbooklist-addtemplate-success-thanks'><?php echo $trans6 ?>&nbsp;<a href='http://wpbooklist.com/index.php/extensions/'><?php echo $trans7 ?></a><br/><br/>&nbsp;<?php echo $trans8 ?> &nbsp;<a id='wpbooklist-addbook-success-review-link' href='https://wordpress.org/support/plugin/wpbooklist/reviews/?filter=5'><?php echo $trans9 ?></a><img id='wpbooklist-smile-icon-1' src='http://evansclienttest.com/wp-content/plugins/wpbooklist/assets/img/icons/happy.svg'></div>");
 
 							$('html, body').animate({
 						        scrollTop: $("#wpbooklist-addtemplate-success-div").offset().top-100
@@ -3943,7 +3943,7 @@ function wpbooklist_upload_new_post_template_action_javascript() {
 			} else {
 				// If the file isn't a zip or css file...
 				$('.wpbooklist-spinner').animate({'opacity':'0'});
-				$('#wpbooklist-addtemplate-success-div').html("<span id='wpbooklist-add-book-success-span'><?php echo $trans10; ?></span><br/><br/> <?php echo $trans11; ?>&nbsp;<em><?php echo $trans12; ?></em> <?php echo $trans13; ?>");
+				$('#wpbooklist-addtemplate-success-div').html("<span id='wpbooklist-success-span'><?php echo $trans10; ?></span><br/><br/> <?php echo $trans11; ?>&nbsp;<em><?php echo $trans12; ?></em> <?php echo $trans13; ?>");
 
 				$('html, body').animate({
 			        scrollTop: $("#wpbooklist-addtemplate-success-div").offset().top-100
@@ -4096,7 +4096,7 @@ function wpbooklist_upload_new_page_template_action_javascript() {
 						response = response.split('sep');
 						if(response[2] == 1){
 							$('.wpbooklist-spinner').animate({'opacity':'0'});
-							$('#wpbooklist-addtemplate-success-div').html("<span id='wpbooklist-add-book-success-span'><?php echo $trans1 ?></span><br/><br/>&nbsp;<?php echo $trans2 ?><div id='wpbooklist-addtemplate-success-thanks'><?php echo $trans6 ?>&nbsp;<a href='http://wpbooklist.com/index.php/extensions/'><?php echo $trans7 ?></a><br/><br/>&nbsp;<?php echo $trans8 ?> &nbsp;<a id='wpbooklist-addbook-success-review-link' href='https://wordpress.org/support/plugin/wpbooklist/reviews/?filter=5'><?php echo $trans8 ?></a><img id='wpbooklist-smile-icon-1' src='http://evansclienttest.com/wp-content/plugins/wpbooklist/assets/img/icons/happy.svg'></div>");
+							$('#wpbooklist-addtemplate-success-div').html("<span id='wpbooklist-success-span'><?php echo $trans1 ?></span><br/><br/>&nbsp;<?php echo $trans2 ?><div id='wpbooklist-addtemplate-success-thanks'><?php echo $trans6 ?>&nbsp;<a href='http://wpbooklist.com/index.php/extensions/'><?php echo $trans7 ?></a><br/><br/>&nbsp;<?php echo $trans8 ?> &nbsp;<a id='wpbooklist-addbook-success-review-link' href='https://wordpress.org/support/plugin/wpbooklist/reviews/?filter=5'><?php echo $trans8 ?></a><img id='wpbooklist-smile-icon-1' src='http://evansclienttest.com/wp-content/plugins/wpbooklist/assets/img/icons/happy.svg'></div>");
 
 							$('html, body').animate({
 						        scrollTop: $("#wpbooklist-addtemplate-success-div").offset().top-100
@@ -4120,7 +4120,7 @@ function wpbooklist_upload_new_page_template_action_javascript() {
 			} else {
 				// If the file isn't a zip or css file...
 				$('.wpbooklist-spinner').animate({'opacity':'0'});
-				$('#wpbooklist-addtemplate-success-div').html("<span id='wpbooklist-add-book-success-span'><?php echo $trans10; ?></span><br/><br/> <?php echo $trans11; ?>&nbsp;<em><?php echo $trans12; ?></em> <?php echo $trans13; ?>");
+				$('#wpbooklist-addtemplate-success-div').html("<span id='wpbooklist-success-span'><?php echo $trans10; ?></span><br/><br/> <?php echo $trans11; ?>&nbsp;<em><?php echo $trans12; ?></em> <?php echo $trans13; ?>");
 
 				$('html, body').animate({
 			        scrollTop: $("#wpbooklist-addtemplate-success-div").offset().top-100
@@ -4266,7 +4266,7 @@ function wpbooklist_create_db_library_backup_action_javascript() {
 			    	response = response.split(',');
 			    	if(response[0] == '1'){
 			    		$('#wpbooklist-spinner-backup').animate({'opacity':'0'}, 500);
-			    		$('#wpbooklist-addbackup-success-div').html("<span id='wpbooklist-add-book-success-span'><?php echo $trans1 ?></span><br/><br/> <?php echo $trans2 ?> <a href='<?php echo LIBRARY_DB_BACKUPS_UPLOAD_URL; ?>"+response[1]+".zip'><?php echo $trans14 ?>.</a><div id='wpbooklist-addstylepak-success-thanks'><?php echo $trans6 ?> <a href='http://wpbooklist.com/index.php/extensions/'><?php echo $trans7 ?></a><br/><br/> <?php echo $trans8 ?> <a id='wpbooklist-addbook-success-review-link' href='https://wordpress.org/support/plugin/wpbooklist/reviews/?filter=5'><?php echo $trans9 ?></a><img id='wpbooklist-smile-icon-1' src='http://evansclienttest.com/wp-content/plugins/wpbooklist/assets/img/icons/happy.svg'></div>");
+			    		$('#wpbooklist-addbackup-success-div').html("<span id='wpbooklist-success-span'><?php echo $trans1 ?></span><br/><br/> <?php echo $trans2 ?> <a href='<?php echo LIBRARY_DB_BACKUPS_UPLOAD_URL; ?>"+response[1]+".zip'><?php echo $trans14 ?>.</a><div id='wpbooklist-addstylepak-success-thanks'><?php echo $trans6 ?> <a href='http://wpbooklist.com/index.php/extensions/'><?php echo $trans7 ?></a><br/><br/> <?php echo $trans8 ?> <a id='wpbooklist-addbook-success-review-link' href='https://wordpress.org/support/plugin/wpbooklist/reviews/?filter=5'><?php echo $trans9 ?></a><img id='wpbooklist-smile-icon-1' src='http://evansclienttest.com/wp-content/plugins/wpbooklist/assets/img/icons/happy.svg'></div>");
 
 						$('html, body').animate({
 					        scrollTop: $("#wpbooklist-addbackup-success-div").offset().top-100
@@ -4360,7 +4360,7 @@ function wpbooklist_restore_db_library_backup_action_javascript() {
 			    timeout: 0,
 			    success: function(response) {
 			    	$('#wpbooklist-spinner-restore-backup').animate({'opacity':'0'}, 500);
-			    	$('#wpbooklist-addbackup-success-div').html("<span id='wpbooklist-add-book-success-span'><?php echo $trans1; ?></span><br/><br/> <?php echo $trans2; ?><div id='wpbooklist-addstylepak-success-thanks'><?php echo $trans6; ?> <a href='http://wpbooklist.com/index.php/extensions/'><?php echo $trans7; ?></a><br/><br/> <?php echo $trans8; ?> <a id='wpbooklist-addbook-success-review-link' href='https://wordpress.org/support/plugin/wpbooklist/reviews/?filter=5'><?php echo $trans9; ?></a><img id='wpbooklist-smile-icon-1' src='http://evansclienttest.com/wp-content/plugins/wpbooklist/assets/img/icons/happy.svg'></div>");
+			    	$('#wpbooklist-addbackup-success-div').html("<span id='wpbooklist-success-span'><?php echo $trans1; ?></span><br/><br/> <?php echo $trans2; ?><div id='wpbooklist-addstylepak-success-thanks'><?php echo $trans6; ?> <a href='http://wpbooklist.com/index.php/extensions/'><?php echo $trans7; ?></a><br/><br/> <?php echo $trans8; ?> <a id='wpbooklist-addbook-success-review-link' href='https://wordpress.org/support/plugin/wpbooklist/reviews/?filter=5'><?php echo $trans9; ?></a><img id='wpbooklist-smile-icon-1' src='http://evansclienttest.com/wp-content/plugins/wpbooklist/assets/img/icons/happy.svg'></div>");
 
 					$('html, body').animate({
 				        scrollTop: $("#wpbooklist-addbackup-success-div").offset().top-100
@@ -4442,7 +4442,7 @@ function wpbooklist_create_csv_action_javascript() {
 			    	response = response.split(',');
 			    	if(response[0] == '1'){
 			    		$('#wpbooklist-spinner-backup-csv').animate({'opacity':'0'}, 500);
-			    		$('#wpbooklist-addbackup-success-div').html("<span id='wpbooklist-add-book-success-span'><?php echo $trans1; ?></span><br/><br/> <?php echo $trans2; ?> <a href='<?php echo LIBRARY_DB_BACKUPS_UPLOAD_URL; ?>"+response[1]+".zip'><?php echo $trans14; ?>.</a> <?php echo $trans15; ?> <a href='https://wpbooklist.com/index.php/downloads/bulk-upload-extension/'><?php echo $trans16; ?></a> <div id='wpbooklist-addstylepak-success-thanks'><?php echo $trans6; ?> <a href='http://wpbooklist.com/index.php/extensions/'><?php echo $trans7; ?></a><br/><br/> <?php echo $trans8; ?> <a id='wpbooklist-addbook-success-review-link' href='https://wordpress.org/support/plugin/wpbooklist/reviews/?filter=5'><?php echo $trans9; ?></a><img id='wpbooklist-smile-icon-1' src='http://evansclienttest.com/wp-content/plugins/wpbooklist/assets/img/icons/happy.svg'></div>");
+			    		$('#wpbooklist-addbackup-success-div').html("<span id='wpbooklist-success-span'><?php echo $trans1; ?></span><br/><br/> <?php echo $trans2; ?> <a href='<?php echo LIBRARY_DB_BACKUPS_UPLOAD_URL; ?>"+response[1]+".zip'><?php echo $trans14; ?>.</a> <?php echo $trans15; ?> <a href='https://wpbooklist.com/index.php/downloads/bulk-upload-extension/'><?php echo $trans16; ?></a> <div id='wpbooklist-addstylepak-success-thanks'><?php echo $trans6; ?> <a href='http://wpbooklist.com/index.php/extensions/'><?php echo $trans7; ?></a><br/><br/> <?php echo $trans8; ?> <a id='wpbooklist-addbook-success-review-link' href='https://wordpress.org/support/plugin/wpbooklist/reviews/?filter=5'><?php echo $trans9; ?></a><img id='wpbooklist-smile-icon-1' src='http://evansclienttest.com/wp-content/plugins/wpbooklist/assets/img/icons/happy.svg'></div>");
 
 						$('html, body').animate({
 					        scrollTop: $("#wpbooklist-addbackup-success-div").offset().top-100
