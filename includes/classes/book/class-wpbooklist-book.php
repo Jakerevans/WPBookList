@@ -97,6 +97,7 @@ if ( ! class_exists( 'WPBookList_Book', false ) ) :
 		public $rerun_amazon_flag  = true;
 		public $whichapifound      = array();
 		public $amazon_array       = array();
+		public $gather_amazon_attempt_with = 'isbn';
 
 		/** Class Constructor - Simply calls the Translations
 		 *
@@ -143,44 +144,200 @@ if ( ! class_exists( 'WPBookList_Book', false ) ) :
 			if ( ( 'add' === $action || 'edit' === $action || 'search' === $action || 'bookfinder-colorbox' === $action ) && null !== $book_array ) {
 
 				// Setting up $book_array values, wrapped in isset() to prevent php error_log notices.
-				if ( isset( $book_array['amazon_auth_yes'] ) ) {
-					$this->amazon_auth_yes = $book_array['amazon_auth_yes'];
+				if ( isset( $book_array['additionalimage1'] ) ) {
+					$this->additionalimage1 = $book_array['additionalimage1'];
 				}
 
-				if ( isset( $book_array['library'] ) ) {
-					$this->library = $book_array['library'];
+				if ( isset( $book_array['additionalimage2'] ) ) {
+					$this->additionalimage2 = $book_array['additionalimage2'];
 				}
 
-				if ( isset( $book_array['use_amazon_yes'] ) ) {
-					$this->use_amazon_yes = $book_array['use_amazon_yes'];
+				if ( isset( $book_array['amazonauth'] ) ) {
+					$this->amazonauth = $book_array['amazonauth'];
 				}
 
-				if ( isset( $book_array['isbn'] ) ) {
-					$this->isbn = $book_array['isbn'];
+				if ( isset( $book_array['amazon_detail_page'] ) ) {
+					$this->amazon_detail_page = $book_array['amazon_detail_page'];
 				}
 
-				if ( isset( $book_array['title'] ) ) {
-					$this->title = $book_array['title'];
+				if ( isset( $book_array['appleibookslink'] ) ) {
+					$this->appleibookslink = $book_array['appleibookslink'];
+				}
+
+				if ( isset( $book_array['asin'] ) ) {
+					$this->asin = $book_array['asin'];
 				}
 
 				if ( isset( $book_array['author'] ) ) {
 					$this->author = $book_array['author'];
 				}
 
+				if ( isset( $book_array['author2'] ) ) {
+					$this->author2 = $book_array['author2'];
+				}
+
+				if ( isset( $book_array['author3'] ) ) {
+					$this->author3 = $book_array['author3'];
+				}
+
 				if ( isset( $book_array['author_url'] ) ) {
 					$this->author_url = $book_array['author_url'];
+				}
+
+				if ( isset( $book_array['backcover'] ) ) {
+					$this->backcover = $book_array['backcover'];
+				}
+
+				if ( isset( $book_array['bn_link'] ) ) {
+					$this->bn_link = $book_array['bn_link'];
+				}
+
+				if ( isset( $book_array['bam_link'] ) ) {
+					$this->bam_link = $book_array['bam_link'];
+				}
+
+				if ( isset( $book_array['callnumber'] ) ) {
+					$this->callnumber = $book_array['callnumber'];
 				}
 
 				if ( isset( $book_array['category'] ) ) {
 					$this->category = $book_array['category'];
 				}
 
-				if ( isset( $book_array['price'] ) ) {
-					$this->price = $book_array['price'];
+				if ( isset( $book_array['copies'] ) ) {
+					$this->copies = $book_array['copies'];
+				}
+
+				if ( isset( $book_array['country'] ) ) {
+					$this->country = $book_array['country'];
+				}
+
+				if ( isset( $book_array['crosssells'] ) ) {
+					$this->crosssells = $book_array['crosssells'];
+				}
+
+				if ( isset( $book_array['datefinished'] ) ) {
+					$this->date_finished = $book_array['datefinished'];
+				}
+
+				if ( isset( $book_array['description'] ) ) {
+					$this->description = $book_array['description'];
+				}
+
+				if ( isset( $book_array['download'] ) ) {
+					$this->download = $book_array['download'];
+				}
+
+				if ( isset( $book_array['edition'] ) ) {
+					$this->edition = $book_array['edition'];
+				}
+
+				if ( isset( $book_array['finished'] ) ) {
+					$this->finished = $book_array['finished'];
+				}
+
+				if ( isset( $book_array['firstedition'] ) ) {
+					$this->first_edition = $book_array['firstedition'];
+				}
+
+				if ( isset( $book_array['format'] ) ) {
+					$this->format = $book_array['format'];
+				}
+
+				if ( isset( $book_array['genres'] ) ) {
+					$this->genres = $book_array['genres'];
+				}
+
+				if ( isset( $book_array['goodreadslink'] ) ) {
+					$this->goodreadslink = $book_array['goodreadslink'];
+				}
+
+				if ( isset( $book_array['google_preview'] ) ) {
+					$this->google_preview = $book_array['google_preview'];
+				}
+
+				if ( isset( $book_array['height'] ) ) {
+					$this->height = $book_array['height'];
+				}
+
+				if ( isset( $book_array['illustrator'] ) ) {
+					$this->illustrator = $book_array['illustrator'];
+				}
+
+				if ( isset( $book_array['image'] ) ) {
+					$this->image = $book_array['image'];
+				}
+
+				if ( isset( $book_array['isbn'] ) ) {
+					$this->isbn = $book_array['isbn'];
+				}
+
+				if ( isset( $book_array['isbn13'] ) ) {
+					$this->isbn13 = $book_array['isbn13'];
+				}
+
+				if ( isset( $book_array['keywords'] ) ) {
+					$this->keywords = $book_array['keywords'];
+				}
+
+				if ( isset( $book_array['kobo_link'] ) ) {
+					$this->kobo_link = $book_array['kobo_link'];
+				}
+
+				if ( isset( $book_array['language'] ) ) {
+					$this->language = $book_array['language'];
+				}
+
+				if ( isset( $book_array['length'] ) ) {
+					$this->length = $book_array['length'];
+				}
+
+				if ( isset( $book_array['library'] ) ) {
+					$this->library = $book_array['library'];
+				}
+
+				if ( isset( $book_array['notes'] ) ) {
+					$this->notes = $book_array['notes'];
+				}
+
+				if ( isset( $book_array['numberinseries'] ) ) {
+					$this->numberinseries = $book_array['numberinseries'];
+				}
+
+				if ( isset( $book_array['originalpubyear'] ) ) {
+					$this->originalpubyear = $book_array['originalpubyear'];
+				}
+
+				if ( isset( $book_array['originaltitle'] ) ) {
+					$this->originaltitle = $book_array['originaltitle'];
+				}
+
+				if ( isset( $book_array['othereditions'] ) ) {
+					$this->othereditions = $book_array['othereditions'];
+				}
+
+				if ( isset( $book_array['outofprint'] ) ) {
+					$this->outofprint = $book_array['outofprint'];
+				}
+
+				if ( isset( $book_array['page_yes'] ) ) {
+					$this->page_yes = $book_array['page_yes'];
 				}
 
 				if ( isset( $book_array['pages'] ) ) {
 					$this->pages = $book_array['pages'];
+				}
+
+				if ( isset( $book_array['post_yes'] ) ) {
+					$this->post_yes = $book_array['post_yes'];
+				}
+
+				if ( isset( $book_array['price'] ) ) {
+					$this->price = $book_array['price'];
+				}
+
+				if ( isset( $book_array['productcategory'] ) ) {
+					$this->productcategory = $book_array['productcategory'];
 				}
 
 				if ( isset( $book_array['pub_year'] ) ) {
@@ -191,140 +348,20 @@ if ( ! class_exists( 'WPBookList_Book', false ) ) :
 					$this->publisher = $book_array['publisher'];
 				}
 
-				if ( isset( $book_array['description'] ) ) {
-					$this->description = $book_array['description'];
-				}
-
-				if ( isset( $book_array['country'] ) ) {
-					$this->country = $book_array['country'];
-				}
-
-				if ( isset( $book_array['subject'] ) ) {
-					$this->subject = $book_array['subject'];
-				}
-
-				if ( isset( $book_array['notes'] ) ) {
-					$this->notes = $book_array['notes'];
+				if ( isset( $book_array['purchasenote'] ) ) {
+					$this->purchasenote = $book_array['purchasenote'];
 				}
 
 				if ( isset( $book_array['rating'] ) ) {
 					$this->rating = $book_array['rating'];
 				}
 
-				if ( isset( $book_array['image'] ) ) {
-					$this->image = $book_array['image'];
-				}
-
-				if ( isset( $book_array['finished'] ) ) {
-					$this->finished = $book_array['finished'];
-				}
-
-				if ( isset( $book_array['date_finished'] ) ) {
-					$this->date_finished = $book_array['date_finished'];
-				}
-
-				if ( isset( $book_array['signed'] ) ) {
-					$this->signed = $book_array['signed'];
-				}
-
-				if ( isset( $book_array['first_edition'] ) ) {
-					$this->first_edition = $book_array['first_edition'];
-				}
-
-				if ( isset( $book_array['page_yes'] ) ) {
-					$this->page_yes = $book_array['page_yes'];
-				}
-
-				if ( isset( $book_array['copies'] ) ) {
-					$this->copies = $book_array['copies'];
-				}
-
-				if ( isset( $book_array['post_yes'] ) ) {
-					$this->post_yes = $book_array['post_yes'];
-				}
-
-				if ( isset( $book_array['page_id'] ) ) {
-					$this->page_id = $book_array['page_id'];
-				}
-
-				if ( isset( $book_array['post_id'] ) ) {
-					$this->post_id = $book_array['post_id'];
-				}
-
-				if ( isset( $book_array['lendable'] ) ) {
-					$this->lendable = $book_array['lendable'];
-				}
-
-				if ( isset( $book_array['itunes_page'] ) ) {
-					$this->itunes_page = $book_array['itunes_page'];
-				}
-
-				if ( isset( $book_array['google_preview'] ) ) {
-					$this->google_preview = $book_array['google_preview'];
-				}
-
-				if ( isset( $book_array['amazon_detail_page'] ) ) {
-					$this->amazon_detail_page = $book_array['amazon_detail_page'];
-				}
-
-				if ( isset( $book_array['review_iframe'] ) ) {
-					$this->review_iframe = $book_array['review_iframe'];
-				}
-
-				if ( isset( $book_array['similar_products'] ) ) {
-					$this->similar_products = $book_array['similar_products'];
-				}
-
-				if ( isset( $book_array['woocommerce'] ) ) {
-					$this->woocommerce = $book_array['woocommerce'];
-				}
-
-				if ( isset( $book_array['saleprice'] ) ) {
-					$this->saleprice = $book_array['saleprice'];
-				}
-
 				if ( isset( $book_array['regularprice'] ) ) {
 					$this->regularprice = $book_array['regularprice'];
 				}
 
-				if ( isset( $book_array['stock'] ) ) {
-					$this->stock = $book_array['stock'];
-				}
-
-				if ( isset( $book_array['length'] ) ) {
-					$this->length = $book_array['length'];
-				}
-
-				if ( isset( $book_array['width'] ) ) {
-					$this->width = $book_array['width'];
-				}
-
-				if ( isset( $book_array['height'] ) ) {
-					$this->height = $book_array['height'];
-				}
-
-				if ( isset( $book_array['weight'] ) ) {
-					$this->weight = $book_array['weight'];
-				}
-
-				if ( isset( $book_array['sku'] ) ) {
-					$this->sku = $book_array['sku'];
-				}
-
-				if ( isset( $book_array['virtual'] ) ) {
-					$this->virtual = $book_array['virtual'];
-				}
-
-				if ( isset( $book_array['download'] ) ) {
-					$this->download = $book_array['download'];
-				}
-
-				if ( isset( $book_array['book_uid'] ) ) {
-					$this->book_uid = $book_array['book_uid'];
-				}
-
-				if ( isset( $book_array['woofile'] ) ) {
-					$this->woofile = $book_array['woofile'];
+				if ( isset( $book_array['reviews'] ) ) {
+					$this->reviews = $book_array['reviews'];
 				}
 
 				if ( isset( $book_array['salebegin'] ) ) {
@@ -335,48 +372,76 @@ if ( ! class_exists( 'WPBookList_Book', false ) ) :
 					$this->saleend = $book_array['saleend'];
 				}
 
-				if ( isset( $book_array['purchasenote'] ) ) {
-					$this->purchasenote = $book_array['purchasenote'];
+				if ( isset( $book_array['saleprice'] ) ) {
+					$this->saleprice = $book_array['saleprice'];
 				}
 
-				if ( isset( $book_array['productcategory'] ) ) {
-					$this->productcategory = $book_array['productcategory'];
+				if ( isset( $book_array['series'] ) ) {
+					$this->series = $book_array['series'];
 				}
 
-				if ( isset( $book_array['reviews'] ) ) {
-					$this->reviews = $book_array['reviews'];
+				if ( isset( $book_array['shortdescription'] ) ) {
+					$this->shortdescription = $book_array['shortdescription'];
+				}
+
+				if ( isset( $book_array['signed'] ) ) {
+					$this->signed = $book_array['signed'];
+				}
+
+				if ( isset( $book_array['similarbooks'] ) ) {
+					$this->similarbooks = $book_array['similarbooks'];
+				}
+
+				if ( isset( $book_array['sku'] ) ) {
+					$this->sku = $book_array['sku'];
+				}
+
+				if ( isset( $book_array['stock'] ) ) {
+					$this->stock = $book_array['stock'];
+				}
+
+				if ( isset( $book_array['subgenre'] ) ) {
+					$this->subgenre = $book_array['subgenre'];
+				}
+
+				if ( isset( $book_array['subject'] ) ) {
+					$this->subject = $book_array['subject'];
+				}
+
+				if ( isset( $book_array['swapYes'] ) ) {
+					$this->swap_yes = $book_array['swapYes'];
+				}
+
+				if ( isset( $book_array['title'] ) ) {
+					$this->title = $book_array['title'];
 				}
 
 				if ( isset( $book_array['upsells'] ) ) {
 					$this->upsells = $book_array['upsells'];
 				}
 
-				if ( isset( $book_array['crosssells'] ) ) {
-					$this->crosssells = $book_array['crosssells'];
+				if ( isset( $book_array['use_amazon_yes'] ) ) {
+					$this->use_amazon_yes = $book_array['use_amazon_yes'];
 				}
 
-				if ( isset( $book_array['amazonbuylink'] ) ) {
-					$this->amazonbuylink = $book_array['amazonbuylink'];
+				if ( isset( $book_array['virtual'] ) ) {
+					$this->virtual = $book_array['virtual'];
 				}
 
-				if ( isset( $book_array['bnbuylink'] ) ) {
-					$this->bnbuylink = $book_array['bnbuylink'];
+				if ( isset( $book_array['weight'] ) ) {
+					$this->weight = $book_array['weight'];
 				}
 
-				if ( isset( $book_array['googlebuylink'] ) ) {
-					$this->googlebuylink = $book_array['googlebuylink'];
+				if ( isset( $book_array['width'] ) ) {
+					$this->width = $book_array['width'];
 				}
 
-				if ( isset( $book_array['itunesbuylink'] ) ) {
-					$this->itunesbuylink = $book_array['itunesbuylink'];
+				if ( isset( $book_array['woocommerce'] ) ) {
+					$this->woocommerce = $book_array['woocommerce'];
 				}
 
-				if ( isset( $book_array['booksamillionbuylink'] ) ) {
-					$this->booksamillionbuylink = $book_array['booksamillionbuylink'];
-				}
-
-				if ( isset( $book_array['kobobuylink'] ) ) {
-					$this->kobobuylink = $book_array['kobobuylink'];
+				if ( isset( $book_array['woofile'] ) ) {
+					$this->woofile = $book_array['woofile'];
 				}
 
 				$this->id = $id;
@@ -384,8 +449,8 @@ if ( ! class_exists( 'WPBookList_Book', false ) ) :
 
 			if ( 'addbulk' === $action && null !== $book_array ) {
 
-				if ( isset( $book_array['amazon_auth_yes'] ) ) {
-					$this->amazon_auth_yes = $book_array['amazon_auth_yes'];
+				if ( isset( $book_array['amazonauth'] ) ) {
+					$this->amazonauth = $book_array['amazonauth'];
 				}
 
 				if ( isset( $book_array['library'] ) ) {
@@ -425,8 +490,8 @@ if ( ! class_exists( 'WPBookList_Book', false ) ) :
 
 			if ( 'search' === $action ) {
 				$this->book_page       = $book_array['book_page'];
-				$this->amazon_auth_yes = $book_array['amazon_auth_yes'];
-				if ( 'true' === $this->amazon_auth_yes && 'true' === $this->use_amazon_yes ) {
+				$this->amazonauth = $book_array['amazonauth'];
+				if ( 'true' === $this->amazonauth && 'true' === $this->use_amazon_yes ) {
 					$this->go_amazon = true;
 					$this->gather_amazon_data();
 					$this->gather_google_data();
@@ -459,50 +524,54 @@ if ( ! class_exists( 'WPBookList_Book', false ) ) :
 
 			global $wp_filesystem;
 
-			// Building Kobo Link.
-			$responsecode = '';
-			$result       = wp_remote_get( 'http://store.kobobooks.com/en-ca/Search?Query=' . $this->isbn );
+			// Creating Kobo link, if one wasn't provided.
+			if ( null === $this->bam_link || '' === $this->bam_link ) {
+				$responsecode = '';
+				$result       = wp_remote_get( 'http://store.kobobooks.com/en-ca/Search?Query=' . $this->isbn );
 
-			// Check the response code.
-			$response_code    = wp_remote_retrieve_response_code( $result );
-			$response_message = wp_remote_retrieve_response_message( $result );
+				// Check the response code.
+				$response_code    = wp_remote_retrieve_response_code( $result );
+				$response_message = wp_remote_retrieve_response_message( $result );
 
-			if ( 200 !== $response_code && ! empty( $response_message ) ) {
-				return new WP_Error( $response_code, $response_message );
-			} elseif ( 200 !== $response_code ) {
-				$this->apireport = $this->apireport . 'Unknown error occurred with wp_remote_get() trying to build Kobo link in the create_buy_links() function ';
-				return new WP_Error( $response_code, 'Unknown error occurred with wp_remote_get() trying to build Kobo link in the create_buy_links() function' );
-			} else {
-				$result = wp_remote_retrieve_body( $result );
-			}
+				if ( 200 !== $response_code && ! empty( $response_message ) ) {
+					return new WP_Error( $response_code, $response_message );
+				} elseif ( 200 !== $response_code ) {
+					$this->apireport = $this->apireport . 'Unknown error occurred with wp_remote_get() trying to build Kobo link in the create_buy_links() function ';
+					return new WP_Error( $response_code, 'Unknown error occurred with wp_remote_get() trying to build Kobo link in the create_buy_links() function' );
+				} else {
+					$result = wp_remote_retrieve_body( $result );
+				}
 
-			if ( false !== strpos( $result, 'did not return any results' ) ) {
-				$this->kobo_link = null;
-			} else {
-				$this->kobo_link = 'http://store.kobobooks.com/en-ca/Search?Query=' . $this->isbn;
-			}
+				if ( false !== strpos( $result, 'did not return any results' ) ) {
+					$this->kobo_link = null;
+				} else {
+					$this->kobo_link = 'http://store.kobobooks.com/en-ca/Search?Query=' . $this->isbn;
+				}
+			}	
 
-			// Creating Books-a-Million link.
-			$result       = wp_remote_get( 'http://www.booksamillion.com/p/' . $this->isbn );
-			$responsecode = '';
+			// Creating Books-a-Million link, if one wasn't provided.
+			if ( null === $this->bam_link || '' === $this->bam_link ) {
+				$result       = wp_remote_get( 'http://www.booksamillion.com/p/' . $this->isbn );
+				$responsecode = '';
 
-			// Check the response code.
-			$response_code    = wp_remote_retrieve_response_code( $result );
-			$response_message = wp_remote_retrieve_response_message( $result );
+				// Check the response code.
+				$response_code    = wp_remote_retrieve_response_code( $result );
+				$response_message = wp_remote_retrieve_response_message( $result );
 
-			if ( 200 !== $response_code && ! empty( $response_message ) ) {
-				return new WP_Error( $response_code, $response_message );
-			} elseif ( 200 !== $response_code ) {
-				$this->apireport = $this->apireport . 'Unknown error occurred with wp_remote_get() trying to build Books-a-Million link in the create_buy_links() function ';
-				return new WP_Error( $response_code, 'Unknown error occurred with wp_remote_get() trying to build Books-a-Million link in the create_buy_links() function' );
-			} else {
-				$result = wp_remote_retrieve_body( $result );
-			}
+				if ( 200 !== $response_code && ! empty( $response_message ) ) {
+					return new WP_Error( $response_code, $response_message );
+				} elseif ( 200 !== $response_code ) {
+					$this->apireport = $this->apireport . 'Unknown error occurred with wp_remote_get() trying to build Books-a-Million link in the create_buy_links() function ';
+					return new WP_Error( $response_code, 'Unknown error occurred with wp_remote_get() trying to build Books-a-Million link in the create_buy_links() function' );
+				} else {
+					$result = wp_remote_retrieve_body( $result );
+				}
 
-			if ( false !== stripos( $result, 'Sorry, we could not find the requested product' ) ) {
-				$this->bam_link = null;
-			} else {
-				$this->bam_link = 'http://www.booksamillion.com/p/' . $this->isbn;
+				if ( false !== stripos( $result, 'Sorry, we could not find the requested product' ) ) {
+					$this->bam_link = null;
+				} else {
+					$this->bam_link = 'http://www.booksamillion.com/p/' . $this->isbn;
+				}
 			}
 		}
 
@@ -512,7 +581,7 @@ if ( ! class_exists( 'WPBookList_Book', false ) ) :
 		private function add_book() {
 
 			// First do Amazon Authorization check.
-			if ( 'true' === $this->amazon_auth_yes && 'true' === $this->use_amazon_yes ) {
+			if ( 'true' === $this->amazonauth && 'true' === $this->use_amazon_yes ) {
 				$this->go_amazon = true;
 				$this->gather_amazon_data();
 				$this->gather_google_data();
@@ -648,6 +717,26 @@ if ( ! class_exists( 'WPBookList_Book', false ) ) :
 				$response_message = wp_remote_retrieve_response_message( $this->amazonapiresult );
 
 				if ( 200 !== $response_code && ! empty( $response_message ) ) {
+
+					$this->apiamazonfailcount++;
+
+					// Let's try this 2 more times, one for ISBN13, and one for ASIN, if they exist.
+					if ( 'isbn-isbn13-asin' !== $this->gather_amazon_attempt_with ) {
+
+						if ( 'isbn' === $this->gather_amazon_attempt_with ) {
+							$this->gather_amazon_attempt_with = 'isbn-isbn13';
+							$this->isbn                       = $this->isbn13;
+							$this->gather_amazon_data();
+						}
+
+						if ( 'isbn-isbn13' === $this->gather_amazon_attempt_with ) {
+							$this->gather_amazon_attempt_with = 'isbn-isbn13-asin';
+							$this->isbn                       = $this->asin;
+							$this->gather_amazon_data();
+						}
+
+					}
+
 					$this->apireport = $this->apireport . 'Looks like we tried the Amazon wp_remote_get function, but something went wrong .  Status Code is: ' . $response_code . ' and Response Message is: ' . $response_message . ' .  URL Request was: https://sublime-vine-199216.appspot.com/?' . $postdata . ' ';
 					return new WP_Error( $response_code, $response_message );
 				} elseif ( 200 !== $response_code ) {
@@ -662,7 +751,7 @@ if ( ! class_exists( 'WPBookList_Book', false ) ) :
 			}
 
 			// Convert result from API call to regular ol' array.
-			if ( 2 > $this->apiamazonfailcount ) {
+			if ( 3 > $this->apiamazonfailcount ) {
 
 				// If we're dealing with the Bookfinder Extension, do not append '</ItemLookupResponse>', otherwise do so.
 				if ( strpos( $this->amazonapiresult, '</ItemSearchResponse>' ) !== false ) {
@@ -1073,12 +1162,10 @@ if ( ! class_exists( 'WPBookList_Book', false ) ) :
 					}
 
 					// Now getting new data.
-					if ( '' === $this->googlebuylink || 'undefined' === $this->googlebuylink ) {
+					if ( '' === $this->googlebuylink || 'undefined' === $this->googlebuylink || null === $this->googlebuylink && ( '' === $this->google_preview || null === $this->google_preview || 'undefined' === $this->google_preview ) ) {
 						if ( array_key_exists( 'items', $json_output_google ) ) {
 							$this->google_preview = $json_output_google['items'][0]['accessInfo']['webReaderLink'];
 						}
-					} else {
-						$this->google_preview = $this->googlebuylink;
 					}
 				}
 			}
@@ -1599,7 +1686,7 @@ if ( ! class_exists( 'WPBookList_Book', false ) ) :
 			if ( $this->page_yes || $this->post_yes ) {
 				$page_post_array = array(
 					'library'            => $this->library,
-					'amazon_auth_yes'    => $this->amazon_auth_yes,
+					'amazonauth'    => $this->amazonauth,
 					'use_amazon_yes'     => $this->use_amazon_yes,
 					'title'              => $this->title,
 					'isbn'               => $this->isbn,
@@ -1670,40 +1757,60 @@ if ( ! class_exists( 'WPBookList_Book', false ) ) :
 
 			// Building array to add to DB.
 			$db_insert_array = array(
-				'title'              => $this->title,
-				'isbn'               => $this->isbn,
+				'additionalimage1'   => $this->additionalimage1,
+				'additionalimage2'   => $this->additionalimage2,
+				'amazon_detail_page' => $this->amazon_detail_page,
+				'appleibookslink'    => $this->appleibookslink,
+				'asin'               => $this->asin,
 				'author'             => $this->author,
+				'author2'            => $this->author2,
+				'author3'            => $this->author3,
 				'author_url'         => $this->author_url,
-				'price'              => $this->price,
-				'finished'           => $this->finished,
+				'backcover'          => $this->backcover,
+				'bam_link'           => $this->bam_link,
+				'bn_link'            => $this->bn_link,
+				'book_uid'           => $this->book_uid,
+				'callnumber'         => $this->callnumber,
+				'category'           => $this->category,
+				'copies'             => $this->copies,
+				'country'            => $this->country,
 				'date_finished'      => $this->date_finished,
-				'signed'             => $this->signed,
+				'description'        => $this->description,
+				'edition'            => $this->edition,
+				'finished'           => $this->finished,
 				'first_edition'      => $this->first_edition,
+				'format'             => $this->format,
+				'genres'             => $this->genres,
+				'goodreadslink'      => $this->goodreadslink,
+				'google_preview'     => $this->google_preview,
+				'illustrator'        => $this->illustrator,
 				'image'              => $this->image,
+				'isbn'               => $this->isbn,
+				'isbn13'             => $this->isbn13,
+				'keywords'           => $this->keywords,
+				'kobo_link'          => $this->kobo_link,
+				'language'           => $this->language,
+				'notes'              => $this->notes,
+				'numberinseries'     => $this->numberinseries,
+				'othereditions'      => $this->othereditions,
+				'originalpubyear'    => $this->originalpubyear,
+				'originaltitle'      => $this->originaltitle,
+				'outofprint'         => $this->outofprint,
+				'page_yes'           => $this->page_yes,
 				'pages'              => $this->pages,
+				'post_yes'           => $this->post_yes,
 				'pub_year'           => $this->pub_year,
 				'publisher'          => $this->publisher,
-				'category'           => $this->category,
-				'subject'            => $this->subject,
-				'country'            => $this->country,
-				'description'        => $this->description,
-				'notes'              => $this->notes,
 				'rating'             => $this->rating,
-				'page_yes'           => $page,
-				'post_yes'           => $post,
-				'itunes_page'        => $this->itunes_page,
-				'google_preview'     => $this->google_preview,
-				'amazon_detail_page' => $this->amazon_detail_page,
 				'review_iframe'      => $this->review_iframe,
-				'similar_products'   => $this->similar_products,
-				'book_uid'           => $this->book_uid,
-				'lendable'           => $this->lendable,
-				'copies'             => $this->copies,
-				'kobo_link'          => $this->kobo_link,
-				'bam_link'           => $this->bam_link,
-				'woocommerce'        => $this->wooid,
-				'authorfirst'        => $this->finalauthorfirstnames,
-				'authorlast'         => $this->finalauthorlastnames,
+				'series'             => $this->series,
+				'shortdescription'   => $this->shortdescription,
+				'signed'             => $this->signed,
+				'similarbooks'       => $this->similarbooks,
+				'subgenre'           => $this->subgenre,
+				'subject'            => $this->subject,
+				'title'              => $this->title,
+				'woocommerce'        => $this->woocommerce,
 			);
 
 			// Building mask array to add to DB.
@@ -1716,6 +1823,14 @@ if ( ! class_exists( 'WPBookList_Book', false ) ) :
 				'%s',
 				'%s',
 				'%s',
+				'%s',
+				'%s',
+				'%s',
+				'%s',
+				'%s',
+				'%s',
+				'%s',
+				'%d',
 				'%s',
 				'%s',
 				'%s',
@@ -1740,11 +1855,21 @@ if ( ! class_exists( 'WPBookList_Book', false ) ) :
 				'%s',
 				'%s',
 				'%s',
+				'%d',
+				'%s',
+				'%d',
+				'%s',
+				'%d',
+				'%s',
+				'%s',
+				'%s',
+				'%s',
+				'%s',
+				'%s',
+				'%s',
 				'%s',
 				'%s',
 			);
-
-			//--Test1;Plain Text Entry;NA--TextLinkTest1;Text Link;NA--Dropdown_Test;Drop-Down;Option 1;Option 2--Dropdown_2;Drop-Down;Stuff;Stuff 2;My Shit;Awesome Yo;Yup--Image_Test;Image Link;NA--Image_Test2;Image Link;NA--ParaTest1;Paragraph;NA--Teser_2;Plain Text Entry;NA--Linker_55_yo;Text Link;NA--pare_98_yo;Paragraph;NA
 
 			// Now adding in any custom fields to above arrays for insertion into DB.
 			global $wpdb;
@@ -1774,9 +1899,7 @@ if ( ! class_exists( 'WPBookList_Book', false ) ) :
 				}
 			}
 
-			//error_log(print_r($book_array,true));
-
-			// Adding submitted values to the DB.
+			// Actually Adding submitted values to the DB.
 			global $wpdb;
 			$result = $wpdb->insert( $this->library, $db_insert_array, $db_mask_insert_array );
 
@@ -1792,7 +1915,7 @@ if ( ! class_exists( 'WPBookList_Book', false ) ) :
 			// Insert the Amazon Authorization into the DB if it's not already set to 'Yes' .
 			if ( 'true' !== $this->options_results->amazonauth ) {
 				$data         = array(
-					'amazonauth' => $this->amazon_auth_yes,
+					'amazonauth' => $this->amazonauth,
 				);
 				$format       = array( '%s' );
 				$where        = array( 'ID' => 1 );
@@ -2126,7 +2249,7 @@ if ( ! class_exists( 'WPBookList_Book', false ) ) :
 			global $wpdb;
 
 			// First do Amazon Authorization check.
-			if ( 'true' === $this->amazon_auth_yes && 'true' === $this->use_amazon_yes ) {
+			if ( 'true' === $this->amazonauth && 'true' === $this->use_amazon_yes ) {
 				$this->go_amazon = true;
 				$this->gather_amazon_data();
 				$this->gather_google_data();
@@ -2244,7 +2367,7 @@ if ( ! class_exists( 'WPBookList_Book', false ) ) :
 			// Insert the Amazon Authorization into the DB if it's not already set to 'Yes'.
 			if ( 'true' !== $this->options_results->amazonauth ) {
 				$data         = array(
-					'amazonauth' => $this->amazon_auth_yes,
+					'amazonauth' => $this->amazonauth,
 				);
 				$format       = array( '%s' );
 				$where        = array( 'ID' => 1 );

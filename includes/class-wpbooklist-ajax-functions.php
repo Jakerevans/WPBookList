@@ -37,73 +37,104 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 			check_ajax_referer( 'wpbooklist_dashboard_add_book_action_callback', 'security' );
 
 			// First set the variables we'll be passing to class-wpbooklist-book.php to ''.
-			$amazon_auth_yes  = '';
-			$asin             = '';
-			$author           = '';
-			$author2          = '';
-			$author3          = '';
-			$author_url       = '';
-			$backimage        = '';
-			$callnumber       = '';
-			$category         = '';
-			$copies           = '';
-			$country          = '';
-			$crosssells       = '';
-			$date_finished    = '';
-			$description      = '';
-			$download         = '';
-			$finished         = '';
-			$first_edition    = '';
-			$format           = '';
-			$height           = '';
-			$illustrator      = '';
-			$image            = '';
-			$isbn             = '';
-			$isbn13           = '';
-			$keywords         = '';
-			$language         = '';
-			$length           = '';
-			$library          = '';
-			$notes            = '';
-			$numberinseries   = '';
-			$originalpubyear  = '';
-			$originaltitle    = '';
-			$othereditions    = '';
-			$outofprint       = '';
-			$page_yes         = '';
-			$pages            = '';
-			$post_yes         = '';
-			$price            = '';
-			$productcategory  = '';
-			$pub_year         = '';
-			$publisher        = '';
-			$purchasenote     = '';
-			$rating           = '';
-			$regularprice     = '';
-			$reviews          = '';
-			$salebegin        = '';
-			$saleend          = '';
-			$saleprice        = '';
-			$series           = '';
-			$shortdescription = '';
-			$signed           = '';
-			$sku              = '';
-			$stock            = '';
-			$subgenre         = '';
-			$subject          = '';
-			$swap_yes         = '';
-			$title            = '';
-			$upsells          = '';
-			$use_amazon_yes   = '';
-			$virtual          = '';
-			$weight           = '';
-			$width            = '';
-			$woocommerce      = '';
-			$woofile          = '';
+			$additionalimage1   = '';
+			$additionalimage2   = '';
+			$amazon_detail_page = '';
+			$amazonauth         = '';
+			$appleibookslink    = '';
+			$asin               = '';
+			$author             = '';
+			$author2            = '';
+			$author3            = '';
+			$author_url         = '';
+			$backcover          = '';
+			$bam_link           = '';
+			$bn_link            = '';
+			$callnumber         = '';
+			$category           = '';
+			$copies             = '';
+			$country            = '';
+			$crosssells         = '';
+			$date_finished      = '';
+			$description        = '';
+			$download           = '';
+			$edition            = '';
+			$finished           = '';
+			$first_edition      = '';
+			$format             = '';
+			$genres             = '';
+			$goodreadslink      = '';
+			$google_preview     = '';
+			$height             = '';
+			$illustrator        = '';
+			$image              = '';
+			$isbn               = '';
+			$isbn13             = '';
+			$kobo_link          = '';
+			$keywords          = '';
+			$language           = '';
+			$length             = '';
+			$library            = '';
+			$notes              = '';
+			$numberinseries     = '';
+			$originalpubyear    = '';
+			$originaltitle      = '';
+			$othereditions      = '';
+			$outofprint         = '';
+			$page_yes           = '';
+			$pages              = '';
+			$post_yes           = '';
+			$price              = '';
+			$productcategory    = '';
+			$pub_year           = '';
+			$publisher          = '';
+			$purchasenote       = '';
+			$rating             = '';
+			$regularprice       = '';
+			$reviews            = '';
+			$salebegin          = '';
+			$saleend            = '';
+			$saleprice          = '';
+			$series             = '';
+			$shortdescription   = '';
+			$signed             = '';
+			$similarbooks       = '';
+			$sku                = '';
+			$stock              = '';
+			$subgenre           = '';
+			$subject            = '';
+			$swap_yes           = '';
+			$title              = '';
+			$upsells            = '';
+			$use_amazon_yes     = '';
+			$virtual            = '';
+			$weight             = '';
+			$width              = '';
+			$woocommerce        = '';
+			$woofile            = '';
 
 			// First set the variables we'll be passing to class-wpbooklist-book.php to ''.
-			if ( isset( $_POST['amazonAuthYes'] ) ) {
-				$amazon_auth_yes = filter_var( wp_unslash( $_POST['amazonAuthYes'] ), FILTER_SANITIZE_STRING );
+			if ( isset( $_POST['additionalimage1'] ) ) {
+				$additionalimage1 = filter_var( wp_unslash( $_POST['additionalimage1'] ), FILTER_SANITIZE_STRING );
+			}
+
+			// First set the variables we'll be passing to class-wpbooklist-book.php to ''.
+			if ( isset( $_POST['additionalimage2'] ) ) {
+				$additionalimage2 = filter_var( wp_unslash( $_POST['additionalimage2'] ), FILTER_SANITIZE_STRING );
+			}
+
+			// First set the variables we'll be passing to class-wpbooklist-book.php to ''.
+			if ( isset( $_POST['amazonauth'] ) ) {
+				$amazonauth = filter_var( wp_unslash( $_POST['amazonauth'] ), FILTER_SANITIZE_STRING );
+			}
+
+			// First set the variables we'll be passing to class-wpbooklist-book.php to ''.
+			if ( isset( $_POST['amazondetailpage'] ) ) {
+				$amazon_detail_page = filter_var( wp_unslash( $_POST['amazondetailpage'] ), FILTER_SANITIZE_STRING );
+			}
+
+			if ( isset( $_POST['appleibookslink'] ) ) {
+				$appleibookslink = filter_var( wp_unslash( $_POST['appleibookslink'] ), FILTER_SANITIZE_STRING );
 			}
 
 			if ( isset( $_POST['asin'] ) ) {
@@ -122,12 +153,20 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 				$author3 = filter_var( wp_unslash( $_POST['author3'] ), FILTER_SANITIZE_STRING );
 			}
 
-			if ( isset( $_POST['authorUrl'] ) ) {
-				$author_url = filter_var( wp_unslash( $_POST['authorUrl'] ), FILTER_SANITIZE_URL );
+			if ( isset( $_POST['authorurl'] ) ) {
+				$author_url = filter_var( wp_unslash( $_POST['authorurl'] ), FILTER_SANITIZE_URL );
 			}
 
-			if ( isset( $_POST['backimage'] ) ) {
-				$backimage = filter_var( wp_unslash( $_POST['backimage'] ), FILTER_SANITIZE_URL );
+			if ( isset( $_POST['backcover'] ) ) {
+				$backcover = filter_var( wp_unslash( $_POST['backcover'] ), FILTER_SANITIZE_URL );
+			}
+
+			if ( isset( $_POST['bnlink'] ) ) {
+				$bn_link = filter_var( wp_unslash( $_POST['bnlink'] ), FILTER_SANITIZE_URL );
+			}
+
+			if ( isset( $_POST['bamlink'] ) ) {
+				$bam_link = filter_var( wp_unslash( $_POST['bamlink'] ), FILTER_SANITIZE_URL );
 			}
 
 			if ( isset( $_POST['callnumber'] ) ) {
@@ -150,8 +189,8 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 				$crosssells = filter_var( wp_unslash( $_POST['crosssells'] ), FILTER_SANITIZE_STRING );
 			}
 
-			if ( isset( $_POST['dateFinished'] ) ) {
-				$date_finished = filter_var( wp_unslash( $_POST['dateFinished'] ), FILTER_SANITIZE_STRING );
+			if ( isset( $_POST['datefinished'] ) ) {
+				$date_finished = filter_var( wp_unslash( $_POST['datefinished'] ), FILTER_SANITIZE_STRING );
 			}
 
 			if ( isset( $_POST['description'] ) ) {
@@ -162,16 +201,32 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 				$download = filter_var( wp_unslash( $_POST['download'] ), FILTER_SANITIZE_STRING );
 			}
 
+			if ( isset( $_POST['edition'] ) ) {
+				$edition = filter_var( wp_unslash( $_POST['edition'] ), FILTER_SANITIZE_STRING );
+			}
+
 			if ( isset( $_POST['finished'] ) ) {
 				$finished = filter_var( wp_unslash( $_POST['finished'] ), FILTER_SANITIZE_STRING );
 			}
 
-			if ( isset( $_POST['firstEdition'] ) ) {
-				$first_edition = filter_var( wp_unslash( $_POST['firstEdition'] ), FILTER_SANITIZE_STRING );
+			if ( isset( $_POST['firstedition'] ) ) {
+				$first_edition = filter_var( wp_unslash( $_POST['firstedition'] ), FILTER_SANITIZE_STRING );
 			}
 
 			if ( isset( $_POST['format'] ) ) {
-				$first_edition = filter_var( wp_unslash( $_POST['format'] ), FILTER_SANITIZE_STRING );
+				$format = filter_var( wp_unslash( $_POST['format'] ), FILTER_SANITIZE_STRING );
+			}
+
+			if ( isset( $_POST['genres'] ) ) {
+				$genres = filter_var( wp_unslash( $_POST['genres'] ), FILTER_SANITIZE_STRING );
+			}
+
+			if ( isset( $_POST['goodreadslink'] ) ) {
+				$goodreadslink = filter_var( wp_unslash( $_POST['goodreadslink'] ), FILTER_SANITIZE_STRING );
+			}
+
+			if ( isset( $_POST['googlepreview'] ) ) {
+				$google_preview = filter_var( wp_unslash( $_POST['googlepreview'] ), FILTER_SANITIZE_STRING );
 			}
 
 			if ( isset( $_POST['height'] ) ) {
@@ -196,6 +251,10 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 
 			if ( isset( $_POST['keywords'] ) ) {
 				$keywords = filter_var( wp_unslash( $_POST['keywords'] ), FILTER_SANITIZE_STRING );
+			}
+
+			if ( isset( $_POST['kobolink'] ) ) {
+				$kobo_link = filter_var( wp_unslash( $_POST['kobolink'] ), FILTER_SANITIZE_STRING );
 			}
 
 			if ( isset( $_POST['language'] ) ) {
@@ -234,16 +293,16 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 				$outofprint = filter_var( wp_unslash( $_POST['outofprint'] ), FILTER_SANITIZE_STRING );
 			}
 
-			if ( isset( $_POST['pageYes'] ) ) {
-				$page_yes = filter_var( wp_unslash( $_POST['pageYes'] ), FILTER_SANITIZE_STRING );
+			if ( isset( $_POST['pageyes'] ) ) {
+				$page_yes = filter_var( wp_unslash( $_POST['pageyes'] ), FILTER_SANITIZE_STRING );
 			}
 
 			if ( isset( $_POST['pages'] ) ) {
 				$pages = filter_var( wp_unslash( $_POST['pages'] ), FILTER_SANITIZE_STRING );
 			}
 
-			if ( isset( $_POST['postYes'] ) ) {
-				$post_yes = filter_var( wp_unslash( $_POST['postYes'] ), FILTER_SANITIZE_STRING );
+			if ( isset( $_POST['postyes'] ) ) {
+				$post_yes = filter_var( wp_unslash( $_POST['postyes'] ), FILTER_SANITIZE_STRING );
 			}
 
 			if ( isset( $_POST['price'] ) ) {
@@ -254,8 +313,8 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 				$productcategory = filter_var( wp_unslash( $_POST['productcategory'] ), FILTER_SANITIZE_STRING );
 			}
 
-			if ( isset( $_POST['pubYear'] ) ) {
-				$pub_year = filter_var( wp_unslash( $_POST['pubYear'] ), FILTER_SANITIZE_STRING );
+			if ( isset( $_POST['pubyear'] ) ) {
+				$pub_year = filter_var( wp_unslash( $_POST['pubyear'] ), FILTER_SANITIZE_STRING );
 			}
 
 			if ( isset( $_POST['publisher'] ) ) {
@@ -300,6 +359,10 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 
 			if ( isset( $_POST['signed'] ) ) {
 				$signed = filter_var( wp_unslash( $_POST['signed'] ), FILTER_SANITIZE_STRING );
+			}
+
+			if ( isset( $_POST['similarbooks'] ) ) {
+				$similarbooks = filter_var( wp_unslash( $_POST['similarbooks'] ), FILTER_SANITIZE_STRING );
 			}
 
 			if ( isset( $_POST['sku'] ) ) {
@@ -354,9 +417,20 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 				$woofile = filter_var( wp_unslash( $_POST['woofile'] ), FILTER_SANITIZE_STRING );
 			}
 
+
+			// Removing any dashes from the ISBN Field.
+			if ( '' !== $isbn && null !== $isbn && false !== stripos( $isbn, '-' ) ) {
+				$isbn = str_replace( '-', '', $isbn );
+			}
+
+			// Removing any dashes from the ISBN13 Field.
+			if ( '' !== $isbn13 && null !== $isbn13 && false !== stripos( $isbn13, '-' ) ) {
+				$isbn13 = str_replace( '-', '', $isbn13 );
+			}
+
 			// Make check for what kind of isbn/asin we have.
 			if ( '' === $isbn || null === $isbn ) {
-				if ( '' !== $isbn13 && null === $isbn13 ) {
+				if ( '' !== $isbn13 && null !== $isbn13 ) {
 					$isbn = $isbn13;
 				} else {
 					$isbn = $asin;
@@ -364,51 +438,81 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 			}
 
 			$book_array = array(
-				'amazon_auth_yes' => $amazon_auth_yes,
-				'author' => $author,
-				'author_url' => $author_url,
-				'category' => $category,
-				'copies' => $copies,
-				'country' => $country,
-				'crosssells' => $crosssells,
-				'date_finished' => $date_finished,
-				'description' => $description,
-				'download' => $download,
-				'finished' => $finished,
-				'first_edition' => $first_edition,
-				'height' => $height,
-				'image' => $image,
-				'isbn' => $isbn,
-				'length' => $length,
-				'library' => $library,
-				'notes' => $notes,
-				'page_yes' => $page_yes,
-				'pages' => $pages,
-				'post_yes' => $post_yes,
-				'price' => $price,
-				'productcategory' => $productcategory,
-				'pub_year' => $pub_year,
-				'publisher' => $publisher,
-				'purchasenote' => $purchasenote,
-				'rating' => $rating,
-				'regularprice' => $regularprice,
-				'reviews' => $reviews,
-				'salebegin' => $salebegin,
-				'saleend' => $saleend,
-				'saleprice' => $saleprice,
-				'signed' => $signed,
-				'sku' => $sku,
-				'stock' => $stock,
-				'subject' => $subject,
-				'swap_yes' => $swap_yes,
-				'title' => $title,
-				'upsells' => $upsells,
-				'use_amazon_yes' => $use_amazon_yes,
-				'virtual' => $virtual,
-				'weight' => $weight,
-				'width' => $width,
-				'woocommerce' => $woocommerce,
-				'woofile' => $woofile,
+				'additionalimage1'   => $additionalimage1,
+				'additionalimage2'   => $additionalimage2,
+				'amazon_detail_page' => $amazon_detail_page,
+				'amazonauth'         => $amazonauth,
+				'appleibookslink'    => $appleibookslink,
+				'asin'               => $asin,
+				'author'             => $author,
+				'author2'            => $author2,
+				'author3'            => $author3,
+				'author_url'         => $author_url,
+				'backcover'          => $backcover,
+				'bam_link'           => $bam_link,
+				'bn_link'            => $bn_link,
+				'callnumber'         => $callnumber,
+				'category'           => $category,
+				'copies'             => $copies,
+				'country'            => $country,
+				'crosssells'         => $crosssells,
+				'date_finished'      => $date_finished,
+				'description'        => $description,
+				'download'           => $download,
+				'edition'            => $edition,
+				'finished'           => $finished,
+				'first_edition'      => $first_edition,
+				'format'             => $format,
+				'genres'             => $genres,
+				'goodreadslink'      => $goodreadslink,
+				'google_preview'     => $google_preview,
+				'height'             => $height,
+				'illustrator'        => $illustrator,
+				'image'              => $image,
+				'isbn'               => $isbn,
+				'isbn13'             => $isbn13,
+				'keywords'           => $keywords,
+				'kobo_link'          => $kobo_link,
+				'language'           => $language,
+				'length'             => $length,
+				'library'            => $library,
+				'notes'              => $notes,
+				'numberinseries'     => $numberinseries,
+				'othereditions'      => $othereditions,
+				'originalpubyear'    => $originalpubyear,
+				'originaltitle'      => $originaltitle,
+				'outofprint'         => $outofprint,
+				'page_yes'           => $page_yes,
+				'pages'              => $pages,
+				'post_yes'           => $post_yes,
+				'price'              => $price,
+				'productcategory'    => $productcategory,
+				'pub_year'           => $pub_year,
+				'publisher'          => $publisher,
+				'purchasenote'       => $purchasenote,
+				'rating'             => $rating,
+				'regularprice'       => $regularprice,
+				'reviews'            => $reviews,
+				'salebegin'          => $salebegin,
+				'saleend'            => $saleend,
+				'saleprice'          => $saleprice,
+				'series'             => $series,
+				'shortdescription'   => $shortdescription,
+				'signed'             => $signed,
+				'similarbooks'       => $similarbooks,
+				'sku'                => $sku,
+				'stock'              => $stock,
+				'subgenre'           => $subgenre,
+				'subject'            => $subject,
+				'swap_yes'           => $swap_yes,
+				'title'              => $title,
+				'upsells'            => $upsells,
+				'use_amazon_yes'     => $use_amazon_yes,
+				'virtual'            => $virtual,
+				'weight'             => $weight,
+				'width'              => $width,
+				'woocommerce'        => $woocommerce,
+				'woofile'            => $woofile,
 			);
 
 			// Now adding in any custom fields to above arrays for insertion into DB.
@@ -436,8 +540,6 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 					}
 				}
 			}
-
-			error_log(print_r($book_array,true));
 
 			require_once(CLASS_BOOK_DIR.'class-wpbooklist-book.php');
 			$book_class = new WPBookList_Book('add', $book_array, null);
@@ -508,9 +610,9 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 		  $db_name;
 
 		  function wpbooklist_clean($string) {
-		      $string = str_replace(' ', '_', $strinG ); // Replaces all spaces with underscores.
-		      $string = str_replace('-', '_', $strinG );
-		      return preg_replace('/[^A-Za-z0-9\-]/', '', $strinG ); // Removes special chars.
+		      $string = str_replace(' ', '_', $string ); // Replaces all spaces with underscores.
+		      $string = str_replace('-', '_', $string );
+		      return preg_replace('/[^A-Za-z0-9\-]/', '', $string ); // Removes special chars.
 		  }
 		 
 		  // Create a new custom table
@@ -573,19 +675,23 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 		          $wpdb->wpbooklist_jre_list_dynamic_db_names = "{$wpdb->prefix}wpbooklist_jre_list_dynamic_db_names";
 		          $sql_create_table = "CREATE TABLE {$wpdb->wpbooklist_jre_dynamic_db_name} 
 		          (
-		            ID bigint(190) auto_increment,
+		          	ID bigint(190) auto_increment,
+					additionalimage1 varchar(255),
+					additionalimage2 varchar(255),
 					amazon_detail_page varchar(255),
+					appleibookslink varchar(255),
+					asin varchar(190),
 					author varchar(255),
 					author2 varchar(255),
 					author3 varchar(255),
 					author_url varchar(255),
 					authorfirst varchar(255),
-					authorlast varchar(255),
 					authorfirst2 varchar(255),
-					authorlast2 varchar(255),
 					authorfirst3 varchar(255),
+					authorlast varchar(255),
+					authorlast2 varchar(255),
 					authorlast3 varchar(255),
-					backimage varchar(255),
+					backcover varchar(255),
 					bam_link varchar(255),
 					bn_link varchar(255),
 					book_uid varchar(255),
@@ -598,16 +704,17 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 					currentlendname varchar(255),
 					date_finished varchar(255),
 					description MEDIUMTEXT, 
+					edition varchar(255),
 					finished varchar(255),
 					first_edition varchar(255),
 					format varchar(255),
-					genre varchar(255),
+					genres varchar(255),
+					goodreadslink varchar(255),
 					google_preview varchar(255),
 					illustrator varchar(255),
 					image varchar(255),
 					isbn varchar(190),
 					isbn13 varchar(190),
-					asin varchar(190),
 					itunes_page varchar(255),
 					keywords MEDIUMTEXT,
 					kobo_link varchar(255),
@@ -617,7 +724,7 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 					lendstatus varchar(255),
 					notes MEDIUMTEXT,
 					numberinseries varchar(255),
-					originalpub_year bigint(255),
+					originalpubyear bigint(255),
 					originaltitle varchar(255),
 					othereditions MEDIUMTEXT,
 					outofprint varchar(255),
@@ -632,8 +739,9 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 					series varchar(255),
 					shortdescription MEDIUMTEXT, 
 					signed varchar(255),
-					similar_products MEDIUMTEXT,
 					similar_books MEDIUMTEXT,
+					similar_products MEDIUMTEXT,
+					similarbooks MEDIUMTEXT,
 					subgenre varchar(255),
 					subject varchar(255),
 					title varchar(255),
@@ -742,9 +850,9 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 		  $db_name;
 
 		  function wpbooklist_clean($string) {
-		      $string = str_replace(' ', '_', $strinG ); // Replaces all spaces with underscores.
-		      $string = str_replace('-', '_', $strinG );
-		      return preg_replace('/[^A-Za-z0-9\-]/', '', $strinG ); // Removes special chars.
+		      $string = str_replace(' ', '_', $string ); // Replaces all spaces with underscores.
+		      $string = str_replace('-', '_', $string );
+		      return preg_replace('/[^A-Za-z0-9\-]/', '', $string ); // Removes special chars.
 		  }
 		 
 		  // Create a new custom table
@@ -1281,7 +1389,7 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 			check_ajax_referer( 'wpbooklist_edit_book_actual_action_callback', 'security' );
 			
 			// First set the variables we'll be passing to class-wpbooklist-book.php to ''
-			$amazon_auth_yes = '';    
+			$amazonauth = '';    
 			$library = '';    
 			$use_amazon_yes = '';    
 			$isbn = '';    
@@ -1337,8 +1445,8 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 			$booksamillionbuylink = '';    
 			$kobobuylink = ''; 
 
-			if ( isset( $_POST['amazonAuthYes'] ) ) {
-				$amazon_auth_yes = filter_var( wp_unslash( $_POST['amazonAuthYes'] ), FILTER_SANITIZE_STRING );
+			if ( isset( $_POST['amazonauth'] ) ) {
+				$amazonauth = filter_var( wp_unslash( $_POST['amazonauth'] ), FILTER_SANITIZE_STRING );
 			}
 
 			if ( isset( $_POST['library'] ) ) {
@@ -1361,8 +1469,8 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 				$author = filter_var( wp_unslash( $_POST['author'] ), FILTER_SANITIZE_STRING );
 			}
 
-			if ( isset( $_POST['authorUrl'] ) ) {
-				$author_url = filter_var( wp_unslash( $_POST['authorUrl'] ), FILTER_SANITIZE_URL );
+			if ( isset( $_POST['authorurl'] ) ) {
+				$author_url = filter_var( wp_unslash( $_POST['authorurl'] ), FILTER_SANITIZE_URL );
 			}
 
 			if ( isset( $_POST['category'] ) ) {
@@ -1413,16 +1521,16 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 				$finished = filter_var( wp_unslash( $_POST['finished'] ), FILTER_SANITIZE_STRING );
 			}
 
-			if ( isset( $_POST['dateFinished'] ) ) {
-				$date_finished = filter_var( wp_unslash( $_POST['dateFinished'] ), FILTER_SANITIZE_STRING );
+			if ( isset( $_POST['datefinished'] ) ) {
+				$date_finished = filter_var( wp_unslash( $_POST['datefinished'] ), FILTER_SANITIZE_STRING );
 			}
 
 			if ( isset( $_POST['signed'] ) ) {
 				$signed = filter_var( wp_unslash( $_POST['signed'] ), FILTER_SANITIZE_STRING );
 			}
 
-			if ( isset( $_POST['firstEdition'] ) ) {
-				$first_edition = filter_var( wp_unslash( $_POST['firstEdition'] ), FILTER_SANITIZE_STRING );
+			if ( isset( $_POST['firstedition'] ) ) {
+				$first_edition = filter_var( wp_unslash( $_POST['firstedition'] ), FILTER_SANITIZE_STRING );
 			}
 
 			if ( isset( $_POST['pageYes'] ) ) {
@@ -1562,7 +1670,7 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 
 
 			$book_array = array(
-				'amazon_auth_yes' => $amazon_auth_yes,
+				'amazon_auth_yes' => $amazonauth,
 				'library' => $library,
 				'use_amazon_yes' => $use_amazon_yes,
 				'isbn' => $isbn,
