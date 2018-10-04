@@ -822,6 +822,63 @@ if ( ! class_exists( 'WPBookList_Book', false ) ) :
 								}
 							}
 
+							// Get format.
+							$format_string = '';
+							if ( null === $this->format || '' === $this->format ) {
+
+								if ( array_key_exists( 'Binding', $this->amazon_array['Items']['Item'][0]['ItemAttributes'] ) ) {
+									$this->format = $this->amazon_array['Items']['Item'][0]['ItemAttributes']['Binding'];
+								}
+
+								if ( is_array( $this->format ) ) {
+									foreach ( $this->format as $format ) {
+										$format_string = $format_string . ', ' . $format;
+									}
+									$format_string = rtrim( $format_string, ', ' );
+									$format_string = ltrim( $format_string, ', ' );
+									$this->format  = $format_string;
+								}
+							}
+
+							// Get edition.
+							$edition_string = '';
+							if ( null === $this->edition || '' === $this->edition ) {
+
+								if ( array_key_exists( 'Edition', $this->amazon_array['Items']['Item'][0]['ItemAttributes'] ) ) {
+									$this->edition = $this->amazon_array['Items']['Item'][0]['ItemAttributes']['Edition'];
+								}
+
+								if ( is_array( $this->edition ) ) {
+									foreach ( $this->edition as $edition ) {
+										$edition_string = $edition_string . ', ' . $edition;
+									}
+									$edition_string = rtrim( $edition_string, ', ' );
+									$edition_string = ltrim( $edition_string, ', ' );
+									$this->edition  = $edition_string;
+								}
+							}
+
+							// Get Language.
+							$language_string = '';
+							if ( null === $this->language || '' === $this->language ) {
+
+								if ( array_key_exists( 'Languages', $this->amazon_array['Items']['Item'][0]['ItemAttributes'] ) ) {
+									$this->language = $this->amazon_array['Items']['Item'][0]['ItemAttributes']['Languages'];
+								}
+
+								if ( is_array( $this->language ) ) {
+
+									if ( array_key_exists( 'Language', $this->language ) ) {
+
+										if ( array_key_exists( 0, $this->language['Language'] ) ) {
+											$this->language = $this->language['Language'][0]['Name'];
+										} else {
+											$this->language = $this->language['Language']['Name'];
+										}
+									}
+								}
+							}
+
 							// Getting pages.
 							if ( null === $this->pages || '' === $this->pages ) {
 								if ( array_key_exists( 'NumberOfPages', $this->amazon_array['Items']['Item'][0]['ItemAttributes'] ) ) {
@@ -914,6 +971,59 @@ if ( ! class_exists( 'WPBookList_Book', false ) ) :
 									$author_string = rtrim( $author_string, ', ' );
 									$author_string = ltrim( $author_string, ', ' );
 									$this->author  = $author_string;
+								}
+							}
+
+							// Get format.
+							$format_string = '';
+							if ( null === $this->format || '' === $this->format ) {
+								if ( array_key_exists( 'Binding', $this->amazon_array['Items']['Item']['ItemAttributes'] ) ) {
+									$this->format = $this->amazon_array['Items']['Item']['ItemAttributes']['Binding'];
+								}
+								if ( is_array( $this->format ) ) {
+									foreach ( $this->format as $format ) {
+										$format_string = $format_string . ', ' . $format;
+									}
+									$format_string = rtrim( $format_string, ', ' );
+									$format_string = ltrim( $format_string, ', ' );
+									$this->format  = $format_string;
+								}
+							}
+
+							// Get edition.
+							$edition_string = '';
+							if ( null === $this->edition || '' === $this->edition ) {
+								if ( array_key_exists( 'Edition', $this->amazon_array['Items']['Item']['ItemAttributes'] ) ) {
+									$this->edition = $this->amazon_array['Items']['Item']['ItemAttributes']['Edition'];
+								}
+								if ( is_array( $this->edition ) ) {
+									foreach ( $this->edition as $edition ) {
+										$edition_string = $edition_string . ', ' . $edition;
+									}
+									$edition_string = rtrim( $edition_string, ', ' );
+									$edition_string = ltrim( $edition_string, ', ' );
+									$this->edition  = $edition_string;
+								}
+							}
+
+							// Get Language.
+							$language_string = '';
+							if ( null === $this->language || '' === $this->language ) {
+
+								if ( array_key_exists( 'Languages', $this->amazon_array['Items']['Item']['ItemAttributes'] ) ) {
+									$this->language = $this->amazon_array['Items']['Item']['ItemAttributes']['Languages'];
+								}
+
+								if ( is_array( $this->language ) ) {
+
+									if ( array_key_exists( 'Language', $this->language ) ) {
+
+										if ( array_key_exists( 0, $this->language['Language'] ) ) {
+											$this->language = $this->language['Language'][0]['Name'];
+										} else {
+											$this->language = $this->language['Language']['Name'];
+										}
+									}
 								}
 							}
 
@@ -1224,6 +1334,7 @@ if ( ! class_exists( 'WPBookList_Book', false ) ) :
 			$transient_exists = $this->transients->existing_transient_check( $transient_name );
 			if ( $transient_exists ) {
 				$this->openlibapiresult = $transient_exists;
+				$this->openlib_transient_use = 'Yes';
 			} else {
 
 				$status                      = '';
@@ -1357,6 +1468,7 @@ if ( ! class_exists( 'WPBookList_Book', false ) ) :
 			$transient_exists = $this->transients->existing_transient_check( $transient_name );
 			if ( $transient_exists ) {
 				$this->itunesapiresult = $transient_exists;
+				$this->itunes_transient_use = 'Yes';
 			} else {
 
 				$status                     = '';
@@ -1413,6 +1525,7 @@ if ( ! class_exists( 'WPBookList_Book', false ) ) :
 				$transient_exists = $this->transients->existing_transient_check( $transient_name );
 				if ( $transient_exists ) {
 					$this->itunes_audio_transient_use = $transient_exists;
+					$this->itunes_audio_transient_use = 'Yes';
 				} else {
 
 					$status                           = '';

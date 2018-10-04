@@ -788,6 +788,10 @@ if ( ! class_exists( 'WPBookList_General_Functions', false ) ) :
 			) $charset_collate; ";
 			dbDelta( $sql_create_table10 );
 
+			// Call the class that will insert default Storytime data into the table we just created. Seperate file simply because of length of content.
+			require_once CLASS_STORYTIME_DIR . 'class-storytime.php';
+			$storytime_class = new WPBookList_Storytime( 'install' );
+
 		}
 
 		/**
@@ -818,9 +822,16 @@ if ( ! class_exists( 'WPBookList_General_Functions', false ) ) :
 			) $charset_collate; ";
 			dbDelta( $sql_create_table11 );
 
-			// Call the class that will insert default Storytime data into the table we just created. Seperate file simply because of length of content.
-			//require_once CLASS_STORYTIME_DIR . 'class-storytime.php';
-			//$storytime_class = new WPBookList_Storytime( 'install' );
+			$table_name = $wpdb->prefix . 'wpbooklist_jre_storytime_stories_settings';
+
+			$wpdb->insert( $table_name,
+				array(
+					'notifydismiss'     => 1,
+					'newnotify'         => 1,
+					'storytimestylepak' => 'default',
+				)
+			);
+
 		}
 
 		/**
@@ -1144,7 +1155,7 @@ if ( ! class_exists( 'WPBookList_General_Functions', false ) ) :
 			$library_stylepaks_upload_dir = LIBRARY_STYLEPAKS_UPLOAD_URL;
 
 			// Modify the 'LIBRARY_STYLEPAKS_UPLOAD_URL' to make sure we're using the right protocol, as it seems that wp_upload_dir() doesn't return https - introduced in 5.5.2.
-			$protocol = ( ! empty( filter_var( wp_unslash( $_SERVER['HTTPS'] ), FILTER_SANITIZE_STRING ) ) && 'off' !== filter_var( wp_unslash( $_SERVER['HTTPS'] ), FILTER_SANITIZE_STRING ) ) || ( isset( $_SERVER['SERVER_PORT'] ) && 443 === filter_var( wp_unslash( $_SERVER['SERVER_PORT'] ), FILTER_SANITIZE_NUMBER_INT ) ) ? 'https://' : 'http://';
+			$protocol = ( array_key_exists( 'HTTPS', $_SERVER ) && ! empty( filter_var( wp_unslash( $_SERVER['HTTPS'] ), FILTER_SANITIZE_STRING ) ) && 'off' !== filter_var( wp_unslash( $_SERVER['HTTPS'] ), FILTER_SANITIZE_STRING ) ) || ( isset( $_SERVER['SERVER_PORT'] ) && 443 === filter_var( wp_unslash( $_SERVER['SERVER_PORT'] ), FILTER_SANITIZE_NUMBER_INT ) ) ? 'https://' : 'http://';
 
 			if ( 'https://' === $protocol || 'https' === $protocol ) {
 				if ( strpos( LIBRARY_STYLEPAKS_UPLOAD_URL, 'http://' ) !== false ) {
