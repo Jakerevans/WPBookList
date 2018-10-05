@@ -1,11 +1,11 @@
 <?php
 /**
- * WPBookList Posts Display Options Form Tab Class
+ * WPBookList_Posts_Display_Options_Form Class - wpbooklist-posts-display-options-form.php.
  *
  * @author   Jake Evans
  * @category Admin
  * @package  Includes/Classes/Post
- * @version  1
+ * @version  6.0.0
  */
 
 if ( ! defined( 'ABSPATH' ) ) {

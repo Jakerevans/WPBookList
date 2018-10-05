@@ -1,10 +1,10 @@
 <?php
 /**
- * WPBookList WPBookList_Book_Form Tab Class - class-wpbooklist-form.php
+ * WPBookList WPBookList_Book_Form Class - class-wpbooklist-form.php
  *
  * @author   Jake Evans
  * @category Admin
- * @package  Includes/Classes
+ * @package  Includes/Classes/Book
  * @version  6.0.0
  */
 

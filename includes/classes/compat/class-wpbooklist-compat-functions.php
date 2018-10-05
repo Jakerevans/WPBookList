@@ -1,6 +1,6 @@
 <?php
 /**
- * Class WPBookList_Compat_Functions - class-wpbooklist-compat-functions.php
+ * Class WPBookList_Compat_Functions Class - class-wpbooklist-compat-functions.php
  *
  * @author   Jake Evans
  * @category Admin

@@ -259,9 +259,21 @@ if ( ! class_exists( 'WPBookList_Translations', false ) ) :
 			$this->trans_227 = __( 'Link Text', 'wpbooklist' );
 			$this->trans_228 = __( 'Link URL', 'wpbooklist' );
 			$this->trans_229 = __( 'Select an Option...', 'wpbooklist' );
-
-
-
+			$this->trans_230 = __( 'Here you can manage all of the', 'wpbooklist' );
+			$this->trans_231 = __( 'WPBookList StoryTime', 'wpbooklist' );
+			$this->trans_232 = __( 'Settings, to include how long Stories are kept, how you\'d like to be notifed when new Stories arrive, whether or not to create a Page and/or Post when new Stories arrive, and more!', 'wpbooklist' );
+			$this->trans_233 = __( 'Remember, use this shortcode to display the Storytime Reader:', 'wpbooklist' );
+			$this->trans_234 = __( 'Create a Post every time a new Story arrives?', 'wpbooklist' );
+			$this->trans_235 = __( 'Create a Page every time a new Story arrives?', 'wpbooklist' );
+			$this->trans_236 = __( 'Delete all Default StoryTime Content?', 'wpbooklist' );
+			$this->trans_237 = __( 'Display Dashboard notification when new Stories arrive?', 'wpbooklist' );
+			$this->trans_238 = __( 'Disable StoryTime (you will no longer receive', 'wpbooklist' );
+			$this->trans_239 = __( 'ANY', 'wpbooklist' );
+			$this->trans_240 = __( 'Stories', 'wpbooklist' );
+			$this->trans_241 = __( 'Keep Stories for', 'wpbooklist' );
+			$this->trans_242 = __( 'Days (leave blank to keep all Stories forever)', 'wpbooklist' );
+			$this->trans_243 = __( 'Save Settings', 'wpbooklist' );
+			$this->trans_244 = __( 'StoryTime', 'wpbooklist' );
 
 			// The array of translation strings.
 			$translation_array = array(
@@ -474,7 +486,6 @@ if ( ! class_exists( 'WPBookList_Translations', false ) ) :
 				'trans207' => $this->trans_207,
 				'trans208' => $this->trans_208,
 				'trans209' => $this->trans_209,
-				/*
 				'trans210' => $this->trans_210,
 				'trans211' => $this->trans_211,
 				'trans212' => $this->trans_212,
@@ -484,7 +495,32 @@ if ( ! class_exists( 'WPBookList_Translations', false ) ) :
 				'trans216' => $this->trans_216,
 				'trans217' => $this->trans_217,
 				'trans218' => $this->trans_218,
-*/
+				'trans219' => $this->trans_219,
+				'trans220' => $this->trans_220,
+				'trans221' => $this->trans_221,
+				'trans222' => $this->trans_222,
+				'trans223' => $this->trans_223,
+				'trans224' => $this->trans_224,
+				'trans225' => $this->trans_225,
+				'trans226' => $this->trans_226,
+				'trans227' => $this->trans_227,
+				'trans228' => $this->trans_228,
+				'trans229' => $this->trans_229,
+				'trans230' => $this->trans_230,
+				'trans231' => $this->trans_231,
+				'trans232' => $this->trans_232,
+				'trans233' => $this->trans_233,
+				'trans234' => $this->trans_234,
+				'trans235' => $this->trans_235,
+				'trans236' => $this->trans_236,
+				'trans237' => $this->trans_237,
+				'trans238' => $this->trans_238,
+				'trans239' => $this->trans_239,
+				'trans240' => $this->trans_240,
+				'trans241' => $this->trans_241,
+				'trans242' => $this->trans_242,
+				'trans243' => $this->trans_243,
+
 			);
 
 			return $translation_array;

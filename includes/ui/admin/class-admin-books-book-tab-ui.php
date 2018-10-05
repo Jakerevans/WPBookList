@@ -1,6 +1,6 @@
 <?php
 /**
- * WPBookList AddABook Tab Class
+ * WPBookList WPBookList_AddABook_Tab Class - class-admin-books-book-tab-ui.php.
  *
  * @author   Jake Evans
  * @category Admin
@@ -45,7 +45,7 @@ if ( ! class_exists( 'WPBookList_AddABook_Tab', false ) ) :
 		 */
 		private function output_open_admin_container() {
 			$icon_url = ROOT_IMG_ICONS_URL . 'open-book.svg';
-			$title = $this->trans->trans_82;
+			$title    = $this->trans->trans_82;
 			echo $this->template->output_open_admin_container( $title, $icon_url );
 		}
 

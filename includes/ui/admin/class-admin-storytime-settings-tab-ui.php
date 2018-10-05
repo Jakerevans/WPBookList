@@ -20,10 +20,10 @@ class WPBookList_AddABook_Tab {
 
     public function __construct() {
         require_once(CLASS_DIR.'class-admin-ui-template.php');
-        require_once(CLASS_STORYTIME_DIR.'class-storytime-settings-form.php');
+        require_once(CLASS_STORYTIME_DIR.'class-wpbooklist-storytime-settings-form.php');
         // Instantiate the class
         $this->template = new WPBookList_Admin_UI_Template;
-        $this->form = new WPBookList_Add_Book_Form;
+        $this->form = new WPBookList_Storytime_Settings_Form;
         $this->output_open_admin_container();
         $this->output_tab_content();
         $this->output_close_admin_container();

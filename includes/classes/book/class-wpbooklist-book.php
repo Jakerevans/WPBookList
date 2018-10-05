@@ -1,6 +1,6 @@
 <?php
 /**
- * Class WPBookList_Book - class-wpbooklist-book.php
+ * Class WPBookList_Book Class - class-wpbooklist-book.php
  *
  * @author   Jake Evans
  * @category Books
@@ -144,7 +144,7 @@ if ( ! class_exists( 'WPBookList_Book', false ) ) :
 
 		/** Class Constructor - Simply calls the Translations
 		 *
-		 *  @param string $action - The string that will determine whar functions run.
+		 *  @param string $action - The string that will determine what functions run.
 		 *  @param array  $book_array - The array that holds all the book info.
 		 *  @param int    $id - The book's id.
 		 */
