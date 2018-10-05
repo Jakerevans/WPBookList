@@ -118,10 +118,10 @@ if ( ! class_exists( 'WPBookList_Compat_Functions', false ) ) :
 
 				// Begin addition of version 6.0.0 columns.
 				if ( 0 === $wpdb->query( "SHOW COLUMNS FROM `$table_name` LIKE 'customfields'" ) ) {
-					$wpdb->query( "ALTER TABLE $table_name ADD customfields MEDIUMTEXT" );
+					$wpdb->query( "ALTER TABLE $table_name ADD customfields TEXT" );
 				}
 				if ( 0 === $wpdb->query( "SHOW COLUMNS FROM `$table_name` LIKE 'extensionversions'" ) ) {
-					$wpdb->query( "ALTER TABLE $table_name ADD extensionversions MEDIUMTEXT" );
+					$wpdb->query( "ALTER TABLE $table_name ADD extensionversions TEXT" );
 				}
 			}
 		}
@@ -260,79 +260,82 @@ if ( ! class_exists( 'WPBookList_Compat_Functions', false ) ) :
 
 				// Begin addition of version 6.0.0 columns.
 				if ( 0 === $wpdb->query( "SHOW COLUMNS FROM `$table_name_default` LIKE 'additionalimage1'" ) ) {
-					$wpdb->query( "ALTER TABLE $table_name_default ADD additionalimage1 varchar(255)" );
+					$wpdb->query( "ALTER TABLE $table_name_default ADD additionalimage1 TEXT" );
 				}
 				if ( 0 === $wpdb->query( "SHOW COLUMNS FROM `$table_name_default` LIKE 'additionalimage2'" ) ) {
-					$wpdb->query( "ALTER TABLE $table_name_default ADD additionalimage2 varchar(255)" );
+					$wpdb->query( "ALTER TABLE $table_name_default ADD additionalimage2 TEXT" );
 				}
 				if ( 0 === $wpdb->query( "SHOW COLUMNS FROM `$table_name_default` LIKE 'appleibookslink'" ) ) {
-					$wpdb->query( "ALTER TABLE $table_name_default ADD appleibookslink varchar(255)" );
+					$wpdb->query( "ALTER TABLE $table_name_default ADD appleibookslink TEXT" );
 				}
 				if ( 0 === $wpdb->query( "SHOW COLUMNS FROM `$table_name_default` LIKE 'asin'" ) ) {
 					$wpdb->query( "ALTER TABLE $table_name_default ADD asin varchar(190)" );
 				}
 				if ( 0 === $wpdb->query( "SHOW COLUMNS FROM `$table_name_default` LIKE 'author2'" ) ) {
-					$wpdb->query( "ALTER TABLE $table_name_default ADD author2 varchar(255)" );
+					$wpdb->query( "ALTER TABLE $table_name_default ADD author2 TEXT" );
 				}
 				if ( 0 === $wpdb->query( "SHOW COLUMNS FROM `$table_name_default` LIKE 'author3'" ) ) {
-					$wpdb->query( "ALTER TABLE $table_name_default ADD author3 varchar(255)" );
+					$wpdb->query( "ALTER TABLE $table_name_default ADD author3 TEXT" );
 				}
 				if ( 0 === $wpdb->query( "SHOW COLUMNS FROM `$table_name_default` LIKE 'authorfirst2'" ) ) {
-					$wpdb->query( "ALTER TABLE $table_name_default ADD authorfirst2 varchar(255)" );
+					$wpdb->query( "ALTER TABLE $table_name_default ADD authorfirst2 TEXT" );
 				}
 				if ( 0 === $wpdb->query( "SHOW COLUMNS FROM `$table_name_default` LIKE 'authorfirst3'" ) ) {
-					$wpdb->query( "ALTER TABLE $table_name_default ADD authorfirst3 varchar(255)" );
+					$wpdb->query( "ALTER TABLE $table_name_default ADD authorfirst3 TEXT" );
 				}
 				if ( 0 === $wpdb->query( "SHOW COLUMNS FROM `$table_name_default` LIKE 'authorlast2'" ) ) {
-					$wpdb->query( "ALTER TABLE $table_name_default ADD authorlast2 varchar(255)" );
+					$wpdb->query( "ALTER TABLE $table_name_default ADD authorlast2 TEXT" );
 				}
 				if ( 0 === $wpdb->query( "SHOW COLUMNS FROM `$table_name_default` LIKE 'authorlast3'" ) ) {
-					$wpdb->query( "ALTER TABLE $table_name_default ADD authorlast3 varchar(255)" );
+					$wpdb->query( "ALTER TABLE $table_name_default ADD authorlast3 TEXT" );
 				}
 				if ( 0 === $wpdb->query( "SHOW COLUMNS FROM `$table_name_default` LIKE 'backcover'" ) ) {
-					$wpdb->query( "ALTER TABLE $table_name_default ADD backcover varchar(255)" );
+					$wpdb->query( "ALTER TABLE $table_name_default ADD backcover TEXT" );
 				}
 				if ( 0 === $wpdb->query( "SHOW COLUMNS FROM `$table_name_default` LIKE 'callnumber'" ) ) {
-					$wpdb->query( "ALTER TABLE $table_name_default ADD callnumber varchar(255)" );
+					$wpdb->query( "ALTER TABLE $table_name_default ADD callnumber TEXT" );
 				}
 				if ( 0 === $wpdb->query( "SHOW COLUMNS FROM `$table_name_default` LIKE 'edition'" ) ) {
-					$wpdb->query( "ALTER TABLE $table_name_default ADD edition varchar(255)" );
+					$wpdb->query( "ALTER TABLE $table_name_default ADD edition TEXT" );
 				}
 				if ( 0 === $wpdb->query( "SHOW COLUMNS FROM `$table_name_default` LIKE 'format'" ) ) {
-					$wpdb->query( "ALTER TABLE $table_name_default ADD format varchar(255)" );
+					$wpdb->query( "ALTER TABLE $table_name_default ADD format TEXT" );
 				}
 				if ( 0 === $wpdb->query( "SHOW COLUMNS FROM `$table_name_default` LIKE 'genres'" ) ) {
-					$wpdb->query( "ALTER TABLE $table_name_default ADD genres varchar(255)" );
+					$wpdb->query( "ALTER TABLE $table_name_default ADD genres TEXT" );
+				}
+				if ( 0 === $wpdb->query( "SHOW COLUMNS FROM `$table_name_default` LIKE 'goodreadslink'" ) ) {
+					$wpdb->query( "ALTER TABLE $table_name_default ADD goodreadslink TEXT" );
 				}
 				if ( 0 === $wpdb->query( "SHOW COLUMNS FROM `$table_name_default` LIKE 'illustrator'" ) ) {
-					$wpdb->query( "ALTER TABLE $table_name_default ADD illustrator varchar(255)" );
+					$wpdb->query( "ALTER TABLE $table_name_default ADD illustrator TEXT" );
 				}
 				if ( 0 === $wpdb->query( "SHOW COLUMNS FROM `$table_name_default` LIKE 'isbn13'" ) ) {
-					$wpdb->query( "ALTER TABLE $table_name_default ADD isbn13 varchar(255)" );
+					$wpdb->query( "ALTER TABLE $table_name_default ADD isbn13 TEXT" );
 				}
 				if ( 0 === $wpdb->query( "SHOW COLUMNS FROM `$table_name_default` LIKE 'keywords'" ) ) {
 					$wpdb->query( "ALTER TABLE $table_name_default ADD keywords MEDIUMTEXT" );
 				}
 				if ( 0 === $wpdb->query( "SHOW COLUMNS FROM `$table_name_default` LIKE 'language'" ) ) {
-					$wpdb->query( "ALTER TABLE $table_name_default ADD language varchar(255)" );
+					$wpdb->query( "ALTER TABLE $table_name_default ADD language TEXT" );
 				}
 				if ( 0 === $wpdb->query( "SHOW COLUMNS FROM `$table_name_default` LIKE 'numberinseries'" ) ) {
-					$wpdb->query( "ALTER TABLE $table_name_default ADD numberinseries varchar(255)" );
+					$wpdb->query( "ALTER TABLE $table_name_default ADD numberinseries TEXT" );
 				}
 				if ( 0 === $wpdb->query( "SHOW COLUMNS FROM `$table_name_default` LIKE 'originalpubyear'" ) ) {
 					$wpdb->query( "ALTER TABLE $table_name_default ADD originalpubyear bigint(255)" );
 				}
 				if ( 0 === $wpdb->query( "SHOW COLUMNS FROM `$table_name_default` LIKE 'originaltitle'" ) ) {
-					$wpdb->query( "ALTER TABLE $table_name_default ADD originaltitle varchar(255)" );
+					$wpdb->query( "ALTER TABLE $table_name_default ADD originaltitle TEXT" );
 				}
 				if ( 0 === $wpdb->query( "SHOW COLUMNS FROM `$table_name_default` LIKE 'othereditions'" ) ) {
 					$wpdb->query( "ALTER TABLE $table_name_default ADD othereditions MEDIUMTEXT" );
 				}
 				if ( 0 === $wpdb->query( "SHOW COLUMNS FROM `$table_name_default` LIKE 'outofprint'" ) ) {
-					$wpdb->query( "ALTER TABLE $table_name_default ADD outofprint varchar(255)" );
+					$wpdb->query( "ALTER TABLE $table_name_default ADD outofprint TEXT" );
 				}
 				if ( 0 === $wpdb->query( "SHOW COLUMNS FROM `$table_name_default` LIKE 'series'" ) ) {
-					$wpdb->query( "ALTER TABLE $table_name_default ADD series varchar(255)" );
+					$wpdb->query( "ALTER TABLE $table_name_default ADD series TEXT" );
 				}
 				if ( 0 === $wpdb->query( "SHOW COLUMNS FROM `$table_name_default` LIKE 'shortdescription'" ) ) {
 					$wpdb->query( "ALTER TABLE $table_name_default ADD shortdescription MEDIUMTEXT" );
@@ -341,7 +344,7 @@ if ( ! class_exists( 'WPBookList_Compat_Functions', false ) ) :
 					$wpdb->query( "ALTER TABLE $table_name_default ADD similarbooks MEDIUMTEXT" );
 				}
 				if ( 0 === $wpdb->query( "SHOW COLUMNS FROM `$table_name_default` LIKE 'subgenre'" ) ) {
-					$wpdb->query( "ALTER TABLE $table_name_default ADD subgenre varchar(255)" );
+					$wpdb->query( "ALTER TABLE $table_name_default ADD subgenre TEXT" );
 				}
 
 				// Modify the ISBN column in the default library to be varchar, which will allow the storage of ASIN numbers.
