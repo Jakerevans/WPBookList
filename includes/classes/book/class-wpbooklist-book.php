@@ -19,46 +19,79 @@ if ( ! class_exists( 'WPBookList_Book', false ) ) :
 	 */
 	class WPBookList_Book {
 
-		public $add_result;
-		public $edit_result;
-		public $delete_result;
-		public $title;
+		// Class varbiables that map to database fields in the 'saved_book_log' and Dynamic tables.
+		public $additionalimage1;
+		public $additionalimage2;
+		public $amazon_detail_page;
+		public $appleibookslink;
+		public $asin;
+		public $author2;
+		public $author3;
 		public $author;
 		public $author_url;
-		public $image;
-		public $library;
-		public $retrieved_book;
-		public $options_results;
-		public $review_iframe;
-		public $isbn;
-		public $subject;
-		public $country;
-		public $notes;
-		public $rating;
-		public $copies;
-		public $pages;
-		public $finished;
-		public $date_finished;
-		public $first_edition;
-		public $signed;
-		public $description;
+		public $backcover;
+		public $bam_link;
+		public $bn_link;
+		public $book_uid;
+		public $callnumber;
 		public $category;
+		public $copies;
+		public $copieschecked;
+		public $country;
+		public $currentlendemail;
+		public $currentlendname;
+		public $date_finished;
+		public $description;
+		public $edition;
+		public $finalauthorfirstnames2;
+		public $finalauthorfirstnames3;
+		public $finalauthorfirstnames;
+		public $finalauthorlastnames2;
+		public $finalauthorlastnames3;
+		public $finalauthorlastnames;
+		public $finished;
+		public $first_edition;
+		public $format;
+		public $genres;
+		public $goodreadslink;
+		public $google_preview;
+		public $illustrator;
+		public $image;
+		public $isbn13;
+		public $isbn;
+		public $itunes_page;
+		public $keywords;
+		public $kobo_link;
+		public $language;
+		public $lendable;
+		public $lendedon;
+		public $lendstatus;
+		public $notes;
+		public $numberinseries;
+		public $originalpubyear;
+		public $originaltitle;
+		public $othereditions;
+		public $outofprint;
+		public $page_yes;
+		public $pages;
+		public $post_yes;
+		public $price;
 		public $pub_year;
 		public $publisher;
-		public $woocommerce;
-		public $woofile;
-		public $wooid;
-		public $book_page;
-		public $post_yes;
-		public $page_yes;
-		public $page_id;
-		public $post_id;
-		public $lendable;
-		public $itunes_page;
-		public $google_preview;
-		public $amazon_detail_page;
+		public $rating;
+		public $review_iframe;
+		public $series;
+		public $shortdescription;
+		public $signed;
+		public $similar_books;
 		public $similar_products;
-		public $price;
+		public $similarbooks;
+		public $subgenre;
+		public $subject;
+		public $title;
+		public $woocommerce;
+
+		// Variables that pertain to the Storefront Extension / WooCommerce Specifics.
 		public $saleprice;
 		public $regularprice;
 		public $stock;
@@ -69,7 +102,6 @@ if ( ! class_exists( 'WPBookList_Book', false ) ) :
 		public $sku;
 		public $virtual;
 		public $download;
-		public $book_uid;
 		public $salebegin;
 		public $saleend;
 		public $purchasenote;
@@ -77,18 +109,29 @@ if ( ! class_exists( 'WPBookList_Book', false ) ) :
 		public $reviews;
 		public $upsells;
 		public $crosssells;
+		public $defaultprice;
+
+		// Class variables that pertain to ceratin actions taken in thsi class - results of DB actions, API call results, etc.
+		public $add_result;
+		public $edit_result;
+		public $delete_result;
+		public $retrieved_book;
+		public $options_results;
+		public $woofile;
+		public $wooid;
+		public $book_page;
+		public $page_id;
+		public $post_id;
 		public $amazonbuylink;
 		public $bnbuylink;
 		public $googlebuylink;
 		public $itunesbuylink;
 		public $booksamillionbuylink;
-		public $kobobuylink;
 		public $id;
 		public $go_amazon;
-		public $defaultprice;
-		public $finalauthorlastnames;
-		public $finalauthorfirstnames;
+		public $library;
 		public $apireport          = '';
+		public $amazonauth = null;
 		public $amazonapiresult    = '';
 		public $googleapiresult    = '';
 		public $itunesapiresult    = '';
@@ -141,7 +184,7 @@ if ( ! class_exists( 'WPBookList_Book', false ) ) :
 				$this->options_results = $this->transients->create_transient( $transient_name, 'wpdb->get_row', $query, MONTH_IN_SECONDS );
 			}
 
-			if ( ( 'add' === $action || 'edit' === $action || 'search' === $action || 'bookfinder-colorbox' === $action ) && null !== $book_array ) {
+			if ( null !== $book_array ) {
 
 				// Setting up $book_array values, wrapped in isset() to prevent php error_log notices.
 				if ( isset( $book_array['additionalimage1'] ) ) {
@@ -445,33 +488,6 @@ if ( ! class_exists( 'WPBookList_Book', false ) ) :
 				}
 
 				$this->id = $id;
-			}
-
-			if ( 'addbulk' === $action && null !== $book_array ) {
-
-				if ( isset( $book_array['amazonauth'] ) ) {
-					$this->amazonauth = $book_array['amazonauth'];
-				}
-
-				if ( isset( $book_array['library'] ) ) {
-					$this->library = $book_array['library'];
-				}
-
-				if ( isset( $book_array['use_amazon_yes'] ) ) {
-					$this->use_amazon_yes = $book_array['use_amazon_yes'];
-				}
-
-				if ( isset( $book_array['isbn'] ) ) {
-					$this->isbn = $book_array['isbn'];
-				}
-
-				if ( isset( $book_array['post_yes'] ) ) {
-					$this->post_yes = $book_array['post_yes'];
-				}
-
-				if ( isset( $book_array['page_yes'] ) ) {
-					$this->page_yes = $book_array['page_yes'];
-				}
 			}
 
 			if ( 'add' === $action || 'addbulk' === $action ) {
@@ -2415,7 +2431,7 @@ if ( ! class_exists( 'WPBookList_Book', false ) ) :
 					'copies'             => $this->copies,
 					'bn_link'            => $this->bnbuylink,
 					'bam_link'           => $this->booksamillionbuylink,
-					'kobo_link'          => $this->kobobuylink,
+					'kobo_link'          => $this->kobo_link,
 				);
 
 				// Each of these class instantiations will return the ID of the page/post created for storage in DB.
@@ -2467,7 +2483,7 @@ if ( ! class_exists( 'WPBookList_Book', false ) ) :
 				'woocommerce'        => $this->wooid,
 				'bn_link'            => $this->bnbuylink,
 				'bam_link'           => $this->booksamillionbuylink,
-				'kobo_link'          => $this->kobobuylink,
+				'kobo_link'          => $this->kobo_link,
 				'authorfirst'        => $this->finalauthorfirstnames,
 				'authorlast'         => $this->finalauthorlastnames,
 			);
