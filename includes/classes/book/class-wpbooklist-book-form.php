@@ -1,6 +1,6 @@
 <?php
 /**
- * WPBookList WPBookList_Book_Form Class - class-wpbooklist-form.php
+ * WPBookList WPBookList_Book_Form Class - class-wpbooklist-book-form.php
  *
  * @author   Jake Evans
  * @category Admin
@@ -191,7 +191,7 @@ if ( ! class_exists( 'WPBookList_Book_Form', false ) ) :
 			$string5 = '</table>
 						</div>
 						<div id="wpbooklist-addbook-select-library-label" for="wpbooklist-addbook-select-library"><p><img class="wpbooklist-icon-image-question-with-link" data-label="book-form-libraries" src="' . ROOT_IMG_ICONS_URL . 'question-black.svg"/>' . $this->trans->trans_133 . '</p></div>
-						<div class="wpbooklist-libraries-dropdown-container">
+						<div class="wpbooklist-libraries-dropdown-container" id="wpbooklist-libraries-dropdown-container-id">
 							<select class="wpbooklist-addbook-select-default select2-input-libraries" id="wpbooklist-addbook-select-library" name="libraries[]" multiple="multiple">
 							<option selected default value="' . $wpdb->prefix . 'wpbooklist_jre_saved_book_log">' . $this->trans->trans_61 . '</option> ';
 
@@ -383,15 +383,15 @@ if ( ! class_exists( 'WPBookList_Book_Form', false ) ) :
 									<label class="wpbooklist-question-icon-label" for="book-rating">' . $this->trans->trans_211 . '</label>
 									<select class="wpbooklist-addbook-select-default" id="wpbooklist-addbook-select-book-rating" >
 										<option selected disabled default>' . $this->trans->trans_212 . '</option>
-										<option>' . $this->trans->trans_213 . ' ' . $this->trans->trans_219 . '</option>
-										<option>' . $this->trans->trans_214 . ' <span>' . $this->trans->trans_218 . '</span> ' . $this->trans->trans_219 . '  </option>
-										<option>' . $this->trans->trans_214 . ' ' . $this->trans->trans_219 . '</option>
-										<option>' . $this->trans->trans_215 . ' <span>' . $this->trans->trans_218 . '</span> ' . $this->trans->trans_219 . '  </option>
-										<option>' . $this->trans->trans_215 . ' ' . $this->trans->trans_219 . '</option>
-										<option>' . $this->trans->trans_216 . ' <span>' . $this->trans->trans_218 . '</span> ' . $this->trans->trans_219 . '  </option>
-										<option>' . $this->trans->trans_216 . ' ' . $this->trans->trans_219 . '</option>
-										<option>' . $this->trans->trans_217 . ' <span>' . $this->trans->trans_218 . '</span> ' . $this->trans->trans_219 . '  </option>
-										<option>' . $this->trans->trans_217 . ' ' . $this->trans->trans_220 . '</option>
+										<option value="5">' . $this->trans->trans_213 . ' ' . $this->trans->trans_219 . '</option>
+										<option value="4.5">' . $this->trans->trans_214 . ' <span>' . $this->trans->trans_218 . '</span> ' . $this->trans->trans_219 . '  </option>
+										<option value="4">' . $this->trans->trans_214 . ' ' . $this->trans->trans_219 . '</option>
+										<option value="3.5">' . $this->trans->trans_215 . ' <span>' . $this->trans->trans_218 . '</span> ' . $this->trans->trans_219 . '  </option>
+										<option value="3">' . $this->trans->trans_215 . ' ' . $this->trans->trans_219 . '</option>
+										<option value="2.5">' . $this->trans->trans_216 . ' <span>' . $this->trans->trans_218 . '</span> ' . $this->trans->trans_219 . '  </option>
+										<option value="2">' . $this->trans->trans_216 . ' ' . $this->trans->trans_219 . '</option>
+										<option value="1.5">' . $this->trans->trans_217 . ' <span>' . $this->trans->trans_218 . '</span> ' . $this->trans->trans_219 . '  </option>
+										<option value="1">' . $this->trans->trans_217 . ' ' . $this->trans->trans_220 . '</option>
 									</select>
 								</div>
 								<div class="wpbooklist-book-form-indiv-attribute-container">
@@ -550,9 +550,9 @@ if ( ! class_exists( 'WPBookList_Book_Form', false ) ) :
 
 			// Building drop-down of all similarbooks from All book's Titles and ISBNs/ASINs.
 			$string10 = '';
-			foreach ( $this->similar_books_array as $similar_book ) {
+			foreach ( $this->similar_books_array as $key => $similar_book ) {
 				if ( ( '' !== $similar_book ) && ( null !== $similar_book ) ) {
-					$string10 = $string10 . '<option value="' . $similar_book . '">' . ucfirst( $similar_book ) . '</option>';
+					$string10 = $string10 . '<option value="' . $this->keywords_uid_array[ $key ] . '">' . ucfirst( $similar_book ) . '</option>';
 				}
 			}
 

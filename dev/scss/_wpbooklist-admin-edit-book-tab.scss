@@ -1,0 +1,210 @@
+/**
+ * SCSS - _wpbooklist-admin-book-form.scss - Hold CSS specific to the 'Edit & Delete' Book Tab - mainly the styling for each book row/entry.
+ *
+ * @author   Jake Evans
+ * @category SCSS
+ * @package  Includes/Assets/CSS
+ * @version  6.0.0
+ */
+
+.wpbooklist-edit-book-indiv-div-class{
+    @extend %wpbooklist-indiv-row-container-div;
+}
+
+#wpbooklist-edit-books-lib-search-div{
+    text-align: center;
+}
+
+#wpbooklist-edit-books-lib-div, #wpbooklist-edit-books-search-div {
+    display: inline-block;
+    width: 40%;
+    vertical-align: top;
+}
+
+#wpbooklist-spinner-edit-change-lib {
+    position: absolute;
+    top: 100px;
+    left: 0;
+    right: 0;
+}
+
+#wpbooklist-edit-books-search-div label {
+    margin-right: 5px;
+}
+
+#wpbooklist-edit-book-search-input {
+    width: 200px;
+    margin-top: 10px;
+    margin-bottom: 5px;
+}
+
+.wpbooklist-edit-book-search-by-div{
+    text-align: left;
+    position: relative;
+    left: 38px;
+    width: 135px;
+    margin-bottom: 5px;
+}
+
+.wpbooklist-edit-book-search-by-div input{
+    float:right;
+}
+
+#wpbooklist-bulk-edit-div {
+    text-align: center;
+    position: relative;
+    bottom: 15px;
+    height: 60px;
+    overflow: hidden;
+    margin-bottom: 20px;
+    margin-top:40px;
+}
+
+#wpbooklist-bulk-edit-mode-on-div button {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 10px;
+    position: relative;
+    top: 30px;
+}
+
+#wpbooklist-bulk-edit-mode-on-button {
+    margin-bottom: 10px;
+    position: relative;
+    top: 30px;
+}
+
+#wpbooklist-reorder-button {
+    position: relative;
+    bottom: 155px;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+}
+
+.wpbooklist-edit-book-cover-img {
+    width: 60px;
+    float: left;
+    margin-right: 20px;
+}
+
+.wpbooklist-edit-book-title {
+    font-size: 13px;
+    font-weight: bold;
+    margin: 0px;
+    margin-right: 10px;
+    margin-bottom: 0px;
+    font-variant: small-caps;
+}
+
+.wpbooklist-book-icon-author {
+    width: 17px;
+    display: inline-block;
+    margin-left: 8px;
+    position: relative;
+    top: 5px;
+    margin-right: 3px;
+}
+
+.wpbooklist-edit-book-author {
+    width: 70%;
+    vertical-align: text-top;
+    display: inline-block;
+    margin-top: 0px;
+}
+
+.wpbooklist-edit-actions-div div {
+    margin: 5px;
+    background-color: #F05A1A;
+    padding: 7px;
+    padding-left: 10px;
+    margin: 5px;
+    border-radius: 5px;
+    color: white;
+    position: relative;
+    cursor: pointer;
+}
+
+.wpbooklist-edit-actions-div .wpbooklist-edit-actions-edit-button {
+    margin-bottom: 10px;
+}
+
+.wpbooklist-edit-actions-div .wpbooklist-edit-actions-edit-button, .wpbooklist-edit-actions-div .wpbooklist-edit-actions-delete-button {
+    @extend %wpbooklist-buttons-bottom-drop-shadow;
+}
+
+.wpbooklist-edit-actions-div .wpbooklist-edit-actions-edit-button:hover, .wpbooklist-edit-actions-div .wpbooklist-edit-actions-delete-button:hover {
+    box-shadow: none;
+}
+
+.wpbooklist-edit-book-icon-button {
+    width: 16px;
+    display: inline-block;
+    position: relative;
+    top: 3px;
+}
+
+.wpbooklist-edit-actions-div {
+    width: 20%;
+    text-align: center;
+}
+
+.wpbooklist-edit-actions-div p{
+    margin:0px;
+}
+
+.wpbooklist-edit-title-div, .wpbooklist-edit-actions-div {
+    display: inline-block;
+}
+
+.wpbooklist-edit-title-div{
+    width: 75%;
+}
+
+.wpbooklist-bulk-delete-checkbox-div {
+    margin-bottom: 20px;
+    display: none;
+}
+
+.wpbooklist-edit-actions-div .wpbooklist-edit-book-delete-page-post-div {
+    background-color: transparent;
+    color: black;
+    text-align: left;
+    position: absolute;
+    right: 42px;
+}
+
+.wpbooklist-edit-book-delete-page-post-div input {
+    position: relative;
+    bottom: 4px;
+}
+
+.wpbooklist-edit-book-delete-page-post-div label {
+    margin-right: 5px;
+    margin-bottom: 10px;
+    display: inline-block;
+}
+
+.wpbooklist-edit-img-author-div {
+    display: inline-block;
+    width: 90%;
+}
+
+.wpbooklist-delete-result {
+    text-align: center;
+    line-height: 1.5;
+}
+
+.wpbooklist-edit-form-div {
+    opacity: 0;
+}
+
+.wpbooklist-edit-actions-div .wpbooklist-edit-actions-delete-button {
+    padding-right: 20px;
+}
+
+#wpbooklist-cancel-reorder-button{
+    margin-top:15px;
+    position: relative;
+}

@@ -789,7 +789,7 @@ if ( ! class_exists( 'WPBookList_General_Functions', false ) ) :
 			dbDelta( $sql_create_table10 );
 
 			// Call the class that will insert default Storytime data into the table we just created. Seperate file simply because of length of content.
-			require_once CLASS_STORYTIME_DIR . 'class-storytime.php';
+			require_once CLASS_STORYTIME_DIR . 'class-wpbooklist-storytime.php';
 			$storytime_class = new WPBookList_Storytime( 'install' );
 
 		}

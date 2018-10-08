@@ -28,7 +28,7 @@ global $wpdb;
 	require_once 'includes/class-wpbooklist-general-functions.php';
 	require_once 'includes/class-wpbooklist-ajax-functions.php';
 	require_once 'includes/classes/rest/class-wpbooklist-rest-functions.php';
-	require_once 'includes/classes/storytime/class-storytime.php';
+	require_once 'includes/classes/storytime/class-wpbooklist-storytime.php';
 /* END REQUIRE STATEMENTS */
 
 /* CONSTANT DEFINITIONS */
@@ -142,7 +142,7 @@ global $wpdb;
 	define( 'PAGE_POST_TEMPLATES_DEFAULT_DIR', ROOT_DIR . 'includes/templates/' );
 
 	// Define the edit page offset.
-	define( 'EDIT_PAGE_OFFSET', 100 );
+	define( 'EDIT_PAGE_OFFSET', 1000 );
 
 	// Nonces array.
 	define( 'WPBOOKLIST_NONCES_ARRAY',
@@ -187,6 +187,7 @@ global $wpdb;
 			'adminnonce39' => 'wpbooklist_storytime_get_story_action_callback',
 			'adminnonce40' => 'wpbooklist_storytime_expand_browse_action_callback',
 			'adminnonce41' => 'wpbooklist_seed_book_form_autocomplete_action_callback',
+			'adminnonce42'  => 'wpbooklist_dashboard_edit_book_action_callback',
 
 
 		))
@@ -338,6 +339,9 @@ global $wpdb;
 
 	// For adding a book from the admin dashboard.
 	add_action( 'wp_ajax_wpbooklist_dashboard_add_book_action', array( $wp_book_list_ajax_functions, 'wpbooklist_dashboard_add_book_action_callback' ) );
+
+	// For editing a book from the admin dashboard.
+	add_action( 'wp_ajax_wpbooklist_dashboard_edit_book_action', array( $wp_book_list_ajax_functions, 'wpbooklist_dashboard_edit_book_action_callback' ) );
 
 	add_action( 'wp_ajax_wpbooklist_show_book_in_colorbox_action', array( $wp_book_list_ajax_functions, 'wpbooklist_show_book_in_colorbox_action_callback' ) );
 

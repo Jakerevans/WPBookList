@@ -274,6 +274,10 @@ if ( ! class_exists( 'WPBookList_Translations', false ) ) :
 			$this->trans_242 = __( 'Days (leave blank to keep all Stories forever)', 'wpbooklist' );
 			$this->trans_243 = __( 'Save Settings', 'wpbooklist' );
 			$this->trans_244 = __( 'StoryTime', 'wpbooklist' );
+			$this->trans_245 = __( 'Save Changes', 'wpbooklist' );
+			$this->trans_246 = __( 'To Edit this book, simply make your desired changes in the fields below and click the \'Save Changes\' button at the bottom of this section.', 'wpbooklist' );
+
+
 
 			// The array of translation strings.
 			$translation_array = array(
@@ -520,6 +524,9 @@ if ( ! class_exists( 'WPBookList_Translations', false ) ) :
 				'trans241' => $this->trans_241,
 				'trans242' => $this->trans_242,
 				'trans243' => $this->trans_243,
+				'trans244' => $this->trans_244,
+				'trans245' => $this->trans_245,
+				'trans246' => $this->trans_246,
 
 			);
 

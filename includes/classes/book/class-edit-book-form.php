@@ -63,7 +63,7 @@ class WPBookList_Edit_Book_Form {
 
 	    $string1 = '<div id="wpbooklist-edit-books-lib-search-div">
 	    	<div id="wpbooklist-edit-books-lib-div">
-	    		<p id="wpbooklist-edit-books-lib-p">Select a Library to Edit Books From</p>
+	    		<p class="wpbooklist-tab-intro-para">Select a Library to Edit Books From</p>
 	    		<select class="wpbooklist-editbook-select-default" id="wpbooklist-editbook-select-library">
 		    			<option value="'.$wpdb->prefix.'wpbooklist_jre_saved_book_log">Default Library</option>';
 		$string2 = '';
@@ -78,8 +78,15 @@ class WPBookList_Edit_Book_Form {
 				<div class="wpbooklist-spinner" id="wpbooklist-spinner-edit-change-lib"></div>
 				<div id="wpbooklist-edit-books-search-div">
 					<p id="wpbooklist-edit-books-lib-p">Search for a Book to Edit</p>
-					<label>Search by Title</label><input id="wpbooklist-search-title-checkbox" type="checkbox"/><label>Search by Author</label><input id="wpbooklist-search-author-checkbox" type="checkbox"/>
-					<input id="wpbooklist-edit-book-search-input" type="text" />
+					<div class="wpbooklist-edit-book-search-by-div">
+						<label>Search by Title</label>
+						<input id="wpbooklist-search-title-checkbox" type="checkbox"/>
+					</div>
+					<div class="wpbooklist-edit-book-search-by-div">
+						<label>Search by Author</label>
+						<input id="wpbooklist-search-author-checkbox" type="checkbox"/>
+					</div>
+					<input id="wpbooklist-edit-book-search-input" type="text" placeholder="Enter a Search Term..." />
 					<button id="wpbooklist-edit-book-search-button" type="button">Search</button>
 				</div>
 			</div>
@@ -143,8 +150,16 @@ class WPBookList_Edit_Book_Form {
 							</div>
 						</div>
 						<div class="wpbooklist-edit-actions-div">
-							<div class="wpbooklist-edit-actions-edit-button" data-key="'.$key.'" data-table="'.$this->table.'" data-book-id="'.$book->ID.'"><img class="wpbooklist-edit-book-icon wpbooklist-edit-book-icon-button" src="'.ROOT_IMG_ICONS_URL.'pencil.svg"/> Edit</div>
-							<div class="wpbooklist-edit-actions-delete-button" data-key="'.$key.'" data-table="'.$this->table.'" data-book-id="'.$book->ID.'"><img class="wpbooklist-edit-book-icon wpbooklist-edit-book-icon-button" src="'.ROOT_IMG_ICONS_URL.'garbage-bin.svg"/> Delete</div>
+							<div class="wpbooklist-edit-actions-edit-button" data-key="'.$key.'" data-table="'.$this->table.'" data-book-id="'.$book->ID.'">
+								<p>Edit
+									<img class="wpbooklist-edit-book-icon wpbooklist-edit-book-icon-button" src="'.ROOT_IMG_ICONS_URL.'pencil.svg"/> 
+								</p>
+							</div>
+							<div class="wpbooklist-edit-actions-delete-button" data-key="'.$key.'" data-table="'.$this->table.'" data-book-id="'.$book->ID.'"> 
+								<p>Delete
+									<img class="wpbooklist-edit-book-icon wpbooklist-edit-book-icon-button" src="'.ROOT_IMG_ICONS_URL.'garbage-bin.svg"/>
+								</p>
+							</div>
 							<div class="wpbooklist-edit-book-delete-page-post-div">';
 								
 								if($book->page_yes != null && $book->page_yes != 'false'){

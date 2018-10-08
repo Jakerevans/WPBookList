@@ -5,7 +5,7 @@ jQuery( function( $ ) {
 
 	var amazonAuthYes = $( 'input[name="authorize-amazon-yes"]' );
 	var amazonAuthNo = $( 'input[name="authorize-amazon-no"]' );
-	var title = $( 'input[name="book-title"]' );
+	var title = $( 'input[name="book-booktitle"]' );
 	var finishedYes = $( 'input[name="book-finished-yes"]' );
 	var finishedNo = $( 'input[name="book-finished-no"]' );
 	var signedYes = $( 'input[name="book-signed-yes"]' );
@@ -186,7 +186,7 @@ function wpbooklist_add_book_validator() {
 		var amazonAuthNo = $( 'input[name="authorize-amazon-no"]' );
 		var useAmazonYes = $( 'input[name="use-amazon-yes"]' );
 		var useAmazonNo = $( 'input[name="use-amazon-no"]' );
-		var title = $( 'input[name="book-title"]' );
+		var title = $( 'input[name="book-booktitle"]' );
 		var titleLabel = $( '#wpbooklist-addbook-label-booktitle' );
 		var errorFlag = false;
 
