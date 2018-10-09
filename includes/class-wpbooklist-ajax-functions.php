@@ -112,7 +112,7 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 			$width              = '';
 			$woocommerce        = '';
 			$woofile            = '';
-			$bookaction             = '';
+			$bookaction         = '';
 
 			// First set the variables we'll be passing to class-wpbooklist-book.php to ''.
 			if ( isset( $_POST['additionalimage1'] ) ) {
@@ -195,7 +195,7 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 			}
 
 			if ( isset( $_POST['description'] ) ) {
-				$description = filter_var( htmlentities( wp_unslash( $_POST['description'] ) ), FILTER_SANITIZE_STRING );
+				$description = htmlentities( filter_var( wp_unslash( $_POST['description'] ), FILTER_SANITIZE_STRING ) );
 			}
 
 			if ( isset( $_POST['download'] ) ) {
@@ -271,7 +271,7 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 			}
 
 			if ( isset( $_POST['notes'] ) ) {
-				$notes = filter_var( htmlentities( wp_unslash( $_POST['notes'] ) ), FILTER_SANITIZE_STRING );
+				$notes = htmlentities( filter_var( wp_unslash( $_POST['notes'] ), FILTER_SANITIZE_STRING ) );
 			}
 
 			if ( isset( $_POST['numberinseries'] ) ) {
@@ -541,7 +541,7 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 						if ( array_key_exists( 0, $entry_details ) && isset( $entry_details[0] ) && '' !== $entry_details[0] && null !== $entry_details[0] ) {
 
 							// Add new value with key into DB array.
-							if ( isset($_POST[ $entry_details[0] ] ) ) {
+							if ( isset( $_POST[ $entry_details[0] ] ) ) {
 								$book_array[ $entry_details[0] ] = filter_var( wp_unslash( $_POST[ $entry_details[0] ] ), FILTER_SANITIZE_STRING );
 							}	
 						}
@@ -549,37 +549,36 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 				}
 			}
 
-			require_once(CLASS_BOOK_DIR.'class-wpbooklist-book.php');
-			$book_class = new WPBookList_Book( $bookaction, $book_array, $bookid );
-			$insert_result = explode(',',$book_class->add_result);
-			// If book added succesfully, get the ID of the book we just inserted, and return the result and that ID
-			if($insert_result[0] == 1){
+			require_once CLASS_BOOK_DIR . 'class-wpbooklist-book.php';
+			$book_class    = new WPBookList_Book( $bookaction, $book_array, $bookid );
+			$insert_result = explode( ',', $book_class->add_result );
+
+			// If book added succesfully, get the ID of the book we just inserted, and return the result and that ID.
+			if ( $insert_result[0] ) {
 				$book_table_name = $wpdb->prefix . 'wpbooklist_jre_user_options';
-		  		$id_result = $insert_result[1];
-		  		$row = $wpdb->get_row($wpdb->prepare("SELECT * FROM $library WHERE ID = %d", $id_result));
+				$id_result       = $insert_result[1];
+				$row             = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM $library WHERE ID = %d", $id_result ) );
 
-		  		// Get saved page URL
-		  		$pageurl = '';
-				$table_name = $wpdb->prefix.'wpbooklist_jre_saved_page_post_log';
-		  		$page_results = $wpdb->get_row($wpdb->prepare("SELECT * FROM $table_name WHERE book_uid = %s AND type = 'page'" , $row->book_uid));
-		  		if(is_object($page_results)){
-		  			$pageurl = $page_results->post_url;
-		  		}
+				// Get saved page URL.
+				$pageurl      = '';
+				$table_name   = $wpdb->prefix . 'wpbooklist_jre_saved_page_post_log';
+				$page_results = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM $table_name WHERE book_uid = %s AND type = 'page'", $row->book_uid ) );
+				if ( is_object( $page_results ) ) {
+					$pageurl = $page_results->post_url;
+				}
 
-		  		// Get saved post URL.
-		  		$posturl = '';
-				$table_name = $wpdb->prefix.'wpbooklist_jre_saved_page_post_log';
-		  		$post_results = $wpdb->get_row($wpdb->prepare("SELECT * FROM $table_name WHERE book_uid = %s AND type = 'post'", $row->book_uid));
-		  		if(is_object($post_results)){
-		  			$posturl = $post_results->post_url;
-		  		}
+				// Get saved post URL.
+				$posturl      = '';
+				$table_name   = $wpdb->prefix . 'wpbooklist_jre_saved_page_post_log';
+				$post_results = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM $table_name WHERE book_uid = %s AND type = 'post'", $row->book_uid ) );
+				if ( is_object( $post_results ) ) {
+					$posturl = $post_results->post_url;
+				}
 
-		  		echo $insert_result[0].'--sep--'.$id_result.'--sep--'.$library.'--sep--'.$page_yes.'--sep--'.$post_yes.'--sep--'.$pageurl.'--sep--'.$posturl.'--sep--'.$book_class->apireport.'--sep--'.json_encode($book_class->whichapifound).'--sep--'.$book_class->apiamazonfailcount.'--sep--'.$book_class->amazon_transient_use.'--sep--'.$book_class->google_transient_use.'--sep--'.$book_class->openlib_transient_use.'--sep--'.$book_class->itunes_transient_use.'--sep--'.$book_class->itunes_audio_transient_use;
+				wp_die( $insert_result[0] . '--sep--' . $id_result . '--sep--' . $library . '--sep--' . $page_yes . '--sep--' . $post_yes . '--sep--' . $pageurl . '--sep--' . $posturl . '--sep--' . $book_class->apireport . '--sep--' . wp_json_encode( $book_class->whichapifound ) . '--sep--' . $book_class->apiamazonfailcount . '--sep--' . $book_class->amazon_transient_use . '--sep--' . $book_class->google_transient_use . '--sep--' . $book_class->openlib_transient_use . '--sep--' . $book_class->itunes_transient_use . '--sep--' . $book_class->itunes_audio_transient_use );
 			} else {
-				echo $insert_result[0].'--sep--'.$insert_result[1];
+				wp_die( $insert_result[0] . '--sep--' . $insert_result[1] );
 			}
-
-			wp_die();
 		}
 
 		/**
@@ -665,7 +664,7 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 			$width              = '';
 			$woocommerce        = '';
 			$woofile            = '';
-			$bookaction             = '';
+			$bookaction         = '';
 
 			// First set the variables we'll be passing to class-wpbooklist-book.php to ''.
 			if ( isset( $_POST['additionalimage1'] ) ) {
@@ -748,7 +747,7 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 			}
 
 			if ( isset( $_POST['description'] ) ) {
-				$description = filter_var( htmlentities( wp_unslash( $_POST['description'] ) ), FILTER_SANITIZE_STRING );
+				$description = htmlentities( filter_var( wp_unslash( $_POST['description'] ) ), FILTER_SANITIZE_STRING );
 			}
 
 			if ( isset( $_POST['download'] ) ) {
@@ -824,7 +823,7 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 			}
 
 			if ( isset( $_POST['notes'] ) ) {
-				$notes = filter_var( htmlentities( wp_unslash( $_POST['notes'] ) ), FILTER_SANITIZE_STRING );
+				$notes = htmlentities( filter_var( wp_unslash( $_POST['notes'] ) ), FILTER_SANITIZE_STRING );
 			}
 
 			if ( isset( $_POST['numberinseries'] ) ) {
@@ -1094,49 +1093,43 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 						if ( array_key_exists( 0, $entry_details ) && isset( $entry_details[0] ) && '' !== $entry_details[0] && null !== $entry_details[0] ) {
 
 							// Add new value with key into DB array.
-							if ( isset($_POST[ $entry_details[0] ] ) ) {
+							if ( isset( $_POST[ $entry_details[0] ] ) ) {
 								$book_array[ $entry_details[0] ] = filter_var( wp_unslash( $_POST[ $entry_details[0] ] ), FILTER_SANITIZE_STRING );
-							}	
+							}
 						}
 					}
 				}
 			}
 
-			require_once(CLASS_BOOK_DIR.'class-wpbooklist-book.php');
-			$book_class = new WPBookList_Book('edit', $book_array, $bookid );
+			require_once CLASS_BOOK_DIR . 'class-wpbooklist-book.php';
+			$book_class  = new WPBookList_Book( 'edit', $book_array, $bookid );
 			$edit_result = $book_class->edit_result;
 
-
-error_log('$edit_result');
-
-error_log($edit_result);
-
-
-			// If book was edited succesfully, get the ID of the book we just inserted, and return the result and that ID
-			if( 1 === $edit_result ){
+			// If book was edited succesfully, get the ID of the book we just inserted, and return the result and that ID.
+			if ( 1 === $edit_result ) {
 				$book_table_name = $wpdb->prefix . 'wpbooklist_jre_user_options';
-		  		$id_result = $book_class->id;
-		  		$row = $wpdb->get_row($wpdb->prepare("SELECT * FROM $library WHERE ID = %d", $id_result));
+				$id_result       = $book_class->id;
+				$row             = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM $library WHERE ID = %d", $id_result ) );
 
-		  		// Get saved page URL
-		  		$pageurl = '';
-				$table_name = $wpdb->prefix.'wpbooklist_jre_saved_page_post_log';
-		  		$page_results = $wpdb->get_row($wpdb->prepare("SELECT * FROM $table_name WHERE book_uid = %s AND type = 'page'" , $row->book_uid));
-		  		if(is_object($page_results)){
-		  			$pageurl = $page_results->post_url;
-		  		}
+				// Get saved page URL.
+				$pageurl      = '';
+				$table_name   = $wpdb->prefix . 'wpbooklist_jre_saved_page_post_log';
+				$page_results = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM $table_name WHERE book_uid = %s AND type = 'page'", $row->book_uid ) );
+				if ( is_object( $page_results ) ) {
+					$pageurl = $page_results->post_url;
+				}
 
-		  		// Get saved post URL
-		  		$posturl = '';
-				$table_name = $wpdb->prefix.'wpbooklist_jre_saved_page_post_log';
-		  		$post_results = $wpdb->get_row($wpdb->prepare("SELECT * FROM $table_name WHERE book_uid = %s AND type = 'post'", $row->book_uid));
-		  		if(is_object($post_results)){
-		  			$posturl = $post_results->post_url;
-		  		}
+				// Get saved post URL.
+				$posturl      = '';
+				$table_name   = $wpdb->prefix . 'wpbooklist_jre_saved_page_post_log';
+				$post_results = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM $table_name WHERE book_uid = %s AND type = 'post'", $row->book_uid ) );
+				if ( is_object( $post_results ) ) {
+					$posturl = $post_results->post_url;
+				}
 
-		  		echo $edit_result.'--sep--'.$id_result.'--sep--'.$library.'--sep--'.$page_yes.'--sep--'.$post_yes.'--sep--'.$pageurl.'--sep--'.$posturl.'--sep--'.$book_class->apireport.'--sep--'.json_encode($book_class->whichapifound).'--sep--'.$book_class->apiamazonfailcount.'--sep--'.$book_class->amazon_transient_use.'--sep--'.$book_class->google_transient_use.'--sep--'.$book_class->openlib_transient_use.'--sep--'.$book_class->itunes_transient_use.'--sep--'.$book_class->itunes_audio_transient_use;
+				wp_die( $edit_result . '--sep--' . $id_result . '--sep--' . $library . '--sep--' . $page_yes . '--sep--' . $post_yes . '--sep--' . $pageurl . '--sep--' . $posturl . '--sep--' . $book_class->apireport . '--sep--' . wp_json_encode($book_class->whichapifound) . '--sep--' . $book_class->apiamazonfailcount . '--sep--' . $book_class->amazon_transient_use . '--sep--' . $book_class->google_transient_use . '--sep--' . $book_class->openlib_transient_use . '--sep--' . $book_class->itunes_transient_use . '--sep--' . $book_class->itunes_audio_transient_use );
 			} else {
-				echo $edit_result.'--sep--';
+				wp_die( $edit_result . '--sep--' );
 			}
 
 			wp_die();
@@ -1145,20 +1138,24 @@ error_log($edit_result);
 		/**
 		 * Callback function for showing books in the colorbox window
 		 */
-		public function wpbooklist_show_book_in_colorbox_action_callback(){
+		public function wpbooklist_show_book_in_colorbox_action_callback() {
 			global $wpdb;
 			check_ajax_referer( 'wpbooklist_show_book_in_colorbox_action_callback', 'security' );
-			$book_id = filter_var( wp_unslash( $_POST['bookId'] ), FILTER_SANITIZE_NUMBER_INT);
+
+			if ( isset( $_POST['bookId'] ) ) {
+				$book_id = filter_var( wp_unslash( $_POST['bookId'] ), FILTER_SANITIZE_NUMBER_INT );
+			}
+			
 			$book_table = filter_var( wp_unslash( $_POST['bookTable'] ), FILTER_SANITIZE_STRING );
-			$sortParam = filter_var( wp_unslash( $_POST['sortParam'] ), FILTER_SANITIZE_STRING );
+			$sortParam  = filter_var( wp_unslash( $_POST['sortParam'] ), FILTER_SANITIZE_STRING );
 
-			// Double-check that Amazon review isn't expired
-			require_once(CLASS_BOOK_DIR.'class-wpbooklist-book.php');
+			// Double-check that Amazon review isn't expired.
+			require_once CLASS_BOOK_DIR . 'class-wpbooklist-book.php';
 			$book = new WPBookList_Book($book_id, $book_table);
-			$book->refresh_amazon_review($book_id, $book_table);
+			$book->refresh_amazon_review( $book_id, $book_table);
 
-			// Instantiate the class that shows the book in colorbox
-			require_once(CLASS_DIR.'class-show-book-in-colorbox.php');
+			// Instantiate the class that shows the book in colorbox.
+			require_once CLASS_DIR . 'class-show-book-in-colorbox.php';
 			$colorbox = new WPBookList_Show_Book_In_Colorbox($book_id, $book_table, null, $sortParam);
 
 			echo $colorbox->output.'---sep---'.$colorbox->isbn;
@@ -1199,7 +1196,7 @@ error_log($edit_result);
 
 		      $delete_from_list = sanitize_text_field($_POST['table']);
 		      $pos2 = strripos($delete_from_list,"_");
-		      $delete_id = substr($delete_from_list, ($pos2+1));
+		      $delete_id = substr($delete_from_list, ($pos2+1) );
 		      $wpdb->delete( $table_name_dynamic, array( 'ID' => $delete_id ), array( '%d' ) );
 		         
 		      // Dropping primary key in database to alter the IDs and the AUTO_INCREMENT value
@@ -1230,14 +1227,14 @@ error_log($edit_result);
 
 		      // Setting the AUTO_INCREMENT value based on number of remaining entries
 		      $title_count++;
-		      $query5 = $wpdb->prepare( "ALTER TABLE $table_name_dynamic AUTO_INCREMENT=%d",$title_count);
+		      $query5 = $wpdb->prepare( "ALTER TABLE $table_name_dynamic AUTO_INCREMENT=%d", $title_count );
 		      $query5 = str_replace('\'', '`', $query5);
 		      $wpdb->query($query5);
 		      
 		  }
 
-		  if(isset($db_name)){
-		      if(($db_name != "")  ||  ($db_name != null)){
+		  if ( isset( $db_name)){
+		      if (($db_name != "")  ||  ($db_name != null)){
 		          $wpdb->wpbooklist_jre_dynamic_db_name = "{$wpdb->prefix}wpbooklist_jre_{$db_name}";
 		          $wpdb->wpbooklist_jre_dynamic_db_name_settings = "{$wpdb->prefix}wpbooklist_jre_settings_{$db_name}";
 		          $wpdb->wpbooklist_jre_list_dynamic_db_names = "{$wpdb->prefix}wpbooklist_jre_list_dynamic_db_names";
@@ -1399,9 +1396,9 @@ error_log($edit_result);
 				  dbDelta( $sql_create_table2 );
 
 				  	$table_name = $wpdb->wpbooklist_jre_dynamic_db_name_settings;
-		  			$wpdb->insert( $table_name, array('ID' => 1));
+					$wpdb->insert( $table_name, array('ID' => 1) );
 
-		          $wpdb->insert( $table_name_dynamic, array('user_table_name' => $db_name ));
+		          $wpdb->insert( $table_name_dynamic, array('user_table_name' => $db_name ) );
 		      }
 		  }
 		      
@@ -1439,7 +1436,7 @@ error_log($edit_result);
 
 			$delete_from_list = sanitize_text_field($_POST['table']);
 			$pos2 = strripos($delete_from_list,"_");
-			$delete_id = substr($delete_from_list, ($pos2+1));
+			$delete_id = substr($delete_from_list, ($pos2+1) );
 			$wpdb->delete( $table_name_dynamic, array( 'ID' => $delete_id ), array( '%d' ) );
 			 
 			// Dropping primary key in database to alter the IDs and the AUTO_INCREMENT value
@@ -1470,14 +1467,14 @@ error_log($edit_result);
 
 			// Setting the AUTO_INCREMENT value based on number of remaining entries
 			$title_count++;
-			$query5 = $wpdb->prepare( "ALTER TABLE $table_name_dynamic AUTO_INCREMENT=%d",$title_count);
+			$query5 = $wpdb->prepare( "ALTER TABLE $table_name_dynamic AUTO_INCREMENT=%d", $title_count );
 			$query5 = str_replace('\'', '`', $query5);
 			$wpdb->query($query5);
 		  	wp_die();
 		}
 
 		// Callback function for saving library display options
-		public function wpbooklist_dashboard_save_library_display_options_action_callback(){
+		public function wpbooklist_dashboard_save_library_display_options_action_callback() {
 			global $wpdb;
 			check_ajax_referer( 'wpbooklist_dashboard_save_library_display_options_action_callback', 'security' );
 
@@ -1592,14 +1589,14 @@ error_log($edit_result);
 				'booksonpage' => $booksonpage
 			);
 
-			require_once(CLASS_DIR.'class-display-options.php');
+			require_once CLASS_DIR . 'class-display-options.php';
 			$settings_class = new WPBookList_Display_Options();
 			$settings_class->save_library_settings($library, $settings_array);
 			wp_die();
 		}
 
 		// Callback function for saving post display options
-		public function wpbooklist_dashboard_save_post_display_options_action_callback(){
+		public function wpbooklist_dashboard_save_post_display_options_action_callback() {
 			global $wpdb;
 			check_ajax_referer( 'wpbooklist_dashboard_save_post_display_options_action_callback', 'security' );
 
@@ -1683,14 +1680,14 @@ error_log($edit_result);
 				'hidekobopurchase' => $hidekobopurchase
 			);
 
-			require_once(CLASS_DIR.'class-display-options.php');
+			require_once CLASS_DIR . 'class-display-options.php';
 			$settings_class = new WPBookList_Display_Options();
 			$settings_class->save_post_settings($settings_array);
 			wp_die();
 		}
 
 		// Callback function for saving page display options
-		public function wpbooklist_dashboard_save_page_display_options_action_callback(){
+		public function wpbooklist_dashboard_save_page_display_options_action_callback() {
 			global $wpdb;
 			check_ajax_referer( 'wpbooklist_dashboard_save_page_display_options_action_callback', 'security' );
 
@@ -1775,38 +1772,38 @@ error_log($edit_result);
 
 			);
 
-			require_once(CLASS_DIR.'class-display-options.php');
+			require_once CLASS_DIR . 'class-display-options.php';
 			$settings_class = new WPBookList_Display_Options();
 			$settings_class->save_page_settings($settings_array);
 			wp_die();
 		}
 
 		// Callback function for saving library display options.
-		public function wpbooklist_change_library_display_options_action_callback(){
+		public function wpbooklist_change_library_display_options_action_callback() {
 			global $wpdb;
 			check_ajax_referer( 'wpbooklist_change_library_display_options_action_callback', 'security' );
 			$library = filter_var( wp_unslash( $_POST['library'] ), FILTER_SANITIZE_STRING );
 			$table_name = '';
-			if($library == $wpdb->prefix.'wpbooklist_jre_saved_book_log'){
-				$table_name = $wpdb->prefix.'wpbooklist_jre_user_options';
+			if ( $library == $wpdb->prefix . 'wpbooklist_jre_saved_book_log'){
+				$table_name = $wpdb->prefix . 'wpbooklist_jre_user_options';
 			} else {
-				$library = explode('_', $library);
+				$library = explode( '_', $library);
 				$library = array_pop($library);
-				$table_name = $wpdb->prefix.'wpbooklist_jre_settings_'.$library;
+				$table_name = $wpdb->prefix . 'wpbooklist_jre_settings_'.$library;
 			}
 			//$var2 = filter_var( wp_unslash( $_POST['var'] ), FILTER_SANITIZE_NUMBER_INT);
-			$row = $wpdb->get_row($wpdb->prepare("SELECT * FROM $table_name WHERE ID = %d", 1));
+			$row = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM $table_name WHERE ID = %d", 1) );
 			echo $jsonData = json_encode($row); 
 			wp_die();
 		}
 
 		// Callback Function for showing the Edit Book form
-		public function wpbooklist_edit_book_show_form_action_callback(){
+		public function wpbooklist_edit_book_show_form_action_callback() {
 			global $wpdb;
 			check_ajax_referer( 'wpbooklist_edit_book_show_form_action_callback', 'security' );
 			$book_id = filter_var( wp_unslash( $_POST['bookId'] ), FILTER_SANITIZE_NUMBER_INT);
 			$table = filter_var( wp_unslash( $_POST['table'] ), FILTER_SANITIZE_STRING );
-			$book_data = $wpdb->get_row($wpdb->prepare("SELECT * FROM $table WHERE ID = %d",$book_id));
+			$book_data = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM $table WHERE ID = %d", $book_id ) );
 			$crosssell_ids = '';
 			$crosssell_titles = '';
 			$upsell_ids = '';
@@ -1821,21 +1818,21 @@ error_log($edit_result);
 			// Get Woocommerce product, if one exists
 			// $product = array();
 			$cat = '';
-			if($book_data->woocommerce != null){
+			if ( $book_data->woocommerce != null){
 				//$product = wc_get_product( $book_data->woocommerce );
 				$product = get_post_meta($book_data->woocommerce); 
 
 				// Get all downloadable files associated with product
-				if(array_key_exists('_downloadable_files', $product) && array_key_exists(0, $product["_downloadable_files"])){
-					$df = json_encode(current(unserialize($product["_downloadable_files"][0])));
-					$image_url = current(unserialize($product["_downloadable_files"][0]));
-					$attachment = $wpdb->get_col($wpdb->prepare("SELECT ID FROM $wpdb->posts WHERE guid='%s';", $image_url["file"] ));
+				if (array_key_exists('_downloadable_files', $product ) && array_key_exists(0, $product["_downloadable_files"])){
+					$df = json_encode(current(unserialize($product["_downloadable_files"][0])) );
+					$image_url = current(unserialize($product["_downloadable_files"][0]) );
+					$attachment = $wpdb->get_col($wpdb->prepare( "SELECT ID FROM $wpdb->posts WHERE guid='%s';", $image_url["file"] ) );
 
-					if(is_array($attachment) && array_key_exists(0, $attachment)){
+					if ( is_array($attachment ) && array_key_exists(0, $attachment )){
 						$image_thumb = wp_get_attachment_image_src($attachment[0], 'thumbnail');
 					}
 				}
-				//$attachment = $wpdb->get_col($wpdb->prepare("SELECT ID FROM $wpdb->posts WHERE guid='%s';", $image_url ));
+				//$attachment = $wpdb->get_col($wpdb->prepare( "SELECT ID FROM $wpdb->posts WHERE guid='%s';", $image_url ) );
 				//$image_url = $attachment[0]
 
 				// Get crosssell IDs and titles
@@ -1852,35 +1849,35 @@ error_log($edit_result);
 
 				// Get product category
 				$cat = get_the_terms ( $book_data->woocommerce, 'product_cat' );
-				if(is_array($cat) && array_key_exists(0, $cat)){
+				if ( is_array($cat ) && array_key_exists(0, $cat )){
 					$cat = $cat[0]->name;
 				} else {
 					$cat = '';
 				}
 
-				$product = json_encode($product);
+				$product = json_encode($product );
 			}
 
-			require_once(CLASS_BOOK_DIR.'class-wpbooklist-book-form.php');
+			require_once CLASS_BOOK_DIR . 'class-wpbooklist-book-form.php';
 			$form = new WPBookList_Book_Form;
 			$edit_form = $form->output_book_form();
 
 			// Convert html entites back to normal as needed
-			$book_data->title = stripslashes(html_entity_decode($book_data->title, ENT_QUOTES | ENT_XML1, 'UTF-8'));
+			$book_data->title = stripslashes(html_entity_decode($book_data->title, ENT_QUOTES | ENT_XML1, 'UTF-8') );
 
 			// Encode all book data for return trip
 			$book_data = json_encode($book_data);
 
 			// Check to see if Storefront extension is active
 			include_once( ABSPATH . 'wp-admin/includes/plugin.php' );
-			if(is_plugin_active('wpbooklist-storefront/wpbooklist-storefront.php')){
+			if ( is_plugin_active('wpbooklist-storefront/wpbooklist-storefront.php')){
 				$storefront = 'true';
 			} else {
 				$storefront = 'false';
 			}
 
 
-			if(is_array($attachment) && array_key_exists(0, $attachment)){
+			if ( is_array($attachment ) && array_key_exists(0, $attachment )){
 				$attachment = $attachment[0];
 			} else {
 				$attachment = '';
@@ -1894,25 +1891,25 @@ error_log($edit_result);
 		}
 
 		// Callback function for the Edit Book pagination.
-		public function wpbooklist_edit_book_pagination_action_callback(){
+		public function wpbooklist_edit_book_pagination_action_callback() {
 			global $wpdb;
 			check_ajax_referer( 'wpbooklist_edit_book_pagination_action_callback', 'security' );
 			$currentOffset = filter_var( wp_unslash( $_POST['currentOffset'] ), FILTER_SANITIZE_NUMBER_INT);
 			$library = filter_var( wp_unslash( $_POST['library'] ), FILTER_SANITIZE_STRING );
 
-			require_once(CLASS_BOOK_DIR.'class-edit-book-form.php');
+			require_once CLASS_BOOK_DIR . 'class-edit-book-form.php';
 			$form = new WPBookList_Edit_Book_Form;
-			echo $form->output_edit_book_form($library, $currentOffset).'_Separator_'.$library;
+			echo $form->output_edit_book_form($library, $currentOffset ).'_Separator_'.$library;
 			wp_die();
 		}
 
 		// Callback Function for switching libraries on the Edit Book tab
-		public function wpbooklist_edit_book_switch_lib_action_callback(){
+		public function wpbooklist_edit_book_switch_lib_action_callback() {
 			global $wpdb;
 			check_ajax_referer( 'wpbooklist_edit_book_switch_lib_action_callback', 'security' );
 			$library = filter_var( wp_unslash( $_POST['library'] ), FILTER_SANITIZE_STRING );
 
-			require_once(CLASS_BOOK_DIR.'class-edit-book-form.php');
+			require_once CLASS_BOOK_DIR . 'class-edit-book-form.php';
 			$form = new WPBookList_Edit_Book_Form;
 			echo $form->output_edit_book_form($library, 0).'_Separator_'.$library;
 
@@ -1920,7 +1917,7 @@ error_log($edit_result);
 		}
 
 		// Callback Function for searching for a title to edit.
-		public function wpbooklist_edit_book_search_action_callback(){
+		public function wpbooklist_edit_book_search_action_callback() {
 			global $wpdb;
 			check_ajax_referer( 'wpbooklist_edit_book_search_action_callback', 'security' );
 			$search_term = filter_var( wp_unslash( $_POST['searchTerm'] ), FILTER_SANITIZE_STRING );
@@ -1928,23 +1925,23 @@ error_log($edit_result);
 			$title_check = filter_var( wp_unslash( $_POST['titleCheck'] ), FILTER_SANITIZE_STRING );
 			$library = filter_var( wp_unslash( $_POST['library'] ), FILTER_SANITIZE_STRING );
 
-			if($title_check == 'true'){
+			if ( $title_check == 'true'){
 				$search_mode = 'title';
 			}
 
-			if($author_check == 'true'){
+			if ( $author_check == 'true'){
 				$search_mode = 'author';
 			}
 
-			if($author_check == 'true' && $title_check == 'true'){
+			if ( $author_check == 'true' && $title_check == 'true'){
 				$search_mode = 'both';
 			}
 
-			if($author_check != 'true' && $title_check != 'true'){
+			if ( $author_check != 'true' && $title_check != 'true'){
 				$search_mode = 'both';
 			}
 
-			require_once(CLASS_BOOK_DIR.'class-edit-book-form.php');
+			require_once CLASS_BOOK_DIR . 'class-edit-book-form.php';
 			$form = new WPBookList_Edit_Book_Form;
 			echo $form->output_edit_book_form($library, 0, $search_mode, $search_term).'_Separator_'.$library.'_Separator_'.$form->limit;
 			wp_die();
@@ -1952,7 +1949,7 @@ error_log($edit_result);
 
 
 		// Callback function editing a book
-		public function wpbooklist_edit_book_actual_action_callback(){
+		public function wpbooklist_edit_book_actual_action_callback() {
 			global $wpdb;
 			check_ajax_referer( 'wpbooklist_edit_book_actual_action_callback', 'security' );
 			
@@ -2294,45 +2291,45 @@ error_log($edit_result);
 				'kobobuylink' => $kobobuylink
 			);
 
-			require_once(CLASS_BOOK_DIR.'class-wpbooklist-book.php');
+			require_once CLASS_BOOK_DIR . 'class-wpbooklist-book.php';
 			$book_class = new WPBookList_Book('edit', $book_array, $book_id);
 
 			$edit_result = $book_class->edit_result;
 
 			// If book was succesfully edited, and return the page/post results
-			if($edit_result == 1){
-		  		$row = $wpdb->get_row($wpdb->prepare("SELECT * FROM $library WHERE ID = %d", $book_id));
+			if ( $edit_result == 1){
+				$row = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM $library WHERE ID = %d", $book_id ) );
 
-		  		// Get saved page URL
-				$table_name = $wpdb->prefix.'wpbooklist_jre_saved_page_post_log';
-		  		$page_results = $wpdb->get_row($wpdb->prepare("SELECT * FROM $table_name WHERE book_uid = %s AND type = 'page'" , $row->book_uid));
-		  		if(is_object($page_results)){
-		  			$page_url = $page_results->post_url;
-		  		} else {
-		  			$page_url = '';
-		  		}
+				// Get saved page URL
+				$table_name = $wpdb->prefix . 'wpbooklist_jre_saved_page_post_log';
+				$page_results = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM $table_name WHERE book_uid = %s AND type = 'page'", $row->book_uid ) );
+				if ( is_object( $page_results ) ) {
+					$page_url = $page_results->post_url;
+				} else {
+					$page_url = '';
+				}
 
-		  		// Get saved post URL
-				$table_name = $wpdb->prefix.'wpbooklist_jre_saved_page_post_log';
-		  		$post_results = $wpdb->get_row($wpdb->prepare("SELECT * FROM $table_name WHERE book_uid = %s AND type = 'post'", $row->book_uid));
-		  		if(is_object($page_results)){
-		  			$post_url = $post_results->post_url;
-		  		} else {
-		  			$post_url = '';
-		  		}
+				// Get saved post URL
+				$table_name = $wpdb->prefix . 'wpbooklist_jre_saved_page_post_log';
+				$post_results = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM $table_name WHERE book_uid = %s AND type = 'post'", $row->book_uid ) );
+				if ( is_object( $page_results ) ) {
+					$post_url = $post_results->post_url;
+				} else {
+					$post_url = '';
+				}
 
-		  		echo $edit_result.'--sep--'.$book_id.'--sep--'.$library.'--sep--'.$page_yes.'--sep--'.$post_yes.'--sep--'.$page_url.'--sep--'.$post_url.'--sep--'.$wpdb->prefix.'--sep--'.$book_class->apireport.'--sep--'.json_encode($book_class->whichapifound).'--sep--'.$book_class->apiamazonfailcount.'---sep--'.$book_class->amazon_transient_use;
+				echo $edit_result.'--sep--'.$book_id.'--sep--'.$library.'--sep--'.$page_yes.'--sep--'.$post_yes.'--sep--'.$page_url.'--sep--'.$post_url.'--sep--'.$wpdb->prefix . '--sep--'.$book_class->apireport.'--sep--'.json_encode($book_class->whichapifound).'--sep--'.$book_class->apiamazonfailcount.'---sep--'.$book_class->amazon_transient_use;
 
 
 		  	} else {
-		  		echo $edit_result;
+				echo $edit_result;
 		  	}
 
 			wp_die();
 		}
 
 		// Callback function for deleting books 
-		public function wpbooklist_delete_book_action_callback(){
+		public function wpbooklist_delete_book_action_callback() {
 			global $wpdb;
 			check_ajax_referer( 'wpbooklist_delete_book_action_callback', 'security' );
 			$library = filter_var( wp_unslash( $_POST['library'] ), FILTER_SANITIZE_STRING );
@@ -2340,7 +2337,7 @@ error_log($edit_result);
 			$book_id = filter_var( wp_unslash( $_POST['bookId'] ), FILTER_SANITIZE_NUMBER_INT);
 
 
-			require_once(CLASS_BOOK_DIR.'class-wpbooklist-book.php');
+			require_once CLASS_BOOK_DIR . 'class-wpbooklist-book.php';
 			$book_class = new WPBookList_Book;
 			$delete_result = $book_class->delete_book($library, $book_id, $delete_strinG );
 			echo $delete_result;
@@ -2348,7 +2345,7 @@ error_log($edit_result);
 		}
 
 		// Callback function for saving user's API info.
-		public function wpbooklist_user_apis_action_callback(){
+		public function wpbooklist_user_apis_action_callback() {
 			global $wpdb;
 			check_ajax_referer( 'wpbooklist_user_apis_action_callback', 'security' );
 			$amazonapipublic = filter_var( wp_unslash( $_POST['amazonapipublic'] ), FILTER_SANITIZE_STRING );
@@ -2373,7 +2370,7 @@ error_log($edit_result);
 		
 
 		// Callback function for uploading a new StylePak after purchase.
-		public function wpbooklist_upload_new_stylepak_action_callback(){
+		public function wpbooklist_upload_new_stylepak_action_callback() {
 
 			global $wpdb;
 			check_ajax_referer( 'wpbooklist_upload_new_stylepak_action_callback', 'security' );
@@ -2396,7 +2393,7 @@ error_log($edit_result);
 			$move_result = move_uploaded_file($_FILES['my_uploaded_file']['tmp_name'], LIBRARY_STYLEPAKS_UPLOAD_DIR."{$_FILES['my_uploaded_file'] ['name']}");
 
 			// Unzip the file if it's zipped
-			if(strpos($_FILES['my_uploaded_file']['name'], '.zip') !== false){
+			if (strpos($_FILES['my_uploaded_file']['name'], '.zip') !== false){
 				$zip = new ZipArchive;
 				$res = $zip->open(LIBRARY_STYLEPAKS_UPLOAD_DIR.$_FILES['my_uploaded_file']['name']);
 				if ($res === TRUE) {
@@ -2414,32 +2411,32 @@ error_log($edit_result);
 
 
 		// Callback function for assigning a StylePak to a library.
-		public function wpbooklist_assign_stylepak_action_callback(){
+		public function wpbooklist_assign_stylepak_action_callback() {
 
 			global $wpdb;
 			check_ajax_referer( 'wpbooklist_assign_stylepak_action_callback', 'security' );
 
 			// For assigning a StylePak to a Library
 				$stylepak = filter_var( wp_unslash( $_POST["stylepak"] ), FILTER_SANITIZE_STRING );
-		  		$library = filter_var( wp_unslash( $_POST["library"] ), FILTER_SANITIZE_STRING );
+				$library = filter_var( wp_unslash( $_POST["library"] ), FILTER_SANITIZE_STRING );
 
-		  		$stylepak = str_replace('.css', '', $stylepak);
-		  		$stylepak = str_replace('.zip', '', $stylepak);
+				$stylepak = str_replace('.css', '', $stylepak);
+				$stylepak = str_replace('.zip', '', $stylepak);
 
-		  		// Build table name to store StylePak in
-		  		if(strpos($library, 'wpbooklist_jre_saved_book_log') !== false){
-		  			$table_name = $wpdb->prefix . 'wpbooklist_jre_user_options';
-			  		$data = array(
+				// Build table name to store StylePak in
+				if (strpos($library, 'wpbooklist_jre_saved_book_log') !== false){
+					$table_name = $wpdb->prefix . 'wpbooklist_jre_user_options';
+					$data = array(
 				      'stylepak' => $stylepak,
 				    );
 				    $format = array( '%s');   
 				    $where = array( 'ID' => 1 );
 				    $where_format = array( '%d' );
 				    echo $wpdb->update( $table_name, $data, $where, $format, $where_format );
-		  		} else {
-		  			$table_name = $wpdb->prefix . 'wpbooklist_jre_list_dynamic_db_names';
-		  			$library = substr($library, strrpos($library, '_') + 1);
-		  			$data = array(
+				} else {
+					$table_name = $wpdb->prefix . 'wpbooklist_jre_list_dynamic_db_names';
+					$library = substr($library, strrpos($library, '_') + 1);
+					$data = array(
 				      'stylepak' => $stylepak,
 				    );
 				    $format = array( '%s');   
@@ -2447,13 +2444,13 @@ error_log($edit_result);
 				    $where_format = array( '%s' );
 				    echo $stylepak.' '.$library;
 				    echo $wpdb->update( $table_name, $data, $where, $format, $where_format );
-		  		}
+				}
 
 			wp_die();
 		}
 
 		// Callback function for uploading a new Post Template after purchase
-		public function wpbooklist_upload_new_post_template_action_callback(){
+		public function wpbooklist_upload_new_post_template_action_callback() {
 
 			global $wpdb;
 			check_ajax_referer( 'wpbooklist_upload_new_post_template_action_callback', 'security' );
@@ -2477,7 +2474,7 @@ error_log($edit_result);
 				$move_result = move_uploaded_file($_FILES['my_uploaded_file']['tmp_name'], POST_TEMPLATES_UPLOAD_DIR."{$_FILES['my_uploaded_file'] ['name']}");
 
 				// Unzip the file if it's zipped
-				if(strpos($_FILES['my_uploaded_file']['name'], '.zip') !== false){
+				if (strpos($_FILES['my_uploaded_file']['name'], '.zip') !== false){
 					$zip = new ZipArchive;
 					$res = $zip->open(POST_TEMPLATES_UPLOAD_DIR.$_FILES['my_uploaded_file']['name']);
 					if ($res === TRUE) {
@@ -2492,7 +2489,7 @@ error_log($edit_result);
 		}
 
 		// Callback function for uploading a new Post Template after purchase
-		public function wpbooklist_assign_post_template_action_callback(){
+		public function wpbooklist_assign_post_template_action_callback() {
 
 			global $wpdb;
 			check_ajax_referer( 'wpbooklist_assign_post_template_action_callback', 'security' );
@@ -2500,12 +2497,12 @@ error_log($edit_result);
 			// For assigning a Template to a Library
 				$template = filter_var( wp_unslash( $_POST["template"] ), FILTER_SANITIZE_STRING );
 
-		  		$template = str_replace('.php', '', $template);
-		  		$template = str_replace('.zip', '', $template);
+				$template = str_replace('.php', '', $template);
+				$template = str_replace('.zip', '', $template);
 
-		  		$table_name = $wpdb->prefix . 'wpbooklist_jre_user_options';
+				$table_name = $wpdb->prefix . 'wpbooklist_jre_user_options';
 
-		  		$data = array(
+				$data = array(
 			      'activeposttemplate' => $template,
 			    );
 			    $format = array( '%s');   
@@ -2519,7 +2516,7 @@ error_log($edit_result);
 		
 
 		// Callback function for uploading a new page Template after purchase
-		public function wpbooklist_upload_new_page_template_action_callback(){
+		public function wpbooklist_upload_new_page_template_action_callback() {
 
 			global $wpdb;
 			check_ajax_referer( 'wpbooklist_upload_new_page_template_action_callback', 'security' );
@@ -2543,7 +2540,7 @@ error_log($edit_result);
 				$move_result = move_uploaded_file($_FILES['my_uploaded_file']['tmp_name'], PAGE_TEMPLATES_UPLOAD_DIR."{$_FILES['my_uploaded_file'] ['name']}");
 
 				// Unzip the file if it's zipped
-				if(strpos($_FILES['my_uploaded_file']['name'], '.zip') !== false){
+				if (strpos($_FILES['my_uploaded_file']['name'], '.zip') !== false){
 					$zip = new ZipArchive;
 					$res = $zip->open(PAGE_TEMPLATES_UPLOAD_DIR.$_FILES['my_uploaded_file']['name']);
 					if ($res === TRUE) {
@@ -2558,7 +2555,7 @@ error_log($edit_result);
 		}
 
 		// Callback function for uploading a new page Template after purchase
-		public function wpbooklist_assign_page_template_action_callback(){
+		public function wpbooklist_assign_page_template_action_callback() {
 
 			global $wpdb;
 			check_ajax_referer( 'wpbooklist_assign_page_template_action_callback', 'security' );
@@ -2566,12 +2563,12 @@ error_log($edit_result);
 			// For assigning a page_template
 				$template = filter_var( wp_unslash( $_POST["template"] ), FILTER_SANITIZE_STRING );
 
-		  		$template = str_replace('.php', '', $template);
-		  		$template = str_replace('.zip', '', $template);
+				$template = str_replace('.php', '', $template);
+				$template = str_replace('.zip', '', $template);
 
-		  		$table_name = $wpdb->prefix . 'wpbooklist_jre_user_options';
+				$table_name = $wpdb->prefix . 'wpbooklist_jre_user_options';
 
-		  		$data = array(
+				$data = array(
 			      'activepagetemplate' => $template,
 			    );
 			    $format = array( '%s');   
@@ -2583,37 +2580,37 @@ error_log($edit_result);
 		}
 
 		// Callback function for creating a DB backup of a Library
-		public function wpbooklist_create_db_library_backup_action_callback(){
+		public function wpbooklist_create_db_library_backup_action_callback() {
 			global $wpdb;
 			check_ajax_referer( 'wpbooklist_create_db_library_backup_action_callback', 'security' );
 			$library = filter_var( wp_unslash( $_POST['library'] ), FILTER_SANITIZE_STRING );
 
-			require_once(CLASS_BACKUP_DIR.'class-wpbooklist-backup.php');
+			require_once CLASS_BACKUP_DIR . 'class-wpbooklist-backup.php';
 			$backup_class = new WPBookList_Backup('library_database_backup', $library);
 			echo $backup_class->create_backup_result; 
 			wp_die();
 		}
 
 		// Callback function for restoring a backup of a Library.
-		public function wpbooklist_restore_db_library_backup_action_callback(){
+		public function wpbooklist_restore_db_library_backup_action_callback() {
 			global $wpdb;
 			check_ajax_referer( 'wpbooklist_restore_db_library_backup_action_callback', 'security' );
 			$table = filter_var( wp_unslash( $_POST['table'] ), FILTER_SANITIZE_STRING );
 			$backup = filter_var( wp_unslash( $_POST['backup'] ), FILTER_SANITIZE_STRING );
 
-			require_once(CLASS_BACKUP_DIR.'class-wpbooklist-backup.php');
+			require_once CLASS_BACKUP_DIR . 'class-wpbooklist-backup.php';
 			$backup_class = new WPBookList_Backup('library_database_restore', $table, $backup);
 
 			wp_die();
 		}
 
 		// Callback function for creating a .csv file of ISBN/ASIN numbers
-		public function wpbooklist_create_csv_action_callback(){
+		public function wpbooklist_create_csv_action_callback() {
 			global $wpdb;
 			check_ajax_referer( 'wpbooklist_create_csv_action_callback', 'security' );
 			$table = filter_var( wp_unslash( $_POST['table'] ), FILTER_SANITIZE_STRING );
 			
-			require_once(CLASS_BACKUP_DIR.'class-wpbooklist-backup.php');
+			require_once CLASS_BACKUP_DIR . 'class-wpbooklist-backup.php';
 			$backup_class = new WPBookList_Backup('create_csv_file', $table);
 
 			echo $backup_class->create_csv_result;
@@ -2621,7 +2618,7 @@ error_log($edit_result);
 		}
 
 		// Callback function for setting the Amazon Localization.
-		public function wpbooklist_amazon_localization_action_callback(){
+		public function wpbooklist_amazon_localization_action_callback() {
 			global $wpdb;
 			check_ajax_referer( 'wpbooklist_amazon_localization_action_callback', 'security' );
 			$country = filter_var( wp_unslash( $_POST['country'] ), FILTER_SANITIZE_STRING );
@@ -2639,10 +2636,10 @@ error_log($edit_result);
 
 	
 		// Callback function for deleting all books in library.
-		public function wpbooklist_delete_all_books_in_library_action_callback(){
+		public function wpbooklist_delete_all_books_in_library_action_callback() {
 
 			check_ajax_referer( 'wpbooklist_delete_all_books_in_library_action_callback', 'security' );
-			require_once(CLASS_BOOK_DIR.'class-wpbooklist-book.php');
+			require_once CLASS_BOOK_DIR . 'class-wpbooklist-book.php';
 			$book_class = new WPBookList_Book;
 
 			$library = filter_var( wp_unslash( $_POST['library'] ), FILTER_SANITIZE_STRING );
@@ -2652,10 +2649,10 @@ error_log($edit_result);
 		}
 
 		// Callback function for deleting all books, pages, and posts in library.
-		public function wpbooklist_delete_all_books_pages_and_posts_action_callback(){
+		public function wpbooklist_delete_all_books_pages_and_posts_action_callback() {
 
 			check_ajax_referer( 'wpbooklist_delete_all_books_pages_and_posts_action_callback', 'security' );
-			require_once(CLASS_BOOK_DIR.'class-wpbooklist-book.php');
+			require_once CLASS_BOOK_DIR . 'class-wpbooklist-book.php';
 			$book_class = new WPBookList_Book;
 
 			$library = filter_var( wp_unslash( $_POST['library'] ), FILTER_SANITIZE_STRING );
@@ -2665,8 +2662,8 @@ error_log($edit_result);
 		}
 
 		// Callback function for deleting all checked books.
-		public function wpbooklist_delete_all_checked_books_action_callback(){
-			require_once(CLASS_BOOK_DIR.'class-wpbooklist-book.php');
+		public function wpbooklist_delete_all_checked_books_action_callback() {
+			require_once CLASS_BOOK_DIR . 'class-wpbooklist-book.php';
 			$book_class = new WPBookList_Book;
 			check_ajax_referer( 'wpbooklist_delete_all_checked_books_action_callback', 'security' );
 
@@ -2676,12 +2673,12 @@ error_log($edit_result);
 			$book_id = ltrim($book_id, 'sep');
 
 			// Creating array of IDs to delete.
-			$delete_array = explode('sep', $book_id);
+			$delete_array = explode( 'sep', $book_id);
 
 			// Creating array of Page/Post IDs to delete
-			if($delete_string != null && $delete_string != ''){
+			if ( $delete_string != null && $delete_string != ''){
 				$delete_string = ltrim($delete_string, 'sep');
-				$delete_page_post_array = explode('sep', $delete_strinG );
+				$delete_page_post_array = explode( 'sep', $delete_strinG );
 			}	
 
 
@@ -2692,7 +2689,7 @@ error_log($edit_result);
 			foreach($delete_array as $key=>$delete){
 
 				// Send page/post IDs to delete to class-wpbooklist-book.php if they exist, otherwise don't send
-				if($delete_string != null && $delete_string != ''){
+				if ( $delete_string != null && $delete_string != ''){
 					$delete_result = $book_class->delete_book($library, $delete, $delete_page_post_array[$key]);
 				} else {
 					$delete_result = $book_class->delete_book($library, $delete, null);
@@ -2705,7 +2702,7 @@ error_log($edit_result);
 		}
 
 		// Callback function for dismissing the admin notice forever.
-		public function wpbooklist_jre_dismiss_prem_notice_forever_action_callback(){
+		public function wpbooklist_jre_dismiss_prem_notice_forever_action_callback() {
 			
 			global $wpdb; // this is how you get access to the database
 			check_ajax_referer( 'wpbooklist_jre_dismiss_prem_notice_forever_action', 'security' );
@@ -2713,7 +2710,7 @@ error_log($edit_result);
 			$id = filter_var( wp_unslash( $_POST['id'] ), FILTER_SANITIZE_STRING );
 		 
 		 	// Handling the dismiss of the general admin message
-			if($id == 'wpbooklist-my-notice-dismiss-forever-general'){
+			if ( $id == 'wpbooklist-my-notice-dismiss-forever-general'){
 			  $table_name = $wpdb->prefix . 'wpbooklist_jre_user_options';
 
 			  $data = array(
@@ -2727,7 +2724,7 @@ error_log($edit_result);
 			}
 
 			// Handling the dismiss of the StoryTime admin message
-			if($id == 'wpbooklist-my-notice-dismiss-forever-storytime'){
+			if ( $id == 'wpbooklist-my-notice-dismiss-forever-storytime'){
 			  $table_name = $wpdb->prefix . 'wpbooklist_jre_storytime_stories_settings';
 
 			  $data = array(
@@ -2742,7 +2739,7 @@ error_log($edit_result);
 		}
 
 		// Callback function for re-ordering books on the 'Edit & Delete Books' tab.
-		public function wpbooklist_reorder_action_callback(){
+		public function wpbooklist_reorder_action_callback() {
 			global $wpdb;
 			check_ajax_referer( 'wpbooklist_reorder_action_callback', 'security' );
 			$table = filter_var( wp_unslash( $_POST['table'] ), FILTER_SANITIZE_STRING );
@@ -2776,13 +2773,13 @@ error_log($edit_result);
 
 			// Setting the AUTO_INCREMENT value based on number of remaining entries
 			$title_count++;
-			$wpdb->query($wpdb->prepare( "ALTER TABLE $table AUTO_INCREMENT = %d", $title_count));
+			$wpdb->query($wpdb->prepare( "ALTER TABLE $table AUTO_INCREMENT = %d", $title_count ) );
 
 			wp_die();
 		}
 
 		// Callback function for the exit survey triggered when user deactivates WPBookList.
-		public function wpbooklist_exit_results_action_callback(){
+		public function wpbooklist_exit_results_action_callback() {
 			global $wpdb;
 			check_ajax_referer( 'wpbooklist_exit_results_action_callback', 'security' );
 			$reason1 = filter_var( wp_unslash( $_POST['reason1'] ), FILTER_SANITIZE_STRING );
@@ -2801,10 +2798,10 @@ error_log($edit_result);
 
 			$message = $reason1.' '.$reason2.' '.$reason3.' '.$reason4.' '.$reason5.' '.$reason6.' '.$reason7.' '.$reason8.' '.$reason9.' '.$featureSuggestion.' '.$reasonOther.' '.$reasonEmail;
 
-			if($id == 'wpbooklist-modal-submit'){
+			if ( $id == 'wpbooklist-modal-submit'){
 				wp_mail( 'jake@jakerevans.com', 'WPBookList Exit Survey', $message );
 
-				if($reasonEmail != ''){
+				if ( $reasonEmail != ''){
 					$autoresponseMessage = 'Thanks for trying out WPBookList and providing valuable feedback that will help make WPBookList even better! I\'ll review your feedback and get back with you ASAP.  -Jake' ;
 					wp_mail( $reasonEmail, 'WPBookList Deactivation Survey', $autoresponseMessage );
 				}
@@ -2815,12 +2812,12 @@ error_log($edit_result);
 		}
 
 		// Callback function for retrieving the WPBookList StoryTime Stories from the server when the 'Select a Category' drop-down changes.
-		public function wpbooklist_storytime_select_category_action_callback(){
+		public function wpbooklist_storytime_select_category_action_callback() {
 			global $wpdb;
 			check_ajax_referer( 'wpbooklist_storytime_select_category_action_callback', 'security' );
 			$category = filter_var( wp_unslash( $_POST['category'] ), FILTER_SANITIZE_STRING );
 
-			require_once(CLASS_STORYTIME_DIR.'class-storytime.php');
+			require_once CLASS_STORYTIME_DIR . 'class-storytime.php';
 		  	$storytime_class = new WPBookList_Storytime('categorychange', $category );
 
 
@@ -2829,12 +2826,12 @@ error_log($edit_result);
 		}
 
 		// Callback function for retreiving a WPBookList StoryTime Story from the server, once the user has selected one in the reader
-		public function wpbooklist_storytime_get_story_action_callback(){
+		public function wpbooklist_storytime_get_story_action_callback() {
 			global $wpdb;
 			check_ajax_referer( 'wpbooklist_storytime_get_story_action_callback', 'security' );
 			$dataId = filter_var( wp_unslash( $_POST['dataId'] ), FILTER_SANITIZE_NUMBER_INT);
 			
-			require_once(CLASS_STORYTIME_DIR.'class-storytime.php');
+			require_once CLASS_STORYTIME_DIR . 'class-storytime.php';
 		  	$storytime_class = new WPBookList_Storytime('getcontent', null, $dataId);
 
 		  	echo json_encode($storytime_class->stories_db_data);
@@ -2843,11 +2840,11 @@ error_log($edit_result);
 		}
 
 		// Callback function for expanding the 'Browse Stories' section again once a Story has already been selected
-		public function wpbooklist_storytime_expand_browse_action_callback(){
+		public function wpbooklist_storytime_expand_browse_action_callback() {
 			global $wpdb;
 			check_ajax_referer( 'wpbooklist_storytime_expand_browse_action_callback', 'security' );
 
-			require_once(CLASS_STORYTIME_DIR.'class-storytime.php');
+			require_once CLASS_STORYTIME_DIR . 'class-storytime.php';
 		  	$storytime_class = new WPBookList_Storytime('categorychange', 'Recent Additions' );
 
 
@@ -2858,7 +2855,7 @@ error_log($edit_result);
 		
 
 		// Callback function for saving the StoryTime Settings
-		public function wpbooklist_storytime_save_settings_action_callback(){
+		public function wpbooklist_storytime_save_settings_action_callback() {
 			global $wpdb;
 			check_ajax_referer( 'wpbooklist_storytime_save_settings_action_callback', 'security' );
 			$createpost = filter_var( wp_unslash( $_POST['input1'] ), FILTER_SANITIZE_STRING );
@@ -2868,19 +2865,19 @@ error_log($edit_result);
 			$getstories = filter_var( wp_unslash( $_POST['input5'] ), FILTER_SANITIZE_STRING );
 			$storypersist = filter_var( wp_unslash( $_POST['input6'] ), FILTER_SANITIZE_NUMBER_INT);
 
-			if($createpost == 'true'){
+			if ( $createpost == 'true'){
 				$createpost = 1;
 			} else {
 				$createpost = 0;
 			}
 
-			if($createpage == 'true'){
+			if ( $createpage == 'true'){
 				$createpage = 1;
 			} else {
 				$createpage = 0;
 			}
 
-			if($deletedefault == 'true'){
+			if ( $deletedefault == 'true'){
 				$deletedefault = 1;
 
 				// Delete default data
@@ -2888,7 +2885,7 @@ error_log($edit_result);
 				$query_for_default_data = $wpdb->get_results("SELECT * FROM $stories_table");
 
 				// If the default data still exists (based on the fact that war of the worlds should be first in db), proceed, otherwise do nothing.
-				if($query_for_default_data[0]->title == 'Sample Chapter - The War of the Worlds'){
+				if ( $query_for_default_data[0]->title == 'Sample Chapter - The War of the Worlds'){
 
 					$wpdb->query("DELETE FROM $stories_table WHERE providername = 'H. G. Wells' AND title = 'Sample Chapter - The War of the Worlds'");
 
@@ -2935,26 +2932,26 @@ error_log($edit_result);
 
 					// Setting the AUTO_INCREMENT value based on number of remaining entries
 					$title_count++;
-					$wpdb->query($wpdb->prepare( "ALTER TABLE $stories_table AUTO_INCREMENT = %d", $title_count));
+					$wpdb->query($wpdb->prepare( "ALTER TABLE $stories_table AUTO_INCREMENT = %d", $title_count ) );
 				}
 
 			} else {
 				$deletedefault = 0;
 			}
 
-			if($newnotify == 'true'){
+			if ( $newnotify == 'true'){
 				$newnotify = 1;
 			} else {
 				$newnotify = 0;
 			}
 
-			if($getstories == 'true'){
+			if ( $getstories == 'true'){
 				$getstories = 1;
 			} else {
 				$getstories = 0;
 			}
 
-			if($storypersist == '' || $storypersist == null || $storypersist == 0){
+			if ( $storypersist == '' || $storypersist == null || $storypersist == 0){
 				$storypersist = null;
 			}
 
@@ -2977,7 +2974,7 @@ error_log($edit_result);
 		}
 
 		// Callback function for deleting a Story.
-		public function wpbooklist_delete_story_action_callback(){
+		public function wpbooklist_delete_story_action_callback() {
 			global $wpdb;
 			check_ajax_referer( 'wpbooklist_delete_story_action_callback', 'security' );
 			$id = filter_var( wp_unslash( $_POST['dataId'] ), FILTER_SANITIZE_NUMBER_INT);
@@ -3011,7 +3008,7 @@ error_log($edit_result);
 
 			// Setting the AUTO_INCREMENT value based on number of remaining entries
 			$title_count++;
-			echo $wpdb->query($wpdb->prepare( "ALTER TABLE $stories_table AUTO_INCREMENT = %d", $title_count));
+			echo $wpdb->query($wpdb->prepare( "ALTER TABLE $stories_table AUTO_INCREMENT = %d", $title_count ) );
 
 			wp_die();
 		}

@@ -628,7 +628,7 @@ if ( ! class_exists( 'WPBookList_Book_Form', false ) ) :
 
 			$closing_string = '</div></div></form>
 					<div class="wpbooklist-response-success-fail-container">
-			    		<button class="wpbooklist-response-success-fail-button" type="button" id="wpbooklist-admin-addbook-create-button">' . $this->trans->trans_210 . '</button>
+			    		<button class="wpbooklist-response-success-fail-button wpbooklist-admin-editbook-edit-button" type="button" id="wpbooklist-admin-addbook-create-button">' . $this->trans->trans_210 . '</button>
 			    		<div class="wpbooklist-spinner" id="wpbooklist-spinner-1"></div>
 			    		<div class="wpbooklist-response-success-fail-response-actual-container" id="wpbooklist-admin-addbook-response-actual-container"></div>
 		    		</div>
