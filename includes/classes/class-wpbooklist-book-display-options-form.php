@@ -57,6 +57,63 @@ if ( ! class_exists( 'WPBookList_Book_Display_Options_Form', false ) ) :
 
 			$string3 = '</select>';
 
+			/*
+Amazon Purchase Link
+Amazon Reviews
+ASIN
+Author
+B&N Purchase Link
+Book Cover Image (book view)
+Book Finished
+Book Page Link
+Book Post Link
+Book Title (book view)
+Books-A-Million Purchase Link
+Call Number
+Country
+Edition
+Email Share Button
+Facebook Messenger Button
+Facebook Share Button
+Featured Titles Section
+First Edition
+Format
+Full Description
+Genre
+GoodReads Widget
+Google Purchase Link
+Google+ Share Button
+Illustrator
+ISBN 10
+ISBN 13
+iTunes Purchase Link
+Keywords
+Kindle Preview
+Kobo Purchase Link
+Language
+Notes
+Number in Series
+Original Publication Year
+Original Title
+Other Editions
+Out of Print
+Pages
+Pinterest Share Button
+Publication Date
+Publisher
+Quote (book view)
+Review Stars (book view)
+Series
+Short Description
+Signed
+Similar Titles Section
+Sub-Genre
+Twitter Share Button
+
+
+
+			*/
+
 			$string4 =
 				'<div class="wpbooklist-spinner" id="wpbooklist-spinner-2"></div>
 				<div class="wpbooklist-display-options-indiv-entry">
