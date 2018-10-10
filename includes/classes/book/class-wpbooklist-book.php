@@ -112,8 +112,9 @@ if ( ! class_exists( 'WPBookList_Book', false ) ) :
 		public $defaultprice;
 
 		// Class variables that pertain to ceratin actions taken in thsi class - results of DB actions, API call results, etc.
+		public $action = '';
 		public $add_result;
-		public $edit_result;
+		public $edit_result = null;
 		public $delete_result;
 		public $retrieved_book;
 		public $options_results;
@@ -153,6 +154,7 @@ if ( ! class_exists( 'WPBookList_Book', false ) ) :
 			global $wpdb;
 
 			$this->book_array = $book_array;
+			$this->action = $action;
 
 			// Setting up default keys/values for the $whichapifound array.
 			$this->whichapifound['title']            = '';
@@ -490,21 +492,21 @@ if ( ! class_exists( 'WPBookList_Book', false ) ) :
 				$this->id = $id;
 			}
 
-			if ( 'add' === $action || 'addbulk' === $action ) {
+			if ( 'add' === $this->action || 'addbulk' === $this->action ) {
 				$this->add_book();
 			}
 
-			if ( 'edit' === $action ) {
+			if ( 'edit' === $this->action ) {
 				$this->id = $id;
 				$this->edit_book();
 			}
 
-			if ( 'delete' === $action ) {
+			if ( 'delete' === $this->action ) {
 				$this->id = $id;
 				$this->delete_book();
 			}
 
-			if ( 'search' === $action ) {
+			if ( 'search' === $this->action ) {
 				$this->book_page       = $book_array['book_page'];
 				$this->amazonauth = $book_array['amazonauth'];
 				if ( 'true' === $this->amazonauth && 'true' === $this->use_amazon_yes ) {
@@ -525,7 +527,7 @@ if ( ! class_exists( 'WPBookList_Book', false ) ) :
 				}
 			}
 
-			if ( 'bookfinder-colorbox' === $action ) {
+			if ( 'bookfinder-colorbox' === $this->action ) {
 				$this->gather_google_data();
 				$this->gather_open_library_data();
 				$this->gather_itunes_data();
@@ -715,10 +717,14 @@ if ( ! class_exists( 'WPBookList_Book', false ) ) :
 				$this->apireport = $this->apireport . 'Results for Unknown Book: ';
 			}
 
-			// Before we do anything else, let's make sure we don't have a saved transient for this book - if we do, no sense in making a new api call - will cut down on requests.
+
+
+
+
+			// Before we do anything else, let's make sure we don't have a saved transient for this book - if we do, no sense in making a new api call - will cut down on requests. Also, do not use a transient at all if we're editing a book, and try to delete an existing transient in the 'else' part before creating a new one.
 			$transient_name   = 'wpbl_' . md5( $this->isbn . '_amazon' );
 			$transient_exists = $this->transients->existing_transient_check( $transient_name );
-			if ( $transient_exists ) {
+			if ( $transient_exists && 'edit' !== $this->action ) {
 				$this->amazonapiresult      = $transient_exists;
 				$this->amazon_transient_use = 'Yes';
 			} else {
@@ -750,7 +756,6 @@ if ( ! class_exists( 'WPBookList_Book', false ) ) :
 							$this->isbn                       = $this->asin;
 							$this->gather_amazon_data();
 						}
-
 					}
 
 					$this->apireport = $this->apireport . 'Looks like we tried the Amazon wp_remote_get function, but something went wrong .  Status Code is: ' . $response_code . ' and Response Message is: ' . $response_message . ' .  URL Request was: https://sublime-vine-199216.appspot.com/?' . $postdata . ' ';
@@ -763,6 +768,8 @@ if ( ! class_exists( 'WPBookList_Book', false ) ) :
 					$this->amazonapiresult = wp_remote_retrieve_body( $this->amazonapiresult );
 				}
 
+				// Actually attempting to delete existing transients before creation of new one.
+				$transient_delete_api_data_result       = $this->transients->delete_transient( $transient_name );
 				$this->transient_create_result = $this->transients->create_api_transient( $transient_name, $this->amazonapiresult, WEEK_IN_SECONDS );
 			}
 
@@ -1190,10 +1197,10 @@ if ( ! class_exists( 'WPBookList_Book', false ) ) :
 				$google_api = 'AIzaSyBl6KEeKRddmhnK-jX65pGkjBW1Y6Q5_rM';
 			}
 
-			// Before we do anything else, let's make sure we don't have a saved transient for this book - if we do, no sense in making a new api call - will cut down on requests.
+			// Before we do anything else, let's make sure we don't have a saved transient for this book - if we do, no sense in making a new api call - will cut down on requests. Also, do not use a transient at all if we're editing a book, and try to delete an existing transient in the 'else' part before creating a new one.
 			$transient_name   = 'wpbl_' . md5( $this->isbn . '_google' );
 			$transient_exists = $this->transients->existing_transient_check( $transient_name );
-			if ( $transient_exists ) {
+			if ( $transient_exists && 'edit' !== $this->action ) {
 				$this->googleapiresult      = $transient_exists;
 				$this->google_transient_use = 'Yes';
 			} else {
@@ -1218,6 +1225,8 @@ if ( ! class_exists( 'WPBookList_Book', false ) ) :
 					$this->googleapiresult = wp_remote_retrieve_body( $this->googleapiresult );
 				}
 
+				// Actually attempting to delete existing transients before creation of new one.
+				$transient_delete_api_data_result       = $this->transients->delete_transient( $transient_name );
 				$this->transient_create_result = $this->transients->create_api_transient( $transient_name, $this->googleapiresult, WEEK_IN_SECONDS );
 			}
 
@@ -1345,10 +1354,11 @@ if ( ! class_exists( 'WPBookList_Book', false ) ) :
 				return;
 			}
 
-			// Before we do anything else, let's make sure we don't have a saved transient for this book - if we do, no sense in making a new api call - will cut down on requests.
+			
+			// Before we do anything else, let's make sure we don't have a saved transient for this book - if we do, no sense in making a new api call - will cut down on requests. Also, do not use a transient at all if we're editing a book, and try to delete an existing transient in the 'else' part before creating a new one.
 			$transient_name   = 'wpbl_' . md5( $this->isbn . '_openlib' );
 			$transient_exists = $this->transients->existing_transient_check( $transient_name );
-			if ( $transient_exists ) {
+			if ( $transient_exists && 'edit' !== $this->action ) {
 				$this->openlibapiresult = $transient_exists;
 				$this->openlib_transient_use = 'Yes';
 			} else {
@@ -1373,6 +1383,8 @@ if ( ! class_exists( 'WPBookList_Book', false ) ) :
 					$this->openlibapiresult = wp_remote_retrieve_body( $this->openlibapiresult );
 				}
 
+				// Actually attempting to delete existing transients before creation of new one.
+				$transient_delete_api_data_result       = $this->transients->delete_transient( $transient_name );
 				$this->transient_create_result = $this->transients->create_api_transient( $transient_name, $this->openlibapiresult, WEEK_IN_SECONDS );
 			}
 
@@ -1479,10 +1491,11 @@ if ( ! class_exists( 'WPBookList_Book', false ) ) :
 
 			global $wpdb;
 
-			// Before we do anything else, let's make sure we don't have a saved transient for this book - if we do, no sense in making a new api call - will cut down on requests.
+			
+			// Before we do anything else, let's make sure we don't have a saved transient for this book - if we do, no sense in making a new api call - will cut down on requests. Also, do not use a transient at all if we're editing a book, and try to delete an existing transient in the 'else' part before creating a new one.
 			$transient_name   = 'wpbl_' . md5( $this->isbn . '_itunes' );
 			$transient_exists = $this->transients->existing_transient_check( $transient_name );
-			if ( $transient_exists ) {
+			if ( $transient_exists && 'edit' !== $this->action ) {
 				$this->itunesapiresult = $transient_exists;
 				$this->itunes_transient_use = 'Yes';
 			} else {
@@ -1507,6 +1520,8 @@ if ( ! class_exists( 'WPBookList_Book', false ) ) :
 					$this->itunesapiresult = wp_remote_retrieve_body( $this->itunesapiresult );
 				}
 
+				// Actually attempting to delete existing transients before creation of new one.
+				$transient_delete_api_data_result       = $this->transients->delete_transient( $transient_name );
 				$this->transient_create_result = $this->transients->create_api_transient( $transient_name, $this->itunesapiresult, WEEK_IN_SECONDS );
 			}
 
@@ -1536,10 +1551,10 @@ if ( ! class_exists( 'WPBookList_Book', false ) ) :
 			// If we didn't find the book via iBooks, let's search for the Audiobook via itunes.
 			if ( null === $this->itunes_page || '' === $this->itunes_page ) {
 
-				// Before we do anything else, let's make sure we don't have a saved transient for this book - if we do, no sense in making a new api call - will cut down on requests.
+				// Before we do anything else, let's make sure we don't have a saved transient for this book - if we do, no sense in making a new api call - will cut down on requests. Also, do not use a transient at all if we're editing a book, and try to delete an existing transient in the 'else' part before creating a new one.
 				$transient_name   = 'wpbl_' . md5( $this->isbn . '_itunesaudio' );
 				$transient_exists = $this->transients->existing_transient_check( $transient_name );
-				if ( $transient_exists ) {
+				if ( $transient_exists && 'edit' !== $this->action ) {
 					$this->itunes_audio_transient_use = $transient_exists;
 					$this->itunes_audio_transient_use = 'Yes';
 				} else {
@@ -1564,6 +1579,8 @@ if ( ! class_exists( 'WPBookList_Book', false ) ) :
 						$this->itunesapiresult = wp_remote_retrieve_body( $this->itunesapiresult );
 					}
 
+					// Actually attempting to delete existing transients before creation of new one.
+					$transient_delete_api_data_result       = $this->transients->delete_transient( $transient_name );
 					$this->transient_create_result = $this->transients->create_api_transient( $transient_name, $this->itunesapiresult, WEEK_IN_SECONDS );
 				}
 
@@ -2052,6 +2069,11 @@ if ( ! class_exists( 'WPBookList_Book', false ) ) :
 				$wpdb->update( $wpdb->prefix . 'wpbooklist_jre_user_options', $data, $where, $format, $where_format );
 			}
 
+			// Now delete the user options transient.
+			$transient_user_options_name = 'wpbl_' . md5( 'SELECT * FROM ' . $wpdb->prefix . 'wpbooklist_jre_user_options' );
+			// Actually attempting to delete existing transients before creation of new one.
+			$transient_delete_colorbox_result = $this->transients->delete_transient( $transient_user_options_name );
+
 		}
 
 		/**
@@ -2493,6 +2515,11 @@ if ( ! class_exists( 'WPBookList_Book', false ) ) :
 			$where_format = array( '%d' );
 			$result       = $wpdb->update( $this->library, $data, $where, $format, $where_format );
 
+			// Now delete the colorbox transient.
+			$transient_colorbox_name = 'wpbl_' . md5( 'SELECT * FROM ' . $this->library . ' WHERE ID = ' . $this->id );
+			// Actually attempting to delete existing transients before creation of new one.
+			$transient_delete_colorbox_result = $this->transients->delete_transient( $transient_colorbox_name );
+
 			// Insert the Amazon Authorization into the DB if it's not already set to 'Yes'.
 			if ( 'true' !== $this->options_results->amazonauth ) {
 				$data         = array(
@@ -2504,7 +2531,16 @@ if ( ! class_exists( 'WPBookList_Book', false ) ) :
 				$wpdb->update( $wpdb->prefix . 'wpbooklist_jre_user_options', $data, $where, $format, $where_format );
 			}
 
+			// Now delete the user options transient.
+			$transient_user_options_name = 'wpbl_' . md5( 'SELECT * FROM ' . $wpdb->prefix . 'wpbooklist_jre_user_options' );
+			// Actually attempting to delete existing transients before creation of new one.
+			$transient_delete_colorbox_result = $this->transients->delete_transient( $transient_user_options_name );
+
 			$this->edit_result = $result;
+
+			if ( false === $this->edit_result ) {
+				$this->edit_result = $this->edit_result . '--sep--WPBOOKLISTEDITERROR' . $wpdb->last_error;
+			}
 		}
 
 
@@ -2589,10 +2625,15 @@ if ( ! class_exists( 'WPBookList_Book', false ) ) :
 				);
 				$book_id++;
 				$format       = array( '%d' );
-				$where        = array( 'ID' => ( $book_id ) );
+				$where        = array( 'ID' => $book_id );
 				$where_format = array( '%d' );
 				$wpdb->update( $library, $data, $where, $format, $where_format );
 			}
+
+			// Now delete the colorbox transient.
+			$transient_colorbox_name = 'wpbl_' . md5( 'SELECT * FROM ' . $library . ' WHERE ID = ' . $book_id );
+			// Actually attempting to delete existing transients before creation of new one.
+			$transient_delete_colorbox_result = $this->transients->delete_transient( $transient_colorbox_name );
 
 			// Adding primary key back to database.
 			$wpdb->query( "ALTER TABLE $library ADD PRIMARY KEY (`ID`)" );
@@ -2661,6 +2702,12 @@ if ( ! class_exists( 'WPBookList_Book', false ) ) :
 						$where_format = array( '%d' );
 						$wpdb->update( $library, $data, $where, $format, $where_format );
 					}
+
+					// Now delete the colorbox transient.
+					$transient_colorbox_name = 'wpbl_' . md5( 'SELECT * FROM ' . $library . ' WHERE ID = ' . $this->retrieved_book->ID );
+					// Actually attempting to delete existing transients before creation of new one.
+					$transient_delete_colorbox_result = $this->transients->delete_transient( $transient_colorbox_name );
+
 				}
 			}
 		}

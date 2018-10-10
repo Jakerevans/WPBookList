@@ -81,6 +81,14 @@
     padding: 2px 0 0!important;
 }
 
+.wpbooklist-my-notice-dismiss-forever{
+    @extend %wpbooklist-default-buttons-style;
+}
+
+.wpbooklist-my-notice-dismiss-forever:hover {
+    @extend %wpbooklist-default-buttons-style-hover;
+}
+
 /*
  * END ADMIN CONTAINER BONES, ADVERTISMENT, AND DASHBOARD ICON CSS
  */

@@ -19,8 +19,14 @@ if ( ! class_exists( 'WPBookList_Library_Display_Options_Tab', false ) ) :
 class WPBookList_Library_Display_Options_Tab {
 
     public function __construct() {
+
+        // Get Translations.
+        require_once CLASS_TRANSLATIONS_DIR . 'class-wpbooklist-translations.php';
+        $this->trans = new WPBookList_Translations();
+        $this->trans->trans_strings();
+
     	require_once(CLASS_DIR.'class-admin-ui-template.php');
-    	require_once(CLASS_DIR.'class-library-display-options-form.php');
+    	require_once(CLASS_DIR.'class-wpbooklist-library-display-options-form.php');
     	// Instantiate the class
 		$this->template = new WPBookList_Admin_UI_Template;
 		$this->form = new WPBookList_Library_Display_Options_Form ;
@@ -31,13 +37,13 @@ class WPBookList_Library_Display_Options_Tab {
     }
 
     private function output_open_admin_container(){
-        $title = __('Library Display Options', 'wpbooklist');
+        $title = $this->trans->trans_261;
         $icon_url = ROOT_IMG_ICONS_URL.'library-options.svg';
     	echo $this->template->output_open_admin_container($title, $icon_url);
     }
 
     private function output_tab_content(){
-    	echo $this->form->output_add_edit_form();
+    	echo $this->form->output_library_display_options_form();
     }
 
     #TODO: Replace that 'Book Added Succesfully!' line above with a link to open the title in colorbox, once that functionality is complete

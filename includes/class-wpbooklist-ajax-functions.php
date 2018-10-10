@@ -1106,7 +1106,8 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 			$edit_result = $book_class->edit_result;
 
 			// If book was edited succesfully, get the ID of the book we just inserted, and return the result and that ID.
-			if ( 1 === $edit_result ) {
+			if ( 1 === $edit_result || 0 === $edit_result ) {
+
 				$book_table_name = $wpdb->prefix . 'wpbooklist_jre_user_options';
 				$id_result       = $book_class->id;
 				$row             = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM $library WHERE ID = %d", $id_result ) );
@@ -1129,7 +1130,9 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 
 				wp_die( $edit_result . '--sep--' . $id_result . '--sep--' . $library . '--sep--' . $page_yes . '--sep--' . $post_yes . '--sep--' . $pageurl . '--sep--' . $posturl . '--sep--' . $book_class->apireport . '--sep--' . wp_json_encode($book_class->whichapifound) . '--sep--' . $book_class->apiamazonfailcount . '--sep--' . $book_class->amazon_transient_use . '--sep--' . $book_class->google_transient_use . '--sep--' . $book_class->openlib_transient_use . '--sep--' . $book_class->itunes_transient_use . '--sep--' . $book_class->itunes_audio_transient_use );
 			} else {
-				wp_die( $edit_result . '--sep--' );
+
+				// Handling an actual Database error and displaying error code for troubleshooting.
+				wp_die( $edit_result );
 			}
 
 			wp_die();

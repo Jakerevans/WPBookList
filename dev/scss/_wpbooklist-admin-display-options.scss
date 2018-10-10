@@ -1,0 +1,55 @@
+/**
+ * SCSS - _wpbooklist-admin-book-form.scss - Hold CSS specific to the sDisplay Options form on the 'Library' tab.
+ *
+ * @author   Jake Evans
+ * @category SCSS
+ * @package  Includes/Assets/CSS
+ * @version  6.0.0
+ */
+
+.wpbooklist-select-centered{
+	@extend %wpbooklist-select-centered;
+}
+
+.wpbooklist-display-options-indiv-entry, .wpbooklist-margin-right-td, .wpbooklist-display-options-label-div{
+	display: inline-block;
+	vertical-align:top;
+}
+
+.wpbooklist-display-options-indiv-entry{
+    text-align: left;
+    margin: 10px;
+}
+
+.wpbooklist-margin-right-td{
+    display: block;
+    margin-top: 5px;
+    position: relative;
+    left: 25px;
+}
+
+#wpbooklist-display-options-container{
+	text-align:center;
+}
+
+.wpbooklist-icon-image-question-display-options{
+    width: 12px;
+    cursor: pointer;
+    padding-left: 10px;
+    position: relative;
+    top: 2px;
+    left: 2px;
+    vertical-align: top;
+}
+
+.wpbooklist-display-options-label-div label{
+	width:150px;
+	display:inline-block;
+	line-height: 1.1;
+}
+
+#wpbooklist-library-options-lower-table {
+    margin-left: auto;
+    margin-right: auto;
+    text-align: left;
+}

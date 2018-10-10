@@ -276,6 +276,25 @@ if ( ! class_exists( 'WPBookList_Translations', false ) ) :
 			$this->trans_244 = __( 'StoryTime', 'wpbooklist' );
 			$this->trans_245 = __( 'Save Changes', 'wpbooklist' );
 			$this->trans_246 = __( 'To Edit this book, simply make your desired changes in the fields below and click the \'Save Changes\' button at the bottom of this section.', 'wpbooklist' );
+			$this->trans_247  = __( 'Click Here to View Your Edited Book', 'wpbooklist' );
+			$this->trans_248  = __( 'Filter Section', 'wpbooklist' );
+			$this->trans_249  = __( 'Edition Sort Option', 'wpbooklist' );
+			$this->trans_250  = __( 'Quote Section', 'wpbooklist' );
+			$this->trans_251  = __( 'Review Stars', 'wpbooklist' );
+			$this->trans_252  = __( 'Search & Sort', 'wpbooklist' );
+			$this->trans_253  = __( 'Signed Sort Option', 'wpbooklist' );
+			$this->trans_254  = __( 'Statistics Section', 'wpbooklist' );
+			$this->trans_255  = __( 'Subject Sort Option', 'wpbooklist' );
+			$this->trans_256  = __( 'Finished Sort Option', 'wpbooklist' );
+			$this->trans_257  = __( 'Check All', 'wpbooklist' );
+			$this->trans_258  = __( 'Uncheck All', 'wpbooklist' );
+			$this->trans_259  = __( 'Set Default Sorting', 'wpbooklist' );
+			$this->trans_260  = __( 'Set Books Per Page', 'wpbooklist' );
+			$this->trans_261  = __( 'Library View Display Options', 'wpbooklist' );
+			$this->trans_262  = __( 'Here you can set what display options are visible or hidden in your Library Views (the view with all the books in a Library). Select a Library to apply these display options to from the drop-down below, place checkmarks in the checkboxes for the items you want hidden, and click the \'Save Changes\' button at the bottom of the page.', 'wpbooklist' );
+			$this->trans_263  = __( 'Book View Display Options', 'wpbooklist' );
+			$this->trans_264  = __( 'Here you can set what display options are visible or hidden in your Book Views (the pop-up window that appears when clicking on a book). Select a Library to apply these display options to from the drop-down below, place checkmarks in the checkboxes for the items you want hidden, and click the \'Save Changes\' button at the bottom of the page.', 'wpbooklist' );
+
 
 
 
@@ -527,6 +546,7 @@ if ( ! class_exists( 'WPBookList_Translations', false ) ) :
 				'trans244' => $this->trans_244,
 				'trans245' => $this->trans_245,
 				'trans246' => $this->trans_246,
+				'trans247' => $this->trans_247,
 
 			);
 

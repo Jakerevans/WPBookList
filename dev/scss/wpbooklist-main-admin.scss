@@ -182,9 +182,31 @@ $lightgray: #CCCCCC;
     width: 97%;
 }
 
-%wpbooklist-buttons-bottom-drop-shadow{
+%wpbooklist-default-buttons-style{
     box-shadow: inset 0 -3px 0 rgba(0,0,0,.1);
+    margin: 5px;
+    background-color: #F05A1A;
+    padding: 7px;
+    padding-left: 10px;
+    margin: 5px;
+    border-radius: 5px;
+    color: white;
+    position: relative;
+    cursor: pointer;
+    display:inline-block;
 }
+
+%wpbooklist-default-buttons-style-hover{
+    box-shadow: none;
+}
+
+%wpbooklist-select-centered{
+    margin-left:auto;
+    margin-right:auto;
+    display:block;
+}
+
+
 
 
 
@@ -200,6 +222,7 @@ $lightgray: #CCCCCC;
 */
 @import '_wpbooklist-admin-ui.scss';
 @import '_wpbooklist-admin-book-form.scss';
+@import '_wpbooklist-admin-display-options.scss';
 @import '_wpbooklist-admin-edit-book-tab.scss';
 @import '_wpbooklist-admin-select2.scss';
 @import '_wpbooklist-colorbox.scss';

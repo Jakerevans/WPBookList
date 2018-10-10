@@ -193,7 +193,8 @@ class WPBookList_Admin_Menu {
     // Sets up tabs for the 'Display Options' page
     private function setup_display_options_ui() {
         $this->tabs = array(
-            'library'   => __("Library", 'wpbooklist'),
+            'library'   => __("Library View", 'wpbooklist'),
+            'book'   => __("Book View", 'wpbooklist'),
             'posts'  => __("Posts", 'wpbooklist'),
             'pages'  => __("Pages", 'wpbooklist'),
             'librarystylepaks'  => __("Library StylePaks", 'wpbooklist'),
