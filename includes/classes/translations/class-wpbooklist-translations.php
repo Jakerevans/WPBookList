@@ -291,9 +291,37 @@ if ( ! class_exists( 'WPBookList_Translations', false ) ) :
 			$this->trans_259  = __( 'Set Default Sorting', 'wpbooklist' );
 			$this->trans_260  = __( 'Set Books Per Page', 'wpbooklist' );
 			$this->trans_261  = __( 'Library View Display Options', 'wpbooklist' );
-			$this->trans_262  = __( 'Here you can set what display options are visible or hidden in your Library Views (the view with all the books in a Library). Select a Library to apply these display options to from the drop-down below, place checkmarks in the checkboxes for the items you want hidden, and click the \'Save Changes\' button at the bottom of the page.', 'wpbooklist' );
+			$this->trans_262  = __( 'Here you can set what display options are visible or hidden in your Library Views (the view with all the books in a Library). Select a Library to apply these display options to in the drop-down below, place checkmarks in the checkboxes for the items you want hidden, and click the \'Save Changes\' button at the bottom of the page.', 'wpbooklist' );
 			$this->trans_263  = __( 'Book View Display Options', 'wpbooklist' );
 			$this->trans_264  = __( 'Here you can set what display options are visible or hidden in your Book Views (the pop-up window that appears when clicking on a book). Select a Library to apply these display options to from the drop-down below, place checkmarks in the checkboxes for the items you want hidden, and click the \'Save Changes\' button at the bottom of the page.', 'wpbooklist' );
+
+
+
+
+			$this->trans_265  = __( 'Amazon Purchase Link', 'wpbooklist' );
+			$this->trans_266  = __( 'Amazon Reviews', 'wpbooklist' );
+			$this->trans_267  = __( 'B&N Purchase Link', 'wpbooklist' );
+			$this->trans_268  = __( 'Book Finished', 'wpbooklist' );
+			$this->trans_269  = __( 'Page Link', 'wpbooklist' );
+			$this->trans_270  = __( 'Post Link', 'wpbooklist' );
+			$this->trans_271  = __( 'Book Title', 'wpbooklist' );
+			$this->trans_272  = __( 'Books-A-Million Purchase Link', 'wpbooklist' );
+			$this->trans_273  = __( 'Country', 'wpbooklist' );
+			$this->trans_274  = __( 'Email Share Button', 'wpbooklist' );
+			$this->trans_275  = __( 'Facebook Messenger Button', 'wpbooklist' );
+			$this->trans_276  = __( 'Facebook Share Button', 'wpbooklist' );
+			$this->trans_277  = __( 'Featured Titles Section', 'wpbooklist' );
+			$this->trans_278  = __( 'Front Cover Image', 'wpbooklist' );
+			$this->trans_279  = __( 'Goodreads Widget', 'wpbooklist' );
+			$this->trans_280  = __( 'Google Purchase Link', 'wpbooklist' );
+			$this->trans_281  = __( 'Illustrator', 'wpbooklist' );
+			$this->trans_282  = __( 'iBooks Purchase Link', 'wpbooklist' );
+			$this->trans_283  = __( 'Kobo Purchase Link', 'wpbooklist' );
+			$this->trans_284  = __( 'Out of Print', 'wpbooklist' );
+			$this->trans_285  = __( 'Pinterest Share Button', 'wpbooklist' );
+			$this->trans_286  = __( 'Twitter Share Button', 'wpbooklist' );
+
+
 
 
 

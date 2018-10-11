@@ -146,7 +146,7 @@ if ( ! class_exists( 'WPBookList_Library_Display_Options_Form', false ) ) :
 						<label>' . $this->trans->trans_256 . '</label>
 					</div>
 					<div class="wpbooklist-margin-right-td">
-						<input type="checkbox" name="hide-library-display-form-finished"></input>
+						<input type="checkbox" name="hide-library-display-form-finishedsort"></input>
 					</div>
 				</div>';
 
@@ -181,6 +181,7 @@ if ( ! class_exists( 'WPBookList_Library_Display_Options_Form', false ) ) :
 	            		</tr>
 	            	</tbody>
 	            </table>
+	            <button class="wpbooklist-response-success-fail-button wpbooklist-admin-save-library-display-button" type="button">' . $this->trans->trans_245 . '</button>
 			</div>';
 
 			echo $string1 . $string2 . $string3 . $string4 . $string5;

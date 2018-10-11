@@ -19,6 +19,8 @@
 .wpbooklist-display-options-indiv-entry{
     text-align: left;
     margin: 10px;
+    opacity: 0.4;
+    pointer-events: none;
 }
 
 .wpbooklist-margin-right-td{
@@ -52,4 +54,14 @@
     margin-left: auto;
     margin-right: auto;
     text-align: left;
+}
+
+#wpbooklist-display-opt-check-div{
+    margin:50px;
+    margin-bottom:20px;
+}
+
+.wpbooklist-admin-save-library-display-button{
+    margin:50px;
+    margin-top:20px;
 }
