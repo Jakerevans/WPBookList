@@ -23,6 +23,11 @@
     pointer-events: none;
 }
 
+#wpbooklist-display-opt-check-div, #wpbooklist-library-options-lower-table, .wpbooklist-admin-save-library-display-button{
+   opacity: 0.4;
+   pointer-events: none; 
+}
+
 .wpbooklist-margin-right-td{
     display: block;
     margin-top: 5px;

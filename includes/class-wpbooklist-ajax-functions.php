@@ -1476,10 +1476,13 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 		  	wp_die();
 		}
 
-		// Callback function for saving library display options
+		// Callback function for saving library display options.
 		public function wpbooklist_dashboard_save_library_display_options_action_callback() {
 			global $wpdb;
 			check_ajax_referer( 'wpbooklist_dashboard_save_library_display_options_action_callback', 'security' );
+
+
+/*
 
 			$enablepurchase = filter_var( wp_unslash( $_POST['enablepurchase'] ), FILTER_SANITIZE_STRING );
 			$hidesearch = filter_var( wp_unslash( $_POST['hidesearch'] ), FILTER_SANITIZE_STRING );
@@ -1592,13 +1595,83 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 				'booksonpage' => $booksonpage
 			);
 
+*/
+
+
+			if ( isset( $_POST['booksonpage'] ) ) {
+				$booksonpage = filter_var( wp_unslash( $_POST['booksonpage'] ), FILTER_SANITIZE_NUMBER_INT );
+			}
+
+			if ( isset( $_POST['hidefilter'] ) ) {
+				$hidefilter = filter_var( wp_unslash( $_POST['hidefilter'] ), FILTER_SANITIZE_STRING );
+			}
+
+			if ( isset( $_POST['hidefinishedsort'] ) ) {
+				$hidefinishedsort = filter_var( wp_unslash( $_POST['hidefinishedsort'] ), FILTER_SANITIZE_STRING );
+			}
+
+			if ( isset( $_POST['hidefirstsort'] ) ) {
+				$hidefirstsort = filter_var( wp_unslash( $_POST['hidefirstsort'] ), FILTER_SANITIZE_STRING );
+			}
+
+			if ( isset( $_POST['hidelibrarytitle'] ) ) {
+				$hidelibrarytitle = filter_var( wp_unslash( $_POST['hidelibrarytitle'] ), FILTER_SANITIZE_STRING );
+			}
+
+			if ( isset( $_POST['hidequote'] ) ) {
+				$hidequote = filter_var( wp_unslash( $_POST['hidequote'] ), FILTER_SANITIZE_STRING );
+			}
+
+			if ( isset( $_POST['hiderating'] ) ) {
+				$hiderating = filter_var( wp_unslash( $_POST['hiderating'] ), FILTER_SANITIZE_STRING );
+			}
+
+			if ( isset( $_POST['hidesearch'] ) ) {
+				$hidesearch = filter_var( wp_unslash( $_POST['hidesearch'] ), FILTER_SANITIZE_STRING );
+			}
+
+			if ( isset( $_POST['hidesignedsort'] ) ) {
+				$hidesignedsort = filter_var( wp_unslash( $_POST['hidesignedsort'] ), FILTER_SANITIZE_STRING );
+			}
+
+			if ( isset( $_POST['hidestats'] ) ) {
+				$hidestats = filter_var( wp_unslash( $_POST['hidestats'] ), FILTER_SANITIZE_STRING );
+			}
+
+			if ( isset( $_POST['hidesubjectsort'] ) ) {
+				$hidesubjectsort = filter_var( wp_unslash( $_POST['hidesubjectsort'] ), FILTER_SANITIZE_STRING );
+			}
+
+			if ( isset( $_POST['library'] ) ) {
+				$library = filter_var( wp_unslash( $_POST['library'] ), FILTER_SANITIZE_STRING );
+			}
+
+			if ( isset( $_POST['sortoption'] ) ) {
+				$sortoption = filter_var( wp_unslash( $_POST['sortoption'] ), FILTER_SANITIZE_STRING );
+			}
+
+			$settings_array = array(
+				'booksonpage'      => $booksonpage,
+				'hidefilter'       => $hidefilter,
+				'hidefinishedsort' => $hidefinishedsort,
+				'hidefirstsort'    => $hidefirstsort,
+				'hidelibrarytitle' => $hidelibrarytitle,
+				'hidequote'        => $hidequote,
+				'hiderating'       => $hiderating,
+				'hidesearch'       => $hidesearch,
+				'hidesignedsort'   => $hidesignedsort,
+				'hidestats'        => $hidestats,
+				'hidesubjectsort'  => $hidesubjectsort,
+				'sortoption'       => $sortoption,
+			);
+
 			require_once CLASS_DIR . 'class-display-options.php';
 			$settings_class = new WPBookList_Display_Options();
-			$settings_class->save_library_settings($library, $settings_array);
+			$settings_class->save_library_settings( $library, $settings_array );
 			wp_die();
 		}
 
-		// Callback function for saving post display options
+		// Callback function for saving post display options.
 		public function wpbooklist_dashboard_save_post_display_options_action_callback() {
 			global $wpdb;
 			check_ajax_referer( 'wpbooklist_dashboard_save_post_display_options_action_callback', 'security' );
@@ -1794,10 +1867,9 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 				$library = array_pop($library);
 				$table_name = $wpdb->prefix . 'wpbooklist_jre_settings_'.$library;
 			}
-			//$var2 = filter_var( wp_unslash( $_POST['var'] ), FILTER_SANITIZE_NUMBER_INT);
+			
 			$row = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM $table_name WHERE ID = %d", 1) );
-			echo $jsonData = json_encode($row); 
-			wp_die();
+			wp_die( wp_json_encode( $row ) );
 		}
 
 		// Callback Function for showing the Edit Book form

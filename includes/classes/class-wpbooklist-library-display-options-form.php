@@ -45,7 +45,7 @@ if ( ! class_exists( 'WPBookList_Library_Display_Options_Form', false ) ) :
 
 			$string1 = '<div id="wpbooklist-display-options-container">
 							<p class="wpbooklist-tab-intro-para">' . $this->trans->trans_262 . '</p>
-							<select class="wpbooklist-select-centered" id="wpbooklist-library-settings-select">
+							<select class="wpbooklist-select-centered" id="wpbooklist-library-display-settings-select">
 								<option value="' . $wpdb->prefix . 'wpbooklist_jre_saved_book_log">Default Library</option>';
 
 			$string2 = '';
@@ -58,95 +58,97 @@ if ( ! class_exists( 'WPBookList_Library_Display_Options_Form', false ) ) :
 			$string3 = '</select>';
 
 			$string4 =
-				'<div class="wpbooklist-spinner" id="wpbooklist-spinner-2"></div>
-				<div class="wpbooklist-display-options-indiv-entry">
-					<div class="wpbooklist-display-options-label-div">
-						<img class="wpbooklist-icon-image-question-display-options wpbooklist-icon-image-question" data-label="library-display-form-booktitle" src="http://localhost:8888/local/wp-content/plugins/wpbooklist/assets/img/icons/question-black.svg">
-						<label>' . $this->trans->trans_138 . '</label>
+				'<div class="wpbooklist-spinner" id="wpbooklist-spinner"></div>
+				<div id="wpbooklist-display-options-indiv-entry-wrapper">
+					<div class="wpbooklist-display-options-indiv-entry">
+						<div class="wpbooklist-display-options-label-div">
+							<img class="wpbooklist-icon-image-question-display-options wpbooklist-icon-image-question" data-label="library-display-form-booktitle" src="http://localhost:8888/local/wp-content/plugins/wpbooklist/assets/img/icons/question-black.svg">
+							<label>' . $this->trans->trans_138 . '</label>
+						</div>
+						<div class="wpbooklist-margin-right-td">
+							<input type="checkbox" name="hide-library-display-form-booktitle"></input>
+						</div>
 					</div>
-					<div class="wpbooklist-margin-right-td">
-						<input type="checkbox" name="hide-library-display-form-booktitle"></input>
+					<div class="wpbooklist-display-options-indiv-entry">
+						<div class="wpbooklist-display-options-label-div">
+							<img class="wpbooklist-icon-image-question-display-options wpbooklist-icon-image-question" data-label="library-display-form-filter" src="http://localhost:8888/local/wp-content/plugins/wpbooklist/assets/img/icons/question-black.svg">
+							<label>' . $this->trans->trans_248 . '</label>
+						</div>
+						<div class="wpbooklist-margin-right-td">
+							<input type="checkbox" name="hide-library-display-form-filter"></input>
+						</div>
 					</div>
-				</div>
-				<div class="wpbooklist-display-options-indiv-entry">
-					<div class="wpbooklist-display-options-label-div">
-						<img class="wpbooklist-icon-image-question-display-options wpbooklist-icon-image-question" data-label="library-display-form-filter" src="http://localhost:8888/local/wp-content/plugins/wpbooklist/assets/img/icons/question-black.svg">
-						<label>' . $this->trans->trans_248 . '</label>
+					<div class="wpbooklist-display-options-indiv-entry">
+						<div class="wpbooklist-display-options-label-div">
+							<img class="wpbooklist-icon-image-question-display-options wpbooklist-icon-image-question" data-label="library-display-form-editionsort" src="http://localhost:8888/local/wp-content/plugins/wpbooklist/assets/img/icons/question-black.svg">
+							<label>' . $this->trans->trans_249 . '</label>
+						</div>
+						<div class="wpbooklist-margin-right-td">
+							<input type="checkbox" name="hide-library-display-form-editionsort"></input>
+						</div>
 					</div>
-					<div class="wpbooklist-margin-right-td">
-						<input type="checkbox" name="hide-library-display-form-filter"></input>
+					<div class="wpbooklist-display-options-indiv-entry">
+						<div class="wpbooklist-display-options-label-div">
+							<img class="wpbooklist-icon-image-question-display-options wpbooklist-icon-image-question" data-label="library-display-form-quote" src="http://localhost:8888/local/wp-content/plugins/wpbooklist/assets/img/icons/question-black.svg">
+							<label>' . $this->trans->trans_250 . '</label>
+						</div>
+						<div class="wpbooklist-margin-right-td">
+							<input type="checkbox" name="hide-library-display-form-quote"></input>
+						</div>
 					</div>
-				</div>
-				<div class="wpbooklist-display-options-indiv-entry">
-					<div class="wpbooklist-display-options-label-div">
-						<img class="wpbooklist-icon-image-question-display-options wpbooklist-icon-image-question" data-label="library-display-form-editionsort" src="http://localhost:8888/local/wp-content/plugins/wpbooklist/assets/img/icons/question-black.svg">
-						<label>' . $this->trans->trans_249 . '</label>
+					<div class="wpbooklist-display-options-indiv-entry">
+						<div class="wpbooklist-display-options-label-div">
+							<img class="wpbooklist-icon-image-question-display-options wpbooklist-icon-image-question" data-label="library-display-form-reviewstars" src="http://localhost:8888/local/wp-content/plugins/wpbooklist/assets/img/icons/question-black.svg">
+							<label>' . $this->trans->trans_251 . '</label>
+						</div>
+						<div class="wpbooklist-margin-right-td">
+							<input type="checkbox" name="hide-library-display-form-reviewstars"></input>
+						</div>
 					</div>
-					<div class="wpbooklist-margin-right-td">
-						<input type="checkbox" name="hide-library-display-form-editionsort"></input>
+					<div class="wpbooklist-display-options-indiv-entry">
+						<div class="wpbooklist-display-options-label-div">
+							<img class="wpbooklist-icon-image-question-display-options wpbooklist-icon-image-question" data-label="library-display-form-searchsort" src="http://localhost:8888/local/wp-content/plugins/wpbooklist/assets/img/icons/question-black.svg">
+							<label>' . $this->trans->trans_252 . '</label>
+						</div>
+						<div class="wpbooklist-margin-right-td">
+							<input type="checkbox" name="hide-library-display-form-searchsort"></input>
+						</div>
 					</div>
-				</div>
-				<div class="wpbooklist-display-options-indiv-entry">
-					<div class="wpbooklist-display-options-label-div">
-						<img class="wpbooklist-icon-image-question-display-options wpbooklist-icon-image-question" data-label="library-display-form-quote" src="http://localhost:8888/local/wp-content/plugins/wpbooklist/assets/img/icons/question-black.svg">
-						<label>' . $this->trans->trans_250 . '</label>
+					<div class="wpbooklist-display-options-indiv-entry">
+						<div class="wpbooklist-display-options-label-div">
+							<img class="wpbooklist-icon-image-question-display-options wpbooklist-icon-image-question" data-label="library-display-form-signedsort" src="http://localhost:8888/local/wp-content/plugins/wpbooklist/assets/img/icons/question-black.svg">
+							<label>' . $this->trans->trans_253 . '</label>
+						</div>
+						<div class="wpbooklist-margin-right-td">
+							<input type="checkbox" name="hide-library-display-form-signedsort"></input>
+						</div>
 					</div>
-					<div class="wpbooklist-margin-right-td">
-						<input type="checkbox" name="hide-library-display-form-quote"></input>
+					<div class="wpbooklist-display-options-indiv-entry">
+						<div class="wpbooklist-display-options-label-div">
+							<img class="wpbooklist-icon-image-question-display-options wpbooklist-icon-image-question" data-label="library-display-form-statistics" src="http://localhost:8888/local/wp-content/plugins/wpbooklist/assets/img/icons/question-black.svg">
+							<label>' . $this->trans->trans_254 . '</label>
+						</div>
+						<div class="wpbooklist-margin-right-td">
+							<input type="checkbox" name="hide-library-display-form-statistics"></input>
+						</div>
 					</div>
-				</div>
-				<div class="wpbooklist-display-options-indiv-entry">
-					<div class="wpbooklist-display-options-label-div">
-						<img class="wpbooklist-icon-image-question-display-options wpbooklist-icon-image-question" data-label="library-display-form-reviewstars" src="http://localhost:8888/local/wp-content/plugins/wpbooklist/assets/img/icons/question-black.svg">
-						<label>' . $this->trans->trans_251 . '</label>
+					<div class="wpbooklist-display-options-indiv-entry">
+						<div class="wpbooklist-display-options-label-div">
+							<img class="wpbooklist-icon-image-question-display-options wpbooklist-icon-image-question" data-label="library-display-form-subjectsort" src="http://localhost:8888/local/wp-content/plugins/wpbooklist/assets/img/icons/question-black.svg">
+							<label>' . $this->trans->trans_255 . '</label>
+						</div>
+						<div class="wpbooklist-margin-right-td">
+							<input type="checkbox" name="hide-library-display-form-subjectsort"></input>
+						</div>
 					</div>
-					<div class="wpbooklist-margin-right-td">
-						<input type="checkbox" name="hide-library-display-form-reviewstars"></input>
-					</div>
-				</div>
-				<div class="wpbooklist-display-options-indiv-entry">
-					<div class="wpbooklist-display-options-label-div">
-						<img class="wpbooklist-icon-image-question-display-options wpbooklist-icon-image-question" data-label="library-display-form-searchsort" src="http://localhost:8888/local/wp-content/plugins/wpbooklist/assets/img/icons/question-black.svg">
-						<label>' . $this->trans->trans_252 . '</label>
-					</div>
-					<div class="wpbooklist-margin-right-td">
-						<input type="checkbox" name="hide-library-display-form-searchsort"></input>
-					</div>
-				</div>
-				<div class="wpbooklist-display-options-indiv-entry">
-					<div class="wpbooklist-display-options-label-div">
-						<img class="wpbooklist-icon-image-question-display-options wpbooklist-icon-image-question" data-label="library-display-form-signedsort" src="http://localhost:8888/local/wp-content/plugins/wpbooklist/assets/img/icons/question-black.svg">
-						<label>' . $this->trans->trans_253 . '</label>
-					</div>
-					<div class="wpbooklist-margin-right-td">
-						<input type="checkbox" name="hide-library-display-form-signedsort"></input>
-					</div>
-				</div>
-				<div class="wpbooklist-display-options-indiv-entry">
-					<div class="wpbooklist-display-options-label-div">
-						<img class="wpbooklist-icon-image-question-display-options wpbooklist-icon-image-question" data-label="library-display-form-statistics" src="http://localhost:8888/local/wp-content/plugins/wpbooklist/assets/img/icons/question-black.svg">
-						<label>' . $this->trans->trans_254 . '</label>
-					</div>
-					<div class="wpbooklist-margin-right-td">
-						<input type="checkbox" name="hide-library-display-form-statistics"></input>
-					</div>
-				</div>
-				<div class="wpbooklist-display-options-indiv-entry">
-					<div class="wpbooklist-display-options-label-div">
-						<img class="wpbooklist-icon-image-question-display-options wpbooklist-icon-image-question" data-label="library-display-form-subjectsort" src="http://localhost:8888/local/wp-content/plugins/wpbooklist/assets/img/icons/question-black.svg">
-						<label>' . $this->trans->trans_255 . '</label>
-					</div>
-					<div class="wpbooklist-margin-right-td">
-						<input type="checkbox" name="hide-library-display-form-subjectsort"></input>
-					</div>
-				</div>
-				<div class="wpbooklist-display-options-indiv-entry">
-					<div class="wpbooklist-display-options-label-div">
-						<img class="wpbooklist-icon-image-question-display-options wpbooklist-icon-image-question" data-label="library-display-form-finished" src="http://localhost:8888/local/wp-content/plugins/wpbooklist/assets/img/icons/question-black.svg">
-						<label>' . $this->trans->trans_256 . '</label>
-					</div>
-					<div class="wpbooklist-margin-right-td">
-						<input type="checkbox" name="hide-library-display-form-finishedsort"></input>
+					<div class="wpbooklist-display-options-indiv-entry">
+						<div class="wpbooklist-display-options-label-div">
+							<img class="wpbooklist-icon-image-question-display-options wpbooklist-icon-image-question" data-label="library-display-form-finished" src="http://localhost:8888/local/wp-content/plugins/wpbooklist/assets/img/icons/question-black.svg">
+							<label>' . $this->trans->trans_256 . '</label>
+						</div>
+						<div class="wpbooklist-margin-right-td">
+							<input type="checkbox" name="hide-library-display-form-finishedsort"></input>
+						</div>
 					</div>
 				</div>';
 
@@ -163,7 +165,7 @@ if ( ! class_exists( 'WPBookList_Library_Display_Options_Form', false ) ) :
 	                	<tr>
 			              <td class="wpbooklist-display-bottom-4"><label>' . $this->trans->trans_259 . '</label></td>
 			              <td class="wpbooklist-display-bottom-4">
-			                <select name="sort-value" id="wpbooklist-jre-sorting-select"><option selected="selected" value="default">' . $this->trans->trans_3 . '</option>
+			                <select name="sort-value" id="wpbooklist-jre-sorting-select"><option selected="selected" value="' . $this->trans->trans_3 . '">' . $this->trans->trans_3 . '</option>
 			                  <option value="alphabeticallybytitle">' . $this->trans->trans_4 . '</option>
 			                  <option value="alphabeticallybyauthorfirst">' . $this->trans->trans_5 . '</option>
 			                  <option value="alphabeticallybyauthorlast">' . $this->trans->trans_6 . '</option>
@@ -177,7 +179,7 @@ if ( ! class_exists( 'WPBookList_Library_Display_Options_Form', false ) ) :
 		            	</tr>
 		            	<tr>
 			                <td class="wpbooklist-display-bottom-4"><label>' . $this->trans->trans_260 . '</label></td>
-			                <td class="wpbooklist-display-bottom-4"><input class="wpbooklist-dynamic-input" id="wpbooklist-book-control" type="text" name="books-per-page" value="120"></td>
+			                <td class="wpbooklist-display-bottom-4"><input class="wpbooklist-dynamic-input" id="wpbooklist-book-control" type="text" name="books-per-page"></td>
 	            		</tr>
 	            	</tbody>
 	            </table>
