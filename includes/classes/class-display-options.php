@@ -50,6 +50,9 @@ class WPBookList_Display_Options {
         $where = array( 'ID' => 1 );
         $result = $wpdb->update( $final_table, $settings_array, $where );
 
+        error_log($final_table);
+        error_log($result);
+
 	}
 
 	public function save_post_settings($settings_array = array()){

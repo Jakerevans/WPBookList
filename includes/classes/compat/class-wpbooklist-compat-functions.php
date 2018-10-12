@@ -115,13 +115,64 @@ if ( ! class_exists( 'WPBookList_Compat_Functions', false ) ) :
 				if ( 0 === $wpdb->query( "SHOW COLUMNS FROM `$table_name` LIKE 'patreonack'" ) ) {
 					$wpdb->query( "ALTER TABLE $table_name ADD patreonack bigint(255)" );
 				}
-
+				
 				// Begin addition of version 6.0.0 columns.
 				if ( 0 === $wpdb->query( "SHOW COLUMNS FROM `$table_name` LIKE 'customfields'" ) ) {
 					$wpdb->query( "ALTER TABLE $table_name ADD customfields TEXT" );
 				}
 				if ( 0 === $wpdb->query( "SHOW COLUMNS FROM `$table_name` LIKE 'extensionversions'" ) ) {
 					$wpdb->query( "ALTER TABLE $table_name ADD extensionversions TEXT" );
+				}
+				if ( 0 === $wpdb->query( "SHOW COLUMNS FROM `$table_name` LIKE 'hideasin'" ) ) {
+					$wpdb->query( "ALTER TABLE $table_name ADD hideasin bigint(255)" );
+				}
+				if ( 0 === $wpdb->query( "SHOW COLUMNS FROM `$table_name` LIKE 'hideoutofprint'" ) ) {
+					$wpdb->query( "ALTER TABLE $table_name ADD hideoutofprint bigint(255)" );
+				}
+				if ( 0 === $wpdb->query( "SHOW COLUMNS FROM `$table_name` LIKE 'hideothereditions'" ) ) {
+					$wpdb->query( "ALTER TABLE $table_name ADD hideothereditions bigint(255)" );
+				}
+				if ( 0 === $wpdb->query( "SHOW COLUMNS FROM `$table_name` LIKE 'hidekeywords'" ) ) {
+					$wpdb->query( "ALTER TABLE $table_name ADD hidekeywords bigint(255)" );
+				}
+				if ( 0 === $wpdb->query( "SHOW COLUMNS FROM `$table_name` LIKE 'hideisbn10'" ) ) {
+					$wpdb->query( "ALTER TABLE $table_name ADD hideisbn10 bigint(255)" );
+				}
+				if ( 0 === $wpdb->query( "SHOW COLUMNS FROM `$table_name` LIKE 'hideisbn13'" ) ) {
+					$wpdb->query( "ALTER TABLE $table_name ADD hideisbn13 bigint(255)" );
+				}
+				if ( 0 === $wpdb->query( "SHOW COLUMNS FROM `$table_name` LIKE 'hidegenres'" ) ) {
+					$wpdb->query( "ALTER TABLE $table_name ADD hidegenres bigint(255)" );
+				}
+				if ( 0 === $wpdb->query( "SHOW COLUMNS FROM `$table_name` LIKE 'hidecallnumber'" ) ) {
+					$wpdb->query( "ALTER TABLE $table_name ADD hidecallnumber bigint(255)" );
+				}
+				if ( 0 === $wpdb->query( "SHOW COLUMNS FROM `$table_name` LIKE 'hideformat'" ) ) {
+					$wpdb->query( "ALTER TABLE $table_name ADD hideformat bigint(255)" );
+				}
+				if ( 0 === $wpdb->query( "SHOW COLUMNS FROM `$table_name` LIKE 'hideillustrator'" ) ) {
+					$wpdb->query( "ALTER TABLE $table_name ADD hideillustrator bigint(255)" );
+				}
+				if ( 0 === $wpdb->query( "SHOW COLUMNS FROM `$table_name` LIKE 'hidelanguage'" ) ) {
+					$wpdb->query( "ALTER TABLE $table_name ADD hidelanguage bigint(255)" );
+				}
+				if ( 0 === $wpdb->query( "SHOW COLUMNS FROM `$table_name` LIKE 'hidenumberinseries'" ) ) {
+					$wpdb->query( "ALTER TABLE $table_name ADD hidenumberinseries bigint(255)" );
+				}
+				if ( 0 === $wpdb->query( "SHOW COLUMNS FROM `$table_name` LIKE 'hideorigpubyear'" ) ) {
+					$wpdb->query( "ALTER TABLE $table_name ADD hideorigpubyear bigint(255)" );
+				}
+				if ( 0 === $wpdb->query( "SHOW COLUMNS FROM `$table_name` LIKE 'hideorigtitle'" ) ) {
+					$wpdb->query( "ALTER TABLE $table_name ADD hideorigtitle bigint(255)" );
+				}
+				if ( 0 === $wpdb->query( "SHOW COLUMNS FROM `$table_name` LIKE 'hideseries'" ) ) {
+					$wpdb->query( "ALTER TABLE $table_name ADD hideseries bigint(255)" );
+				}
+				if ( 0 === $wpdb->query( "SHOW COLUMNS FROM `$table_name` LIKE 'hideshortdesc'" ) ) {
+					$wpdb->query( "ALTER TABLE $table_name ADD hideshortdesc bigint(255)" );
+				}
+				if ( 0 === $wpdb->query( "SHOW COLUMNS FROM `$table_name` LIKE 'hidesubgenre'" ) ) {
+					$wpdb->query( "ALTER TABLE $table_name ADD hidesubgenre bigint(255)" );
 				}
 			}
 		}
@@ -160,6 +211,59 @@ if ( ! class_exists( 'WPBookList_Compat_Functions', false ) ) :
 					$wpdb->query( "ALTER TABLE $table_name_page_options ADD hidefilter bigint(255)" );
 				}
 
+				// Begin addition of version 6.0.0 columns.
+				if ( 0 === $wpdb->query( "SHOW COLUMNS FROM `$table_name_page_options` LIKE 'hideasin'" ) ) {
+					$wpdb->query( "ALTER TABLE $table_name_page_options ADD hideasin bigint(255)" );
+				}
+				if ( 0 === $wpdb->query( "SHOW COLUMNS FROM `$table_name_page_options` LIKE 'hideoutofprint'" ) ) {
+					$wpdb->query( "ALTER TABLE $table_name_page_options ADD hideoutofprint bigint(255)" );
+				}
+				if ( 0 === $wpdb->query( "SHOW COLUMNS FROM `$table_name_page_options` LIKE 'hideothereditions'" ) ) {
+					$wpdb->query( "ALTER TABLE $table_name_page_options ADD hideothereditions bigint(255)" );
+				}
+				if ( 0 === $wpdb->query( "SHOW COLUMNS FROM `$table_name_page_options` LIKE 'hidekeywords'" ) ) {
+					$wpdb->query( "ALTER TABLE $table_name_page_options ADD hidekeywords bigint(255)" );
+				}
+				if ( 0 === $wpdb->query( "SHOW COLUMNS FROM `$table_name_page_options` LIKE 'hideisbn10'" ) ) {
+					$wpdb->query( "ALTER TABLE $table_name_page_options ADD hideisbn10 bigint(255)" );
+				}
+				if ( 0 === $wpdb->query( "SHOW COLUMNS FROM `$table_name_page_options` LIKE 'hideisbn13'" ) ) {
+					$wpdb->query( "ALTER TABLE $table_name_page_options ADD hideisbn13 bigint(255)" );
+				}
+				if ( 0 === $wpdb->query( "SHOW COLUMNS FROM `$table_name_page_options` LIKE 'hidegenres'" ) ) {
+					$wpdb->query( "ALTER TABLE $table_name_page_options ADD hidegenres bigint(255)" );
+				}
+				if ( 0 === $wpdb->query( "SHOW COLUMNS FROM `$table_name_page_options` LIKE 'hidecallnumber'" ) ) {
+					$wpdb->query( "ALTER TABLE $table_name_page_options ADD hidecallnumber bigint(255)" );
+				}
+				if ( 0 === $wpdb->query( "SHOW COLUMNS FROM `$table_name_page_options` LIKE 'hideformat'" ) ) {
+					$wpdb->query( "ALTER TABLE $table_name_page_options ADD hideformat bigint(255)" );
+				}
+				if ( 0 === $wpdb->query( "SHOW COLUMNS FROM `$table_name_page_options` LIKE 'hideillustrator'" ) ) {
+					$wpdb->query( "ALTER TABLE $table_name_page_options ADD hideillustrator bigint(255)" );
+				}
+				if ( 0 === $wpdb->query( "SHOW COLUMNS FROM `$table_name_page_options` LIKE 'hidelanguage'" ) ) {
+					$wpdb->query( "ALTER TABLE $table_name_page_options ADD hidelanguage bigint(255)" );
+				}
+				if ( 0 === $wpdb->query( "SHOW COLUMNS FROM `$table_name_page_options` LIKE 'hidenumberinseries'" ) ) {
+					$wpdb->query( "ALTER TABLE $table_name_page_options ADD hidenumberinseries bigint(255)" );
+				}
+				if ( 0 === $wpdb->query( "SHOW COLUMNS FROM `$table_name_page_options` LIKE 'hideorigpubyear'" ) ) {
+					$wpdb->query( "ALTER TABLE $table_name_page_options ADD hideorigpubyear bigint(255)" );
+				}
+				if ( 0 === $wpdb->query( "SHOW COLUMNS FROM `$table_name_page_options` LIKE 'hideorigtitle'" ) ) {
+					$wpdb->query( "ALTER TABLE $table_name_page_options ADD hideorigtitle bigint(255)" );
+				}
+				if ( 0 === $wpdb->query( "SHOW COLUMNS FROM `$table_name_page_options` LIKE 'hideseries'" ) ) {
+					$wpdb->query( "ALTER TABLE $table_name_page_options ADD hideseries bigint(255)" );
+				}
+				if ( 0 === $wpdb->query( "SHOW COLUMNS FROM `$table_name_page_options` LIKE 'hideshortdesc'" ) ) {
+					$wpdb->query( "ALTER TABLE $table_name_page_options ADD hideshortdesc bigint(255)" );
+				}
+				if ( 0 === $wpdb->query( "SHOW COLUMNS FROM `$table_name_page_options` LIKE 'hidesubgenre'" ) ) {
+					$wpdb->query( "ALTER TABLE $table_name_page_options ADD hidesubgenre bigint(255)" );
+				}
+
 			}
 		}
 
@@ -174,27 +278,80 @@ if ( ! class_exists( 'WPBookList_Compat_Functions', false ) ) :
 			if ( WPBOOKLIST_VERSION_NUM !== $this->version ) {
 
 				// ADD COLUMNS TO THE 'wpbooklist_jre_post_options' TABLE.
-				$table_name_post_options = $wpdb->prefix . 'wpbooklist_jre_post_options';
-				if ( 0 === $wpdb->query( "SHOW COLUMNS FROM `$table_name_post_options` LIKE 'hidekindleprev'" ) ) {
-					$wpdb->query( "ALTER TABLE $table_name_post_options ADD hidekindleprev bigint(255)" );
+				$table = $wpdb->prefix . 'wpbooklist_jre_post_options';
+				if ( 0 === $wpdb->query( "SHOW COLUMNS FROM `$table` LIKE 'hidekindleprev'" ) ) {
+					$wpdb->query( "ALTER TABLE $table ADD hidekindleprev bigint(255)" );
 				}
-				if ( 0 === $wpdb->query( "SHOW COLUMNS FROM `$table_name_post_options` LIKE 'hidegoogleprev'" ) ) {
-					$wpdb->query( "ALTER TABLE $table_name_post_options ADD hidegoogleprev bigint(255)" );
+				if ( 0 === $wpdb->query( "SHOW COLUMNS FROM `$table` LIKE 'hidegoogleprev'" ) ) {
+					$wpdb->query( "ALTER TABLE $table ADD hidegoogleprev bigint(255)" );
 				}
-				if ( 0 === $wpdb->query( "SHOW COLUMNS FROM `$table_name_post_options` LIKE 'hidekobopurchase'" ) ) {
-					$wpdb->query( "ALTER TABLE $table_name_post_options ADD hidekobopurchase bigint(255)" );
+				if ( 0 === $wpdb->query( "SHOW COLUMNS FROM `$table` LIKE 'hidekobopurchase'" ) ) {
+					$wpdb->query( "ALTER TABLE $table ADD hidekobopurchase bigint(255)" );
 				}
-				if ( 0 === $wpdb->query( "SHOW COLUMNS FROM `$table_name_post_options` LIKE 'hidebampurchase'" ) ) {
-					$wpdb->query( "ALTER TABLE $table_name_post_options ADD hidebampurchase bigint(255)" );
+				if ( 0 === $wpdb->query( "SHOW COLUMNS FROM `$table` LIKE 'hidebampurchase'" ) ) {
+					$wpdb->query( "ALTER TABLE $table ADD hidebampurchase bigint(255)" );
 				}
-				if ( 0 === $wpdb->query( "SHOW COLUMNS FROM `$table_name_post_options` LIKE 'hidesubject'" ) ) {
-					$wpdb->query( "ALTER TABLE $table_name_post_options ADD hidesubject bigint(255)" );
+				if ( 0 === $wpdb->query( "SHOW COLUMNS FROM `$table` LIKE 'hidesubject'" ) ) {
+					$wpdb->query( "ALTER TABLE $table ADD hidesubject bigint(255)" );
 				}
-				if ( 0 === $wpdb->query( "SHOW COLUMNS FROM `$table_name_post_options` LIKE 'hidecountry'" ) ) {
-					$wpdb->query( "ALTER TABLE $table_name_post_options ADD hidecountry bigint(255)" );
+				if ( 0 === $wpdb->query( "SHOW COLUMNS FROM `$table` LIKE 'hidecountry'" ) ) {
+					$wpdb->query( "ALTER TABLE $table ADD hidecountry bigint(255)" );
 				}
-				if ( 0 === $wpdb->query( "SHOW COLUMNS FROM `$table_name_post_options` LIKE 'hidefilter'" ) ) {
-					$wpdb->query( "ALTER TABLE $table_name_post_options ADD hidefilter bigint(255)" );
+				if ( 0 === $wpdb->query( "SHOW COLUMNS FROM `$table` LIKE 'hidefilter'" ) ) {
+					$wpdb->query( "ALTER TABLE $table ADD hidefilter bigint(255)" );
+				}
+
+				// Begin addition of version 6.0.0 columns.
+				if ( 0 === $wpdb->query( "SHOW COLUMNS FROM `$table` LIKE 'hideasin'" ) ) {
+					$wpdb->query( "ALTER TABLE $table ADD hideasin bigint(255)" );
+				}
+				if ( 0 === $wpdb->query( "SHOW COLUMNS FROM `$table` LIKE 'hideoutofprint'" ) ) {
+					$wpdb->query( "ALTER TABLE $table ADD hideoutofprint bigint(255)" );
+				}
+				if ( 0 === $wpdb->query( "SHOW COLUMNS FROM `$table` LIKE 'hideothereditions'" ) ) {
+					$wpdb->query( "ALTER TABLE $table ADD hideothereditions bigint(255)" );
+				}
+				if ( 0 === $wpdb->query( "SHOW COLUMNS FROM `$table` LIKE 'hidekeywords'" ) ) {
+					$wpdb->query( "ALTER TABLE $table ADD hidekeywords bigint(255)" );
+				}
+				if ( 0 === $wpdb->query( "SHOW COLUMNS FROM `$table` LIKE 'hideisbn10'" ) ) {
+					$wpdb->query( "ALTER TABLE $table ADD hideisbn10 bigint(255)" );
+				}
+				if ( 0 === $wpdb->query( "SHOW COLUMNS FROM `$table` LIKE 'hideisbn13'" ) ) {
+					$wpdb->query( "ALTER TABLE $table ADD hideisbn13 bigint(255)" );
+				}
+				if ( 0 === $wpdb->query( "SHOW COLUMNS FROM `$table` LIKE 'hidegenres'" ) ) {
+					$wpdb->query( "ALTER TABLE $table ADD hidegenres bigint(255)" );
+				}
+				if ( 0 === $wpdb->query( "SHOW COLUMNS FROM `$table` LIKE 'hidecallnumber'" ) ) {
+					$wpdb->query( "ALTER TABLE $table ADD hidecallnumber bigint(255)" );
+				}
+				if ( 0 === $wpdb->query( "SHOW COLUMNS FROM `$table` LIKE 'hideformat'" ) ) {
+					$wpdb->query( "ALTER TABLE $table ADD hideformat bigint(255)" );
+				}
+				if ( 0 === $wpdb->query( "SHOW COLUMNS FROM `$table` LIKE 'hideillustrator'" ) ) {
+					$wpdb->query( "ALTER TABLE $table ADD hideillustrator bigint(255)" );
+				}
+				if ( 0 === $wpdb->query( "SHOW COLUMNS FROM `$table` LIKE 'hidelanguage'" ) ) {
+					$wpdb->query( "ALTER TABLE $table ADD hidelanguage bigint(255)" );
+				}
+				if ( 0 === $wpdb->query( "SHOW COLUMNS FROM `$table` LIKE 'hidenumberinseries'" ) ) {
+					$wpdb->query( "ALTER TABLE $table ADD hidenumberinseries bigint(255)" );
+				}
+				if ( 0 === $wpdb->query( "SHOW COLUMNS FROM `$table` LIKE 'hideorigpubyear'" ) ) {
+					$wpdb->query( "ALTER TABLE $table ADD hideorigpubyear bigint(255)" );
+				}
+				if ( 0 === $wpdb->query( "SHOW COLUMNS FROM `$table` LIKE 'hideorigtitle'" ) ) {
+					$wpdb->query( "ALTER TABLE $table ADD hideorigtitle bigint(255)" );
+				}
+				if ( 0 === $wpdb->query( "SHOW COLUMNS FROM `$table` LIKE 'hideseries'" ) ) {
+					$wpdb->query( "ALTER TABLE $table ADD hideseries bigint(255)" );
+				}
+				if ( 0 === $wpdb->query( "SHOW COLUMNS FROM `$table` LIKE 'hideshortdesc'" ) ) {
+					$wpdb->query( "ALTER TABLE $table ADD hideshortdesc bigint(255)" );
+				}
+				if ( 0 === $wpdb->query( "SHOW COLUMNS FROM `$table` LIKE 'hidesubgenre'" ) ) {
+					$wpdb->query( "ALTER TABLE $table ADD hidesubgenre bigint(255)" );
 				}
 
 			}
@@ -258,7 +415,7 @@ if ( ! class_exists( 'WPBookList_Compat_Functions', false ) ) :
 					$wpdb->query( "ALTER TABLE $table_name_default ADD authorlast varchar(255)" );
 				}
 
-				// Begin addition of version 6.0.0 columns.
+				// Begin addition of version 6.0.0 columns..
 				if ( 0 === $wpdb->query( "SHOW COLUMNS FROM `$table_name_default` LIKE 'additionalimage1'" ) ) {
 					$wpdb->query( "ALTER TABLE $table_name_default ADD additionalimage1 TEXT" );
 				}
@@ -425,7 +582,7 @@ if ( ! class_exists( 'WPBookList_Compat_Functions', false ) ) :
 						$wpdb->query( "ALTER TABLE $table ADD authorlast varchar(255)" );
 					}
 
-					// Begin addition of version 6.0.0 columns.
+					// Begin addition of version 6.0.0 columns..
 					if ( 0 === $wpdb->query( "SHOW COLUMNS FROM `$table` LIKE 'additionalimage1'" ) ) {
 						$wpdb->query( "ALTER TABLE $table ADD additionalimage1 varchar(255)" );
 					}
@@ -551,6 +708,59 @@ if ( ! class_exists( 'WPBookList_Compat_Functions', false ) ) :
 					}
 					if ( 0 === $wpdb->query( "SHOW COLUMNS FROM `$table` LIKE 'hidesubjectsort'" ) ) {
 						$wpdb->query( "ALTER TABLE $table ADD hidesubjectsort bigint(255)" );
+					}
+
+					// Begin addition of version 6.0.0 columns.
+					if ( 0 === $wpdb->query( "SHOW COLUMNS FROM `$table` LIKE 'hideasin'" ) ) {
+						$wpdb->query( "ALTER TABLE $table ADD hideasin bigint(255)" );
+					}
+					if ( 0 === $wpdb->query( "SHOW COLUMNS FROM `$table` LIKE 'hideoutofprint'" ) ) {
+						$wpdb->query( "ALTER TABLE $table ADD hideoutofprint bigint(255)" );
+					}
+					if ( 0 === $wpdb->query( "SHOW COLUMNS FROM `$table` LIKE 'hideothereditions'" ) ) {
+						$wpdb->query( "ALTER TABLE $table ADD hideothereditions bigint(255)" );
+					}
+					if ( 0 === $wpdb->query( "SHOW COLUMNS FROM `$table` LIKE 'hidekeywords'" ) ) {
+						$wpdb->query( "ALTER TABLE $table ADD hidekeywords bigint(255)" );
+					}
+					if ( 0 === $wpdb->query( "SHOW COLUMNS FROM `$table` LIKE 'hideisbn10'" ) ) {
+						$wpdb->query( "ALTER TABLE $table ADD hideisbn10 bigint(255)" );
+					}
+					if ( 0 === $wpdb->query( "SHOW COLUMNS FROM `$table` LIKE 'hideisbn13'" ) ) {
+						$wpdb->query( "ALTER TABLE $table ADD hideisbn13 bigint(255)" );
+					}
+					if ( 0 === $wpdb->query( "SHOW COLUMNS FROM `$table` LIKE 'hidegenres'" ) ) {
+						$wpdb->query( "ALTER TABLE $table ADD hidegenres bigint(255)" );
+					}
+					if ( 0 === $wpdb->query( "SHOW COLUMNS FROM `$table` LIKE 'hidecallnumber'" ) ) {
+						$wpdb->query( "ALTER TABLE $table ADD hidecallnumber bigint(255)" );
+					}
+					if ( 0 === $wpdb->query( "SHOW COLUMNS FROM `$table` LIKE 'hideformat'" ) ) {
+						$wpdb->query( "ALTER TABLE $table ADD hideformat bigint(255)" );
+					}
+					if ( 0 === $wpdb->query( "SHOW COLUMNS FROM `$table` LIKE 'hideillustrator'" ) ) {
+						$wpdb->query( "ALTER TABLE $table ADD hideillustrator bigint(255)" );
+					}
+					if ( 0 === $wpdb->query( "SHOW COLUMNS FROM `$table` LIKE 'hidelanguage'" ) ) {
+						$wpdb->query( "ALTER TABLE $table ADD hidelanguage bigint(255)" );
+					}
+					if ( 0 === $wpdb->query( "SHOW COLUMNS FROM `$table` LIKE 'hidenumberinseries'" ) ) {
+						$wpdb->query( "ALTER TABLE $table ADD hidenumberinseries bigint(255)" );
+					}
+					if ( 0 === $wpdb->query( "SHOW COLUMNS FROM `$table` LIKE 'hideorigpubyear'" ) ) {
+						$wpdb->query( "ALTER TABLE $table ADD hideorigpubyear bigint(255)" );
+					}
+					if ( 0 === $wpdb->query( "SHOW COLUMNS FROM `$table` LIKE 'hideorigtitle'" ) ) {
+						$wpdb->query( "ALTER TABLE $table ADD hideorigtitle bigint(255)" );
+					}
+					if ( 0 === $wpdb->query( "SHOW COLUMNS FROM `$table` LIKE 'hideseries'" ) ) {
+						$wpdb->query( "ALTER TABLE $table ADD hideseries bigint(255)" );
+					}
+					if ( 0 === $wpdb->query( "SHOW COLUMNS FROM `$table` LIKE 'hideshortdesc'" ) ) {
+						$wpdb->query( "ALTER TABLE $table ADD hideshortdesc bigint(255)" );
+					}
+					if ( 0 === $wpdb->query( "SHOW COLUMNS FROM `$table` LIKE 'hidesubgenre'" ) ) {
+						$wpdb->query( "ALTER TABLE $table ADD hidesubgenre bigint(255)" );
 					}
 				}
 			}

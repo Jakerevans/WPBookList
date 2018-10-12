@@ -187,8 +187,9 @@ global $wpdb;
 			'adminnonce39' => 'wpbooklist_storytime_get_story_action_callback',
 			'adminnonce40' => 'wpbooklist_storytime_expand_browse_action_callback',
 			'adminnonce41' => 'wpbooklist_seed_book_form_autocomplete_action_callback',
-			'adminnonce42'  => 'wpbooklist_dashboard_edit_book_action_callback',
-			'adminnonce43'  => 'wpbooklist_get_library_view_display_options_action_callback',
+			'adminnonce42' => 'wpbooklist_dashboard_edit_book_action_callback',
+			'adminnonce43' => 'wpbooklist_get_library_view_display_options_action_callback',
+			'adminnonce44'  => 'wpbooklist_dashboard_save_book_display_options_action_callback',
 		))
 	);
 
@@ -353,6 +354,9 @@ global $wpdb;
 	// For saving library display options.
 	add_action( 'wp_ajax_wpbooklist_dashboard_save_library_display_options_action', array( $wp_book_list_ajax_functions, 'wpbooklist_dashboard_save_library_display_options_action_callback' ) );
 
+	// For saving book display options.
+	add_action( 'wp_ajax_wpbooklist_dashboard_save_book_display_options_action', array( $wp_book_list_ajax_functions, 'wpbooklist_dashboard_save_book_display_options_action_callback' ) );
+
 	// For saving post display options.
 	add_action( 'wp_ajax_wpbooklist_dashboard_save_post_display_options_action', array( $wp_book_list_ajax_functions, 'wpbooklist_dashboard_save_post_display_options_action_callback' ) );
 
@@ -449,7 +453,6 @@ global $wpdb;
 
 	// For deleting a StoryTime Settings.
 	add_action( 'wp_ajax_wpbooklist_delete_story_action', array( $wp_book_list_ajax_functions, 'wpbooklist_delete_story_action_callback' ) );
-
 
 	// Function to populate the Library View Display Options checkboxes.
 	add_action( 'wp_ajax_wpbooklist_get_library_view_display_options_action', array( $wp_book_list_ajax_functions, 'wpbooklist_get_library_view_display_options_action_callback' ) );
