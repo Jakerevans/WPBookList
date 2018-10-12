@@ -543,7 +543,7 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 							// Add new value with key into DB array.
 							if ( isset( $_POST[ $entry_details[0] ] ) ) {
 								$book_array[ $entry_details[0] ] = filter_var( wp_unslash( $_POST[ $entry_details[0] ] ), FILTER_SANITIZE_STRING );
-							}	
+							}
 						}
 					}
 				}
@@ -1128,7 +1128,7 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 					$posturl = $post_results->post_url;
 				}
 
-				wp_die( $edit_result . '--sep--' . $id_result . '--sep--' . $library . '--sep--' . $page_yes . '--sep--' . $post_yes . '--sep--' . $pageurl . '--sep--' . $posturl . '--sep--' . $book_class->apireport . '--sep--' . wp_json_encode($book_class->whichapifound) . '--sep--' . $book_class->apiamazonfailcount . '--sep--' . $book_class->amazon_transient_use . '--sep--' . $book_class->google_transient_use . '--sep--' . $book_class->openlib_transient_use . '--sep--' . $book_class->itunes_transient_use . '--sep--' . $book_class->itunes_audio_transient_use );
+				wp_die( $edit_result . '--sep--' . $id_result . '--sep--' . $library . '--sep--' . $page_yes . '--sep--' . $post_yes . '--sep--' . $pageurl . '--sep--' . $posturl . '--sep--' . $book_class->apireport . '--sep--' . wp_json_encode( $book_class->whichapifound) . '--sep--' . $book_class->apiamazonfailcount . '--sep--' . $book_class->amazon_transient_use . '--sep--' . $book_class->google_transient_use . '--sep--' . $book_class->openlib_transient_use . '--sep--' . $book_class->itunes_transient_use . '--sep--' . $book_class->itunes_audio_transient_use );
 			} else {
 
 				// Handling an actual Database error and displaying error code for troubleshooting.
@@ -1148,102 +1148,59 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 			if ( isset( $_POST['bookId'] ) ) {
 				$book_id = filter_var( wp_unslash( $_POST['bookId'] ), FILTER_SANITIZE_NUMBER_INT );
 			}
-			
+
 			$book_table = filter_var( wp_unslash( $_POST['bookTable'] ), FILTER_SANITIZE_STRING );
 			$sortParam  = filter_var( wp_unslash( $_POST['sortParam'] ), FILTER_SANITIZE_STRING );
 
 			// Double-check that Amazon review isn't expired.
 			require_once CLASS_BOOK_DIR . 'class-wpbooklist-book.php';
-			$book = new WPBookList_Book($book_id, $book_table);
-			$book->refresh_amazon_review( $book_id, $book_table);
+			$book = new WPBookList_Book( $book_id, $book_table );
+			$book->refresh_amazon_review( $book_id, $book_table );
 
 			// Instantiate the class that shows the book in colorbox.
 			require_once CLASS_DIR . 'class-show-book-in-colorbox.php';
-			$colorbox = new WPBookList_Show_Book_In_Colorbox($book_id, $book_table, null, $sortParam);
+			$colorbox = new WPBookList_Show_Book_In_Colorbox( $book_id, $book_table, null, $sortParam );
 
-			echo $colorbox->output.'---sep---'.$colorbox->isbn;
+			echo $colorbox->output . '---sep---' . $colorbox->isbn;
 			wp_die();
 		}
 
+		/** Helper function for cleaning up user-provided string.
+		 *
+		 *  @param string $string - The string that contains the table name.
+		 */
+		public function wpbooklist_clean( $string ) {
+			$string = str_replace( ' ', '_', $string );
+			$string = str_replace( '-', '_', $string );
+			return preg_replace( '/[^A-Za-z0-9\-]/', '', $string );
+		}
 
-		
-
+		/**
+		 * Callback function for creating a new Custom Library.
+		 */
 		public function wpbooklist_new_library_action_callback() {
-		  // Grabbing the existing options from DB
-		  global $wpdb;
-		  global $charset_collate;
-		  require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
-		  check_ajax_referer( 'wpbooklist_new_library_action_callback', 'security' );
-		  $table_name_dynamic = $wpdb->prefix . 'wpbooklist_jre_list_dynamic_db_names';
-		  $db_name;
 
-		  function wpbooklist_clean($string) {
-		      $string = str_replace(' ', '_', $string ); // Replaces all spaces with underscores.
-		      $string = str_replace('-', '_', $string );
-		      return preg_replace('/[^A-Za-z0-9\-]/', '', $string ); // Removes special chars.
-		  }
-		 
-		  // Create a new custom table
-		  if ( isset( $_POST['currentval'] ) ) {
-		      $db_name = sanitize_text_field($_POST['currentval']);
-		      $db_name = wpbooklist_clean($db_name);
-		  }
+			global $wpdb;
+			global $charset_collate;
+			require_once ABSPATH . 'wp-admin/includes/upgrade.php';
+			check_ajax_referer( 'wpbooklist_new_library_action_callback', 'security' );
+			$table_name_dynamic = $wpdb->prefix . 'wpbooklist_jre_list_dynamic_db_names';
 
-		  // Delete the table
-		  if ( isset( $_POST['table'] ) ) { 
-		      $table = $wpdb->prefix."wpbooklist_jre_".sanitize_text_field($_POST['table']);
-		      $pos = strripos($table,"_");
-		      $table = substr($table, 0, $pos);
-		      echo $table;
-		      $wpdb->query("DROP TABLE IF EXISTS $table");
+			// Set up table namee.
+			$db_name = '';
+			if ( isset( $_POST['currentval'] ) ) {
+				$db_name = sanitize_text_field( wp_unslash( $_POST['currentval'] ) );
+				$db_name = $this->wpbooklist_clean( $db_name );
+			}
 
-		      $delete_from_list = sanitize_text_field($_POST['table']);
-		      $pos2 = strripos($delete_from_list,"_");
-		      $delete_id = substr($delete_from_list, ($pos2+1) );
-		      $wpdb->delete( $table_name_dynamic, array( 'ID' => $delete_id ), array( '%d' ) );
-		         
-		      // Dropping primary key in database to alter the IDs and the AUTO_INCREMENT value
-		      $table_name_dynamic = str_replace('\'', '`', $table_name_dynamic);
-		      $wpdb->query("ALTER TABLE $table_name_dynamic MODIFY ID bigint(190) NOT NULL");
-
-		      $wpdb->query("ALTER TABLE $table_name_dynamic DROP PRIMARY KEY");
-
-		      // Adjusting ID values of remaining entries in database
-		      $my_query = $wpdb->get_results("SELECT * FROM $table_name_dynamic");
-		      $title_count = $wpdb->num_rows;
-
-		      for ($x = $delete_id ; $x <= $title_count; $x++) {
-		        $data = array(
-		            'ID' => $delete_id 
-		        );
-		        $format = array( '%s'); 
-		        $delete_id ++;  
-		        $where = array( 'ID' => ($delete_id ) );
-		        $where_format = array( '%d' );
-		        $wpdb->update( $table_name_dynamic, $data, $where, $format, $where_format );
-		      }  
-		        
-		      // Adding primary key back to database 
-		      $wpdb->query("ALTER TABLE $table_name_dynamic ADD PRIMARY KEY (`ID`)");    
-
-		      $wpdb->query("ALTER TABLE $table_name_dynamic MODIFY ID bigint(190) AUTO_INCREMENT");
-
-		      // Setting the AUTO_INCREMENT value based on number of remaining entries
-		      $title_count++;
-		      $query5 = $wpdb->prepare( "ALTER TABLE $table_name_dynamic AUTO_INCREMENT=%d", $title_count );
-		      $query5 = str_replace('\'', '`', $query5);
-		      $wpdb->query($query5);
-		      
-		  }
-
-		  if ( isset( $db_name)){
-		      if (($db_name != "")  ||  ($db_name != null)){
-		          $wpdb->wpbooklist_jre_dynamic_db_name = "{$wpdb->prefix}wpbooklist_jre_{$db_name}";
-		          $wpdb->wpbooklist_jre_dynamic_db_name_settings = "{$wpdb->prefix}wpbooklist_jre_settings_{$db_name}";
-		          $wpdb->wpbooklist_jre_list_dynamic_db_names = "{$wpdb->prefix}wpbooklist_jre_list_dynamic_db_names";
-		          $sql_create_table = "CREATE TABLE {$wpdb->wpbooklist_jre_dynamic_db_name} 
-		          (
-		          	ID bigint(190) auto_increment,
+			// Create a new custom table - both the table for books and the Settings table.
+			if ( ( '' !== $db_name ) && ( null !== $db_name ) ) {
+				$wpdb->wpbooklist_jre_dynamic_db_name          = "{$wpdb->prefix}wpbooklist_jre_{$db_name}";
+				$wpdb->wpbooklist_jre_dynamic_db_name_settings = "{$wpdb->prefix}wpbooklist_jre_settings_{$db_name}";
+				$wpdb->wpbooklist_jre_list_dynamic_db_names    = "{$wpdb->prefix}wpbooklist_jre_list_dynamic_db_names";
+				$sql_create_table                              = "CREATE TABLE {$wpdb->wpbooklist_jre_dynamic_db_name} 
+				(
+					ID bigint(190) auto_increment,
 					additionalimage1 TEXT,
 					additionalimage2 TEXT,
 					amazon_detail_page TEXT,
@@ -1316,82 +1273,81 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 					woocommerce TEXT,
 					PRIMARY KEY  (ID),
 					KEY isbn (isbn)
-		          ) $charset_collate; ";
-		          dbDelta( $sql_create_table );
+				) $charset_collate; ";
+				dbDelta( $sql_create_table );
 
-
-		          $sql_create_table2 = "CREATE TABLE {$wpdb->wpbooklist_jre_dynamic_db_name_settings} 
-				  (
-			        ID bigint(190) auto_increment,
-			        username varchar(190),
-			        version varchar(255) NOT NULL DEFAULT '3.3',
-			        amazonaff varchar(255) NOT NULL DEFAULT 'wpbooklistid-20',
-			        amazonauth varchar(255),
-			        itunesaff varchar(255) NOT NULL DEFAULT '1010lnPx',
-			        enablepurchase bigint(255),
-			        amazonapipublic varchar(255),
-			        amazonapisecret varchar(255),
-			        googleapi varchar(255),
-			        appleapi varchar(255),
-			        openlibraryapi varchar(255),
-			        hidestats bigint(255),
-			        hidesortby bigint(255),
-			        hidesearch bigint(255),
-			        hidefilter bigint(255),
-			        hidebooktitle bigint(255),
-			        hidebookimage bigint(255),
-			        hidefinished bigint(255),
-			        hidelibrarytitle bigint(255),
-			        hideauthor bigint(255),
-			        hidecategory bigint(255),
-			        hidepages bigint(255),
-			        hidebookpage bigint(255),
-			        hidebookpost bigint(255),
-			        hidepublisher bigint(255),
-			        hidepubdate bigint(255),
-			        hidesigned bigint(255),
-			        hidesubject bigint(255),
-			        hidecountry bigint(255),
-			        hidefirstedition bigint(255),
-			        hidefinishedsort bigint(255),
-			        hidesignedsort bigint(255),
-			        hidefirstsort bigint(255),
-			        hidesubjectsort bigint(255),
-			        hidefacebook bigint(255),
-			        hidemessenger bigint(255),
-			        hidetwitter bigint(255),
-			        hidegoogleplus bigint(255),
-			        hidepinterest bigint(255),
-			        hideemail bigint(255),
-			        hidefrontendbuyimg bigint(255),
-			        hidefrontendbuyprice bigint(255),
-			        hidecolorboxbuyimg bigint(255),
-			        hidecolorboxbuyprice bigint(255),
-			        hidegoodreadswidget bigint(255),
-			        hidedescription bigint(255),
-			        hidesimilar bigint(255),
-			        hideamazonreview bigint(255),
-			        hidenotes bigint(255),
-			        hidegooglepurchase bigint(255),
-			        hidefeaturedtitles bigint(255),
-			        hidebnpurchase bigint(255),
-			        hideitunespurchase bigint(255),
-			        hideamazonpurchase bigint(255),
-			        hiderating bigint(255),
-			        hideratingbook bigint(255),
-			        hidequote bigint(255),
-			        hidequotebook bigint(255),
-			        sortoption varchar(255),
-			        booksonpage bigint(255) NOT NULL DEFAULT 12,
-			        amazoncountryinfo varchar(255) NOT NULL DEFAULT 'US',
-			        stylepak varchar(255) NOT NULL DEFAULT 'Default',
-			        admindismiss bigint(255) NOT NULL DEFAULT 1,
-			        activeposttemplate varchar(255),
-			        activepagetemplate varchar(255),
-			        hidekindleprev bigint(255),
-			        hidegoogleprev bigint(255),
-			        hidebampurchase bigint(255),
-			        hidekobopurchase bigint(255),
+				$sql_create_table2 = "CREATE TABLE {$wpdb->wpbooklist_jre_dynamic_db_name_settings} 
+				(
+					ID bigint(190) auto_increment,
+					username varchar(190),
+					version varchar(255) NOT NULL DEFAULT '3.3',
+					amazonaff varchar(255) NOT NULL DEFAULT 'wpbooklistid-20',
+					amazonauth varchar(255),
+					itunesaff varchar(255) NOT NULL DEFAULT '1010lnPx',
+					enablepurchase bigint(255),
+					amazonapipublic varchar(255),
+					amazonapisecret varchar(255),
+					googleapi varchar(255),
+					appleapi varchar(255),
+					openlibraryapi varchar(255),
+					hidestats bigint(255),
+					hidesortby bigint(255),
+					hidesearch bigint(255),
+					hidefilter bigint(255),
+					hidebooktitle bigint(255),
+					hidebookimage bigint(255),
+					hidefinished bigint(255),
+					hidelibrarytitle bigint(255),
+					hideauthor bigint(255),
+					hidecategory bigint(255),
+					hidepages bigint(255),
+					hidebookpage bigint(255),
+					hidebookpost bigint(255),
+					hidepublisher bigint(255),
+					hidepubdate bigint(255),
+					hidesigned bigint(255),
+					hidesubject bigint(255),
+					hidecountry bigint(255),
+					hidefirstedition bigint(255),
+					hidefinishedsort bigint(255),
+					hidesignedsort bigint(255),
+					hidefirstsort bigint(255),
+					hidesubjectsort bigint(255),
+					hidefacebook bigint(255),
+					hidemessenger bigint(255),
+					hidetwitter bigint(255),
+					hidegoogleplus bigint(255),
+					hidepinterest bigint(255),
+					hideemail bigint(255),
+					hidefrontendbuyimg bigint(255),
+					hidefrontendbuyprice bigint(255),
+					hidecolorboxbuyimg bigint(255),
+					hidecolorboxbuyprice bigint(255),
+					hidegoodreadswidget bigint(255),
+					hidedescription bigint(255),
+					hidesimilar bigint(255),
+					hideamazonreview bigint(255),
+					hidenotes bigint(255),
+					hidegooglepurchase bigint(255),
+					hidefeaturedtitles bigint(255),
+					hidebnpurchase bigint(255),
+					hideitunespurchase bigint(255),
+					hideamazonpurchase bigint(255),
+					hiderating bigint(255),
+					hideratingbook bigint(255),
+					hidequote bigint(255),
+					hidequotebook bigint(255),
+					sortoption varchar(255),
+					booksonpage bigint(255) NOT NULL DEFAULT 12,
+					amazoncountryinfo varchar(255) NOT NULL DEFAULT 'US',
+					stylepak varchar(255) NOT NULL DEFAULT 'Default',
+					admindismiss bigint(255) NOT NULL DEFAULT 1,
+					activeposttemplate varchar(255),
+					activepagetemplate varchar(255),
+					hidekindleprev bigint(255),
+					hidegoogleprev bigint(255),
+					hidebampurchase bigint(255),
+					hidekobopurchase bigint(255),
 					hideasin bigint(255),
 					hidegenres bigint(255),
 					hideisbn10 bigint(255),
@@ -1399,108 +1355,94 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 					hidekeywords bigint(255),
 					hideothereditions bigint(255),
 					hideoutofprint bigint(255),
-			        hidecallnumber bigint(255),
-			        hideformat bigint(255),
-			        hideillustrator bigint(255),
-			        hidelanguage bigint(255),
-			        hidenumberinseries bigint(255),
-			        hideorigpubyear bigint(255),
-			        hideorigtitle bigint(255),
-			        hideseries bigint(255),
-			        hideshortdesc bigint(255),
-			        hidesubgenre bigint(255),
-			        adminmessage varchar(10000) NOT NULL DEFAULT '".ADMIN_MESSAGE."',
-			        PRIMARY KEY  (ID),
-		          	KEY username (username)
-				  ) $charset_collate; ";
-				  dbDelta( $sql_create_table2 );
+					hidecallnumber bigint(255),
+					hideformat bigint(255),
+					hideillustrator bigint(255),
+					hidelanguage bigint(255),
+					hidenumberinseries bigint(255),
+					hideorigpubyear bigint(255),
+					hideorigtitle bigint(255),
+					hideseries bigint(255),
+					hideshortdesc bigint(255),
+					hidesubgenre bigint(255),
+					adminmessage varchar(10000) NOT NULL DEFAULT '" . ADMIN_MESSAGE . "',
+					PRIMARY KEY  (ID),
+					KEY username (username )
+				) $charset_collate; ";
+				dbDelta( $sql_create_table2 );
 
-				  	$table_name = $wpdb->wpbooklist_jre_dynamic_db_name_settings;
-					$wpdb->insert( $table_name, array('ID' => 1) );
+					$table_name = $wpdb->wpbooklist_jre_dynamic_db_name_settings;
+				$wpdb->insert( $table_name, array( 'ID' => 1 ) );
 
-		          $wpdb->insert( $table_name_dynamic, array('user_table_name' => $db_name ) );
-		      }
-		  }
-		      
-		  wp_die();
+				$wpdb->insert( $table_name_dynamic, array( 'user_table_name' => $db_name ) );
+			}
+			wp_die();
 		}
 
+		/**
+		 * Callback function for deleting a Custom Library.
+		 */
 		public function wpbooklist_delete_library_action_callback() {
-		  // Grabbing the existing options from DB
-		  global $wpdb;
-		  global $charset_collate;
-		  require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
-		  check_ajax_referer( 'wpbooklist_delete_library_action_callback', 'security' );
-		  $table_name_dynamic = $wpdb->prefix . 'wpbooklist_jre_list_dynamic_db_names';
-		  $db_name;
 
-		  function wpbooklist_clean($string) {
-		      $string = str_replace(' ', '_', $string ); // Replaces all spaces with underscores.
-		      $string = str_replace('-', '_', $string );
-		      return preg_replace('/[^A-Za-z0-9\-]/', '', $string ); // Removes special chars.
-		  }
-		 
-		  // Create a new custom table
-		  if ( isset( $_POST['currentval'] ) ) {
-		      $db_name = sanitize_text_field($_POST['currentval']);
-		      $db_name = wpbooklist_clean($db_name);
-		  }
+			// Grabbing the existing options from DB.
+			global $wpdb;
+			global $charset_collate;
+			require_once ABSPATH . 'wp-admin/includes/upgrade.php';
+			check_ajax_referer( 'wpbooklist_delete_library_action_callback', 'security' );
+			$table_name_dynamic = $wpdb->prefix . 'wpbooklist_jre_list_dynamic_db_names';
 
-		  // Delete the table
+			// Delete the table.
+			if ( isset( $_POST['table'] ) ) {
+				$table = $wpdb->prefix . 'wpbooklist_jre_' . sanitize_text_field( wp_unslash( $_POST['table'] ) );
+				$pos   = strripos( $table, '_' );
+				$table = substr( $table, 0, $pos );
+				$wpdb->query( "DROP TABLE IF EXISTS $table" );
 
-			$table = $wpdb->prefix."wpbooklist_jre_".sanitize_text_field($_POST['table']);
-			$pos = strripos($table,"_");
-			$table = substr($table, 0, $pos);
-			echo $table;
-			$wpdb->query("DROP TABLE IF EXISTS $table");
+				$delete_from_list = sanitize_text_field( wp_unslash( $_POST['table'] ) );
+				$pos2             = strripos( $delete_from_list, '_' );
+				$delete_id        = substr( $delete_from_list, ( $pos2 + 1 ) );
+				$wpdb->delete( $table_name_dynamic, array( 'ID' => $delete_id ), array( '%d' ) );
 
-			$delete_from_list = sanitize_text_field($_POST['table']);
-			$pos2 = strripos($delete_from_list,"_");
-			$delete_id = substr($delete_from_list, ($pos2+1) );
-			$wpdb->delete( $table_name_dynamic, array( 'ID' => $delete_id ), array( '%d' ) );
-			 
-			// Dropping primary key in database to alter the IDs and the AUTO_INCREMENT value
-			$table_name_dynamic = str_replace('\'', '`', $table_name_dynamic);
-			$wpdb->query("ALTER TABLE $table_name_dynamic MODIFY ID bigint(190) NOT NULL");
+				// Dropping primary key in database to alter the IDs and the AUTO_INCREMENT value.
+				$table_name_dynamic = str_replace( '\'', '`', $table_name_dynamic );
+				$wpdb->query( "ALTER TABLE $table_name_dynamic MODIFY ID bigint(190) NOT NULL" );
+				$wpdb->query( "ALTER TABLE $table_name_dynamic DROP PRIMARY KEY" );
 
-			$wpdb->query("ALTER TABLE $table_name_dynamic DROP PRIMARY KEY");
+				// Adjusting ID values of remaining entries in database.
+				$my_query    = $wpdb->get_results( "SELECT * FROM $table_name_dynamic" );
+				$title_count = $wpdb->num_rows;
 
-			// Adjusting ID values of remaining entries in database
-			$my_query = $wpdb->get_results("SELECT * FROM $table_name_dynamic");
-			$title_count = $wpdb->num_rows;
+				for ( $x = $delete_id; $x <= $title_count; $x++ ) {
+					$data   = array(
+						'ID' => $delete_id,
+					);
+					$format = array( '%s' );
+					$delete_id++;
+					$where        = array( 'ID' => ( $delete_id ) );
+					$where_format = array( '%d' );
+					$wpdb->update( $table_name_dynamic, $data, $where, $format, $where_format );
+				}
 
-			for ($x = $delete_id ; $x <= $title_count; $x++) {
-			$data = array(
-			    'ID' => $delete_id 
-			);
-			$format = array( '%s'); 
-			$delete_id ++;  
-			$where = array( 'ID' => ($delete_id ) );
-			$where_format = array( '%d' );
-			$wpdb->update( $table_name_dynamic, $data, $where, $format, $where_format );
-			}  
+				// Adding primary key back to database.
+				$wpdb->query( "ALTER TABLE $table_name_dynamic ADD PRIMARY KEY (`ID`)" );
+				$wpdb->query( "ALTER TABLE $table_name_dynamic MODIFY ID bigint(190) AUTO_INCREMENT" );
 
-			// Adding primary key back to database 
-			$wpdb->query("ALTER TABLE $table_name_dynamic ADD PRIMARY KEY (`ID`)");    
+				// Setting the AUTO_INCREMENT value based on number of remaining entries.
+				$title_count++;
+				$query = $wpdb->prepare( "ALTER TABLE $table_name_dynamic AUTO_INCREMENT = %d", $title_count );
+				$query = str_replace( '\'', '`', $query );
+				$wpdb->query( $query );
+			}
 
-			$wpdb->query("ALTER TABLE $table_name_dynamic MODIFY ID bigint(190) AUTO_INCREMENT");
-
-			// Setting the AUTO_INCREMENT value based on number of remaining entries
-			$title_count++;
-			$query5 = $wpdb->prepare( "ALTER TABLE $table_name_dynamic AUTO_INCREMENT=%d", $title_count );
-			$query5 = str_replace('\'', '`', $query5);
-			$wpdb->query($query5);
-		  	wp_die();
+			wp_die();
 		}
 
-		// Callback function for saving library display options.
+		/**
+		 * Callback function for saving Library display options.
+		 */
 		public function wpbooklist_dashboard_save_library_display_options_action_callback() {
 			global $wpdb;
 			check_ajax_referer( 'wpbooklist_dashboard_save_library_display_options_action_callback', 'security' );
-
-
-
-
 
 			if ( isset( $_POST['booksonpage'] ) ) {
 				$booksonpage = filter_var( wp_unslash( $_POST['booksonpage'] ), FILTER_SANITIZE_NUMBER_INT );
@@ -1575,11 +1517,12 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 			wp_die();
 		}
 
-		// Callback function for saving library display options.
+		/**
+		 * Callback function for saving Book display options.
+		 */
 		public function wpbooklist_dashboard_save_book_display_options_action_callback() {
 			global $wpdb;
 			check_ajax_referer( 'wpbooklist_dashboard_save_book_display_options_action_callback', 'security' );
-
 
 			if ( isset( $_POST['library'] ) ) {
 				$library = filter_var( wp_unslash( $_POST['library'] ), FILTER_SANITIZE_STRING );
@@ -1826,56 +1769,56 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 			}
 
 			$settings_array = array(
-				'booksonpage'      => $booksonpage,
-				'hideamazonpurchase' => $hideamazonpurchase,
-				'hideamazonreview' => $hideamazonreview,
-				'hideasin' => $hideasin,
-				'hideauthor' => $hideauthor,
-				'hidebnpurchase' => $hidebnpurchase,
-				'hidefinished' => $hidefinished,
-				'hidebookpage' => $hidebookpage,
-				'hidepages' => $hidepages,
-				'hidebookpost' => $hidebookpost,
-				'hidebooktitle' => $hidebooktitle,
-				'hidebampurchase' => $hidebampurchase,
-				'hidecallnumber' => $hidecallnumber,
-				'hidecountry' => $hidecountry,
-				'hidefirstedition' => $hidefirstedition,
-				'hideemail' => $hideemail,
-				'hidemessenger' => $hidemessenger,
-				'hidefacebook' => $hidefacebook,
-				'hidefeaturedtitles' => $hidefeaturedtitles,
-				'hideformat' => $hideformat,
-				'hidebookimage' => $hidebookimage,
-				'hidedescription' => $hidedescription,
-				'hidegenres' => $hidegenres,
+				'booksonpage'         => $booksonpage,
+				'hideamazonpurchase'  => $hideamazonpurchase,
+				'hideamazonreview'    => $hideamazonreview,
+				'hideasin'            => $hideasin,
+				'hideauthor'          => $hideauthor,
+				'hidebnpurchase'      => $hidebnpurchase,
+				'hidefinished'        => $hidefinished,
+				'hidebookpage'        => $hidebookpage,
+				'hidepages'           => $hidepages,
+				'hidebookpost'        => $hidebookpost,
+				'hidebooktitle'       => $hidebooktitle,
+				'hidebampurchase'     => $hidebampurchase,
+				'hidecallnumber'      => $hidecallnumber,
+				'hidecountry'         => $hidecountry,
+				'hidefirstedition'    => $hidefirstedition,
+				'hideemail'           => $hideemail,
+				'hidemessenger'       => $hidemessenger,
+				'hidefacebook'        => $hidefacebook,
+				'hidefeaturedtitles'  => $hidefeaturedtitles,
+				'hideformat'          => $hideformat,
+				'hidebookimage'       => $hidebookimage,
+				'hidedescription'     => $hidedescription,
+				'hidegenres'          => $hidegenres,
 				'hidegoodreadswidget' => $hidegoodreadswidget,
-				'hidegooglepurchase' => $hidegooglepurchase,
-				'hideillustrator' => $hideillustrator,
-				'hideisbn10' => $hideisbn10,
-				'hideisbn13' => $hideisbn13,
-				'hideitunespurchase' => $hideitunespurchase,
-				'hidekeywords' => $hidekeywords,
-				'hidekobopurchase' => $hidekobopurchase,
-				'hidelanguage' => $hidelanguage,
-				'hidenotes' => $hidenotes,
-				'hidenumberinseries' => $hidenumberinseries,
-				'hideorigpubyear' => $hideorigpubyear,
-				'hideorigtitle' => $hideorigtitle,
-				'hideothereditions' => $hideothereditions,
-				'hideoutofprint' => $hideoutofprint,
-				'hidebookpage' => $hidebookpage,
-				'hidepinterest' => $hidepinterest,
-				'hidepubdate' => $hidepubdate,
-				'hidepublisher' => $hidepublisher,
-				'hideratingbook' => $hideratingbook,
-				'hideseries' => $hideseries,
-				'hideshortdesc' => $hideshortdesc,
-				'hidesigned' => $hidesigned,
-				'hidesimilar' => $hidesimilar,
-				'hidesubgenre' => $hidesubgenre,
-				'hidetwitter' => $hidetwitter,
-				'sortoption'       => $sortoption,
+				'hidegooglepurchase'  => $hidegooglepurchase,
+				'hideillustrator'     => $hideillustrator,
+				'hideisbn10'          => $hideisbn10,
+				'hideisbn13'          => $hideisbn13,
+				'hideitunespurchase'  => $hideitunespurchase,
+				'hidekeywords'        => $hidekeywords,
+				'hidekobopurchase'    => $hidekobopurchase,
+				'hidelanguage'        => $hidelanguage,
+				'hidenotes'           => $hidenotes,
+				'hidenumberinseries'  => $hidenumberinseries,
+				'hideorigpubyear'     => $hideorigpubyear,
+				'hideorigtitle'       => $hideorigtitle,
+				'hideothereditions'   => $hideothereditions,
+				'hideoutofprint'      => $hideoutofprint,
+				'hidebookpage'        => $hidebookpage,
+				'hidepinterest'       => $hidepinterest,
+				'hidepubdate'         => $hidepubdate,
+				'hidepublisher'       => $hidepublisher,
+				'hideratingbook'      => $hideratingbook,
+				'hideseries'          => $hideseries,
+				'hideshortdesc'       => $hideshortdesc,
+				'hidesigned'          => $hidesigned,
+				'hidesimilar'         => $hidesimilar,
+				'hidesubgenre'        => $hidesubgenre,
+				'hidetwitter'         => $hidetwitter,
+				'sortoption'          => $sortoption,
 			);
 
 			require_once CLASS_DIR . 'class-display-options.php';
@@ -1884,204 +1827,366 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 			wp_die();
 		}
 
-		// Callback function for saving post display options.
+		/**
+		 * Callback function for saving post display options.
+		 */
 		public function wpbooklist_dashboard_save_post_display_options_action_callback() {
 			global $wpdb;
 			check_ajax_referer( 'wpbooklist_dashboard_save_post_display_options_action_callback', 'security' );
 
-			$enablepurchase = filter_var( wp_unslash( $_POST['enablepurchase'] ), FILTER_SANITIZE_STRING );
-			$hidefacebook = filter_var( wp_unslash( $_POST['hidefacebook'] ), FILTER_SANITIZE_STRING );
-			$hidetwitter = filter_var( wp_unslash( $_POST['hidetwitter'] ), FILTER_SANITIZE_STRING );
-			$hidegoogleplus = filter_var( wp_unslash( $_POST['hidegoogleplus'] ), FILTER_SANITIZE_STRING );
-			$hidemessenger = filter_var( wp_unslash( $_POST['hidemessenger'] ), FILTER_SANITIZE_STRING );
-			$hidepinterest = filter_var( wp_unslash( $_POST['hidepinterest'] ), FILTER_SANITIZE_STRING );
-			$hideemail = filter_var( wp_unslash( $_POST['hideemail'] ), FILTER_SANITIZE_STRING );
-			$hideamazonreview = filter_var( wp_unslash( $_POST['hideamazonreview'] ), FILTER_SANITIZE_STRING );
-			$hidedescription = filter_var( wp_unslash( $_POST['hidedescription'] ), FILTER_SANITIZE_STRING );
-			$hidesimilar = filter_var( wp_unslash( $_POST['hidesimilar'] ), FILTER_SANITIZE_STRING );
-			$hidetitle = filter_var( wp_unslash( $_POST['hidetitle'] ), FILTER_SANITIZE_STRING );
-			$hidebookimage = filter_var( wp_unslash( $_POST['hidebookimage'] ), FILTER_SANITIZE_STRING );
-			$hidefinished = filter_var( wp_unslash( $_POST['hidefinished'] ), FILTER_SANITIZE_STRING );
-			$hideauthor = filter_var( wp_unslash( $_POST['hideauthor'] ), FILTER_SANITIZE_STRING );
-			$hidecategory = filter_var( wp_unslash( $_POST['hidecategory'] ), FILTER_SANITIZE_STRING );
-			$hidepages = filter_var( wp_unslash( $_POST['hidepages'] ), FILTER_SANITIZE_STRING );
-			$hidepublisher = filter_var( wp_unslash( $_POST['hidepublisher'] ), FILTER_SANITIZE_STRING );
-			$hidepubdate = filter_var( wp_unslash( $_POST['hidepubdate'] ), FILTER_SANITIZE_STRING );
-			$hidesigned = filter_var( wp_unslash( $_POST['hidesigned'] ), FILTER_SANITIZE_STRING );
-			$hidesubject = filter_var( wp_unslash( $_POST['hidesubject'] ), FILTER_SANITIZE_STRING );
-			$hidecountry = filter_var( wp_unslash( $_POST['hidecountry'] ), FILTER_SANITIZE_STRING );
-			$hidefirstedition= filter_var( wp_unslash( $_POST['hidefirstedition'] ), FILTER_SANITIZE_STRING ); 
-			$hidefeaturedtitles = filter_var( wp_unslash( $_POST['hidefeaturedtitles'] ), FILTER_SANITIZE_STRING );
-			$hidenotes = filter_var( wp_unslash( $_POST['hidenotes'] ), FILTER_SANITIZE_STRING );
-			$hidequote = filter_var( wp_unslash( $_POST['hidequote'] ), FILTER_SANITIZE_STRING );
-			$hiderating = filter_var( wp_unslash( $_POST['hiderating'] ), FILTER_SANITIZE_STRING );
-			$hidegooglepurchase = filter_var( wp_unslash( $_POST['hidegooglepurchase'] ), FILTER_SANITIZE_STRING );
-			$hideamazonpurchase = filter_var( wp_unslash( $_POST['hideamazonpurchase'] ), FILTER_SANITIZE_STRING );
-			$hidebnpurchase = filter_var( wp_unslash( $_POST['hidebnpurchase'] ), FILTER_SANITIZE_STRING );
-			$hideitunespurchase = filter_var( wp_unslash( $_POST['hideitunespurchase'] ), FILTER_SANITIZE_STRING );
-			$hidefrontendbuyimg = filter_var( wp_unslash( $_POST['hidefrontendbuyimg'] ), FILTER_SANITIZE_STRING );
-			$hidecolorboxbuyimg = filter_var( wp_unslash( $_POST['hidecolorboxbuyimg'] ), FILTER_SANITIZE_STRING );
-			$hidecolorboxbuyprice = filter_var( wp_unslash( $_POST['hidecolorboxbuyprice'] ), FILTER_SANITIZE_STRING );
-			$hidefrontendbuyprice = filter_var( wp_unslash( $_POST['hidefrontendbuyprice'] ), FILTER_SANITIZE_STRING );
-			$hidekindleprev = filter_var( wp_unslash( $_POST['hidekindleprev'] ), FILTER_SANITIZE_STRING );
-			$hidegoogleprev = filter_var( wp_unslash( $_POST['hidegoogleprev'] ), FILTER_SANITIZE_STRING );
-			$hidekobopurchase = filter_var( wp_unslash( $_POST['hidekobopurchase'] ), FILTER_SANITIZE_STRING );
-			$hidebampurchase = filter_var( wp_unslash( $_POST['hidebampurchase'] ), FILTER_SANITIZE_STRING );
+			if ( isset( $_POST['enablepurchase'] ) ) {
+				$enablepurchase = filter_var( wp_unslash( $_POST['enablepurchase'] ), FILTER_SANITIZE_STRING );
+			}
+			if ( isset( $_POST['hidefacebook'] ) ) {
+				$hidefacebook = filter_var( wp_unslash( $_POST['hidefacebook'] ), FILTER_SANITIZE_STRING );
+			}
+			if ( isset( $_POST['hidetwitter'] ) ) {
+				$hidetwitter = filter_var( wp_unslash( $_POST['hidetwitter'] ), FILTER_SANITIZE_STRING );
+			}
+			if ( isset( $_POST['hidegoogleplus'] ) ) {
+				$hidegoogleplus = filter_var( wp_unslash( $_POST['hidegoogleplus'] ), FILTER_SANITIZE_STRING );
+			}
+			if ( isset( $_POST['hidemessenger'] ) ) {
+				$hidemessenger = filter_var( wp_unslash( $_POST['hidemessenger'] ), FILTER_SANITIZE_STRING );
+			}
+			if ( isset( $_POST['hidepinterest'] ) ) {
+				$hidepinterest = filter_var( wp_unslash( $_POST['hidepinterest'] ), FILTER_SANITIZE_STRING );
+			}
+			if ( isset( $_POST['hideemail'] ) ) {
+				$hideemail = filter_var( wp_unslash( $_POST['hideemail'] ), FILTER_SANITIZE_STRING );
+			}
+			if ( isset( $_POST['hideamazonreview'] ) ) {
+				$hideamazonreview = filter_var( wp_unslash( $_POST['hideamazonreview'] ), FILTER_SANITIZE_STRING );
+			}
+			if ( isset( $_POST['hidedescription'] ) ) {
+				$hidedescription = filter_var( wp_unslash( $_POST['hidedescription'] ), FILTER_SANITIZE_STRING );
+			}
+			if ( isset( $_POST['hidesimilar'] ) ) {
+				$hidesimilar = filter_var( wp_unslash( $_POST['hidesimilar'] ), FILTER_SANITIZE_STRING );
+			}
+			if ( isset( $_POST['hidetitle'] ) ) {
+				$hidetitle = filter_var( wp_unslash( $_POST['hidetitle'] ), FILTER_SANITIZE_STRING );
+			}
+			if ( isset( $_POST['hidebookimage'] ) ) {
+				$hidebookimage = filter_var( wp_unslash( $_POST['hidebookimage'] ), FILTER_SANITIZE_STRING );
+			}
+			if ( isset( $_POST['hidefinished'] ) ) {
+				$hidefinished = filter_var( wp_unslash( $_POST['hidefinished'] ), FILTER_SANITIZE_STRING );
+			}
+			if ( isset( $_POST['hideauthor'] ) ) {
+				$hideauthor = filter_var( wp_unslash( $_POST['hideauthor'] ), FILTER_SANITIZE_STRING );
+			}
+			if ( isset( $_POST['hidecategory'] ) ) {
+				$hidecategory = filter_var( wp_unslash( $_POST['hidecategory'] ), FILTER_SANITIZE_STRING );
+			}
+			if ( isset( $_POST['hidepages'] ) ) {
+				$hidepages = filter_var( wp_unslash( $_POST['hidepages'] ), FILTER_SANITIZE_STRING );
+			}
+			if ( isset( $_POST['hidepublisher'] ) ) {
+				$hidepublisher = filter_var( wp_unslash( $_POST['hidepublisher'] ), FILTER_SANITIZE_STRING );
+			}
+			if ( isset( $_POST['hidepubdate'] ) ) {
+				$hidepubdate = filter_var( wp_unslash( $_POST['hidepubdate'] ), FILTER_SANITIZE_STRING );
+			}
+			if ( isset( $_POST['hidesigned'] ) ) {
+				$hidesigned = filter_var( wp_unslash( $_POST['hidesigned'] ), FILTER_SANITIZE_STRING );
+			}
+			if ( isset( $_POST['hidesubject'] ) ) {
+				$hidesubject = filter_var( wp_unslash( $_POST['hidesubject'] ), FILTER_SANITIZE_STRING );
+			}
+			if ( isset( $_POST['hidecountry'] ) ) {
+				$hidecountry = filter_var( wp_unslash( $_POST['hidecountry'] ), FILTER_SANITIZE_STRING );
+			}
+			if ( isset( $_POST['hidefirstedition'] ) ) {
+				$hidefirstedition= filter_var( wp_unslash( $_POST['hidefirstedition'] ), FILTER_SANITIZE_STRING );
+			}
+			if ( isset( $_POST['hidefeaturedtitles'] ) ) { 
+				$hidefeaturedtitles = filter_var( wp_unslash( $_POST['hidefeaturedtitles'] ), FILTER_SANITIZE_STRING );
+			}
+			if ( isset( $_POST['hidenotes'] ) ) {
+				$hidenotes = filter_var( wp_unslash( $_POST['hidenotes'] ), FILTER_SANITIZE_STRING );
+			}
+			if ( isset( $_POST['hidequote'] ) ) {
+				$hidequote = filter_var( wp_unslash( $_POST['hidequote'] ), FILTER_SANITIZE_STRING );
+			}
+			if ( isset( $_POST['hiderating'] ) ) {
+				$hiderating = filter_var( wp_unslash( $_POST['hiderating'] ), FILTER_SANITIZE_STRING );
+			}
+			if ( isset( $_POST['hidegooglepurchase'] ) ) {
+				$hidegooglepurchase = filter_var( wp_unslash( $_POST['hidegooglepurchase'] ), FILTER_SANITIZE_STRING );
+			}
+			if ( isset( $_POST['hideamazonpurchase'] ) ) {
+				$hideamazonpurchase = filter_var( wp_unslash( $_POST['hideamazonpurchase'] ), FILTER_SANITIZE_STRING );
+			}
+			if ( isset( $_POST['hidebnpurchase'] ) ) {
+				$hidebnpurchase = filter_var( wp_unslash( $_POST['hidebnpurchase'] ), FILTER_SANITIZE_STRING );
+			}
+			if ( isset( $_POST['hideitunespurchase'] ) ) {
+				$hideitunespurchase = filter_var( wp_unslash( $_POST['hideitunespurchase'] ), FILTER_SANITIZE_STRING );
+			}
+			if ( isset( $_POST['hidefrontendbuyimg'] ) ) {
+				$hidefrontendbuyimg = filter_var( wp_unslash( $_POST['hidefrontendbuyimg'] ), FILTER_SANITIZE_STRING );
+			}
+			if ( isset( $_POST['hidecolorboxbuyimg'] ) ) {
+				$hidecolorboxbuyimg = filter_var( wp_unslash( $_POST['hidecolorboxbuyimg'] ), FILTER_SANITIZE_STRING );
+			}
+			if ( isset( $_POST['hidecolorboxbuyprice'] ) ) {
+				$hidecolorboxbuyprice = filter_var( wp_unslash( $_POST['hidecolorboxbuyprice'] ), FILTER_SANITIZE_STRING );
+			}
+			if ( isset( $_POST['hidefrontendbuyprice'] ) ) {
+				$hidefrontendbuyprice = filter_var( wp_unslash( $_POST['hidefrontendbuyprice'] ), FILTER_SANITIZE_STRING );
+			}
+			if ( isset( $_POST['hidekindleprev'] ) ) {
+				$hidekindleprev = filter_var( wp_unslash( $_POST['hidekindleprev'] ), FILTER_SANITIZE_STRING );
+			}
+			if ( isset( $_POST['hidegoogleprev'] ) ) {
+				$hidegoogleprev = filter_var( wp_unslash( $_POST['hidegoogleprev'] ), FILTER_SANITIZE_STRING );
+			}
+			if ( isset( $_POST['hidekobopurchase'] ) ) {
+				$hidekobopurchase = filter_var( wp_unslash( $_POST['hidekobopurchase'] ), FILTER_SANITIZE_STRING );
+			}
+			if ( isset( $_POST['hidebampurchase'] ) ) {
+				$hidebampurchase = filter_var( wp_unslash( $_POST['hidebampurchase'] ), FILTER_SANITIZE_STRING );
+			}
 
 			$settings_array = array(
-				'enablepurchase' => $enablepurchase,
-				'hidefacebook' => $hidefacebook,
-				'hidetwitter' => $hidetwitter,
-				'hidegoogleplus' => $hidegoogleplus,
-				'hidemessenger' => $hidemessenger,
-				'hidepinterest' => $hidepinterest,
-				'hideemail' => $hideemail,
-				'hidequote' => $hidequote,
-				'hideamazonreview' => $hideamazonreview,
-				'hidedescription' => $hidedescription,
-				'hidesimilar' => $hidesimilar,
-				'hidetitle'=> $hidetitle,
-				'hidebookimage' => $hidebookimage,
-				'hidefinished'=> $hidefinished,
-				'hideauthor'=> $hideauthor,
-				'hidecategory'=> $hidecategory,
-				'hidepages'=> $hidepages,
-				'hidepublisher'=> $hidepublisher,
-				'hidepubdate'=> $hidepubdate,
-				'hidesigned'=> $hidesigned,
-				'hidesubject'=> $hidesubject,
-				'hidecountry'=> $hidecountry,
-				'hidefirstedition'=> $hidefirstedition,
-				'hidefeaturedtitles' => $hidefeaturedtitles,
-				'hidenotes' => $hidenotes,
-				'hiderating' => $hiderating,
-				'hidegooglepurchase' => $hidegooglepurchase,
-				'hideamazonpurchase' => $hideamazonpurchase,
-				'hidebnpurchase' => $hidebnpurchase,
-				'hideitunespurchase' => $hideitunespurchase,
-				'hidefrontendbuyimg' => $hidefrontendbuyimg,
-				'hidecolorboxbuyimg' => $hidecolorboxbuyimg,
+				'enablepurchase'       => $enablepurchase,
+				'hidefacebook'         => $hidefacebook,
+				'hidetwitter'          => $hidetwitter,
+				'hidegoogleplus'       => $hidegoogleplus,
+				'hidemessenger'        => $hidemessenger,
+				'hidepinterest'        => $hidepinterest,
+				'hideemail'            => $hideemail,
+				'hidequote'            => $hidequote,
+				'hideamazonreview'     => $hideamazonreview,
+				'hidedescription'      => $hidedescription,
+				'hidesimilar'          => $hidesimilar,
+				'hidetitle'            => $hidetitle,
+				'hidebookimage'        => $hidebookimage,
+				'hidefinished'         => $hidefinished,
+				'hideauthor'           => $hideauthor,
+				'hidecategory'         => $hidecategory,
+				'hidepages'            => $hidepages,
+				'hidepublisher'        => $hidepublisher,
+				'hidepubdate'          => $hidepubdate,
+				'hidesigned'           => $hidesigned,
+				'hidesubject'          => $hidesubject,
+				'hidecountry'          => $hidecountry,
+				'hidefirstedition'     => $hidefirstedition,
+				'hidefeaturedtitles'   => $hidefeaturedtitles,
+				'hidenotes'            => $hidenotes,
+				'hiderating'           => $hiderating,
+				'hidegooglepurchase'   => $hidegooglepurchase,
+				'hideamazonpurchase'   => $hideamazonpurchase,
+				'hidebnpurchase'       => $hidebnpurchase,
+				'hideitunespurchase'   => $hideitunespurchase,
+				'hidefrontendbuyimg'   => $hidefrontendbuyimg,
+				'hidecolorboxbuyimg'   => $hidecolorboxbuyimg,
 				'hidecolorboxbuyprice' => $hidecolorboxbuyprice,
 				'hidefrontendbuyprice' => $hidefrontendbuyprice,
-				'hidekindleprev' => $hidekindleprev,
-				'hidegoogleprev' => $hidegoogleprev,
-				'hidebampurchase' => $hidebampurchase,
-				'hidekobopurchase' => $hidekobopurchase
+				'hidekindleprev'       => $hidekindleprev,
+				'hidegoogleprev'       => $hidegoogleprev,
+				'hidebampurchase'      => $hidebampurchase,
+				'hidekobopurchase'     => $hidekobopurchase,
 			);
 
 			require_once CLASS_DIR . 'class-display-options.php';
 			$settings_class = new WPBookList_Display_Options();
-			$settings_class->save_post_settings($settings_array);
+			$settings_class->save_post_settings( $settings_array );
 			wp_die();
 		}
 
-		// Callback function for saving page display options
+		/**
+		 * Callback function for saving page display options.
+		 */
 		public function wpbooklist_dashboard_save_page_display_options_action_callback() {
 			global $wpdb;
 			check_ajax_referer( 'wpbooklist_dashboard_save_page_display_options_action_callback', 'security' );
 
-			$enablepurchase = filter_var( wp_unslash( $_POST['enablepurchase'] ), FILTER_SANITIZE_STRING );
-			$hidefacebook = filter_var( wp_unslash( $_POST['hidefacebook'] ), FILTER_SANITIZE_STRING );
-			$hidetwitter = filter_var( wp_unslash( $_POST['hidetwitter'] ), FILTER_SANITIZE_STRING );
-			$hidegoogleplus = filter_var( wp_unslash( $_POST['hidegoogleplus'] ), FILTER_SANITIZE_STRING );
-			$hidemessenger = filter_var( wp_unslash( $_POST['hidemessenger'] ), FILTER_SANITIZE_STRING );
-			$hidepinterest = filter_var( wp_unslash( $_POST['hidepinterest'] ), FILTER_SANITIZE_STRING );
-			$hideemail = filter_var( wp_unslash( $_POST['hideemail'] ), FILTER_SANITIZE_STRING );
-			$hideamazonreview = filter_var( wp_unslash( $_POST['hideamazonreview'] ), FILTER_SANITIZE_STRING );
-			$hidedescription = filter_var( wp_unslash( $_POST['hidedescription'] ), FILTER_SANITIZE_STRING );
-			$hidesimilar = filter_var( wp_unslash( $_POST['hidesimilar'] ), FILTER_SANITIZE_STRING );
-			$hidetitle = filter_var( wp_unslash( $_POST['hidetitle'] ), FILTER_SANITIZE_STRING );
-			$hidebookimage = filter_var( wp_unslash( $_POST['hidebookimage'] ), FILTER_SANITIZE_STRING );
-			$hidefinished = filter_var( wp_unslash( $_POST['hidefinished'] ), FILTER_SANITIZE_STRING );
-			$hideauthor = filter_var( wp_unslash( $_POST['hideauthor'] ), FILTER_SANITIZE_STRING );
-			$hidecategory = filter_var( wp_unslash( $_POST['hidecategory'] ), FILTER_SANITIZE_STRING );
-			$hidepages = filter_var( wp_unslash( $_POST['hidepages'] ), FILTER_SANITIZE_STRING );
-			$hidepublisher = filter_var( wp_unslash( $_POST['hidepublisher'] ), FILTER_SANITIZE_STRING );
-			$hidepubdate = filter_var( wp_unslash( $_POST['hidepubdate'] ), FILTER_SANITIZE_STRING );
-			$hidesigned = filter_var( wp_unslash( $_POST['hidesigned'] ), FILTER_SANITIZE_STRING );
-			$hidesubject = filter_var( wp_unslash( $_POST['hidesubject'] ), FILTER_SANITIZE_STRING );
-			$hidecountry = filter_var( wp_unslash( $_POST['hidecountry'] ), FILTER_SANITIZE_STRING );
-			$hidefirstedition= filter_var( wp_unslash( $_POST['hidefirstedition'] ), FILTER_SANITIZE_STRING ); 
-			$hidefeaturedtitles = filter_var( wp_unslash( $_POST['hidefeaturedtitles'] ), FILTER_SANITIZE_STRING );
-			$hidenotes = filter_var( wp_unslash( $_POST['hidenotes'] ), FILTER_SANITIZE_STRING );
-			$hidequote = filter_var( wp_unslash( $_POST['hidequote'] ), FILTER_SANITIZE_STRING );
-			$hiderating = filter_var( wp_unslash( $_POST['hiderating'] ), FILTER_SANITIZE_STRING );
-			$hidegooglepurchase = filter_var( wp_unslash( $_POST['hidegooglepurchase'] ), FILTER_SANITIZE_STRING );
-			$hideamazonpurchase = filter_var( wp_unslash( $_POST['hideamazonpurchase'] ), FILTER_SANITIZE_STRING );
-			$hidebnpurchase = filter_var( wp_unslash( $_POST['hidebnpurchase'] ), FILTER_SANITIZE_STRING );
-			$hideitunespurchase = filter_var( wp_unslash( $_POST['hideitunespurchase'] ), FILTER_SANITIZE_STRING );
-			$hidefrontendbuyimg = filter_var( wp_unslash( $_POST['hidefrontendbuyimg'] ), FILTER_SANITIZE_STRING );
-			$hidecolorboxbuyimg = filter_var( wp_unslash( $_POST['hidecolorboxbuyimg'] ), FILTER_SANITIZE_STRING );
-			$hidecolorboxbuyprice = filter_var( wp_unslash( $_POST['hidecolorboxbuyprice'] ), FILTER_SANITIZE_STRING );
-			$hidefrontendbuyprice = filter_var( wp_unslash( $_POST['hidefrontendbuyprice'] ), FILTER_SANITIZE_STRING );
-			$hidekindleprev = filter_var( wp_unslash( $_POST['hidekindleprev'] ), FILTER_SANITIZE_STRING );
-			$hidegoogleprev = filter_var( wp_unslash( $_POST['hidegoogleprev'] ), FILTER_SANITIZE_STRING );
-			$hidekobopurchase = filter_var( wp_unslash( $_POST['hidekobopurchase'] ), FILTER_SANITIZE_STRING );
-			$hidebampurchase = filter_var( wp_unslash( $_POST['hidebampurchase'] ), FILTER_SANITIZE_STRING );
+			if ( isset( $_POST['enablepurchase'] ) ) {
+				$enablepurchase = filter_var( wp_unslash( $_POST['enablepurchase'] ), FILTER_SANITIZE_STRING );
+			}
+			if ( isset( $_POST['hidefacebook'] ) ) {
+				$hidefacebook = filter_var( wp_unslash( $_POST['hidefacebook'] ), FILTER_SANITIZE_STRING );
+			}
+			if ( isset( $_POST['hidetwitter'] ) ) {
+				$hidetwitter = filter_var( wp_unslash( $_POST['hidetwitter'] ), FILTER_SANITIZE_STRING );
+			}
+			if ( isset( $_POST['hidegoogleplus'] ) ) {
+				$hidegoogleplus = filter_var( wp_unslash( $_POST['hidegoogleplus'] ), FILTER_SANITIZE_STRING );
+			}
+			if ( isset( $_POST['hidemessenger'] ) ) {
+				$hidemessenger = filter_var( wp_unslash( $_POST['hidemessenger'] ), FILTER_SANITIZE_STRING );
+			}
+			if ( isset( $_POST['hidepinterest'] ) ) {
+				$hidepinterest = filter_var( wp_unslash( $_POST['hidepinterest'] ), FILTER_SANITIZE_STRING );
+			}
+			if ( isset( $_POST['hideemail'] ) ) {
+				$hideemail = filter_var( wp_unslash( $_POST['hideemail'] ), FILTER_SANITIZE_STRING );
+			}
+			if ( isset( $_POST['hideamazonreview'] ) ) {
+				$hideamazonreview = filter_var( wp_unslash( $_POST['hideamazonreview'] ), FILTER_SANITIZE_STRING );
+			}
+			if ( isset( $_POST['hidedescription'] ) ) {
+				$hidedescription = filter_var( wp_unslash( $_POST['hidedescription'] ), FILTER_SANITIZE_STRING );
+			}
+			if ( isset( $_POST['hidesimilar'] ) ) {
+				$hidesimilar = filter_var( wp_unslash( $_POST['hidesimilar'] ), FILTER_SANITIZE_STRING );
+			}
+			if ( isset( $_POST['hidetitle'] ) ) {
+				$hidetitle = filter_var( wp_unslash( $_POST['hidetitle'] ), FILTER_SANITIZE_STRING );
+			}
+			if ( isset( $_POST['hidebookimage'] ) ) {
+				$hidebookimage = filter_var( wp_unslash( $_POST['hidebookimage'] ), FILTER_SANITIZE_STRING );
+			}
+			if ( isset( $_POST['hidefinished'] ) ) {
+				$hidefinished = filter_var( wp_unslash( $_POST['hidefinished'] ), FILTER_SANITIZE_STRING );
+			}
+			if ( isset( $_POST['hideauthor'] ) ) {
+				$hideauthor = filter_var( wp_unslash( $_POST['hideauthor'] ), FILTER_SANITIZE_STRING );
+			}
+			if ( isset( $_POST['hidecategory'] ) ) {
+				$hidecategory = filter_var( wp_unslash( $_POST['hidecategory'] ), FILTER_SANITIZE_STRING );
+			}
+			if ( isset( $_POST['hidepages'] ) ) {
+				$hidepages = filter_var( wp_unslash( $_POST['hidepages'] ), FILTER_SANITIZE_STRING );
+			}
+			if ( isset( $_POST['hidepublisher'] ) ) {
+				$hidepublisher = filter_var( wp_unslash( $_POST['hidepublisher'] ), FILTER_SANITIZE_STRING );
+			}
+			if ( isset( $_POST['hidepubdate'] ) ) {
+				$hidepubdate = filter_var( wp_unslash( $_POST['hidepubdate'] ), FILTER_SANITIZE_STRING );
+			}
+			if ( isset( $_POST['hidesigned'] ) ) {
+				$hidesigned = filter_var( wp_unslash( $_POST['hidesigned'] ), FILTER_SANITIZE_STRING );
+			}
+			if ( isset( $_POST['hidesubject'] ) ) {
+				$hidesubject = filter_var( wp_unslash( $_POST['hidesubject'] ), FILTER_SANITIZE_STRING );
+			}
+			if ( isset( $_POST['hidecountry'] ) ) {
+				$hidecountry = filter_var( wp_unslash( $_POST['hidecountry'] ), FILTER_SANITIZE_STRING );
+			}
+			if ( isset( $_POST['hidefirstedition'] ) ) {
+				$hidefirstedition= filter_var( wp_unslash( $_POST['hidefirstedition'] ), FILTER_SANITIZE_STRING );
+			}
+			if ( isset( $_POST['hidefeaturedtitles'] ) ) { 
+				$hidefeaturedtitles = filter_var( wp_unslash( $_POST['hidefeaturedtitles'] ), FILTER_SANITIZE_STRING );
+			}
+			if ( isset( $_POST['hidenotes'] ) ) {
+				$hidenotes = filter_var( wp_unslash( $_POST['hidenotes'] ), FILTER_SANITIZE_STRING );
+			}
+			if ( isset( $_POST['hidequote'] ) ) {
+				$hidequote = filter_var( wp_unslash( $_POST['hidequote'] ), FILTER_SANITIZE_STRING );
+			}
+			if ( isset( $_POST['hiderating'] ) ) {
+				$hiderating = filter_var( wp_unslash( $_POST['hiderating'] ), FILTER_SANITIZE_STRING );
+			}
+			if ( isset( $_POST['hidegooglepurchase'] ) ) {
+				$hidegooglepurchase = filter_var( wp_unslash( $_POST['hidegooglepurchase'] ), FILTER_SANITIZE_STRING );
+			}
+			if ( isset( $_POST['hideamazonpurchase'] ) ) {
+				$hideamazonpurchase = filter_var( wp_unslash( $_POST['hideamazonpurchase'] ), FILTER_SANITIZE_STRING );
+			}
+			if ( isset( $_POST['hidebnpurchase'] ) ) {
+				$hidebnpurchase = filter_var( wp_unslash( $_POST['hidebnpurchase'] ), FILTER_SANITIZE_STRING );
+			}
+			if ( isset( $_POST['hideitunespurchase'] ) ) {
+				$hideitunespurchase = filter_var( wp_unslash( $_POST['hideitunespurchase'] ), FILTER_SANITIZE_STRING );
+			}
+			if ( isset( $_POST['hidefrontendbuyimg'] ) ) {
+				$hidefrontendbuyimg = filter_var( wp_unslash( $_POST['hidefrontendbuyimg'] ), FILTER_SANITIZE_STRING );
+			}
+			if ( isset( $_POST['hidecolorboxbuyimg'] ) ) {
+				$hidecolorboxbuyimg = filter_var( wp_unslash( $_POST['hidecolorboxbuyimg'] ), FILTER_SANITIZE_STRING );
+			}
+			if ( isset( $_POST['hidecolorboxbuyprice'] ) ) {
+				$hidecolorboxbuyprice = filter_var( wp_unslash( $_POST['hidecolorboxbuyprice'] ), FILTER_SANITIZE_STRING );
+			}
+			if ( isset( $_POST['hidefrontendbuyprice'] ) ) {
+				$hidefrontendbuyprice = filter_var( wp_unslash( $_POST['hidefrontendbuyprice'] ), FILTER_SANITIZE_STRING );
+			}
+			if ( isset( $_POST['hidekindleprev'] ) ) {
+				$hidekindleprev = filter_var( wp_unslash( $_POST['hidekindleprev'] ), FILTER_SANITIZE_STRING );
+			}
+			if ( isset( $_POST['hidegoogleprev'] ) ) {
+				$hidegoogleprev = filter_var( wp_unslash( $_POST['hidegoogleprev'] ), FILTER_SANITIZE_STRING );
+			}
+			if ( isset( $_POST['hidekobopurchase'] ) ) {
+				$hidekobopurchase = filter_var( wp_unslash( $_POST['hidekobopurchase'] ), FILTER_SANITIZE_STRING );
+			}
+			if ( isset( $_POST['hidebampurchase'] ) ) {
+				$hidebampurchase = filter_var( wp_unslash( $_POST['hidebampurchase'] ), FILTER_SANITIZE_STRING );
+			}
 
 			$settings_array = array(
-				'enablepurchase' => $enablepurchase,
-				'hidefacebook' => $hidefacebook,
-				'hidetwitter' => $hidetwitter,
-				'hidegoogleplus' => $hidegoogleplus,
-				'hidemessenger' => $hidemessenger,
-				'hidepinterest' => $hidepinterest,
-				'hideemail' => $hideemail,
-				'hidequote' => $hidequote,
-				'hideamazonreview' => $hideamazonreview,
-				'hidedescription' => $hidedescription,
-				'hidesimilar' => $hidesimilar,
-				'hidetitle'=> $hidetitle,
-				'hidebookimage' => $hidebookimage,
-				'hidefinished'=> $hidefinished,
-				'hideauthor'=> $hideauthor,
-				'hidecategory'=> $hidecategory,
-				'hidepages'=> $hidepages,
-				'hidepublisher'=> $hidepublisher,
-				'hidepubdate'=> $hidepubdate,
-				'hidesigned'=> $hidesigned,
-				'hidesubject'=> $hidesubject,
-				'hidecountry'=> $hidecountry,
-				'hidefirstedition'=> $hidefirstedition,
-				'hidefeaturedtitles' => $hidefeaturedtitles,
-				'hidenotes' => $hidenotes,
-				'hiderating' => $hiderating,
-				'hidegooglepurchase' => $hidegooglepurchase,
-				'hideamazonpurchase' => $hideamazonpurchase,
-				'hidebnpurchase' => $hidebnpurchase,
-				'hideitunespurchase' => $hideitunespurchase,
-				'hidefrontendbuyimg' => $hidefrontendbuyimg,
-				'hidecolorboxbuyimg' => $hidecolorboxbuyimg,
+				'enablepurchase'       => $enablepurchase,
+				'hidefacebook'         => $hidefacebook,
+				'hidetwitter'          => $hidetwitter,
+				'hidegoogleplus'       => $hidegoogleplus,
+				'hidemessenger'        => $hidemessenger,
+				'hidepinterest'        => $hidepinterest,
+				'hideemail'            => $hideemail,
+				'hidequote'            => $hidequote,
+				'hideamazonreview'     => $hideamazonreview,
+				'hidedescription'      => $hidedescription,
+				'hidesimilar'          => $hidesimilar,
+				'hidetitle'            => $hidetitle,
+				'hidebookimage'        => $hidebookimage,
+				'hidefinished'         => $hidefinished,
+				'hideauthor'           => $hideauthor,
+				'hidecategory'         => $hidecategory,
+				'hidepages'            => $hidepages,
+				'hidepublisher'        => $hidepublisher,
+				'hidepubdate'          => $hidepubdate,
+				'hidesigned'           => $hidesigned,
+				'hidesubject'          => $hidesubject,
+				'hidecountry'          => $hidecountry,
+				'hidefirstedition'     => $hidefirstedition,
+				'hidefeaturedtitles'   => $hidefeaturedtitles,
+				'hidenotes'            => $hidenotes,
+				'hiderating'           => $hiderating,
+				'hidegooglepurchase'   => $hidegooglepurchase,
+				'hideamazonpurchase'   => $hideamazonpurchase,
+				'hidebnpurchase'       => $hidebnpurchase,
+				'hideitunespurchase'   => $hideitunespurchase,
+				'hidefrontendbuyimg'   => $hidefrontendbuyimg,
+				'hidecolorboxbuyimg'   => $hidecolorboxbuyimg,
 				'hidecolorboxbuyprice' => $hidecolorboxbuyprice,
 				'hidefrontendbuyprice' => $hidefrontendbuyprice,
-				'hidekindleprev' => $hidekindleprev,
-				'hidegoogleprev' => $hidegoogleprev,
-				'hidebampurchase' => $hidebampurchase,
-				'hidekobopurchase' => $hidekobopurchase,
-
+				'hidekindleprev'       => $hidekindleprev,
+				'hidegoogleprev'       => $hidegoogleprev,
+				'hidebampurchase'      => $hidebampurchase,
+				'hidekobopurchase'     => $hidekobopurchase,
 			);
 
 			require_once CLASS_DIR . 'class-display-options.php';
 			$settings_class = new WPBookList_Display_Options();
-			$settings_class->save_page_settings($settings_array);
+			$settings_class->save_page_settings( $settings_array );
 			wp_die();
 		}
 
-		// Callback function for saving library display options.
+		/**
+		 * Callback function for getting Library display options for when the Library drop-down changes.
+		 */
 		public function wpbooklist_change_library_display_options_action_callback() {
 			global $wpdb;
 			check_ajax_referer( 'wpbooklist_change_library_display_options_action_callback', 'security' );
-			$library = filter_var( wp_unslash( $_POST['library'] ), FILTER_SANITIZE_STRING );
-			$table_name = '';
-			if ( $library == $wpdb->prefix . 'wpbooklist_jre_saved_book_log'){
-				$table_name = $wpdb->prefix . 'wpbooklist_jre_user_options';
-			} else {
-				$library = explode( '_', $library);
-				$library = array_pop($library);
-				$table_name = $wpdb->prefix . 'wpbooklist_jre_settings_'.$library;
+
+			$row = '';
+			if ( isset( $_POST['library'] ) ) {
+				$library    = filter_var( wp_unslash( $_POST['library'] ), FILTER_SANITIZE_STRING );
+				$table_name = '';
+				if ( $library === $wpdb->prefix . 'wpbooklist_jre_saved_book_log' ) {
+					$table_name = $wpdb->prefix . 'wpbooklist_jre_user_options';
+				} else {
+					$library    = explode( '_', $library );
+					$library    = array_pop( $library );
+					$table_name = $wpdb->prefix . 'wpbooklist_jre_settings_' . $library;
+				}
+
+				$row = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM $table_name WHERE ID = %d", 1 ) );
+
 			}
-			
-			$row = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM $table_name WHERE ID = %d", 1) );
 			wp_die( wp_json_encode( $row ) );
 		}
 
@@ -2108,42 +2213,42 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 			$cat = '';
 			if ( $book_data->woocommerce != null){
 				//$product = wc_get_product( $book_data->woocommerce );
-				$product = get_post_meta($book_data->woocommerce); 
+				$product = get_post_meta( $book_data->woocommerce ); 
 
 				// Get all downloadable files associated with product
-				if (array_key_exists('_downloadable_files', $product ) && array_key_exists(0, $product["_downloadable_files"])){
-					$df = json_encode(current(unserialize($product["_downloadable_files"][0])) );
-					$image_url = current(unserialize($product["_downloadable_files"][0]) );
-					$attachment = $wpdb->get_col($wpdb->prepare( "SELECT ID FROM $wpdb->posts WHERE guid='%s';", $image_url["file"] ) );
+				if (array_key_exists( '_downloadable_files', $product ) && array_key_exists(0, $product["_downloadable_files"]) ) {
+					$df = json_encode(current(unserialize( $product["_downloadable_files"][0])) );
+					$image_url = current(unserialize( $product["_downloadable_files"][0]) );
+					$attachment = $wpdb->get_col( $wpdb->prepare( "SELECT ID FROM $wpdb->posts WHERE guid='%s';", $image_url["file"] ) );
 
-					if ( is_array($attachment ) && array_key_exists(0, $attachment )){
-						$image_thumb = wp_get_attachment_image_src($attachment[0], 'thumbnail');
+					if ( is_array( $attachment ) && array_key_exists(0, $attachment ) ) {
+						$image_thumb = wp_get_attachment_image_src( $attachment[0], 'thumbnail' );
 					}
 				}
-				//$attachment = $wpdb->get_col($wpdb->prepare( "SELECT ID FROM $wpdb->posts WHERE guid='%s';", $image_url ) );
+				//$attachment = $wpdb->get_col( $wpdb->prepare( "SELECT ID FROM $wpdb->posts WHERE guid='%s';", $image_url ) );
 				//$image_url = $attachment[0]
 
 				// Get crosssell IDs and titles
-				$cs = unserialize($product["_crosssell_ids"][0]);
-				foreach ($cs as $key => $value) {
-				    $crosssell_ids = $crosssell_ids.','.$value;
+				$cs = unserialize( $product["_crosssell_ids"][0]);
+				foreach ( $cs as $key => $value ) {
+						$crosssell_ids = $crosssell_ids.',' . $value;
 				}
 
 				// Get upsell IDs and titles
-				$us = unserialize($product["_upsell_ids"][0]);
-				foreach ($us as $key => $value) {
-				    $upsell_ids = $upsell_ids.','.$value;
+				$us = unserialize( $product["_upsell_ids"][0]);
+				foreach ( $us as $key => $value ) {
+						$upsell_ids = $upsell_ids.',' . $value;
 				}
 
 				// Get product category
 				$cat = get_the_terms ( $book_data->woocommerce, 'product_cat' );
-				if ( is_array($cat ) && array_key_exists(0, $cat )){
+				if ( is_array( $cat ) && array_key_exists(0, $cat ) ) {
 					$cat = $cat[0]->name;
 				} else {
 					$cat = '';
 				}
 
-				$product = json_encode($product );
+				$product = json_encode( $product );
 			}
 
 			require_once CLASS_BOOK_DIR . 'class-wpbooklist-book-form.php';
@@ -2151,21 +2256,21 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 			$edit_form = $form->output_book_form();
 
 			// Convert html entites back to normal as needed
-			$book_data->title = stripslashes(html_entity_decode($book_data->title, ENT_QUOTES | ENT_XML1, 'UTF-8') );
+			$book_data->title = stripslashes(html_entity_decode( $book_data->title, ENT_QUOTES | ENT_XML1, 'UTF-8') );
 
 			// Encode all book data for return trip
-			$book_data = json_encode($book_data);
+			$book_data = json_encode( $book_data);
 
 			// Check to see if Storefront extension is active
 			include_once( ABSPATH . 'wp-admin/includes/plugin.php' );
-			if ( is_plugin_active('wpbooklist-storefront/wpbooklist-storefront.php')){
+			if ( is_plugin_active( 'wpbooklist-storefront/wpbooklist-storefront.php') ) {
 				$storefront = 'true';
 			} else {
 				$storefront = 'false';
 			}
 
 
-			if ( is_array($attachment ) && array_key_exists(0, $attachment )){
+			if ( is_array( $attachment ) && array_key_exists(0, $attachment ) ) {
 				$attachment = $attachment[0];
 			} else {
 				$attachment = '';
@@ -2173,7 +2278,7 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 
 			
 
-			echo $book_data.'–sep-seperator-sep–'.$edit_form.'–sep-seperator-sep–'.$product.'–sep-seperator-sep–'.$storefront.'–sep-seperator-sep–'.$crosssell_ids.'–sep-seperator-sep–'.$crosssell_ids.'–sep-seperator-sep–'.$upsell_ids.'–sep-seperator-sep–'.$upsell_ids.'–sep-seperator-sep–'.$cat.'–sep-seperator-sep–'.basename($image_url["file"]).'–sep-seperator-sep–'.$attachment;
+			echo $book_data.'–sep-seperator-sep–' . $edit_form.'–sep-seperator-sep–' . $product . '–sep-seperator-sep–' . $storefront . '–sep-seperator-sep–' . $crosssell_ids.'–sep-seperator-sep–' . $crosssell_ids.'–sep-seperator-sep–' . $upsell_ids.'–sep-seperator-sep–' . $upsell_ids.'–sep-seperator-sep–' . $cat . '–sep-seperator-sep–'.basename( $image_url["file"]).'–sep-seperator-sep–' . $attachment;
 
 			wp_die();
 		}
@@ -2187,7 +2292,7 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 
 			require_once CLASS_BOOK_DIR . 'class-edit-book-form.php';
 			$form = new WPBookList_Edit_Book_Form;
-			echo $form->output_edit_book_form($library, $currentOffset ).'_Separator_'.$library;
+			echo $form->output_edit_book_form( $library, $currentOffset ).'_Separator_' . $library;
 			wp_die();
 		}
 
@@ -2199,7 +2304,7 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 
 			require_once CLASS_BOOK_DIR . 'class-edit-book-form.php';
 			$form = new WPBookList_Edit_Book_Form;
-			echo $form->output_edit_book_form($library, 0).'_Separator_'.$library;
+			echo $form->output_edit_book_form( $library, 0).'_Separator_' . $library;
 
 			wp_die();
 		}
@@ -2231,7 +2336,7 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 
 			require_once CLASS_BOOK_DIR . 'class-edit-book-form.php';
 			$form = new WPBookList_Edit_Book_Form;
-			echo $form->output_edit_book_form($library, 0, $search_mode, $search_term).'_Separator_'.$library.'_Separator_'.$form->limit;
+			echo $form->output_edit_book_form( $library, 0, $search_mode, $search_term).'_Separator_' . $library.'_Separator_' . $form->limit;
 			wp_die();
 		}
 
@@ -2580,12 +2685,12 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 			);
 
 			require_once CLASS_BOOK_DIR . 'class-wpbooklist-book.php';
-			$book_class = new WPBookList_Book('edit', $book_array, $book_id);
+			$book_class = new WPBookList_Book( 'edit', $book_array, $book_id);
 
 			$edit_result = $book_class->edit_result;
 
 			// If book was succesfully edited, and return the page/post results
-			if ( $edit_result == 1){
+			if ( $edit_result == 1 ){
 				$row = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM $library WHERE ID = %d", $book_id ) );
 
 				// Get saved page URL
@@ -2606,12 +2711,12 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 					$post_url = '';
 				}
 
-				echo $edit_result.'--sep--'.$book_id.'--sep--'.$library.'--sep--'.$page_yes.'--sep--'.$post_yes.'--sep--'.$page_url.'--sep--'.$post_url.'--sep--'.$wpdb->prefix . '--sep--'.$book_class->apireport.'--sep--'.json_encode($book_class->whichapifound).'--sep--'.$book_class->apiamazonfailcount.'---sep--'.$book_class->amazon_transient_use;
+				echo $edit_result . '--sep--' . $book_id.'--sep--' . $library.'--sep--' . $page_yes.'--sep--' . $post_yes.'--sep--' . $page_url.'--sep--' . $post_url.'--sep--' . $wpdb->prefix . '--sep--' . $book_class->apireport . '--sep--'.json_encode( $book_class->whichapifound).'--sep--' . $book_class->apiamazonfailcount . '---sep--' . $book_class->amazon_transient_use;
 
 
-		  	} else {
+				} else {
 				echo $edit_result;
-		  	}
+				}
 
 			wp_die();
 		}
@@ -2627,7 +2732,7 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 
 			require_once CLASS_BOOK_DIR . 'class-wpbooklist-book.php';
 			$book_class = new WPBookList_Book;
-			$delete_result = $book_class->delete_book($library, $book_id, $delete_strinG );
+			$delete_result = $book_class->delete_book( $library, $book_id, $delete_strinG );
 			echo $delete_result;
 			wp_die();
 		}
@@ -2642,14 +2747,14 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 
 			$table_name = $wpdb->prefix . 'wpbooklist_jre_user_options';
 			$data = array(
-		        'amazonapipublic' => $amazonapipublic, 
-		        'amazonapisecret' => $amazonapisecret, 
-		        'googleapi' => $googleapi, 
-		    );
-		    $format = array( '%s');  
-		    $where = array( 'ID' => ( 1 ) );
-		    $where_format = array( '%d' );
-		    $result = $wpdb->update( $table_name, $data, $where, $format, $where_format );
+					'amazonapipublic' => $amazonapipublic, 
+					'amazonapisecret' => $amazonapisecret, 
+					'googleapi' => $googleapi, 
+			  );
+			  $format = array( '%s' );  
+			  $where = array( 'ID' => ( 1 ) );
+			  $where_format = array( '%d' );
+			  $result = $wpdb->update( $table_name, $data, $where, $format, $where_format );
 
 			echo $result;
 			wp_die();
@@ -2667,31 +2772,31 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 			$mkdir1 = null;
 			if (!file_exists(UPLOADS_BASE_DIR."wpbooklist")) {
 				// TODO: create log file entry 
-				$mkdir1 = mkdir(UPLOADS_BASE_DIR."wpbooklist", 0777, true);
+				$mkdir1 = mkdir(UPLOADS_BASE_DIR."wpbooklist", 0777, true );
 			}
 
 			// Create file structure in the uploads dir 
 			$mkdir2 = null;
 			if (!file_exists(LIBRARY_STYLEPAKS_UPLOAD_DIR)) {
 				// TODO: create log file entry 
-				$mkdir2 = mkdir(LIBRARY_STYLEPAKS_UPLOAD_DIR, 0777, true);
+				$mkdir2 = mkdir(LIBRARY_STYLEPAKS_UPLOAD_DIR, 0777, true );
 			}
 
 			// TODO: create log file entry 
-			$move_result = move_uploaded_file($_FILES['my_uploaded_file']['tmp_name'], LIBRARY_STYLEPAKS_UPLOAD_DIR."{$_FILES['my_uploaded_file'] ['name']}");
+			$move_result = move_uploaded_file( $_FILES['my_uploaded_file']['tmp_name'], LIBRARY_STYLEPAKS_UPLOAD_DIR."{$_FILES['my_uploaded_file'] ['name']}" );
 
 			// Unzip the file if it's zipped
-			if (strpos($_FILES['my_uploaded_file']['name'], '.zip') !== false){
+			if (strpos( $_FILES['my_uploaded_file']['name'], '.zip') !== false ){
 				$zip = new ZipArchive;
-				$res = $zip->open(LIBRARY_STYLEPAKS_UPLOAD_DIR.$_FILES['my_uploaded_file']['name']);
-				if ($res === TRUE) {
-				  $zip->extractTo(LIBRARY_STYLEPAKS_UPLOAD_DIR);
-				  $zip->close();
-				  unlink(LIBRARY_STYLEPAKS_UPLOAD_DIR.$_FILES['my_uploaded_file']['name']);
+				$res = $zip->open(LIBRARY_STYLEPAKS_UPLOAD_DIR.$_FILES['my_uploaded_file']['name'] );
+				if ( $res === TRUE) {
+					$zip->extractTo(LIBRARY_STYLEPAKS_UPLOAD_DIR);
+					$zip->close();
+					unlink(LIBRARY_STYLEPAKS_UPLOAD_DIR.$_FILES['my_uploaded_file']['name'] );
 				}
 			}
 
-			echo $mkdir1.'sep'.$mkdir2.'sep'.$move_result;
+			echo $mkdir1.'sep' . $mkdir2.'sep' . $move_result;
 			wp_die();
 		}
 
@@ -2708,30 +2813,30 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 				$stylepak = filter_var( wp_unslash( $_POST["stylepak"] ), FILTER_SANITIZE_STRING );
 				$library = filter_var( wp_unslash( $_POST["library"] ), FILTER_SANITIZE_STRING );
 
-				$stylepak = str_replace('.css', '', $stylepak);
-				$stylepak = str_replace('.zip', '', $stylepak);
+				$stylepak = str_replace( '.css', '', $stylepak);
+				$stylepak = str_replace( '.zip', '', $stylepak);
 
 				// Build table name to store StylePak in
-				if (strpos($library, 'wpbooklist_jre_saved_book_log') !== false){
+				if (strpos( $library, 'wpbooklist_jre_saved_book_log') !== false ){
 					$table_name = $wpdb->prefix . 'wpbooklist_jre_user_options';
 					$data = array(
-				      'stylepak' => $stylepak,
-				    );
-				    $format = array( '%s');   
-				    $where = array( 'ID' => 1 );
-				    $where_format = array( '%d' );
-				    echo $wpdb->update( $table_name, $data, $where, $format, $where_format );
+						'stylepak' => $stylepak,
+						);
+						$format = array( '%s' );   
+						$where = array( 'ID' => 1 );
+						$where_format = array( '%d' );
+						echo $wpdb->update( $table_name, $data, $where, $format, $where_format );
 				} else {
 					$table_name = $wpdb->prefix . 'wpbooklist_jre_list_dynamic_db_names';
-					$library = substr($library, strrpos($library, '_') + 1);
+					$library = substr( $library, strrpos( $library, '_') + 1 );
 					$data = array(
-				      'stylepak' => $stylepak,
-				    );
-				    $format = array( '%s');   
-				    $where = array( 'user_table_name' => $library );
-				    $where_format = array( '%s' );
-				    echo $stylepak.' '.$library;
-				    echo $wpdb->update( $table_name, $data, $where, $format, $where_format );
+						'stylepak' => $stylepak,
+						);
+						$format = array( '%s' );   
+						$where = array( 'user_table_name' => $library );
+						$where_format = array( '%s' );
+						echo $stylepak.' ' . $library;
+						echo $wpdb->update( $table_name, $data, $where, $format, $where_format );
 				}
 
 			wp_die();
@@ -2748,31 +2853,31 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 				$mkdir1 = null;
 				if (!file_exists(UPLOADS_BASE_DIR."wpbooklist")) {
 					// TODO: create log file entry 
-					$mkdir1 = mkdir(UPLOADS_BASE_DIR."wpbooklist", 0777, true);
+					$mkdir1 = mkdir(UPLOADS_BASE_DIR."wpbooklist", 0777, true );
 				}
 
 				// Create file structure in the uploads dir 
 				$mkdir2 = null;
 				if (!file_exists(POST_TEMPLATES_UPLOAD_DIR)) {
 					// TODO: create log file entry 
-					$mkdir2 = mkdir(POST_TEMPLATES_UPLOAD_DIR, 0777, true);
+					$mkdir2 = mkdir(POST_TEMPLATES_UPLOAD_DIR, 0777, true );
 				}
 
 				// TODO: create log file entry 
-				$move_result = move_uploaded_file($_FILES['my_uploaded_file']['tmp_name'], POST_TEMPLATES_UPLOAD_DIR."{$_FILES['my_uploaded_file'] ['name']}");
+				$move_result = move_uploaded_file( $_FILES['my_uploaded_file']['tmp_name'], POST_TEMPLATES_UPLOAD_DIR."{$_FILES['my_uploaded_file'] ['name']}" );
 
 				// Unzip the file if it's zipped
-				if (strpos($_FILES['my_uploaded_file']['name'], '.zip') !== false){
+				if (strpos( $_FILES['my_uploaded_file']['name'], '.zip') !== false ){
 					$zip = new ZipArchive;
-					$res = $zip->open(POST_TEMPLATES_UPLOAD_DIR.$_FILES['my_uploaded_file']['name']);
-					if ($res === TRUE) {
-					  $zip->extractTo(POST_TEMPLATES_UPLOAD_DIR);
-					  $zip->close();
-					  unlink(POST_TEMPLATES_UPLOAD_DIR.$_FILES['my_uploaded_file']['name']);
+					$res = $zip->open(POST_TEMPLATES_UPLOAD_DIR.$_FILES['my_uploaded_file']['name'] );
+					if ( $res === TRUE) {
+						$zip->extractTo(POST_TEMPLATES_UPLOAD_DIR);
+						$zip->close();
+						unlink(POST_TEMPLATES_UPLOAD_DIR.$_FILES['my_uploaded_file']['name'] );
 					}
 				}
 
-				echo $mkdir1.'sep'.$mkdir2.'sep'.$move_result;
+				echo $mkdir1.'sep' . $mkdir2.'sep' . $move_result;
 			wp_die();
 		}
 
@@ -2785,18 +2890,18 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 			// For assigning a Template to a Library
 				$template = filter_var( wp_unslash( $_POST["template"] ), FILTER_SANITIZE_STRING );
 
-				$template = str_replace('.php', '', $template);
-				$template = str_replace('.zip', '', $template);
+				$template = str_replace( '.php', '', $template );
+				$template = str_replace( '.zip', '', $template );
 
 				$table_name = $wpdb->prefix . 'wpbooklist_jre_user_options';
 
 				$data = array(
-			      'activeposttemplate' => $template,
-			    );
-			    $format = array( '%s');   
-			    $where = array( 'ID' => 1 );
-			    $where_format = array( '%d' );
-			    echo $wpdb->update( $table_name, $data, $where, $format, $where_format );
+					'activeposttemplate' => $template,
+					);
+					$format = array( '%s' );   
+					$where = array( 'ID' => 1 );
+					$where_format = array( '%d' );
+					echo $wpdb->update( $table_name, $data, $where, $format, $where_format );
 
 			wp_die();
 		}
@@ -2814,31 +2919,31 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 				$mkdir1 = null;
 				if (!file_exists(UPLOADS_BASE_DIR."wpbooklist")) {
 					// TODO: create log file entry 
-					$mkdir1 = mkdir(UPLOADS_BASE_DIR."wpbooklist", 0777, true);
+					$mkdir1 = mkdir(UPLOADS_BASE_DIR."wpbooklist", 0777, true );
 				}
 
 				// Create file structure in the uploads dir 
 				$mkdir2 = null;
 				if (!file_exists(PAGE_TEMPLATES_UPLOAD_DIR)) {
 					// TODO: create log file entry 
-					$mkdir2 = mkdir(PAGE_TEMPLATES_UPLOAD_DIR, 0777, true);
+					$mkdir2 = mkdir(PAGE_TEMPLATES_UPLOAD_DIR, 0777, true );
 				}
 
 				// TODO: create log file entry 
-				$move_result = move_uploaded_file($_FILES['my_uploaded_file']['tmp_name'], PAGE_TEMPLATES_UPLOAD_DIR."{$_FILES['my_uploaded_file'] ['name']}");
+				$move_result = move_uploaded_file( $_FILES['my_uploaded_file']['tmp_name'], PAGE_TEMPLATES_UPLOAD_DIR."{$_FILES['my_uploaded_file'] ['name']}" );
 
 				// Unzip the file if it's zipped
-				if (strpos($_FILES['my_uploaded_file']['name'], '.zip') !== false){
+				if (strpos( $_FILES['my_uploaded_file']['name'], '.zip') !== false ){
 					$zip = new ZipArchive;
-					$res = $zip->open(PAGE_TEMPLATES_UPLOAD_DIR.$_FILES['my_uploaded_file']['name']);
-					if ($res === TRUE) {
-					  $zip->extractTo(PAGE_TEMPLATES_UPLOAD_DIR);
-					  $zip->close();
-					  unlink(PAGE_TEMPLATES_UPLOAD_DIR.$_FILES['my_uploaded_file']['name']);
+					$res = $zip->open(PAGE_TEMPLATES_UPLOAD_DIR.$_FILES['my_uploaded_file']['name'] );
+					if ( $res === TRUE) {
+						$zip->extractTo(PAGE_TEMPLATES_UPLOAD_DIR);
+						$zip->close();
+						unlink(PAGE_TEMPLATES_UPLOAD_DIR.$_FILES['my_uploaded_file']['name'] );
 					}
 				}
 
-				echo $mkdir1.'sep'.$mkdir2.'sep'.$move_result;
+				echo $mkdir1.'sep' . $mkdir2.'sep' . $move_result;
 			wp_die();
 		}
 
@@ -2851,18 +2956,18 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 			// For assigning a page_template
 				$template = filter_var( wp_unslash( $_POST["template"] ), FILTER_SANITIZE_STRING );
 
-				$template = str_replace('.php', '', $template);
-				$template = str_replace('.zip', '', $template);
+				$template = str_replace( '.php', '', $template );
+				$template = str_replace( '.zip', '', $template );
 
 				$table_name = $wpdb->prefix . 'wpbooklist_jre_user_options';
 
 				$data = array(
-			      'activepagetemplate' => $template,
-			    );
-			    $format = array( '%s');   
-			    $where = array( 'ID' => 1 );
-			    $where_format = array( '%d' );
-			    $wpdb->update( $table_name, $data, $where, $format, $where_format );
+					'activepagetemplate' => $template,
+					);
+					$format = array( '%s' );   
+					$where = array( 'ID' => 1 );
+					$where_format = array( '%d' );
+					$wpdb->update( $table_name, $data, $where, $format, $where_format );
 
 			wp_die();
 		}
@@ -2874,7 +2979,7 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 			$library = filter_var( wp_unslash( $_POST['library'] ), FILTER_SANITIZE_STRING );
 
 			require_once CLASS_BACKUP_DIR . 'class-wpbooklist-backup.php';
-			$backup_class = new WPBookList_Backup('library_database_backup', $library);
+			$backup_class = new WPBookList_Backup( 'library_database_backup', $library );
 			echo $backup_class->create_backup_result; 
 			wp_die();
 		}
@@ -2887,7 +2992,7 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 			$backup = filter_var( wp_unslash( $_POST['backup'] ), FILTER_SANITIZE_STRING );
 
 			require_once CLASS_BACKUP_DIR . 'class-wpbooklist-backup.php';
-			$backup_class = new WPBookList_Backup('library_database_restore', $table, $backup);
+			$backup_class = new WPBookList_Backup( 'library_database_restore', $table, $backup);
 
 			wp_die();
 		}
@@ -2899,7 +3004,7 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 			$table = filter_var( wp_unslash( $_POST['table'] ), FILTER_SANITIZE_STRING );
 			
 			require_once CLASS_BACKUP_DIR . 'class-wpbooklist-backup.php';
-			$backup_class = new WPBookList_Backup('create_csv_file', $table);
+			$backup_class = new WPBookList_Backup( 'create_csv_file', $table );
 
 			echo $backup_class->create_csv_result;
 			wp_die();
@@ -2913,9 +3018,9 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 			$table_name = $wpdb->prefix . 'wpbooklist_jre_user_options';
 
 			$data = array(
-			    'amazoncountryinfo' => $country
+					'amazoncountryinfo' => $country
 			);
-			$format = array( '%s');  
+			$format = array( '%s' );  
 			$where = array( 'ID' => 1 );
 			$where_format = array( '%d' );
 			$wpdb->update( $table_name, $data, $where, $format, $where_format );
@@ -2931,7 +3036,7 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 			$book_class = new WPBookList_Book;
 
 			$library = filter_var( wp_unslash( $_POST['library'] ), FILTER_SANITIZE_STRING );
-			$delete_result = $book_class->empty_table($library);
+			$delete_result = $book_class->empty_table( $library );
 
 			wp_die();
 		}
@@ -2944,7 +3049,7 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 			$book_class = new WPBookList_Book;
 
 			$library = filter_var( wp_unslash( $_POST['library'] ), FILTER_SANITIZE_STRING );
-			$delete_result = $book_class->empty_everything($library);
+			$delete_result = $book_class->empty_everything( $library );
 
 			wp_die();
 		}
@@ -2958,29 +3063,29 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 			$library = filter_var( wp_unslash( $_POST['library'] ), FILTER_SANITIZE_STRING );
 			$delete_string = filter_var( wp_unslash( $_POST['deleteString'] ), FILTER_SANITIZE_STRING );
 			$book_id = filter_var( wp_unslash( $_POST['bookId'] ), FILTER_SANITIZE_STRING );
-			$book_id = ltrim($book_id, 'sep');
+			$book_id = ltrim( $book_id, 'sep' );
 
 			// Creating array of IDs to delete.
 			$delete_array = explode( 'sep', $book_id);
 
 			// Creating array of Page/Post IDs to delete
 			if ( $delete_string != null && $delete_string != ''){
-				$delete_string = ltrim($delete_string, 'sep');
+				$delete_string = ltrim( $delete_string, 'sep' );
 				$delete_page_post_array = explode( 'sep', $delete_strinG );
 			}	
 
 
 			// Required to delete the correct book, update the IDs, then delete the next correct book
-			$delete_array = array_reverse($delete_array);
+			$delete_array = array_reverse( $delete_array );
 
 			// The loop that will send each book ID and Page/Post ID to class-wpbooklist-book.php to be deleted.
-			foreach($delete_array as $key=>$delete){
+			foreach( $delete_array as $key=>$delete ){
 
 				// Send page/post IDs to delete to class-wpbooklist-book.php if they exist, otherwise don't send
 				if ( $delete_string != null && $delete_string != ''){
-					$delete_result = $book_class->delete_book($library, $delete, $delete_page_post_array[$key]);
+					$delete_result = $book_class->delete_book( $library, $delete, $delete_page_post_array[$key]);
 				} else {
-					$delete_result = $book_class->delete_book($library, $delete, null);
+					$delete_result = $book_class->delete_book( $library, $delete, null);
 				}	
 			}
 
@@ -2999,30 +3104,30 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 		 
 		 	// Handling the dismiss of the general admin message
 			if ( $id == 'wpbooklist-my-notice-dismiss-forever-general'){
-			  $table_name = $wpdb->prefix . 'wpbooklist_jre_user_options';
+				$table_name = $wpdb->prefix . 'wpbooklist_jre_user_options';
 
-			  $data = array(
-			      'admindismiss' => 0
-			  );
-			  $where = array( 'ID' => 1 );
-			  $format = array( '%d');  
-			  $where_format = array( '%d' );
-			  echo $wpdb->update( $table_name, $data, $where, $format, $where_format );
-			  wp_die();
+				$data = array(
+					'admindismiss' => 0
+				);
+				$where = array( 'ID' => 1 );
+				$format = array( '%d' );  
+				$where_format = array( '%d' );
+				echo $wpdb->update( $table_name, $data, $where, $format, $where_format );
+				wp_die();
 			}
 
 			// Handling the dismiss of the StoryTime admin message
 			if ( $id == 'wpbooklist-my-notice-dismiss-forever-storytime'){
-			  $table_name = $wpdb->prefix . 'wpbooklist_jre_storytime_stories_settings';
+				$table_name = $wpdb->prefix . 'wpbooklist_jre_storytime_stories_settings';
 
-			  $data = array(
-			      'notifydismiss' => 0
-			  );
-			  $where = array( 'ID' => 1 );
-			  $format = array( '%d');  
-			  $where_format = array( '%d' );
-			  echo $wpdb->update( $table_name, $data, $where, $format, $where_format );
-			  wp_die();
+				$data = array(
+					'notifydismiss' => 0
+				);
+				$where = array( 'ID' => 1 );
+				$format = array( '%d' );  
+				$where_format = array( '%d' );
+				echo $wpdb->update( $table_name, $data, $where, $format, $where_format );
+				wp_die();
 			}
 		}
 
@@ -3031,37 +3136,37 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 			global $wpdb;
 			check_ajax_referer( 'wpbooklist_reorder_action_callback', 'security' );
 			$table = filter_var( wp_unslash( $_POST['table'] ), FILTER_SANITIZE_STRING );
-			$idarray = stripslashes($_POST['idarray']);
-			$idarray = json_decode($idarray);
+			$idarray = stripslashes( $_POST['idarray'] );
+			$idarray = json_decode( $idarray );
 
 			// Dropping primary key in database to alter the IDs and the AUTO_INCREMENT value
-			$wpdb->query("ALTER TABLE $table MODIFY ID BIGINT(190) NOT NULL");
+			$wpdb->query( "ALTER TABLE $table MODIFY ID BIGINT(190) NOT NULL" );
 
-			$wpdb->query("ALTER TABLE $table DROP PRIMARY KEY");
+			$wpdb->query( "ALTER TABLE $table DROP PRIMARY KEY" );
 
-			foreach ($idarray as $key => $value) {
+			foreach ( $idarray as $key => $value ) {
 				$data = array(
-				    'ID' => $key+1
+						'ID' => $key+1
 				);
 
-				$format = array( '%d');  
+				$format = array( '%d' );  
 				$where = array( 'book_uid' => $value );
 				$where_format = array( '%s' );
 				$wpdb->update( $table, $data, $where, $format, $where_format );
 			}
 
 			// Adding primary key back to database 
-			echo $wpdb->query("ALTER TABLE $table ADD PRIMARY KEY (`ID`)"); 
+			echo $wpdb->query( "ALTER TABLE $table ADD PRIMARY KEY (`ID`)" ); 
 
 			// Adjusting ID values of remaining entries in database
-			$my_query = $wpdb->get_results("SELECT * FROM $table");
+			$my_query = $wpdb->get_results( "SELECT * FROM $table" );
 			$title_count = $wpdb->num_rows;   
 
-			$wpdb->query("ALTER TABLE $table MODIFY ID BIGINT(190) AUTO_INCREMENT");
+			$wpdb->query( "ALTER TABLE $table MODIFY ID BIGINT(190) AUTO_INCREMENT" );
 
 			// Setting the AUTO_INCREMENT value based on number of remaining entries
 			$title_count++;
-			$wpdb->query($wpdb->prepare( "ALTER TABLE $table AUTO_INCREMENT = %d", $title_count ) );
+			$wpdb->query( $wpdb->prepare( "ALTER TABLE $table AUTO_INCREMENT = %d", $title_count ) );
 
 			wp_die();
 		}
@@ -3084,7 +3189,7 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 			$featureSuggestion = filter_var( wp_unslash( $_POST['featureSuggestion'] ), FILTER_SANITIZE_STRING );
 			$reasonEmail = filter_var( wp_unslash( $_POST['reasonEmail'] ), FILTER_SANITIZE_EMAIL);
 
-			$message = $reason1.' '.$reason2.' '.$reason3.' '.$reason4.' '.$reason5.' '.$reason6.' '.$reason7.' '.$reason8.' '.$reason9.' '.$featureSuggestion.' '.$reasonOther.' '.$reasonEmail;
+			$message = $reason1.' ' . $reason2.' ' . $reason3.' ' . $reason4.' ' . $reason5.' ' . $reason6.' ' . $reason7.' ' . $reason8.' ' . $reason9.' ' . $featureSuggestion.' ' . $reasonOther.' ' . $reasonEmail;
 
 			if ( $id == 'wpbooklist-modal-submit'){
 				wp_mail( 'jake@jakerevans.com', 'WPBookList Exit Survey', $message );
@@ -3095,7 +3200,7 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 				}
 			}
 
-			deactivate_plugins( 'wpbooklist/wpbooklist.php');
+			deactivate_plugins( 'wpbooklist/wpbooklist.php' );
 			wp_die();
 		}
 
@@ -3106,7 +3211,7 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 			$category = filter_var( wp_unslash( $_POST['category'] ), FILTER_SANITIZE_STRING );
 
 			require_once CLASS_STORYTIME_DIR . 'class-storytime.php';
-		  	$storytime_class = new WPBookList_Storytime('categorychange', $category );
+				$storytime_class = new WPBookList_Storytime( 'categorychange', $category );
 
 
 			echo $storytime_class->category_change_output;
@@ -3120,9 +3225,9 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 			$dataId = filter_var( wp_unslash( $_POST['dataId'] ), FILTER_SANITIZE_NUMBER_INT);
 			
 			require_once CLASS_STORYTIME_DIR . 'class-storytime.php';
-		  	$storytime_class = new WPBookList_Storytime('getcontent', null, $dataId);
+				$storytime_class = new WPBookList_Storytime( 'getcontent', null, $dataId);
 
-		  	echo json_encode($storytime_class->stories_db_data);
+				echo json_encode( $storytime_class->stories_db_data);
 
 			wp_die();
 		}
@@ -3133,7 +3238,7 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 			check_ajax_referer( 'wpbooklist_storytime_expand_browse_action_callback', 'security' );
 
 			require_once CLASS_STORYTIME_DIR . 'class-storytime.php';
-		  	$storytime_class = new WPBookList_Storytime('categorychange', 'Recent Additions' );
+				$storytime_class = new WPBookList_Storytime( 'categorychange', 'Recent Additions' );
 
 
 			echo $storytime_class->category_change_output;
@@ -3170,44 +3275,44 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 
 				// Delete default data
 				$stories_table = $wpdb->prefix . 'wpbooklist_jre_storytime_stories';
-				$query_for_default_data = $wpdb->get_results("SELECT * FROM $stories_table");
+				$query_for_default_data = $wpdb->get_results( "SELECT * FROM $stories_table" );
 
 				// If the default data still exists (based on the fact that war of the worlds should be first in db), proceed, otherwise do nothing.
 				if ( $query_for_default_data[0]->title == 'Sample Chapter - The War of the Worlds'){
 
-					$wpdb->query("DELETE FROM $stories_table WHERE providername = 'H. G. Wells' AND title = 'Sample Chapter - The War of the Worlds'");
+					$wpdb->query( "DELETE FROM $stories_table WHERE providername = 'H. G. Wells' AND title = 'Sample Chapter - The War of the Worlds'" );
 
-					$wpdb->query("DELETE FROM $stories_table WHERE providername = 'Jane Austen' AND title = 'Sample Chapter - Pride and Predjudice'");
+					$wpdb->query( "DELETE FROM $stories_table WHERE providername = 'Jane Austen' AND title = 'Sample Chapter - Pride and Predjudice'" );
 
-					$wpdb->query("DELETE FROM $stories_table WHERE providername = 'Matthew Dawes' AND title = 'Sample Chapter - Nightfall'");
+					$wpdb->query( "DELETE FROM $stories_table WHERE providername = 'Matthew Dawes' AND title = 'Sample Chapter - Nightfall'" );
 
-					$wpdb->query("DELETE FROM $stories_table WHERE providername = 'Maine Authors Publishing' AND title = 'Interview - Maine Authors Publishing'");
+					$wpdb->query( "DELETE FROM $stories_table WHERE providername = 'Maine Authors Publishing' AND title = 'Interview - Maine Authors Publishing'" );
 
-					$wpdb->query("DELETE FROM $stories_table WHERE providername = 'Missouri Writers’ Guild' AND title = 'Article - Missouri Writers’ Guild'");
+					$wpdb->query( "DELETE FROM $stories_table WHERE providername = 'Missouri Writers’ Guild' AND title = 'Article - Missouri Writers’ Guild'" );
 
-					$wpdb->query("DELETE FROM $stories_table WHERE providername = 'Benjamin Franklin' AND title = 'Autobiography of Benjamin Franklin'");
+					$wpdb->query( "DELETE FROM $stories_table WHERE providername = 'Benjamin Franklin' AND title = 'Autobiography of Benjamin Franklin'" );
 
-					$wpdb->query("DELETE FROM $stories_table WHERE providername = 'Zac Wilson' AND title = 'Sample Chapter - Morningland'");
+					$wpdb->query( "DELETE FROM $stories_table WHERE providername = 'Zac Wilson' AND title = 'Sample Chapter - Morningland'" );
 
-					$wpdb->query("DELETE FROM $stories_table WHERE providername = 'David Luddington' AND title = 'Author Showcase - David Luddington'");
+					$wpdb->query( "DELETE FROM $stories_table WHERE providername = 'David Luddington' AND title = 'Author Showcase - David Luddington'" );
 
-					$wpdb->query("DELETE FROM $stories_table WHERE providername = 'Bram Stoker' AND title = 'Sample Chapter - Dracula'");
+					$wpdb->query( "DELETE FROM $stories_table WHERE providername = 'Bram Stoker' AND title = 'Sample Chapter - Dracula'" );
 
-					$wpdb->query("DELETE FROM $stories_table WHERE providername = 'Brendan T. Beery' AND title = 'Author Showcase - Brendan T. Beery'");
+					$wpdb->query( "DELETE FROM $stories_table WHERE providername = 'Brendan T. Beery' AND title = 'Author Showcase - Brendan T. Beery'" );
 
 					// Dropping primary key in database to alter the IDs and the AUTO_INCREMENT value
-					$wpdb->query("ALTER TABLE $stories_table MODIFY ID bigint(190)");
-					$wpdb->query("ALTER TABLE $stories_table DROP PRIMARY KEY");
+					$wpdb->query( "ALTER TABLE $stories_table MODIFY ID bigint(190)" );
+					$wpdb->query( "ALTER TABLE $stories_table DROP PRIMARY KEY" );
 
 					// Adjusting ID values of remaining entries in database
-					$my_query = $wpdb->get_results("SELECT * FROM $stories_table");
+					$my_query = $wpdb->get_results( "SELECT * FROM $stories_table" );
 					$title_count = $wpdb->num_rows;
 					$book_id = 10; // Hard-coded based on number of default rows included with WPBookList
-					for ($x = 1; $x <= $title_count; $x++) {
+					for ( $x = 1; $x <= $title_count; $x++) {
 						$data = array(
-						    'ID' => $x
+								'ID' => $x
 						);
-						$format = array( '%d');  
+						$format = array( '%d' );  
 						$where = array( 'ID' => $book_id);
 						$where_format = array( '%d' );
 						$wpdb->update( $stories_table, $data, $where, $format, $where_format );
@@ -3215,12 +3320,12 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 					}  
 
 					// Adding primary key back to database 
-					$wpdb->query("ALTER TABLE $stories_table ADD PRIMARY KEY (`ID`)");    
-					$wpdb->query("ALTER TABLE $stories_table MODIFY ID bigint(190) AUTO_INCREMENT");
+					$wpdb->query( "ALTER TABLE $stories_table ADD PRIMARY KEY (`ID`)" );    
+					$wpdb->query( "ALTER TABLE $stories_table MODIFY ID bigint(190) AUTO_INCREMENT" );
 
 					// Setting the AUTO_INCREMENT value based on number of remaining entries
 					$title_count++;
-					$wpdb->query($wpdb->prepare( "ALTER TABLE $stories_table AUTO_INCREMENT = %d", $title_count ) );
+					$wpdb->query( $wpdb->prepare( "ALTER TABLE $stories_table AUTO_INCREMENT = %d", $title_count ) );
 				}
 
 			} else {
@@ -3246,17 +3351,17 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 			// Update StoryTime settings table
 			$table_name = $wpdb->prefix . 'wpbooklist_jre_storytime_stories_settings';
 			$data = array(
-		        'createpost' => $createpost,
+					'createpost' => $createpost,
 				'createpage' => $createpage,
 				'deletedefault' => $deletedefault,
 				'newnotify' => $newnotify,
 				'getstories' => $getstories,
 				'storypersist' => $storypersist,
-		    );
-		    $format = array( '%d','%d','%d','%d','%d','%d'); 
-		    $where = array( 'ID' => 1 );
-		    $where_format = array( '%d' );
-		    $wpdb->update( $table_name, $data, $where, $format, $where_format );
+			  );
+			  $format = array( '%d','%d','%d','%d','%d','%d' ); 
+			  $where = array( 'ID' => 1 );
+			  $where_format = array( '%d' );
+			  $wpdb->update( $table_name, $data, $where, $format, $where_format );
 
 			wp_die();
 		}
@@ -3268,35 +3373,35 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 			$id = filter_var( wp_unslash( $_POST['dataId'] ), FILTER_SANITIZE_NUMBER_INT);
 
 			$stories_table = $wpdb->prefix . 'wpbooklist_jre_storytime_stories';
-			$query_for_default_data = $wpdb->get_results("SELECT * FROM $stories_table");
+			$query_for_default_data = $wpdb->get_results( "SELECT * FROM $stories_table" );
 
-			$wpdb->query("DELETE FROM $stories_table WHERE ID = $id");
+			$wpdb->query( "DELETE FROM $stories_table WHERE ID = $id" );
 
 			// Dropping primary key in database to alter the IDs and the AUTO_INCREMENT value
-			$wpdb->query("ALTER TABLE $stories_table MODIFY ID bigint(190)");
-			$wpdb->query("ALTER TABLE $stories_table DROP PRIMARY KEY");
+			$wpdb->query( "ALTER TABLE $stories_table MODIFY ID bigint(190)" );
+			$wpdb->query( "ALTER TABLE $stories_table DROP PRIMARY KEY" );
 
 			// Adjusting ID values of remaining entries in database
-			$my_query = $wpdb->get_results("SELECT * FROM $stories_table");
+			$my_query = $wpdb->get_results( "SELECT * FROM $stories_table" );
 			$title_count = $wpdb->num_rows;
-			for ($x = $id; $x <= $title_count; $x++) {
+			for ( $x = $id; $x <= $title_count; $x++) {
 				$data = array(
-				    'ID' => $id
+						'ID' => $id
 				);
-				$format = array( '%d'); 
+				$format = array( '%d' ); 
 				$id++;  
-				$where = array( 'ID' => ($id) );
+				$where = array( 'ID' => ( $id) );
 				$where_format = array( '%d' );
 				$wpdb->update( $stories_table, $data, $where, $format, $where_format );
 			} 
 
 			// Adding primary key back to database.
-			$wpdb->query("ALTER TABLE $stories_table ADD PRIMARY KEY (`ID`)");    
-			$wpdb->query("ALTER TABLE $stories_table MODIFY ID bigint(190) AUTO_INCREMENT");
+			$wpdb->query( "ALTER TABLE $stories_table ADD PRIMARY KEY (`ID`)" );    
+			$wpdb->query( "ALTER TABLE $stories_table MODIFY ID bigint(190) AUTO_INCREMENT" );
 
 			// Setting the AUTO_INCREMENT value based on number of remaining entries
 			$title_count++;
-			echo $wpdb->query($wpdb->prepare( "ALTER TABLE $stories_table AUTO_INCREMENT = %d", $title_count ) );
+			echo $wpdb->query( $wpdb->prepare( "ALTER TABLE $stories_table AUTO_INCREMENT = %d", $title_count ) );
 
 			wp_die();
 		}
