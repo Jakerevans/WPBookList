@@ -62,7 +62,7 @@ if ( ! class_exists( 'WPBookList_Library_Display_Options_Form', false ) ) :
 				<div id="wpbooklist-display-options-indiv-entry-wrapper">
 					<div class="wpbooklist-display-options-indiv-entry">
 						<div class="wpbooklist-display-options-label-div">
-							<img class="wpbooklist-icon-image-question-display-options wpbooklist-icon-image-question" data-label="library-display-form-booktitle" src="http://localhost:8888/local/wp-content/plugins/wpbooklist/assets/img/icons/question-black.svg">
+							<img class="wpbooklist-icon-image-question-display-options wpbooklist-icon-image-question" data-label="library-display-form-booktitle" src="' . ROOT_IMG_ICONS_URL . 'question-black.svg">
 							<label>' . $this->trans->trans_138 . '</label>
 						</div>
 						<div class="wpbooklist-margin-right-td">
@@ -71,7 +71,7 @@ if ( ! class_exists( 'WPBookList_Library_Display_Options_Form', false ) ) :
 					</div>
 					<div class="wpbooklist-display-options-indiv-entry">
 						<div class="wpbooklist-display-options-label-div">
-							<img class="wpbooklist-icon-image-question-display-options wpbooklist-icon-image-question" data-label="library-display-form-filter" src="http://localhost:8888/local/wp-content/plugins/wpbooklist/assets/img/icons/question-black.svg">
+							<img class="wpbooklist-icon-image-question-display-options wpbooklist-icon-image-question" data-label="library-display-form-filter" src="' . ROOT_IMG_ICONS_URL . 'question-black.svg">
 							<label>' . $this->trans->trans_248 . '</label>
 						</div>
 						<div class="wpbooklist-margin-right-td">
@@ -80,7 +80,7 @@ if ( ! class_exists( 'WPBookList_Library_Display_Options_Form', false ) ) :
 					</div>
 					<div class="wpbooklist-display-options-indiv-entry">
 						<div class="wpbooklist-display-options-label-div">
-							<img class="wpbooklist-icon-image-question-display-options wpbooklist-icon-image-question" data-label="library-display-form-editionsort" src="http://localhost:8888/local/wp-content/plugins/wpbooklist/assets/img/icons/question-black.svg">
+							<img class="wpbooklist-icon-image-question-display-options wpbooklist-icon-image-question" data-label="library-display-form-editionsort" src="' . ROOT_IMG_ICONS_URL . 'question-black.svg">
 							<label>' . $this->trans->trans_249 . '</label>
 						</div>
 						<div class="wpbooklist-margin-right-td">
@@ -89,7 +89,7 @@ if ( ! class_exists( 'WPBookList_Library_Display_Options_Form', false ) ) :
 					</div>
 					<div class="wpbooklist-display-options-indiv-entry">
 						<div class="wpbooklist-display-options-label-div">
-							<img class="wpbooklist-icon-image-question-display-options wpbooklist-icon-image-question" data-label="library-display-form-quote" src="http://localhost:8888/local/wp-content/plugins/wpbooklist/assets/img/icons/question-black.svg">
+							<img class="wpbooklist-icon-image-question-display-options wpbooklist-icon-image-question" data-label="library-display-form-quote" src="' . ROOT_IMG_ICONS_URL . 'question-black.svg">
 							<label>' . $this->trans->trans_250 . '</label>
 						</div>
 						<div class="wpbooklist-margin-right-td">
@@ -98,7 +98,7 @@ if ( ! class_exists( 'WPBookList_Library_Display_Options_Form', false ) ) :
 					</div>
 					<div class="wpbooklist-display-options-indiv-entry">
 						<div class="wpbooklist-display-options-label-div">
-							<img class="wpbooklist-icon-image-question-display-options wpbooklist-icon-image-question" data-label="library-display-form-reviewstars" src="http://localhost:8888/local/wp-content/plugins/wpbooklist/assets/img/icons/question-black.svg">
+							<img class="wpbooklist-icon-image-question-display-options wpbooklist-icon-image-question" data-label="library-display-form-reviewstars" src="' . ROOT_IMG_ICONS_URL . 'question-black.svg">
 							<label>' . $this->trans->trans_251 . '</label>
 						</div>
 						<div class="wpbooklist-margin-right-td">
@@ -107,7 +107,7 @@ if ( ! class_exists( 'WPBookList_Library_Display_Options_Form', false ) ) :
 					</div>
 					<div class="wpbooklist-display-options-indiv-entry">
 						<div class="wpbooklist-display-options-label-div">
-							<img class="wpbooklist-icon-image-question-display-options wpbooklist-icon-image-question" data-label="library-display-form-searchsort" src="http://localhost:8888/local/wp-content/plugins/wpbooklist/assets/img/icons/question-black.svg">
+							<img class="wpbooklist-icon-image-question-display-options wpbooklist-icon-image-question" data-label="library-display-form-searchsort" src="' . ROOT_IMG_ICONS_URL . 'question-black.svg">
 							<label>' . $this->trans->trans_252 . '</label>
 						</div>
 						<div class="wpbooklist-margin-right-td">
@@ -116,7 +116,7 @@ if ( ! class_exists( 'WPBookList_Library_Display_Options_Form', false ) ) :
 					</div>
 					<div class="wpbooklist-display-options-indiv-entry">
 						<div class="wpbooklist-display-options-label-div">
-							<img class="wpbooklist-icon-image-question-display-options wpbooklist-icon-image-question" data-label="library-display-form-signedsort" src="http://localhost:8888/local/wp-content/plugins/wpbooklist/assets/img/icons/question-black.svg">
+							<img class="wpbooklist-icon-image-question-display-options wpbooklist-icon-image-question" data-label="library-display-form-signedsort" src="' . ROOT_IMG_ICONS_URL . 'question-black.svg">
 							<label>' . $this->trans->trans_253 . '</label>
 						</div>
 						<div class="wpbooklist-margin-right-td">
@@ -125,7 +125,7 @@ if ( ! class_exists( 'WPBookList_Library_Display_Options_Form', false ) ) :
 					</div>
 					<div class="wpbooklist-display-options-indiv-entry">
 						<div class="wpbooklist-display-options-label-div">
-							<img class="wpbooklist-icon-image-question-display-options wpbooklist-icon-image-question" data-label="library-display-form-statistics" src="http://localhost:8888/local/wp-content/plugins/wpbooklist/assets/img/icons/question-black.svg">
+							<img class="wpbooklist-icon-image-question-display-options wpbooklist-icon-image-question" data-label="library-display-form-statistics" src="' . ROOT_IMG_ICONS_URL . 'question-black.svg">
 							<label>' . $this->trans->trans_254 . '</label>
 						</div>
 						<div class="wpbooklist-margin-right-td">
@@ -134,7 +134,7 @@ if ( ! class_exists( 'WPBookList_Library_Display_Options_Form', false ) ) :
 					</div>
 					<div class="wpbooklist-display-options-indiv-entry">
 						<div class="wpbooklist-display-options-label-div">
-							<img class="wpbooklist-icon-image-question-display-options wpbooklist-icon-image-question" data-label="library-display-form-subjectsort" src="http://localhost:8888/local/wp-content/plugins/wpbooklist/assets/img/icons/question-black.svg">
+							<img class="wpbooklist-icon-image-question-display-options wpbooklist-icon-image-question" data-label="library-display-form-subjectsort" src="' . ROOT_IMG_ICONS_URL . 'question-black.svg">
 							<label>' . $this->trans->trans_255 . '</label>
 						</div>
 						<div class="wpbooklist-margin-right-td">
@@ -143,7 +143,7 @@ if ( ! class_exists( 'WPBookList_Library_Display_Options_Form', false ) ) :
 					</div>
 					<div class="wpbooklist-display-options-indiv-entry">
 						<div class="wpbooklist-display-options-label-div">
-							<img class="wpbooklist-icon-image-question-display-options wpbooklist-icon-image-question" data-label="library-display-form-finished" src="http://localhost:8888/local/wp-content/plugins/wpbooklist/assets/img/icons/question-black.svg">
+							<img class="wpbooklist-icon-image-question-display-options wpbooklist-icon-image-question" data-label="library-display-form-finished" src="' . ROOT_IMG_ICONS_URL . 'question-black.svg">
 							<label>' . $this->trans->trans_256 . '</label>
 						</div>
 						<div class="wpbooklist-margin-right-td">

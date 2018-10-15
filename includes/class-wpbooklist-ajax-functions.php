@@ -1371,10 +1371,34 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 				) $charset_collate; ";
 				dbDelta( $sql_create_table2 );
 
-					$table_name = $wpdb->wpbooklist_jre_dynamic_db_name_settings;
+				$table_name = $wpdb->wpbooklist_jre_dynamic_db_name_settings;
 				$wpdb->insert( $table_name, array( 'ID' => 1 ) );
 
 				$wpdb->insert( $table_name_dynamic, array( 'user_table_name' => $db_name ) );
+
+				// Now we need to add any existing Custom Fields into this newly-created Librarys settings table
+				$default_settings = $wpdb->get_row( 'SELECT * FROM ' . $wpdb->prefix . 'wpbooklist_jre_user_options' );
+
+				if ( false !== stripos( $default_settings->customfields, '--' ) ) {
+
+					$fields = explode( '--', $default_settings->customfields );
+
+					foreach ( $fields as $key => $indivfield ) {
+
+						if ( false !== stripos( $indivfield, ';' ) ) {
+
+							$temp = explode( ';', $indivfield );
+							if ( 0 === $wpdb->query( "SHOW COLUMNS FROM `$table_name` LIKE 'hide" . $temp[0] . "'" ) ) {
+								$wpdb->query( "ALTER TABLE $table_name ADD hide" . $temp[0] . " bigint(255)" );
+							}
+						}
+					}
+				}
+
+				// ADD COLUMNS TO THE 'wpbooklist_jre_user_options' TABLE.
+				if ( 0 === $wpdb->query( "SHOW COLUMNS FROM `$table_name` LIKE 'activeposttemplate'" ) ) {
+					$wpdb->query( "ALTER TABLE $table_name ADD activeposttemplate varchar( 255 ) NOT NULL DEFAULT 'default'" );
+				}
 			}
 			wp_die();
 		}
@@ -1768,6 +1792,11 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 				$booksonpage = filter_var( wp_unslash( $_POST['booksonpage'] ), FILTER_SANITIZE_NUMBER_INT );
 			}
 
+			$customfieldsarray = null;
+			if ( isset( $_POST['customfieldsarray'] ) ) {
+				$customfieldsarray = filter_var_array(  wp_unslash( $_POST['customfieldsarray'] ), FILTER_SANITIZE_STRING );
+			}
+
 			$settings_array = array(
 				'booksonpage'         => $booksonpage,
 				'hideamazonpurchase'  => $hideamazonpurchase,
@@ -1819,7 +1848,10 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 				'hidesubgenre'        => $hidesubgenre,
 				'hidetwitter'         => $hidetwitter,
 				'sortoption'          => $sortoption,
+				'customfieldsarray'   => $customfieldsarray,
 			);
+
+			// Add in the Customfieldsarray 
 
 			require_once CLASS_DIR . 'class-display-options.php';
 			$settings_class = new WPBookList_Display_Options();
@@ -2185,6 +2217,10 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 				}
 
 				$row = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM $table_name WHERE ID = %d", 1 ) );
+
+				// Now get the Custom Fields string from the default settings table, and add that into the return results.
+				$default_settings = $wpdb->get_row( 'SELECT * FROM ' . $wpdb->prefix . 'wpbooklist_jre_user_options' );
+				$row->customfields = $default_settings->customfields;
 
 			}
 			wp_die( wp_json_encode( $row ) );

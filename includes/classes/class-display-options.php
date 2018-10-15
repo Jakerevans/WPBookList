@@ -16,101 +16,128 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 if ( ! class_exists( 'WPBookList_Display_Options', false ) ) :
-/**
- * WPBookList_Display_Options.
- */
-class WPBookList_Display_Options {
 
-	public function save_library_settings($table, $settings_array = array()){
+	/**
+	 * WPBookList_Display_Options.
+	 */
+	class WPBookList_Display_Options {
 
-		global $wpdb;
-		$final_table = '';
-		if(strpos($table, 'wpbooklist_jre_saved_book_log') !== false){
-			$final_table = $wpdb->prefix.'wpbooklist_jre_user_options';
-		} else {
-			$temp = explode('_', $table);
-			$size = sizeof($temp);
-			$temp = $temp[$size-1];
-			$final_table = $wpdb->prefix.'wpbooklist_jre_settings_'.$temp;
+		/**
+		 * Function to save Display Options.
+		 */
+		public function save_library_settings( $table, $settings_array = array() ) {
+
+			global $wpdb;
+			$final_table = '';
+			if ( false !== strpos($table, 'wpbooklist_jre_saved_book_log') ) {
+				$final_table = $wpdb->prefix . 'wpbooklist_jre_user_options';
+			} else {
+				$temp        = explode( '_', $table );
+				$size        = count( $temp );
+				$temp        = $temp[ $size - 1 ];
+				$final_table = $wpdb->prefix . 'wpbooklist_jre_settings_' . $temp;
+			}
+
+			foreach ( $settings_array as $key => $value ) {
+
+				if ( 'customfieldsarray' === $key && is_array( $value ) ) {
+
+					foreach ( $value as $key => $customfield ) {
+
+						if ( false === stripos( $customfield, 'undefined' ) ) {
+							$field = explode( ';', $customfield );
+
+							if ( 'false' === $field[1] ) {
+								$field[1] = 0;
+							}
+
+							if ( 'true' === $field[1] ) {
+								$field[1] = 1;
+							}
+
+							$settings_array[ 'hide'.$field[0] ] = $field[1];
+
+						}
+					}
+				}
+
+				// Remove the 'customfieldsarray' entry now that we're done with it, as that column does not exist in any of the db tables - was just for passing data to this function.
+				if ( 'customfieldsarray' === $key ) {
+					unset( $settings_array['customfieldsarray'] );
+				}
+
+				if ($value == 'false'){
+					$settings_array[$key] = 0;
+				}
+
+				if ($value == 'true'){
+					$settings_array[$key] = 1;
+				}
+
+
+			}
+
+	        $where = array( 'ID' => 1 );
+	        $result = $wpdb->update( $final_table, $settings_array, $where );
+
 		}
 
-		foreach($settings_array as $key=>$array){
-			if($array == 'false'){
-				$settings_array[$key] = 0;
+		public function save_post_settings($settings_array = array()){
+			global $wpdb;
+			$table = $wpdb->prefix.'wpbooklist_jre_post_options';
+
+			foreach($settings_array as $key=>$array){
+				if ($array == 'false'){
+					$settings_array[$key] = 0;
+				}
+
+				if ($array == 'true'){
+					$settings_array[$key] = 1;
+				}
 			}
 
-			if($array == 'true'){
-				$settings_array[$key] = 1;
+	        $where = array( 'ID' => 1 );
+	        $result = $wpdb->update( $table, $settings_array, $where);
+
+		}
+
+		public function save_page_settings($settings_array = array()){
+
+			global $wpdb;
+			$table = $wpdb->prefix.'wpbooklist_jre_page_options';
+
+			foreach($settings_array as $key=>$array){
+				if ($array == 'false'){
+					$settings_array[$key] = 0;
+				}
+
+				if ($array == 'true'){
+					$settings_array[$key] = 1;
+				}
 			}
+
+	        $where = array( 'ID' => 1 );
+	        $result = $wpdb->update( $table, $settings_array, $where);
 
 
 		}
 
+		public function get_page_display_settings(){
 
-        $where = array( 'ID' => 1 );
-        $result = $wpdb->update( $final_table, $settings_array, $where );
-
-        error_log($final_table);
-        error_log($result);
-
-	}
-
-	public function save_post_settings($settings_array = array()){
-		global $wpdb;
-		$table = $wpdb->prefix.'wpbooklist_jre_post_options';
-
-		foreach($settings_array as $key=>$array){
-			if($array == 'false'){
-				$settings_array[$key] = 0;
-			}
-
-			if($array == 'true'){
-				$settings_array[$key] = 1;
-			}
 		}
 
-        $where = array( 'ID' => 1 );
-        $result = $wpdb->update( $table, $settings_array, $where);
+		public function get_post_display_settings(){
 
-	}
-
-	public function save_page_settings($settings_array = array()){
-
-		global $wpdb;
-		$table = $wpdb->prefix.'wpbooklist_jre_page_options';
-
-		foreach($settings_array as $key=>$array){
-			if($array == 'false'){
-				$settings_array[$key] = 0;
-			}
-
-			if($array == 'true'){
-				$settings_array[$key] = 1;
-			}
 		}
 
-        $where = array( 'ID' => 1 );
-        $result = $wpdb->update( $table, $settings_array, $where);
+		public function get_library_display_settings($table){
+
+		}
+
+		
+
 
 
 	}
-
-	public function get_page_display_settings(){
-
-	}
-
-	public function get_post_display_settings(){
-
-	}
-
-	public function get_library_display_settings($table){
-
-	}
-
-	
-
-
-
-}
 
 endif;
