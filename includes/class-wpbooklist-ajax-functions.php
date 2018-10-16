@@ -3113,7 +3113,7 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 
 			require_once CLASS_BOOK_DIR . 'class-wpbooklist-book.php';
 			$book_class = new WPBookList_Book;
-			$delete_result = $book_class->delete_book( $library, $book_id, $delete_strinG );
+			$delete_result = $book_class->delete_book( $library, $book_id, $delete_string );
 			echo $delete_result;
 			wp_die();
 		}
@@ -3452,7 +3452,7 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 			// Creating array of Page/Post IDs to delete
 			if ( $delete_string != null && $delete_string != ''){
 				$delete_string = ltrim( $delete_string, 'sep' );
-				$delete_page_post_array = explode( 'sep', $delete_strinG );
+				$delete_page_post_array = explode( 'sep', $delete_string );
 			}	
 
 

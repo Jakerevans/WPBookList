@@ -2459,13 +2459,13 @@ if ( ! class_exists( 'WPBookList_Book', false ) ) :
 				// Each of these class instantiations will return the ID of the page/post created for storage in DB.
 				$page = $this->page_id;
 				$post = $this->post_id;
-				if ( 'Yes' === $this->page_yes && ( 'false' === $this->page_id || 'true' === $this->page_id ) ) {
+				if ( 'Yes' === $this->page_yes ) {
 					require_once CLASS_PAGE_DIR . 'class-wpbooklist-page.php';
 					$page = new WPBookList_Page( $page_post_array );
 					$page = $page->create_result;
 				}
 
-				if ( 'Yes' === $this->post_yes && ( 'false' === $this->post_id || 'true' === $this->post_id ) ) {
+				if ( 'Yes' === $this->post_yes ) {
 					require_once CLASS_POST_DIR . 'class-wpbooklist-post.php';
 					$post = new WPBookList_Post( $page_post_array );
 					$post = $post->post_id;
@@ -2594,6 +2594,7 @@ if ( ! class_exists( 'WPBookList_Book', false ) ) :
 				foreach ( $delete_array as $delete ) {
 					$delete_result = wp_delete_post( $delete, true );
 
+					$d_result = '';
 					if ( $delete_result ) {
 						$d_result = 1;
 					}

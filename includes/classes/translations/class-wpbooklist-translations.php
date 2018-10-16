@@ -317,6 +317,8 @@ if ( ! class_exists( 'WPBookList_Translations', false ) ) :
 			$this->trans_285 = __( 'Pinterest Share Button', 'wpbooklist' );
 			$this->trans_286 = __( 'Twitter Share Button', 'wpbooklist' );
 			$this->trans_287 = __( 'Here you can set what display options are visible or hidden in your WPBookList Posts. Place checkmarks in the checkboxes for the items you want hidden, and click the \'Save Changes\' button at the bottom of the page.', 'wpbooklist' );
+			$this->trans_288 = __( 'Here you can set what display options are visible or hidden in your WPBookList Pages. Place checkmarks in the checkboxes for the items you want hidden, and click the \'Save Changes\' button at the bottom of the page.', 'wpbooklist' );
+			$this->trans_289 = __( 'Already Created', 'wpbooklist' );
 
 			// The array of translation strings.
 			$translation_array = array(
@@ -567,6 +569,48 @@ if ( ! class_exists( 'WPBookList_Translations', false ) ) :
 				'trans245' => $this->trans_245,
 				'trans246' => $this->trans_246,
 				'trans247' => $this->trans_247,
+				'trans248' => $this->trans_248,
+				'trans249' => $this->trans_249,
+				'trans250' => $this->trans_250,
+				'trans251' => $this->trans_251,
+				'trans252' => $this->trans_252,
+				'trans253' => $this->trans_253,
+				'trans254' => $this->trans_254,
+				'trans255' => $this->trans_255,
+				'trans256' => $this->trans_256,
+				'trans257' => $this->trans_257,
+				'trans258' => $this->trans_258,
+				'trans259' => $this->trans_259,
+				'trans260' => $this->trans_260,
+				'trans261' => $this->trans_261,
+				'trans262' => $this->trans_262,
+				'trans263' => $this->trans_263,
+				'trans264' => $this->trans_264,
+				'trans265' => $this->trans_265,
+				'trans266' => $this->trans_266,
+				'trans267' => $this->trans_267,
+				'trans268' => $this->trans_268,
+				'trans269' => $this->trans_269,
+				'trans270' => $this->trans_270,
+				'trans271' => $this->trans_271,
+				'trans272' => $this->trans_272,
+				'trans273' => $this->trans_273,
+				'trans274' => $this->trans_274,
+				'trans275' => $this->trans_275,
+				'trans276' => $this->trans_276,
+				'trans277' => $this->trans_277,
+				'trans278' => $this->trans_278,
+				'trans279' => $this->trans_279,
+				'trans280' => $this->trans_280,
+				'trans281' => $this->trans_281,
+				'trans282' => $this->trans_282,
+				'trans283' => $this->trans_283,
+				'trans284' => $this->trans_284,
+				'trans285' => $this->trans_285,
+				'trans286' => $this->trans_286,
+				'trans287' => $this->trans_287,
+				'trans288' => $this->trans_288,
+				'trans289' => $this->trans_289,
 
 			);
 

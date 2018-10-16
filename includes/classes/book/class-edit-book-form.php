@@ -121,7 +121,7 @@ class WPBookList_Edit_Book_Form {
 
 			// The loop that will construct each line
 			foreach($this->books_actual as $key=>$book){
-				if(($key >= ($offset)) && ($key <= ($offset+EDIT_PAGE_OFFSET))){
+				if(($key >= ($offset)) && ($key < ($offset+EDIT_PAGE_OFFSET))){
 
 				if($book->title == '' || $book->title == null){
 					$book->title = 'Book Title Unavailable!';

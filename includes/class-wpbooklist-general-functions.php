@@ -1812,6 +1812,20 @@ if ( ! class_exists( 'WPBookList_General_Functions', false ) ) :
 							$link = $options_row[0]->amazon_detail_page;
 						}
 						break;
+					case 'page':
+						$class = 'class="wpbooklist_jre_book_cover_shortcode_link"';
+						$link  = get_permalink( $options_row[0]->page_yes );
+						if ( null === $link ) {
+							$link = $options_row[0]->amazon_detail_page;
+						}
+						break;
+					case 'post':
+						$class = 'class="wpbooklist_jre_book_cover_shortcode_link"';
+						$link  = get_permalink( $options_row[0]->post_yes );
+						if ( null === $link ) {
+							$link = $options_row[0]->amazon_detail_post;
+						}
+						break;
 					case 'bookview':
 						$class = 'class="wpbooklist_jre_book_cover_shortcode_link wpbooklist-show-book-colorbox"';
 						break;

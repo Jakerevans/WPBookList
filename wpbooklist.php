@@ -142,7 +142,7 @@ global $wpdb;
 	define( 'PAGE_POST_TEMPLATES_DEFAULT_DIR', ROOT_DIR . 'includes/templates/' );
 
 	// Define the edit page offset.
-	define( 'EDIT_PAGE_OFFSET', 10 );
+	define( 'EDIT_PAGE_OFFSET', 100 );
 
 	// Nonces array.
 	define( 'WPBOOKLIST_NONCES_ARRAY',

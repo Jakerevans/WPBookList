@@ -24,9 +24,6 @@ if ( ! class_exists( 'WPBookList_Page', false ) ) :
 		 */
 		public function __construct( $book_array ) {
 
-			$this->amazon_auth_yes    = $book_array['amazonauth'];
-			$this->library            = $book_array['library'];
-			$this->use_amazon_yes     = $book_array['use_amazon_yes'];
 			$this->isbn               = $book_array['isbn'];
 			$this->title              = $book_array['title'];
 			$this->author             = $book_array['author'];
