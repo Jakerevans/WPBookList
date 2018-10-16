@@ -36,6 +36,7 @@ if ( ! class_exists( 'WPBookList_Library_Display_Options_Form', false ) ) :
 		 * Outputs all HTML elements on the page.
 		 */
 		public function output_library_display_options_form() {
+			
 			global $wpdb;
 			// Getting all user-created libraries.
 			$db_row = $wpdb->get_results( 'SELECT * FROM ' . $wpdb->prefix . 'wpbooklist_jre_list_dynamic_db_names' );

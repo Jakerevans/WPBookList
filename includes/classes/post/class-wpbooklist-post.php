@@ -26,7 +26,7 @@ if ( ! class_exists( 'WPBookList_Post', false ) ) :
 		 */
 		public function __construct( $book_array ) {
 
-			$this->amazon_auth_yes    = $book_array['amazon_auth_yes'];
+			$this->amazon_auth_yes    = $book_array['amazonauth'];
 			$this->library            = $book_array['library'];
 			$this->use_amazon_yes     = $book_array['use_amazon_yes'];
 			$this->isbn               = $book_array['isbn'];
@@ -153,8 +153,8 @@ if ( ! class_exists( 'WPBookList_Post', false ) ) :
 			$image_data = wp_remote_get( $image_url );
 
 			// Check the response code.
-			$response_code    = wp_remote_retrieve_response_code( $result );
-			$response_message = wp_remote_retrieve_response_message( $result );
+			$response_code    = wp_remote_retrieve_response_code( $image_data );
+			$response_message = wp_remote_retrieve_response_message( $image_data );
 
 			if ( 200 !== $response_code && ! empty( $response_message ) ) {
 				return new WP_Error( $response_code, $response_message );
@@ -170,6 +170,13 @@ if ( ! class_exists( 'WPBookList_Post', false ) ) :
 				$file = $upload_dir['path'] . '/' . $filename;
 			} else {
 				$file = $upload_dir['basedir'] . '/' . $filename;
+			}
+
+			// Initialize the WP filesystem.
+			global $wp_filesystem;
+			if ( empty( $wp_filesystem ) ) {
+				require_once ABSPATH . '/wp-admin/includes/file.php';
+				WP_Filesystem();
 			}
 
 			$result      = $wp_filesystem->put_contents( $file, $image_data );

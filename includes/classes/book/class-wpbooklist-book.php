@@ -1829,7 +1829,7 @@ if ( ! class_exists( 'WPBookList_Book', false ) ) :
 			// Create a unique identifier for this book.
 			$this->book_uid = uniqid();
 
-			if ( $this->page_yes || $this->post_yes ) {
+			if ( 'Yes' === $this->page_yes || 'Yes' === $this->post_yes ) {
 				$page_post_array = array(
 					'library'            => $this->library,
 					'amazonauth'    => $this->amazonauth,
@@ -1874,14 +1874,14 @@ if ( ! class_exists( 'WPBookList_Book', false ) ) :
 				$page = $this->page_yes;
 				$post = $this->post_yes;
 
-				if ( 'true' === $this->post_yes ) {
-					require_once CLASS_POST_DIR . 'class-post.php';
+				if ( 'Yes' === $this->post_yes ) {
+					require_once CLASS_POST_DIR . 'class-wpbooklist-post.php';
 					$post = new WPBookList_Post( $page_post_array );
 					$post = $post->post_id;
 				}
 
-				if ( 'true' === $this->page_yes ) {
-					require_once CLASS_PAGE_DIR . 'class-page.php';
+				if ( 'Yes' === $this->page_yes ) {
+					require_once CLASS_PAGE_DIR . 'class-wpbooklist-page.php';
 					$page = new WPBookList_Page( $page_post_array );
 					$page = $page->create_result;
 				}
@@ -1942,9 +1942,9 @@ if ( ! class_exists( 'WPBookList_Book', false ) ) :
 				'originalpubyear'    => $this->originalpubyear,
 				'originaltitle'      => $this->originaltitle,
 				'outofprint'         => $this->outofprint,
-				'page_yes'           => $this->page_yes,
+				'page_yes'           => $page,
 				'pages'              => $this->pages,
-				'post_yes'           => $this->post_yes,
+				'post_yes'           => $post,
 				'pub_year'           => $this->pub_year,
 				'publisher'          => $this->publisher,
 				'rating'             => $this->rating,
@@ -2421,7 +2421,7 @@ if ( ! class_exists( 'WPBookList_Book', false ) ) :
 
 			$page = null;
 			$post = null;
-			if ( $this->page_yes || $this->post_yes ) {
+			if ( 'Yes' === $this->page_yes || 'Yes' === $this->post_yes ) {
 
 				$page_post_array = array(
 					'title'              => $this->title,
@@ -2459,14 +2459,14 @@ if ( ! class_exists( 'WPBookList_Book', false ) ) :
 				// Each of these class instantiations will return the ID of the page/post created for storage in DB.
 				$page = $this->page_id;
 				$post = $this->post_id;
-				if ( 'true' === $this->page_yes && ( 'false' === $this->page_id || 'true' === $this->page_id ) ) {
-					require_once CLASS_PAGE_DIR . 'class-page.php';
+				if ( 'Yes' === $this->page_yes && ( 'false' === $this->page_id || 'true' === $this->page_id ) ) {
+					require_once CLASS_PAGE_DIR . 'class-wpbooklist-page.php';
 					$page = new WPBookList_Page( $page_post_array );
 					$page = $page->create_result;
 				}
 
-				if ( 'true' === $this->post_yes && ( 'false' === $this->post_id || 'true' === $this->post_id ) ) {
-					require_once CLASS_POST_DIR . 'class-post.php';
+				if ( 'Yes' === $this->post_yes && ( 'false' === $this->post_id || 'true' === $this->post_id ) ) {
+					require_once CLASS_POST_DIR . 'class-wpbooklist-post.php';
 					$post = new WPBookList_Post( $page_post_array );
 					$post = $post->post_id;
 				}

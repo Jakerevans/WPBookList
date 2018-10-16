@@ -189,7 +189,9 @@ global $wpdb;
 			'adminnonce41' => 'wpbooklist_seed_book_form_autocomplete_action_callback',
 			'adminnonce42' => 'wpbooklist_dashboard_edit_book_action_callback',
 			'adminnonce43' => 'wpbooklist_get_library_view_display_options_action_callback',
-			'adminnonce44'  => 'wpbooklist_dashboard_save_book_display_options_action_callback',
+			'adminnonce44' => 'wpbooklist_dashboard_save_book_display_options_action_callback',
+			'adminnonce45' => 'wpbooklist_get_post_display_options_action_callback',
+			'adminnonce46' => 'wpbooklist_get_page_display_options_action_callback',
 		))
 	);
 
@@ -456,6 +458,12 @@ global $wpdb;
 
 	// Function to populate the Library View Display Options checkboxes.
 	add_action( 'wp_ajax_wpbooklist_get_library_view_display_options_action', array( $wp_book_list_ajax_functions, 'wpbooklist_get_library_view_display_options_action_callback' ) );
+
+	// Function to populate the Library View Display Options checkboxes.
+	add_action( 'wp_ajax_wpbooklist_get_post_display_options_action', array( $wp_book_list_ajax_functions, 'wpbooklist_get_post_display_options_action_callback' ) );
+
+	// Function to populate the Library View Display Options checkboxes.
+	add_action( 'wp_ajax_wpbooklist_get_page_display_options_action', array( $wp_book_list_ajax_functions, 'wpbooklist_get_page_display_options_action_callback' ) );
 
 
 

@@ -24,7 +24,7 @@ if ( ! class_exists( 'WPBookList_Page', false ) ) :
 		 */
 		public function __construct( $book_array ) {
 
-			$this->amazon_auth_yes    = $book_array['amazon_auth_yes'];
+			$this->amazon_auth_yes    = $book_array['amazonauth'];
 			$this->library            = $book_array['library'];
 			$this->use_amazon_yes     = $book_array['use_amazon_yes'];
 			$this->isbn               = $book_array['isbn'];
@@ -138,8 +138,8 @@ if ( ! class_exists( 'WPBookList_Page', false ) ) :
 			$image_data = wp_remote_get( $image_url );
 
 			// Check the response code.
-			$response_code    = wp_remote_retrieve_response_code( $result );
-			$response_message = wp_remote_retrieve_response_message( $result );
+			$response_code    = wp_remote_retrieve_response_code( $image_data );
+			$response_message = wp_remote_retrieve_response_message( $image_data );
 
 			if ( 200 !== $response_code && ! empty( $response_message ) ) {
 				return new WP_Error( $response_code, $response_message );

@@ -765,6 +765,8 @@ class WPBookList_Show_Book_In_Colorbox {
 							                        }
 
 							                        $string42 = '';
+							                        error_log('$page id!!');
+							                        error_log($this->page_id);
 							                        if($this->hidebookpage != 1 && $this->page_id != null && $this->page_id != 'false'){
 							                        	$string42 = '<tr>
 						                                    <td>

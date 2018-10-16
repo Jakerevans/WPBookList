@@ -20,7 +20,7 @@ class WPBookList_Posts_Display_Options_Tab {
 
     public function __construct() {
     	require_once(CLASS_DIR.'class-admin-ui-template.php');
-    	require_once(CLASS_POST_DIR.'class-posts-display-options-form.php');
+    	require_once(CLASS_POST_DIR.'class-wpbooklist-posts-display-options-form.php');
     	// Instantiate the class
 		$this->template = new WPBookList_Admin_UI_Template;
 		$this->form = new WPBookList_Posts_Display_Options_Form;
@@ -37,7 +37,7 @@ class WPBookList_Posts_Display_Options_Tab {
     }
 
     private function output_tab_content(){
-    	echo $this->form->output_add_edit_form();
+    	echo $this->form->output_posts_display_options_form();
     }
 
     #TODO: Replace that 'Book Added Succesfully!' line above with a link to open the title in colorbox, once that functionality is complete

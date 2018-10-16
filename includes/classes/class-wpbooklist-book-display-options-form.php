@@ -62,15 +62,6 @@ if ( ! class_exists( 'WPBookList_Book_Display_Options_Form', false ) ) :
 					<div class="wpbooklist-spinner" id="wpbooklist-spinner-2"></div>
 					<div class="wpbooklist-display-options-indiv-entry">
 						<div class="wpbooklist-display-options-label-div">
-							<img class="wpbooklist-icon-image-question-display-options wpbooklist-icon-image-question" data-label="library-display-form-amazonpurchaselink" src="' . ROOT_IMG_ICONS_URL . 'question-black.svg">
-							<label>' . $this->trans->trans_265 . '</label>
-						</div>
-						<div class="wpbooklist-margin-right-td">
-							<input type="checkbox" name="hide-library-display-form-amazonpurchaselink"></input>
-						</div>
-					</div>
-					<div class="wpbooklist-display-options-indiv-entry">
-						<div class="wpbooklist-display-options-label-div">
 							<img class="wpbooklist-icon-image-question-display-options wpbooklist-icon-image-question" data-label="library-display-form-amaonreviews" src="' . ROOT_IMG_ICONS_URL . 'question-black.svg">
 							<label>' . $this->trans->trans_266 . '</label>
 						</div>
@@ -112,24 +103,6 @@ if ( ! class_exists( 'WPBookList_Book_Display_Options_Form', false ) ) :
 						</div>
 						<div class="wpbooklist-margin-right-td">
 							<input type="checkbox" name="hide-library-display-form-bookfinished"></input>
-						</div>
-					</div>
-					<div class="wpbooklist-display-options-indiv-entry">
-						<div class="wpbooklist-display-options-label-div">
-							<img class="wpbooklist-icon-image-question-display-options wpbooklist-icon-image-question" data-label="library-display-form-bookpagelink" src="' . ROOT_IMG_ICONS_URL . 'question-black.svg">
-							<label>' . $this->trans->trans_269 . '</label>
-						</div>
-						<div class="wpbooklist-margin-right-td">
-							<input type="checkbox" name="hide-library-display-form-bookpagelink"></input>
-						</div>
-					</div>
-					<div class="wpbooklist-display-options-indiv-entry">
-						<div class="wpbooklist-display-options-label-div">
-							<img class="wpbooklist-icon-image-question-display-options wpbooklist-icon-image-question" data-label="library-display-form-bookpostlink" src="' . ROOT_IMG_ICONS_URL . 'question-black.svg">
-							<label>' . $this->trans->trans_270 . '</label>
-						</div>
-						<div class="wpbooklist-margin-right-td">
-							<input type="checkbox" name="hide-library-display-form-bookpostlink"></input>
 						</div>
 					</div>
 					<div class="wpbooklist-display-options-indiv-entry">

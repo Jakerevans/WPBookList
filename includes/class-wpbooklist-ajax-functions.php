@@ -1836,7 +1836,6 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 				'hideorigtitle'       => $hideorigtitle,
 				'hideothereditions'   => $hideothereditions,
 				'hideoutofprint'      => $hideoutofprint,
-				'hidebookpage'        => $hidebookpage,
 				'hidepinterest'       => $hidepinterest,
 				'hidepubdate'         => $hidepubdate,
 				'hidepublisher'       => $hidepublisher,
@@ -1851,8 +1850,6 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 				'customfieldsarray'   => $customfieldsarray,
 			);
 
-			// Add in the Customfieldsarray 
-
 			require_once CLASS_DIR . 'class-display-options.php';
 			$settings_class = new WPBookList_Display_Options();
 			$settings_class->save_library_settings( $library, $settings_array );
@@ -1866,160 +1863,334 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 			global $wpdb;
 			check_ajax_referer( 'wpbooklist_dashboard_save_post_display_options_action_callback', 'security' );
 
-			if ( isset( $_POST['enablepurchase'] ) ) {
-				$enablepurchase = filter_var( wp_unslash( $_POST['enablepurchase'] ), FILTER_SANITIZE_STRING );
-			}
-			if ( isset( $_POST['hidefacebook'] ) ) {
-				$hidefacebook = filter_var( wp_unslash( $_POST['hidefacebook'] ), FILTER_SANITIZE_STRING );
-			}
-			if ( isset( $_POST['hidetwitter'] ) ) {
-				$hidetwitter = filter_var( wp_unslash( $_POST['hidetwitter'] ), FILTER_SANITIZE_STRING );
-			}
-			if ( isset( $_POST['hidegoogleplus'] ) ) {
-				$hidegoogleplus = filter_var( wp_unslash( $_POST['hidegoogleplus'] ), FILTER_SANITIZE_STRING );
-			}
-			if ( isset( $_POST['hidemessenger'] ) ) {
-				$hidemessenger = filter_var( wp_unslash( $_POST['hidemessenger'] ), FILTER_SANITIZE_STRING );
-			}
-			if ( isset( $_POST['hidepinterest'] ) ) {
-				$hidepinterest = filter_var( wp_unslash( $_POST['hidepinterest'] ), FILTER_SANITIZE_STRING );
-			}
-			if ( isset( $_POST['hideemail'] ) ) {
-				$hideemail = filter_var( wp_unslash( $_POST['hideemail'] ), FILTER_SANITIZE_STRING );
-			}
-			if ( isset( $_POST['hideamazonreview'] ) ) {
-				$hideamazonreview = filter_var( wp_unslash( $_POST['hideamazonreview'] ), FILTER_SANITIZE_STRING );
-			}
-			if ( isset( $_POST['hidedescription'] ) ) {
-				$hidedescription = filter_var( wp_unslash( $_POST['hidedescription'] ), FILTER_SANITIZE_STRING );
-			}
-			if ( isset( $_POST['hidesimilar'] ) ) {
-				$hidesimilar = filter_var( wp_unslash( $_POST['hidesimilar'] ), FILTER_SANITIZE_STRING );
-			}
-			if ( isset( $_POST['hidetitle'] ) ) {
-				$hidetitle = filter_var( wp_unslash( $_POST['hidetitle'] ), FILTER_SANITIZE_STRING );
-			}
-			if ( isset( $_POST['hidebookimage'] ) ) {
-				$hidebookimage = filter_var( wp_unslash( $_POST['hidebookimage'] ), FILTER_SANITIZE_STRING );
-			}
-			if ( isset( $_POST['hidefinished'] ) ) {
-				$hidefinished = filter_var( wp_unslash( $_POST['hidefinished'] ), FILTER_SANITIZE_STRING );
-			}
-			if ( isset( $_POST['hideauthor'] ) ) {
-				$hideauthor = filter_var( wp_unslash( $_POST['hideauthor'] ), FILTER_SANITIZE_STRING );
-			}
-			if ( isset( $_POST['hidecategory'] ) ) {
-				$hidecategory = filter_var( wp_unslash( $_POST['hidecategory'] ), FILTER_SANITIZE_STRING );
-			}
-			if ( isset( $_POST['hidepages'] ) ) {
-				$hidepages = filter_var( wp_unslash( $_POST['hidepages'] ), FILTER_SANITIZE_STRING );
-			}
-			if ( isset( $_POST['hidepublisher'] ) ) {
-				$hidepublisher = filter_var( wp_unslash( $_POST['hidepublisher'] ), FILTER_SANITIZE_STRING );
-			}
-			if ( isset( $_POST['hidepubdate'] ) ) {
-				$hidepubdate = filter_var( wp_unslash( $_POST['hidepubdate'] ), FILTER_SANITIZE_STRING );
-			}
-			if ( isset( $_POST['hidesigned'] ) ) {
-				$hidesigned = filter_var( wp_unslash( $_POST['hidesigned'] ), FILTER_SANITIZE_STRING );
-			}
-			if ( isset( $_POST['hidesubject'] ) ) {
-				$hidesubject = filter_var( wp_unslash( $_POST['hidesubject'] ), FILTER_SANITIZE_STRING );
-			}
-			if ( isset( $_POST['hidecountry'] ) ) {
-				$hidecountry = filter_var( wp_unslash( $_POST['hidecountry'] ), FILTER_SANITIZE_STRING );
-			}
-			if ( isset( $_POST['hidefirstedition'] ) ) {
-				$hidefirstedition= filter_var( wp_unslash( $_POST['hidefirstedition'] ), FILTER_SANITIZE_STRING );
-			}
-			if ( isset( $_POST['hidefeaturedtitles'] ) ) { 
-				$hidefeaturedtitles = filter_var( wp_unslash( $_POST['hidefeaturedtitles'] ), FILTER_SANITIZE_STRING );
-			}
-			if ( isset( $_POST['hidenotes'] ) ) {
-				$hidenotes = filter_var( wp_unslash( $_POST['hidenotes'] ), FILTER_SANITIZE_STRING );
-			}
-			if ( isset( $_POST['hidequote'] ) ) {
-				$hidequote = filter_var( wp_unslash( $_POST['hidequote'] ), FILTER_SANITIZE_STRING );
-			}
 			if ( isset( $_POST['hiderating'] ) ) {
 				$hiderating = filter_var( wp_unslash( $_POST['hiderating'] ), FILTER_SANITIZE_STRING );
 			}
+
+			if ( isset( $_POST['hidequote'] ) ) {
+				$hidequote = filter_var( wp_unslash( $_POST['hidequote'] ), FILTER_SANITIZE_STRING );
+			}
+
+			if ( isset( $_POST['hidefacebook'] ) ) {
+				$hidefacebook = filter_var( wp_unslash( $_POST['hidefacebook'] ), FILTER_SANITIZE_STRING );
+			}
+
+			if ( isset( $_POST['hideasin'] ) ) {
+				$hideasin = filter_var( wp_unslash( $_POST['hideasin'] ), FILTER_SANITIZE_STRING );
+			}
+
+			if ( isset( $_POST['hideformat'] ) ) {
+				$hideformat = filter_var( wp_unslash( $_POST['hideformat'] ), FILTER_SANITIZE_STRING );
+			}
+
+			if ( isset( $_POST['hidegenres'] ) ) {
+				$hidegenres = filter_var( wp_unslash( $_POST['hidegenres'] ), FILTER_SANITIZE_STRING );
+			}
+
+			if ( isset( $_POST['hideillustrator'] ) ) {
+				$hideillustrator = filter_var( wp_unslash( $_POST['hideillustrator'] ), FILTER_SANITIZE_STRING );
+			}
+
+			if ( isset( $_POST['hideisbn10'] ) ) {
+				$hideisbn10 = filter_var( wp_unslash( $_POST['hideisbn10'] ), FILTER_SANITIZE_STRING );
+			}
+
+			if ( isset( $_POST['hideisbn13'] ) ) {
+				$hideisbn13 = filter_var( wp_unslash( $_POST['hideisbn13'] ), FILTER_SANITIZE_STRING );
+			}
+
+			if ( isset( $_POST['hidekeywords'] ) ) {
+				$hidekeywords = filter_var( wp_unslash( $_POST['hidekeywords'] ), FILTER_SANITIZE_STRING );
+			}
+
+			if ( isset( $_POST['hidelanguage'] ) ) {
+				$hidelanguage = filter_var( wp_unslash( $_POST['hidelanguage'] ), FILTER_SANITIZE_STRING );
+			}
+
+			if ( isset( $_POST['hidenumberinseries'] ) ) {
+				$hidenumberinseries = filter_var( wp_unslash( $_POST['hidenumberinseries'] ), FILTER_SANITIZE_STRING );
+			}
+
+			if ( isset( $_POST['hideorigpubyear'] ) ) {
+				$hideorigpubyear = filter_var( wp_unslash( $_POST['hideorigpubyear'] ), FILTER_SANITIZE_STRING );
+			}
+
+			if ( isset( $_POST['hideorigtitle'] ) ) {
+				$hideorigtitle = filter_var( wp_unslash( $_POST['hideorigtitle'] ), FILTER_SANITIZE_STRING );
+			}
+
+			if ( isset( $_POST['hideothereditions'] ) ) {
+				$hideothereditions = filter_var( wp_unslash( $_POST['hideothereditions'] ), FILTER_SANITIZE_STRING );
+			}
+
+			if ( isset( $_POST['hideoutofprint'] ) ) {
+				$hideoutofprint = filter_var( wp_unslash( $_POST['hideoutofprint'] ), FILTER_SANITIZE_STRING );
+			}
+
+			if ( isset( $_POST['hideseries'] ) ) {
+				$hideseries = filter_var( wp_unslash( $_POST['hideseries'] ), FILTER_SANITIZE_STRING );
+			}
+
+			if ( isset( $_POST['hideshortdesc'] ) ) {
+				$hideshortdesc = filter_var( wp_unslash( $_POST['hideshortdesc'] ), FILTER_SANITIZE_STRING );
+			}
+
+			if ( isset( $_POST['hidesubgenre'] ) ) {
+				$hidesubgenre = filter_var( wp_unslash( $_POST['hidesubgenre'] ), FILTER_SANITIZE_STRING );
+			}
+
+			if ( isset( $_POST['hidecallnumber'] ) ) {
+				$hidecallnumber = filter_var( wp_unslash( $_POST['hidecallnumber'] ), FILTER_SANITIZE_STRING );
+			}
+
+			if ( isset( $_POST['hidetwitter'] ) ) {
+				$hidetwitter = filter_var( wp_unslash( $_POST['hidetwitter'] ), FILTER_SANITIZE_STRING );
+			}
+
+			if ( isset( $_POST['hidegoogleplus'] ) ) {
+				$hidegoogleplus = filter_var( wp_unslash( $_POST['hidegoogleplus'] ), FILTER_SANITIZE_STRING );
+			}
+
+			if ( isset( $_POST['hidemessenger'] ) ) {
+				$hidemessenger = filter_var( wp_unslash( $_POST['hidemessenger'] ), FILTER_SANITIZE_STRING );
+			}
+
+			if ( isset( $_POST['hidepinterest'] ) ) {
+				$hidepinterest = filter_var( wp_unslash( $_POST['hidepinterest'] ), FILTER_SANITIZE_STRING );
+			}
+
+			if ( isset( $_POST['hideemail'] ) ) {
+				$hideemail = filter_var( wp_unslash( $_POST['hideemail'] ), FILTER_SANITIZE_STRING );
+			}
+
+			if ( isset( $_POST['hideamazonreview'] ) ) {
+				$hideamazonreview = filter_var( wp_unslash( $_POST['hideamazonreview'] ), FILTER_SANITIZE_STRING );
+			}
+
+			if ( isset( $_POST['hidedescription'] ) ) {
+				$hidedescription = filter_var( wp_unslash( $_POST['hidedescription'] ), FILTER_SANITIZE_STRING );
+			}
+
+			if ( isset( $_POST['hidesimilar'] ) ) {
+				$hidesimilar = filter_var( wp_unslash( $_POST['hidesimilar'] ), FILTER_SANITIZE_STRING );
+			}
+
+			if ( isset( $_POST['hidebooktitle'] ) ) {
+				$hidebooktitle = filter_var( wp_unslash( $_POST['hidebooktitle'] ), FILTER_SANITIZE_STRING );
+			}
+
+			if ( isset( $_POST['hidebookimage'] ) ) {
+				$hidebookimage = filter_var( wp_unslash( $_POST['hidebookimage'] ), FILTER_SANITIZE_STRING );
+			}
+
+			if ( isset( $_POST['hidefinished'] ) ) {
+				$hidefinished = filter_var( wp_unslash( $_POST['hidefinished'] ), FILTER_SANITIZE_STRING );
+			}
+
+			if ( isset( $_POST['hideauthor'] ) ) {
+				$hideauthor = filter_var( wp_unslash( $_POST['hideauthor'] ), FILTER_SANITIZE_STRING );
+			}
+
+			if ( isset( $_POST['hidecategory'] ) ) {
+				$hidecategory = filter_var( wp_unslash( $_POST['hidecategory'] ), FILTER_SANITIZE_STRING );
+			}
+
+			if ( isset( $_POST['hidepages'] ) ) {
+				$hidepages = filter_var( wp_unslash( $_POST['hidepages'] ), FILTER_SANITIZE_STRING );
+			}
+
+			if ( isset( $_POST['hidepublisher'] ) ) {
+				$hidepublisher = filter_var( wp_unslash( $_POST['hidepublisher'] ), FILTER_SANITIZE_STRING );
+			}
+
+			if ( isset( $_POST['hidepubdate'] ) ) {
+				$hidepubdate = filter_var( wp_unslash( $_POST['hidepubdate'] ), FILTER_SANITIZE_STRING );
+			}
+
+			if ( isset( $_POST['hidesigned'] ) ) {
+				$hidesigned = filter_var( wp_unslash( $_POST['hidesigned'] ), FILTER_SANITIZE_STRING );
+			}
+
+			if ( isset( $_POST['hidesubject'] ) ) {
+				$hidesubject = filter_var( wp_unslash( $_POST['hidesubject'] ), FILTER_SANITIZE_STRING );
+			}
+
+			if ( isset( $_POST['hidecountry'] ) ) {
+				$hidecountry = filter_var( wp_unslash( $_POST['hidecountry'] ), FILTER_SANITIZE_STRING );
+			}
+
+			if ( isset( $_POST['hidefirstedition'] ) ) {
+				$hidefirstedition = filter_var( wp_unslash( $_POST['hidefirstedition'] ), FILTER_SANITIZE_STRING );
+			}
+
+			if ( isset( $_POST['hidefeaturedtitles'] ) ) {
+				$hidefeaturedtitles = filter_var( wp_unslash( $_POST['hidefeaturedtitles'] ), FILTER_SANITIZE_STRING );
+			}
+
+			if ( isset( $_POST['hidenotes'] ) ) {
+				$hidenotes = filter_var( wp_unslash( $_POST['hidenotes'] ), FILTER_SANITIZE_STRING );
+			}
+
+			if ( isset( $_POST['hidequotebook'] ) ) {
+				$hidequotebook = filter_var( wp_unslash( $_POST['hidequotebook'] ), FILTER_SANITIZE_STRING );
+			}
+
 			if ( isset( $_POST['hidegooglepurchase'] ) ) {
 				$hidegooglepurchase = filter_var( wp_unslash( $_POST['hidegooglepurchase'] ), FILTER_SANITIZE_STRING );
 			}
+
 			if ( isset( $_POST['hideamazonpurchase'] ) ) {
 				$hideamazonpurchase = filter_var( wp_unslash( $_POST['hideamazonpurchase'] ), FILTER_SANITIZE_STRING );
 			}
+
 			if ( isset( $_POST['hidebnpurchase'] ) ) {
 				$hidebnpurchase = filter_var( wp_unslash( $_POST['hidebnpurchase'] ), FILTER_SANITIZE_STRING );
 			}
+
 			if ( isset( $_POST['hideitunespurchase'] ) ) {
 				$hideitunespurchase = filter_var( wp_unslash( $_POST['hideitunespurchase'] ), FILTER_SANITIZE_STRING );
 			}
+
 			if ( isset( $_POST['hidefrontendbuyimg'] ) ) {
 				$hidefrontendbuyimg = filter_var( wp_unslash( $_POST['hidefrontendbuyimg'] ), FILTER_SANITIZE_STRING );
 			}
+
 			if ( isset( $_POST['hidecolorboxbuyimg'] ) ) {
 				$hidecolorboxbuyimg = filter_var( wp_unslash( $_POST['hidecolorboxbuyimg'] ), FILTER_SANITIZE_STRING );
 			}
+
 			if ( isset( $_POST['hidecolorboxbuyprice'] ) ) {
 				$hidecolorboxbuyprice = filter_var( wp_unslash( $_POST['hidecolorboxbuyprice'] ), FILTER_SANITIZE_STRING );
 			}
+
 			if ( isset( $_POST['hidefrontendbuyprice'] ) ) {
 				$hidefrontendbuyprice = filter_var( wp_unslash( $_POST['hidefrontendbuyprice'] ), FILTER_SANITIZE_STRING );
 			}
+
 			if ( isset( $_POST['hidekindleprev'] ) ) {
 				$hidekindleprev = filter_var( wp_unslash( $_POST['hidekindleprev'] ), FILTER_SANITIZE_STRING );
 			}
+
 			if ( isset( $_POST['hidegoogleprev'] ) ) {
 				$hidegoogleprev = filter_var( wp_unslash( $_POST['hidegoogleprev'] ), FILTER_SANITIZE_STRING );
 			}
+
 			if ( isset( $_POST['hidekobopurchase'] ) ) {
 				$hidekobopurchase = filter_var( wp_unslash( $_POST['hidekobopurchase'] ), FILTER_SANITIZE_STRING );
 			}
+
 			if ( isset( $_POST['hidebampurchase'] ) ) {
 				$hidebampurchase = filter_var( wp_unslash( $_POST['hidebampurchase'] ), FILTER_SANITIZE_STRING );
 			}
 
+			if ( isset( $_POST['booksonpage'] ) ) {
+				$booksonpage = filter_var( wp_unslash( $_POST['booksonpage'] ), FILTER_SANITIZE_NUMBER_INT );
+			}
+
+			if ( isset( $_POST['booksonpage'] ) ) {
+				$booksonpage = filter_var( wp_unslash( $_POST['booksonpage'] ), FILTER_SANITIZE_NUMBER_INT );
+			}
+
+			if ( isset( $_POST['hidefilter'] ) ) {
+				$hidefilter = filter_var( wp_unslash( $_POST['hidefilter'] ), FILTER_SANITIZE_STRING );
+			}
+
+			if ( isset( $_POST['hidefinishedsort'] ) ) {
+				$hidefinishedsort = filter_var( wp_unslash( $_POST['hidefinishedsort'] ), FILTER_SANITIZE_STRING );
+			}
+
+			if ( isset( $_POST['hidefirstsort'] ) ) {
+				$hidefirstsort = filter_var( wp_unslash( $_POST['hidefirstsort'] ), FILTER_SANITIZE_STRING );
+			}
+
+			if ( isset( $_POST['hidelibrarytitle'] ) ) {
+				$hidelibrarytitle = filter_var( wp_unslash( $_POST['hidelibrarytitle'] ), FILTER_SANITIZE_STRING );
+			}
+
+			if ( isset( $_POST['hidequote'] ) ) {
+				$hidequote = filter_var( wp_unslash( $_POST['hidequote'] ), FILTER_SANITIZE_STRING );
+			}
+
+			if ( isset( $_POST['hiderating'] ) ) {
+				$hiderating = filter_var( wp_unslash( $_POST['hiderating'] ), FILTER_SANITIZE_STRING );
+			}
+
+			if ( isset( $_POST['hidesearch'] ) ) {
+				$hidesearch = filter_var( wp_unslash( $_POST['hidesearch'] ), FILTER_SANITIZE_STRING );
+			}
+
+			if ( isset( $_POST['hidesignedsort'] ) ) {
+				$hidesignedsort = filter_var( wp_unslash( $_POST['hidesignedsort'] ), FILTER_SANITIZE_STRING );
+			}
+
+			if ( isset( $_POST['hidestats'] ) ) {
+				$hidestats = filter_var( wp_unslash( $_POST['hidestats'] ), FILTER_SANITIZE_STRING );
+			}
+
+			if ( isset( $_POST['hidesubjectsort'] ) ) {
+				$hidesubjectsort = filter_var( wp_unslash( $_POST['hidesubjectsort'] ), FILTER_SANITIZE_STRING );
+			}
+
+			if ( isset( $_POST['library'] ) ) {
+				$library = filter_var( wp_unslash( $_POST['library'] ), FILTER_SANITIZE_STRING );
+			}
+
+			if ( isset( $_POST['sortoption'] ) ) {
+				$sortoption = filter_var( wp_unslash( $_POST['sortoption'] ), FILTER_SANITIZE_STRING );
+			}
+
+			$customfieldsarray = null;
+			if ( isset( $_POST['customfieldsarray'] ) ) {
+				$customfieldsarray = filter_var_array(  wp_unslash( $_POST['customfieldsarray'] ), FILTER_SANITIZE_STRING );
+			}
+
 			$settings_array = array(
-				'enablepurchase'       => $enablepurchase,
-				'hidefacebook'         => $hidefacebook,
-				'hidetwitter'          => $hidetwitter,
-				'hidegoogleplus'       => $hidegoogleplus,
-				'hidemessenger'        => $hidemessenger,
-				'hidepinterest'        => $hidepinterest,
-				'hideemail'            => $hideemail,
-				'hidequote'            => $hidequote,
-				'hideamazonreview'     => $hideamazonreview,
-				'hidedescription'      => $hidedescription,
-				'hidesimilar'          => $hidesimilar,
-				'hidetitle'            => $hidetitle,
-				'hidebookimage'        => $hidebookimage,
-				'hidefinished'         => $hidefinished,
-				'hideauthor'           => $hideauthor,
-				'hidecategory'         => $hidecategory,
-				'hidepages'            => $hidepages,
-				'hidepublisher'        => $hidepublisher,
-				'hidepubdate'          => $hidepubdate,
-				'hidesigned'           => $hidesigned,
-				'hidesubject'          => $hidesubject,
-				'hidecountry'          => $hidecountry,
-				'hidefirstedition'     => $hidefirstedition,
-				'hidefeaturedtitles'   => $hidefeaturedtitles,
-				'hidenotes'            => $hidenotes,
-				'hiderating'           => $hiderating,
-				'hidegooglepurchase'   => $hidegooglepurchase,
-				'hideamazonpurchase'   => $hideamazonpurchase,
-				'hidebnpurchase'       => $hidebnpurchase,
-				'hideitunespurchase'   => $hideitunespurchase,
-				'hidefrontendbuyimg'   => $hidefrontendbuyimg,
-				'hidecolorboxbuyimg'   => $hidecolorboxbuyimg,
-				'hidecolorboxbuyprice' => $hidecolorboxbuyprice,
-				'hidefrontendbuyprice' => $hidefrontendbuyprice,
-				'hidekindleprev'       => $hidekindleprev,
-				'hidegoogleprev'       => $hidegoogleprev,
-				'hidebampurchase'      => $hidebampurchase,
-				'hidekobopurchase'     => $hidekobopurchase,
+				'hideamazonpurchase' => $hideamazonpurchase,
+				'hideamazonreview'   => $hideamazonreview,
+				'hideasin'           => $hideasin,
+				'hideauthor'         => $hideauthor,
+				'hidebnpurchase'     => $hidebnpurchase,
+				'hidefinished'       => $hidefinished,
+				'hidepages'          => $hidepages,
+				'hidebooktitle'      => $hidebooktitle,
+				'hidebampurchase'    => $hidebampurchase,
+				'hidecallnumber'     => $hidecallnumber,
+				'hidecountry'        => $hidecountry,
+				'hidefirstedition'   => $hidefirstedition,
+				'hideemail'          => $hideemail,
+				'hidemessenger'      => $hidemessenger,
+				'hidefacebook'       => $hidefacebook,
+				'hidefeaturedtitles' => $hidefeaturedtitles,
+				'hideformat'         => $hideformat,
+				'hidebookimage'      => $hidebookimage,
+				'hidedescription'    => $hidedescription,
+				'hidegenres'         => $hidegenres,
+				'hidegooglepurchase' => $hidegooglepurchase,
+				'hideillustrator'    => $hideillustrator,
+				'hideisbn10'         => $hideisbn10,
+				'hideisbn13'         => $hideisbn13,
+				'hideitunespurchase' => $hideitunespurchase,
+				'hidekeywords'       => $hidekeywords,
+				'hidekobopurchase'   => $hidekobopurchase,
+				'hidelanguage'       => $hidelanguage,
+				'hidenotes'          => $hidenotes,
+				'hidenumberinseries' => $hidenumberinseries,
+				'hideorigpubyear'    => $hideorigpubyear,
+				'hideorigtitle'      => $hideorigtitle,
+				'hideothereditions'  => $hideothereditions,
+				'hideoutofprint'     => $hideoutofprint,
+				'hidepinterest'      => $hidepinterest,
+				'hidepubdate'        => $hidepubdate,
+				'hidepublisher'      => $hidepublisher,
+				'hideseries'         => $hideseries,
+				'hideshortdesc'      => $hideshortdesc,
+				'hidesigned'         => $hidesigned,
+				'hidesimilar'        => $hidesimilar,
+				'hidesubgenre'       => $hidesubgenre,
+				'hidetwitter'        => $hidetwitter,
+				'hiderating'         => $hiderating,
+				'hidequote'          => $hidequote,
+				'customfieldsarray'  => $customfieldsarray,
 			);
 
 			require_once CLASS_DIR . 'class-display-options.php';
@@ -2035,160 +2206,334 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 			global $wpdb;
 			check_ajax_referer( 'wpbooklist_dashboard_save_page_display_options_action_callback', 'security' );
 
-			if ( isset( $_POST['enablepurchase'] ) ) {
-				$enablepurchase = filter_var( wp_unslash( $_POST['enablepurchase'] ), FILTER_SANITIZE_STRING );
-			}
-			if ( isset( $_POST['hidefacebook'] ) ) {
-				$hidefacebook = filter_var( wp_unslash( $_POST['hidefacebook'] ), FILTER_SANITIZE_STRING );
-			}
-			if ( isset( $_POST['hidetwitter'] ) ) {
-				$hidetwitter = filter_var( wp_unslash( $_POST['hidetwitter'] ), FILTER_SANITIZE_STRING );
-			}
-			if ( isset( $_POST['hidegoogleplus'] ) ) {
-				$hidegoogleplus = filter_var( wp_unslash( $_POST['hidegoogleplus'] ), FILTER_SANITIZE_STRING );
-			}
-			if ( isset( $_POST['hidemessenger'] ) ) {
-				$hidemessenger = filter_var( wp_unslash( $_POST['hidemessenger'] ), FILTER_SANITIZE_STRING );
-			}
-			if ( isset( $_POST['hidepinterest'] ) ) {
-				$hidepinterest = filter_var( wp_unslash( $_POST['hidepinterest'] ), FILTER_SANITIZE_STRING );
-			}
-			if ( isset( $_POST['hideemail'] ) ) {
-				$hideemail = filter_var( wp_unslash( $_POST['hideemail'] ), FILTER_SANITIZE_STRING );
-			}
-			if ( isset( $_POST['hideamazonreview'] ) ) {
-				$hideamazonreview = filter_var( wp_unslash( $_POST['hideamazonreview'] ), FILTER_SANITIZE_STRING );
-			}
-			if ( isset( $_POST['hidedescription'] ) ) {
-				$hidedescription = filter_var( wp_unslash( $_POST['hidedescription'] ), FILTER_SANITIZE_STRING );
-			}
-			if ( isset( $_POST['hidesimilar'] ) ) {
-				$hidesimilar = filter_var( wp_unslash( $_POST['hidesimilar'] ), FILTER_SANITIZE_STRING );
-			}
-			if ( isset( $_POST['hidetitle'] ) ) {
-				$hidetitle = filter_var( wp_unslash( $_POST['hidetitle'] ), FILTER_SANITIZE_STRING );
-			}
-			if ( isset( $_POST['hidebookimage'] ) ) {
-				$hidebookimage = filter_var( wp_unslash( $_POST['hidebookimage'] ), FILTER_SANITIZE_STRING );
-			}
-			if ( isset( $_POST['hidefinished'] ) ) {
-				$hidefinished = filter_var( wp_unslash( $_POST['hidefinished'] ), FILTER_SANITIZE_STRING );
-			}
-			if ( isset( $_POST['hideauthor'] ) ) {
-				$hideauthor = filter_var( wp_unslash( $_POST['hideauthor'] ), FILTER_SANITIZE_STRING );
-			}
-			if ( isset( $_POST['hidecategory'] ) ) {
-				$hidecategory = filter_var( wp_unslash( $_POST['hidecategory'] ), FILTER_SANITIZE_STRING );
-			}
-			if ( isset( $_POST['hidepages'] ) ) {
-				$hidepages = filter_var( wp_unslash( $_POST['hidepages'] ), FILTER_SANITIZE_STRING );
-			}
-			if ( isset( $_POST['hidepublisher'] ) ) {
-				$hidepublisher = filter_var( wp_unslash( $_POST['hidepublisher'] ), FILTER_SANITIZE_STRING );
-			}
-			if ( isset( $_POST['hidepubdate'] ) ) {
-				$hidepubdate = filter_var( wp_unslash( $_POST['hidepubdate'] ), FILTER_SANITIZE_STRING );
-			}
-			if ( isset( $_POST['hidesigned'] ) ) {
-				$hidesigned = filter_var( wp_unslash( $_POST['hidesigned'] ), FILTER_SANITIZE_STRING );
-			}
-			if ( isset( $_POST['hidesubject'] ) ) {
-				$hidesubject = filter_var( wp_unslash( $_POST['hidesubject'] ), FILTER_SANITIZE_STRING );
-			}
-			if ( isset( $_POST['hidecountry'] ) ) {
-				$hidecountry = filter_var( wp_unslash( $_POST['hidecountry'] ), FILTER_SANITIZE_STRING );
-			}
-			if ( isset( $_POST['hidefirstedition'] ) ) {
-				$hidefirstedition= filter_var( wp_unslash( $_POST['hidefirstedition'] ), FILTER_SANITIZE_STRING );
-			}
-			if ( isset( $_POST['hidefeaturedtitles'] ) ) { 
-				$hidefeaturedtitles = filter_var( wp_unslash( $_POST['hidefeaturedtitles'] ), FILTER_SANITIZE_STRING );
-			}
-			if ( isset( $_POST['hidenotes'] ) ) {
-				$hidenotes = filter_var( wp_unslash( $_POST['hidenotes'] ), FILTER_SANITIZE_STRING );
-			}
-			if ( isset( $_POST['hidequote'] ) ) {
-				$hidequote = filter_var( wp_unslash( $_POST['hidequote'] ), FILTER_SANITIZE_STRING );
-			}
 			if ( isset( $_POST['hiderating'] ) ) {
 				$hiderating = filter_var( wp_unslash( $_POST['hiderating'] ), FILTER_SANITIZE_STRING );
 			}
+
+			if ( isset( $_POST['hidequote'] ) ) {
+				$hidequote = filter_var( wp_unslash( $_POST['hidequote'] ), FILTER_SANITIZE_STRING );
+			}
+
+			if ( isset( $_POST['hidefacebook'] ) ) {
+				$hidefacebook = filter_var( wp_unslash( $_POST['hidefacebook'] ), FILTER_SANITIZE_STRING );
+			}
+
+			if ( isset( $_POST['hideasin'] ) ) {
+				$hideasin = filter_var( wp_unslash( $_POST['hideasin'] ), FILTER_SANITIZE_STRING );
+			}
+
+			if ( isset( $_POST['hideformat'] ) ) {
+				$hideformat = filter_var( wp_unslash( $_POST['hideformat'] ), FILTER_SANITIZE_STRING );
+			}
+
+			if ( isset( $_POST['hidegenres'] ) ) {
+				$hidegenres = filter_var( wp_unslash( $_POST['hidegenres'] ), FILTER_SANITIZE_STRING );
+			}
+
+			if ( isset( $_POST['hideillustrator'] ) ) {
+				$hideillustrator = filter_var( wp_unslash( $_POST['hideillustrator'] ), FILTER_SANITIZE_STRING );
+			}
+
+			if ( isset( $_POST['hideisbn10'] ) ) {
+				$hideisbn10 = filter_var( wp_unslash( $_POST['hideisbn10'] ), FILTER_SANITIZE_STRING );
+			}
+
+			if ( isset( $_POST['hideisbn13'] ) ) {
+				$hideisbn13 = filter_var( wp_unslash( $_POST['hideisbn13'] ), FILTER_SANITIZE_STRING );
+			}
+
+			if ( isset( $_POST['hidekeywords'] ) ) {
+				$hidekeywords = filter_var( wp_unslash( $_POST['hidekeywords'] ), FILTER_SANITIZE_STRING );
+			}
+
+			if ( isset( $_POST['hidelanguage'] ) ) {
+				$hidelanguage = filter_var( wp_unslash( $_POST['hidelanguage'] ), FILTER_SANITIZE_STRING );
+			}
+
+			if ( isset( $_POST['hidenumberinseries'] ) ) {
+				$hidenumberinseries = filter_var( wp_unslash( $_POST['hidenumberinseries'] ), FILTER_SANITIZE_STRING );
+			}
+
+			if ( isset( $_POST['hideorigpubyear'] ) ) {
+				$hideorigpubyear = filter_var( wp_unslash( $_POST['hideorigpubyear'] ), FILTER_SANITIZE_STRING );
+			}
+
+			if ( isset( $_POST['hideorigtitle'] ) ) {
+				$hideorigtitle = filter_var( wp_unslash( $_POST['hideorigtitle'] ), FILTER_SANITIZE_STRING );
+			}
+
+			if ( isset( $_POST['hideothereditions'] ) ) {
+				$hideothereditions = filter_var( wp_unslash( $_POST['hideothereditions'] ), FILTER_SANITIZE_STRING );
+			}
+
+			if ( isset( $_POST['hideoutofprint'] ) ) {
+				$hideoutofprint = filter_var( wp_unslash( $_POST['hideoutofprint'] ), FILTER_SANITIZE_STRING );
+			}
+
+			if ( isset( $_POST['hideseries'] ) ) {
+				$hideseries = filter_var( wp_unslash( $_POST['hideseries'] ), FILTER_SANITIZE_STRING );
+			}
+
+			if ( isset( $_POST['hideshortdesc'] ) ) {
+				$hideshortdesc = filter_var( wp_unslash( $_POST['hideshortdesc'] ), FILTER_SANITIZE_STRING );
+			}
+
+			if ( isset( $_POST['hidesubgenre'] ) ) {
+				$hidesubgenre = filter_var( wp_unslash( $_POST['hidesubgenre'] ), FILTER_SANITIZE_STRING );
+			}
+
+			if ( isset( $_POST['hidecallnumber'] ) ) {
+				$hidecallnumber = filter_var( wp_unslash( $_POST['hidecallnumber'] ), FILTER_SANITIZE_STRING );
+			}
+
+			if ( isset( $_POST['hidetwitter'] ) ) {
+				$hidetwitter = filter_var( wp_unslash( $_POST['hidetwitter'] ), FILTER_SANITIZE_STRING );
+			}
+
+			if ( isset( $_POST['hidegoogleplus'] ) ) {
+				$hidegoogleplus = filter_var( wp_unslash( $_POST['hidegoogleplus'] ), FILTER_SANITIZE_STRING );
+			}
+
+			if ( isset( $_POST['hidemessenger'] ) ) {
+				$hidemessenger = filter_var( wp_unslash( $_POST['hidemessenger'] ), FILTER_SANITIZE_STRING );
+			}
+
+			if ( isset( $_POST['hidepinterest'] ) ) {
+				$hidepinterest = filter_var( wp_unslash( $_POST['hidepinterest'] ), FILTER_SANITIZE_STRING );
+			}
+
+			if ( isset( $_POST['hideemail'] ) ) {
+				$hideemail = filter_var( wp_unslash( $_POST['hideemail'] ), FILTER_SANITIZE_STRING );
+			}
+
+			if ( isset( $_POST['hideamazonreview'] ) ) {
+				$hideamazonreview = filter_var( wp_unslash( $_POST['hideamazonreview'] ), FILTER_SANITIZE_STRING );
+			}
+
+			if ( isset( $_POST['hidedescription'] ) ) {
+				$hidedescription = filter_var( wp_unslash( $_POST['hidedescription'] ), FILTER_SANITIZE_STRING );
+			}
+
+			if ( isset( $_POST['hidesimilar'] ) ) {
+				$hidesimilar = filter_var( wp_unslash( $_POST['hidesimilar'] ), FILTER_SANITIZE_STRING );
+			}
+
+			if ( isset( $_POST['hidebooktitle'] ) ) {
+				$hidebooktitle = filter_var( wp_unslash( $_POST['hidebooktitle'] ), FILTER_SANITIZE_STRING );
+			}
+
+			if ( isset( $_POST['hidebookimage'] ) ) {
+				$hidebookimage = filter_var( wp_unslash( $_POST['hidebookimage'] ), FILTER_SANITIZE_STRING );
+			}
+
+			if ( isset( $_POST['hidefinished'] ) ) {
+				$hidefinished = filter_var( wp_unslash( $_POST['hidefinished'] ), FILTER_SANITIZE_STRING );
+			}
+
+			if ( isset( $_POST['hideauthor'] ) ) {
+				$hideauthor = filter_var( wp_unslash( $_POST['hideauthor'] ), FILTER_SANITIZE_STRING );
+			}
+
+			if ( isset( $_POST['hidecategory'] ) ) {
+				$hidecategory = filter_var( wp_unslash( $_POST['hidecategory'] ), FILTER_SANITIZE_STRING );
+			}
+
+			if ( isset( $_POST['hidepages'] ) ) {
+				$hidepages = filter_var( wp_unslash( $_POST['hidepages'] ), FILTER_SANITIZE_STRING );
+			}
+
+			if ( isset( $_POST['hidepublisher'] ) ) {
+				$hidepublisher = filter_var( wp_unslash( $_POST['hidepublisher'] ), FILTER_SANITIZE_STRING );
+			}
+
+			if ( isset( $_POST['hidepubdate'] ) ) {
+				$hidepubdate = filter_var( wp_unslash( $_POST['hidepubdate'] ), FILTER_SANITIZE_STRING );
+			}
+
+			if ( isset( $_POST['hidesigned'] ) ) {
+				$hidesigned = filter_var( wp_unslash( $_POST['hidesigned'] ), FILTER_SANITIZE_STRING );
+			}
+
+			if ( isset( $_POST['hidesubject'] ) ) {
+				$hidesubject = filter_var( wp_unslash( $_POST['hidesubject'] ), FILTER_SANITIZE_STRING );
+			}
+
+			if ( isset( $_POST['hidecountry'] ) ) {
+				$hidecountry = filter_var( wp_unslash( $_POST['hidecountry'] ), FILTER_SANITIZE_STRING );
+			}
+
+			if ( isset( $_POST['hidefirstedition'] ) ) {
+				$hidefirstedition = filter_var( wp_unslash( $_POST['hidefirstedition'] ), FILTER_SANITIZE_STRING );
+			}
+
+			if ( isset( $_POST['hidefeaturedtitles'] ) ) {
+				$hidefeaturedtitles = filter_var( wp_unslash( $_POST['hidefeaturedtitles'] ), FILTER_SANITIZE_STRING );
+			}
+
+			if ( isset( $_POST['hidenotes'] ) ) {
+				$hidenotes = filter_var( wp_unslash( $_POST['hidenotes'] ), FILTER_SANITIZE_STRING );
+			}
+
+			if ( isset( $_POST['hidequotebook'] ) ) {
+				$hidequotebook = filter_var( wp_unslash( $_POST['hidequotebook'] ), FILTER_SANITIZE_STRING );
+			}
+
 			if ( isset( $_POST['hidegooglepurchase'] ) ) {
 				$hidegooglepurchase = filter_var( wp_unslash( $_POST['hidegooglepurchase'] ), FILTER_SANITIZE_STRING );
 			}
+
 			if ( isset( $_POST['hideamazonpurchase'] ) ) {
 				$hideamazonpurchase = filter_var( wp_unslash( $_POST['hideamazonpurchase'] ), FILTER_SANITIZE_STRING );
 			}
+
 			if ( isset( $_POST['hidebnpurchase'] ) ) {
 				$hidebnpurchase = filter_var( wp_unslash( $_POST['hidebnpurchase'] ), FILTER_SANITIZE_STRING );
 			}
+
 			if ( isset( $_POST['hideitunespurchase'] ) ) {
 				$hideitunespurchase = filter_var( wp_unslash( $_POST['hideitunespurchase'] ), FILTER_SANITIZE_STRING );
 			}
+
 			if ( isset( $_POST['hidefrontendbuyimg'] ) ) {
 				$hidefrontendbuyimg = filter_var( wp_unslash( $_POST['hidefrontendbuyimg'] ), FILTER_SANITIZE_STRING );
 			}
+
 			if ( isset( $_POST['hidecolorboxbuyimg'] ) ) {
 				$hidecolorboxbuyimg = filter_var( wp_unslash( $_POST['hidecolorboxbuyimg'] ), FILTER_SANITIZE_STRING );
 			}
+
 			if ( isset( $_POST['hidecolorboxbuyprice'] ) ) {
 				$hidecolorboxbuyprice = filter_var( wp_unslash( $_POST['hidecolorboxbuyprice'] ), FILTER_SANITIZE_STRING );
 			}
+
 			if ( isset( $_POST['hidefrontendbuyprice'] ) ) {
 				$hidefrontendbuyprice = filter_var( wp_unslash( $_POST['hidefrontendbuyprice'] ), FILTER_SANITIZE_STRING );
 			}
+
 			if ( isset( $_POST['hidekindleprev'] ) ) {
 				$hidekindleprev = filter_var( wp_unslash( $_POST['hidekindleprev'] ), FILTER_SANITIZE_STRING );
 			}
+
 			if ( isset( $_POST['hidegoogleprev'] ) ) {
 				$hidegoogleprev = filter_var( wp_unslash( $_POST['hidegoogleprev'] ), FILTER_SANITIZE_STRING );
 			}
+
 			if ( isset( $_POST['hidekobopurchase'] ) ) {
 				$hidekobopurchase = filter_var( wp_unslash( $_POST['hidekobopurchase'] ), FILTER_SANITIZE_STRING );
 			}
+
 			if ( isset( $_POST['hidebampurchase'] ) ) {
 				$hidebampurchase = filter_var( wp_unslash( $_POST['hidebampurchase'] ), FILTER_SANITIZE_STRING );
 			}
 
+			if ( isset( $_POST['booksonpage'] ) ) {
+				$booksonpage = filter_var( wp_unslash( $_POST['booksonpage'] ), FILTER_SANITIZE_NUMBER_INT );
+			}
+
+			if ( isset( $_POST['booksonpage'] ) ) {
+				$booksonpage = filter_var( wp_unslash( $_POST['booksonpage'] ), FILTER_SANITIZE_NUMBER_INT );
+			}
+
+			if ( isset( $_POST['hidefilter'] ) ) {
+				$hidefilter = filter_var( wp_unslash( $_POST['hidefilter'] ), FILTER_SANITIZE_STRING );
+			}
+
+			if ( isset( $_POST['hidefinishedsort'] ) ) {
+				$hidefinishedsort = filter_var( wp_unslash( $_POST['hidefinishedsort'] ), FILTER_SANITIZE_STRING );
+			}
+
+			if ( isset( $_POST['hidefirstsort'] ) ) {
+				$hidefirstsort = filter_var( wp_unslash( $_POST['hidefirstsort'] ), FILTER_SANITIZE_STRING );
+			}
+
+			if ( isset( $_POST['hidelibrarytitle'] ) ) {
+				$hidelibrarytitle = filter_var( wp_unslash( $_POST['hidelibrarytitle'] ), FILTER_SANITIZE_STRING );
+			}
+
+			if ( isset( $_POST['hidequote'] ) ) {
+				$hidequote = filter_var( wp_unslash( $_POST['hidequote'] ), FILTER_SANITIZE_STRING );
+			}
+
+			if ( isset( $_POST['hiderating'] ) ) {
+				$hiderating = filter_var( wp_unslash( $_POST['hiderating'] ), FILTER_SANITIZE_STRING );
+			}
+
+			if ( isset( $_POST['hidesearch'] ) ) {
+				$hidesearch = filter_var( wp_unslash( $_POST['hidesearch'] ), FILTER_SANITIZE_STRING );
+			}
+
+			if ( isset( $_POST['hidesignedsort'] ) ) {
+				$hidesignedsort = filter_var( wp_unslash( $_POST['hidesignedsort'] ), FILTER_SANITIZE_STRING );
+			}
+
+			if ( isset( $_POST['hidestats'] ) ) {
+				$hidestats = filter_var( wp_unslash( $_POST['hidestats'] ), FILTER_SANITIZE_STRING );
+			}
+
+			if ( isset( $_POST['hidesubjectsort'] ) ) {
+				$hidesubjectsort = filter_var( wp_unslash( $_POST['hidesubjectsort'] ), FILTER_SANITIZE_STRING );
+			}
+
+			if ( isset( $_POST['library'] ) ) {
+				$library = filter_var( wp_unslash( $_POST['library'] ), FILTER_SANITIZE_STRING );
+			}
+
+			if ( isset( $_POST['sortoption'] ) ) {
+				$sortoption = filter_var( wp_unslash( $_POST['sortoption'] ), FILTER_SANITIZE_STRING );
+			}
+
+			$customfieldsarray = null;
+			if ( isset( $_POST['customfieldsarray'] ) ) {
+				$customfieldsarray = filter_var_array(  wp_unslash( $_POST['customfieldsarray'] ), FILTER_SANITIZE_STRING );
+			}
+
 			$settings_array = array(
-				'enablepurchase'       => $enablepurchase,
-				'hidefacebook'         => $hidefacebook,
-				'hidetwitter'          => $hidetwitter,
-				'hidegoogleplus'       => $hidegoogleplus,
-				'hidemessenger'        => $hidemessenger,
-				'hidepinterest'        => $hidepinterest,
-				'hideemail'            => $hideemail,
-				'hidequote'            => $hidequote,
-				'hideamazonreview'     => $hideamazonreview,
-				'hidedescription'      => $hidedescription,
-				'hidesimilar'          => $hidesimilar,
-				'hidetitle'            => $hidetitle,
-				'hidebookimage'        => $hidebookimage,
-				'hidefinished'         => $hidefinished,
-				'hideauthor'           => $hideauthor,
-				'hidecategory'         => $hidecategory,
-				'hidepages'            => $hidepages,
-				'hidepublisher'        => $hidepublisher,
-				'hidepubdate'          => $hidepubdate,
-				'hidesigned'           => $hidesigned,
-				'hidesubject'          => $hidesubject,
-				'hidecountry'          => $hidecountry,
-				'hidefirstedition'     => $hidefirstedition,
-				'hidefeaturedtitles'   => $hidefeaturedtitles,
-				'hidenotes'            => $hidenotes,
-				'hiderating'           => $hiderating,
-				'hidegooglepurchase'   => $hidegooglepurchase,
-				'hideamazonpurchase'   => $hideamazonpurchase,
-				'hidebnpurchase'       => $hidebnpurchase,
-				'hideitunespurchase'   => $hideitunespurchase,
-				'hidefrontendbuyimg'   => $hidefrontendbuyimg,
-				'hidecolorboxbuyimg'   => $hidecolorboxbuyimg,
-				'hidecolorboxbuyprice' => $hidecolorboxbuyprice,
-				'hidefrontendbuyprice' => $hidefrontendbuyprice,
-				'hidekindleprev'       => $hidekindleprev,
-				'hidegoogleprev'       => $hidegoogleprev,
-				'hidebampurchase'      => $hidebampurchase,
-				'hidekobopurchase'     => $hidekobopurchase,
+				'hideamazonpurchase' => $hideamazonpurchase,
+				'hideamazonreview'   => $hideamazonreview,
+				'hideasin'           => $hideasin,
+				'hideauthor'         => $hideauthor,
+				'hidebnpurchase'     => $hidebnpurchase,
+				'hidefinished'       => $hidefinished,
+				'hidepages'          => $hidepages,
+				'hidebooktitle'      => $hidebooktitle,
+				'hidebampurchase'    => $hidebampurchase,
+				'hidecallnumber'     => $hidecallnumber,
+				'hidecountry'        => $hidecountry,
+				'hidefirstedition'   => $hidefirstedition,
+				'hideemail'          => $hideemail,
+				'hidemessenger'      => $hidemessenger,
+				'hidefacebook'       => $hidefacebook,
+				'hidefeaturedtitles' => $hidefeaturedtitles,
+				'hideformat'         => $hideformat,
+				'hidebookimage'      => $hidebookimage,
+				'hidedescription'    => $hidedescription,
+				'hidegenres'         => $hidegenres,
+				'hidegooglepurchase' => $hidegooglepurchase,
+				'hideillustrator'    => $hideillustrator,
+				'hideisbn10'         => $hideisbn10,
+				'hideisbn13'         => $hideisbn13,
+				'hideitunespurchase' => $hideitunespurchase,
+				'hidekeywords'       => $hidekeywords,
+				'hidekobopurchase'   => $hidekobopurchase,
+				'hidelanguage'       => $hidelanguage,
+				'hidenotes'          => $hidenotes,
+				'hidenumberinseries' => $hidenumberinseries,
+				'hideorigpubyear'    => $hideorigpubyear,
+				'hideorigtitle'      => $hideorigtitle,
+				'hideothereditions'  => $hideothereditions,
+				'hideoutofprint'     => $hideoutofprint,
+				'hidepinterest'      => $hidepinterest,
+				'hidepubdate'        => $hidepubdate,
+				'hidepublisher'      => $hidepublisher,
+				'hideseries'         => $hideseries,
+				'hideshortdesc'      => $hideshortdesc,
+				'hidesigned'         => $hidesigned,
+				'hidesimilar'        => $hidesimilar,
+				'hidesubgenre'       => $hidesubgenre,
+				'hidetwitter'        => $hidetwitter,
+				'hiderating'         => $hiderating,
+				'hidequote'          => $hidequote,
+				'customfieldsarray'  => $customfieldsarray,
 			);
 
 			require_once CLASS_DIR . 'class-display-options.php';
@@ -3472,7 +3817,7 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 			wp_die();
 		}
 
-		// Function to populate the Library View Display Options checkboxes.
+		// Function to populate the Library and Book View Display Options checkboxes.
 		public function wpbooklist_get_library_view_display_options_action_callback() {
 			global $wpdb;
 			check_ajax_referer( 'wpbooklist_get_library_view_display_options_action_callback', 'security' );
@@ -3481,6 +3826,28 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 			global $wpdb;
 			$this->user_options = $wpdb->get_row( 'SELECT * FROM ' . $wpdb->prefix . 'wpbooklist_jre_user_options' );
 			wp_die( wp_json_encode( $this->user_options ) );
+		}
+
+		// Function to populate the Post View Display Options checkboxes.
+		public function wpbooklist_get_post_display_options_action_callback() {
+			global $wpdb;
+			check_ajax_referer( 'wpbooklist_get_post_display_options_action_callback', 'security' );
+
+			// Now get the Display Options.
+			global $wpdb;
+			$this->post_options = $wpdb->get_row( 'SELECT * FROM ' . $wpdb->prefix . 'wpbooklist_jre_post_options' );
+			wp_die( wp_json_encode( $this->post_options ) );
+		}
+
+		// Function to populate the page View Display Options checkboxes.
+		public function wpbooklist_get_page_display_options_action_callback() {
+			global $wpdb;
+			check_ajax_referer( 'wpbooklist_get_page_display_options_action_callback', 'security' );
+
+			// Now get the Display Options.
+			global $wpdb;
+			$this->page_options = $wpdb->get_row( 'SELECT * FROM ' . $wpdb->prefix . 'wpbooklist_jre_page_options' );
+			wp_die( wp_json_encode( $this->page_options ) );
 		}
 
 
