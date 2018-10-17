@@ -32,7 +32,7 @@ if ( ! class_exists( 'WPBookList_StoryTime_Default_Tab', false ) ) :
 
 			// Instantiate the class.
 			$this->template = new WPBookList_Admin_UI_Template();
-			$this->form = new WPBookList_Storytime_Form();
+			$this->form     = new WPBookList_Storytime_Form();
 			$this->output_open_admin_container();
 			$this->output_tab_content();
 			$this->output_close_admin_container();

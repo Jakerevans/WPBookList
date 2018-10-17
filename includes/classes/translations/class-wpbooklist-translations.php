@@ -319,6 +319,22 @@ if ( ! class_exists( 'WPBookList_Translations', false ) ) :
 			$this->trans_287 = __( 'Here you can set what display options are visible or hidden in your WPBookList Posts. Place checkmarks in the checkboxes for the items you want hidden, and click the \'Save Changes\' button at the bottom of the page.', 'wpbooklist' );
 			$this->trans_288 = __( 'Here you can set what display options are visible or hidden in your WPBookList Pages. Place checkmarks in the checkboxes for the items you want hidden, and click the \'Save Changes\' button at the bottom of the page.', 'wpbooklist' );
 			$this->trans_289 = __( 'Already Created', 'wpbooklist' );
+			$this->trans_290 = __( 'What\'s a', 'wpbooklist' );
+			$this->trans_291 = __( 'Template Pak', 'wpbooklist' );
+			$this->trans_292 = __( 'you ask?', 'wpbooklist' );
+			$this->trans_293 = __( 'Template Paks', 'wpbooklist' );
+			$this->trans_294 = __( 'are the best way to instantly change the look and feel of your', 'wpbooklist' );
+			$this->trans_295 = __( 'Pages and Posts!', 'wpbooklist' );
+			$this->trans_296 = __( 'StoreFront Extension', 'wpbooklist' );
+			$this->trans_297 = __( 'Template Pak Bundle!', 'wpbooklist' );
+			$this->trans_298 = __( 'Can\'t decide on just one Template Pak? Get \'em all with the', 'wpbooklist' );
+			$this->trans_299 = __( 'StylePaks', 'wpbooklist' );
+			$this->trans_300 = __( 'Storytime Settings', 'wpbooklist' );
+			$this->trans_301 = __( 'Privacy', 'wpbooklist' );
+			$this->trans_302 = __( 'Custom Libraries & Shortcodes', 'wpbooklist' );
+			$this->trans_303 = __( 'API Settings', 'wpbooklist' );
+
+			
 
 			// The array of translation strings.
 			$translation_array = array(

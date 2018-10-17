@@ -1,11 +1,11 @@
 <?php
 /**
- * WPBookList API Settings Tab
+ * WPBookList_Backup_Settings Tab - class-admin-settings-backup-tab-ui.php.
  *
  * @author   Jake Evans
  * @category Admin
- * @package  Includes/Classes
- * @version  1
+ * @package  Includes/UI/Admin
+ * @version  6.0.0
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -24,8 +24,8 @@ if ( ! class_exists( 'WPBookList_Backup_Settings', false ) ) :
 		 */
 		public function __construct() {
 
-			require_once( CLASS_DIR . 'class-admin-ui-template.php' );
-			require_once( CLASS_BACKUP_DIR . 'class-wpbooklist-backup-settings-form.php' );
+			require_once CLASS_DIR . 'class-admin-ui-template.php';
+			require_once CLASS_BACKUP_DIR . 'class-wpbooklist-backup-settings-form.php';
 
 			// Get Translations.
 			require_once CLASS_TRANSLATIONS_DIR . 'class-wpbooklist-translations.php';
