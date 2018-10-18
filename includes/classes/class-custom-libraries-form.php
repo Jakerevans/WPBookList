@@ -37,7 +37,7 @@ class WPBookList_Custom_Libraries_Form {
 		$string1 = '<div id="wpbooklist-custom-libraries-container">
 				<p class="wpbooklist-tab-intro-para">'.__('Create custom Libraries here, and read all about how the various shortcodes can be used and their arguments further down this page.', 'wpbooklist').'</p>';
 
-		$string2 = '<table style="width: 100%; text-align: center; background: #efefef; color: #555; border: 1px solid #ccc;">
+		$string2 = '<table style="width: 100%; text-align: center; color: #555; border: 1px solid #ccc;">
 						<tbody>
 	          				<tr colspan="2">
 	          					<td colspan="2">

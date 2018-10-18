@@ -40,31 +40,31 @@ if ( ! class_exists( 'WPBookList_Storytime_Settings_Form', false ) ) :
 			global $wpdb;
 			$settings_results = $wpdb->get_row( 'SELECT * FROM ' . $wpdb->prefix . 'wpbooklist_jre_storytime_stories_settings' );
 
-			if ( 1 === $settings_results->createpost ) {
+			if ( '1' === $settings_results->createpost ) {
 				$input1 = '<input checked id="wpbooklist-storytime-settings-input-1" type="checkbox" />';
 			} else {
 				$input1 = '<input id="wpbooklist-storytime-settings-input-1" type="checkbox" />';
 			}
 
-			if ( 1 === $settings_results->createpage ) {
+			if ( '1' === $settings_results->createpage ) {
 				$input2 = '<input checked id="wpbooklist-storytime-settings-input-2" type="checkbox" />';
 			} else {
 				$input2 = '<input id="wpbooklist-storytime-settings-input-2" type="checkbox" />';
 			}
 
-			if ( 1 === $settings_results->deletedefault ) {
+			if ( '1' === $settings_results->deletedefault ) {
 				$input3 = '<input checked id="wpbooklist-storytime-settings-input-3" type="checkbox" />';
 			} else {
 				$input3 = '<input id="wpbooklist-storytime-settings-input-3" type="checkbox" />';
 			}
 
-			if ( 1 === $settings_results->newnotify ) {
+			if ( '1' === $settings_results->newnotify ) {
 				$input4 = '<input checked id="wpbooklist-storytime-settings-input-4" type="checkbox" />';
 			} else {
 				$input4 = '<input id="wpbooklist-storytime-settings-input-4" type="checkbox" />';
 			}
 
-			if ( 1 === $settings_results->getstories ) {
+			if ( '1' === $settings_results->getstories ) {
 				$input5 = '<input checked id="wpbooklist-storytime-settings-input-5" type="checkbox" />';
 			} else {
 				$input5 = '<input id="wpbooklist-storytime-settings-input-5" type="checkbox" />';
@@ -78,10 +78,10 @@ if ( ! class_exists( 'WPBookList_Storytime_Settings_Form', false ) ) :
 
 			$string1 = '
 			<div id="wpbooklist-addbook-container">
-				<p>' . $this->trans->trans_230 . ' <span class="wpbooklist-color-orange-italic">' . $this->trans->trans_231 . '</span> ' . $this->trans->trans_232 . '</p>
-				<p>' . $this->trans->trans_233 . '&nbsp;<strong>[wpbooklist_storytime]</strong></p>
+				<p class="wpbooklist-tab-intro-para">' . $this->trans->trans_230 . ' <span class="wpbooklist-color-orange-italic">' . $this->trans->trans_231 . '</span> ' . $this->trans->trans_232 . '</p>
+				<p class="wpbooklist-tab-intro-para">' . $this->trans->trans_233 . '&nbsp;<strong>[wpbooklist_storytime]</strong></p>
 				<div id="wpbooklist-storytime-settings-cont">
-					<p>Settings</p>
+					<p class="wpbooklist-tab-intro-para">Settings</p>
 					<div id="wpbooklist-storytime-settings-inner">
 					<div class="wpbooklist-storytime-row-div">
 						<label>' . $this->trans->trans_234 . '</label>
@@ -110,7 +110,7 @@ if ( ! class_exists( 'WPBookList_Storytime_Settings_Form', false ) ) :
 					</div>
 					</div>
 					<div class="wpbooklist-storytime-settings-save-div">
-					<button id="wpbooklist-storytime-settings-save">' . $this->trans->trans_243 . '</button>
+					<button class="wpbooklist-response-success-fail-button" id="wpbooklist-storytime-settings-save">' . $this->trans->trans_243 . '</button>
 					<div class="wpbooklist-spinner" id="wpbooklist-spinner-storytime-settings"></div>
 					</div>
 				</div>

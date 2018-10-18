@@ -1,0 +1,213 @@
+/**
+ * SCSS - _wpbooklist-admin-book-form.scss - Hold CSS specific to the Book Form for adding and editing books.
+ *
+ * @author   Jake Evans
+ * @category SCSS
+ * @package  Includes/Assets/CSS
+ * @version  6.0.0
+ */
+
+.span_1_of_2 {
+    width: 46%;
+    margin-bottom: 40px;
+    border-radius: 5px;
+    height: 355px;
+    position: relative;
+    text-align: center;
+    position: relative;
+    display: inline-block;
+    margin-left: 15px;
+    vertical-align: top;
+}
+
+.wpbooklist-extension-title {
+    font-size: 18px;
+    margin-bottom: 10px;
+    font-style: italic;
+    text-align: center;
+    display: none;
+}
+
+#wpbooklist-extensions-page-img-link {
+    text-decoration: none;
+}
+
+#wpbooklist-extension-page-ext-div-6 {
+    background-color: #f05a1a;
+}
+
+#wpbooklist-extension-page-ext-div-2 {
+    background-color: #4E76B6;
+}
+
+#wpbooklist-extension-page-ext-div-1 {
+    background-color: #EC422E;
+}
+
+#wpbooklist-extension-page-ext-div-8 {
+    background-color: #12CACA;
+}
+
+#wpbooklist-extension-page-ext-div-3 {
+    background-color: #13921D;
+}
+
+#wpbooklist-extension-page-ext-div-4 {
+    background-color: #912882;
+}
+
+#wpbooklist-extension-page-ext-div-5 {
+    background-color: #FD9828;
+}
+
+#wpbooklist-extension-page-ext-div-7 {
+    background-color: #EF1843;
+}
+
+#wpbooklist-extension-page-ext-div-9 {
+    background-color: #3E7982;
+}
+
+#wpbooklist-extension-page-ext-div-10 {
+    background-color: #0daa16;
+}
+
+#wpbooklist-extension-page-ext-div-11 {
+    background-color: #FDD442;
+}
+
+#wpbooklist-extension-page-ext-div-12 {
+    background-color: #246AB5;
+}
+
+#wpbooklist-extension-page-ext-div-13 {
+    background-color: #F06740;
+}
+
+#wpbooklist-extension-page-ext-div-14 {
+    background-color: #C89F2F;
+}
+
+.wpbooklist-extension-img-bundle-mult {
+    width: 30px;
+    margin-left: 5px;
+    margin-right: 5px;
+    position: relative;
+    top: 20px;
+}
+
+.wpbooklist-extension-img {
+    border-radius: 5px;
+    margin-bottom: 10px;
+    width: 48px;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+    position: relative;
+    top: 30px;
+}
+
+
+
+.wpbooklist-extension-p-bundle-ext {
+    position: relative;
+    top: 8px;
+    font-size: 25px;
+}
+
+.wpbooklist-extension-excerpt {
+    margin-bottom: 90px;
+    font-size: 13px;
+    text-align: center;
+}
+
+.wpbooklist-excerpt-span, .wpbooklist-excerpt-span-home {
+    display: inline-block;
+    text-align: center;
+    margin-bottom: 0px;
+    position: relative;
+    bottom: 20px;
+    font-size: 15px;
+    height: 60px;
+    font-style: italic;
+}
+
+.wpbooklist-top-line-span {
+    position: absolute;
+    width: 90%;
+    background-color: #E7E8E7;
+    left: 0;
+    right: 0;
+    margin-right: auto;
+    margin-left: auto;
+    top: 320px;
+}
+
+.wpbooklist-to-download-page {
+    position: absolute;
+    bottom: 50px;
+    left: 0;
+    right: 0;
+    text-align: center;
+    font-size: 12px;
+}
+
+.wpbooklist-extensions-purchase-button-link a {
+    position: absolute;
+    bottom: 25px;
+    left: 0;
+    right: 0;
+    background-color: #4F97CE;
+    width: 185px;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 10px;
+    border-radius: 5px;
+    color: white;
+    font-size: 15px;
+    text-decoration: none;
+    @extend %wpbooklist-button-and-link-box-shadow;
+}
+
+.wpbooklist-extensions-purchase-button-link a:hover {
+    box-shadow:none;
+}
+
+.wpbooklist-extension-page-ext-div {
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 30px;
+    height: 175px;
+    max-width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+    @extend %wpbooklist-button-and-link-box-shadow;
+}
+
+.wpbooklist-extension-p, .wpbooklist-extension-p-bundle-ext {
+    text-align: center;
+    font-size: 35px;
+    font-style: italic;
+    color: white;
+    margin: 0;
+    margin-top: 28px;
+    font-variant: small-caps;
+    line-height: 1.1;
+}
+
+.wpbooklist-extension-p-stylepaks{
+	font-size: 28px;
+	text-align: center;
+    font-style: italic;
+    color: white;
+    margin: 0;
+    margin-top: 28px;
+    font-variant: small-caps;
+    line-height: 1.1;
+}
+
+.wpbooklist-extension-p-bundle-ext {
+    position: relative;
+    top: 8px;
+    font-size: 25px;
+}

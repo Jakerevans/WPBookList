@@ -3191,34 +3191,34 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 			check_ajax_referer( 'wpbooklist_assign_stylepak_action_callback', 'security' );
 
 			// For assigning a StylePak to a Library
-				$stylepak = filter_var( wp_unslash( $_POST["stylepak"] ), FILTER_SANITIZE_STRING );
-				$library = filter_var( wp_unslash( $_POST["library"] ), FILTER_SANITIZE_STRING );
+			$stylepak = filter_var( wp_unslash( $_POST["stylepak"] ), FILTER_SANITIZE_STRING );
+			$library = filter_var( wp_unslash( $_POST["library"] ), FILTER_SANITIZE_STRING );
 
-				$stylepak = str_replace( '.css', '', $stylepak);
-				$stylepak = str_replace( '.zip', '', $stylepak);
+			$stylepak = str_replace( '.css', '', $stylepak);
+			$stylepak = str_replace( '.zip', '', $stylepak);
 
-				// Build table name to store StylePak in
-				if (strpos( $library, 'wpbooklist_jre_saved_book_log') !== false ){
-					$table_name = $wpdb->prefix . 'wpbooklist_jre_user_options';
-					$data = array(
-						'stylepak' => $stylepak,
-						);
-						$format = array( '%s' );   
-						$where = array( 'ID' => 1 );
-						$where_format = array( '%d' );
-						echo $wpdb->update( $table_name, $data, $where, $format, $where_format );
-				} else {
-					$table_name = $wpdb->prefix . 'wpbooklist_jre_list_dynamic_db_names';
-					$library = substr( $library, strrpos( $library, '_') + 1 );
-					$data = array(
-						'stylepak' => $stylepak,
-						);
-						$format = array( '%s' );   
-						$where = array( 'user_table_name' => $library );
-						$where_format = array( '%s' );
-						echo $stylepak.' ' . $library;
-						echo $wpdb->update( $table_name, $data, $where, $format, $where_format );
-				}
+			// Build table name to store StylePak in
+			if (strpos( $library, 'wpbooklist_jre_saved_book_log') !== false ){
+				$table_name = $wpdb->prefix . 'wpbooklist_jre_user_options';
+				$data = array(
+					'stylepak' => $stylepak,
+					);
+					$format = array( '%s' );   
+					$where = array( 'ID' => 1 );
+					$where_format = array( '%d' );
+					echo $wpdb->update( $table_name, $data, $where, $format, $where_format );
+			} else {
+				$table_name = $wpdb->prefix . 'wpbooklist_jre_list_dynamic_db_names';
+				$library = substr( $library, strrpos( $library, '_') + 1 );
+				$data = array(
+					'stylepak' => $stylepak,
+					);
+					$format = array( '%s' );   
+					$where = array( 'user_table_name' => $library );
+					$where_format = array( '%s' );
+					echo $stylepak.' ' . $library;
+					echo $wpdb->update( $table_name, $data, $where, $format, $where_format );
+			}
 
 			wp_die();
 		}
@@ -3591,7 +3591,7 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 			check_ajax_referer( 'wpbooklist_storytime_select_category_action_callback', 'security' );
 			$category = filter_var( wp_unslash( $_POST['category'] ), FILTER_SANITIZE_STRING );
 
-			require_once CLASS_STORYTIME_DIR . 'class-storytime.php';
+			require_once CLASS_STORYTIME_DIR . 'class-wpbooklist-storytime.php';
 				$storytime_class = new WPBookList_Storytime( 'categorychange', $category );
 
 
@@ -3605,7 +3605,7 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 			check_ajax_referer( 'wpbooklist_storytime_get_story_action_callback', 'security' );
 			$dataId = filter_var( wp_unslash( $_POST['dataId'] ), FILTER_SANITIZE_NUMBER_INT);
 			
-			require_once CLASS_STORYTIME_DIR . 'class-storytime.php';
+			require_once CLASS_STORYTIME_DIR . 'class-wpbooklist-storytime.php';
 				$storytime_class = new WPBookList_Storytime( 'getcontent', null, $dataId);
 
 				echo json_encode( $storytime_class->stories_db_data);
@@ -3618,7 +3618,7 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 			global $wpdb;
 			check_ajax_referer( 'wpbooklist_storytime_expand_browse_action_callback', 'security' );
 
-			require_once CLASS_STORYTIME_DIR . 'class-storytime.php';
+			require_once CLASS_STORYTIME_DIR . 'class-wpbooklist-storytime.php';
 				$storytime_class = new WPBookList_Storytime( 'categorychange', 'Recent Additions' );
 
 

@@ -53,7 +53,7 @@ if ( ! class_exists( 'WPBookList_Pages_Display_Options_Form', false ) ) :
 
 			$string1 =
 				'<div id="wpbooklist-display-options-container">
-					<p class="wpbooklist-tab-intro-para">' . $this->trans->trans_287 . '</p>
+					<p class="wpbooklist-tab-intro-para">' . $this->trans->trans_288 . '</p>
 					<div class="wpbooklist-spinner" id="wpbooklist-spinner"></div>
 				<div id="wpbooklist-display-options-indiv-entry-wrapper">
 					<div class="wpbooklist-display-options-indiv-entry">

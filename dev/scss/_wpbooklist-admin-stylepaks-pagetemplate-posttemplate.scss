@@ -1,0 +1,140 @@
+/**
+ * SCSS - _wpbooklist-admin-book-form.scss - Hold CSS specific to the sDisplay Options form on the 'Library' tab.
+ *
+ * @author   Jake Evans
+ * @category SCSS
+ * @package  Includes/Assets/CSS
+ * @version  6.0.0
+ */
+
+#wpbooklist-stylepak-demo-links a{
+    margin:10px;
+    text-align: center;
+}
+
+#wpbooklist-stylepak-demo-links{
+    margin-top:40px;
+    margin-bottom:15px;
+    text-align: center;
+}
+
+#wpbooklist-stylepak-buy-link img {
+    width: 200px;
+    border-radius: 5px;
+    @extend %wpbooklist-button-and-link-box-shadow;
+    margin: 5px;
+    background-color: #F05A1A;
+    padding: 7px;
+    padding-left: 10px;
+    margin: 5px;
+    border-radius: 5px;
+    color: white;
+    position: relative;
+}
+
+#wpbooklist-buy-library-stylepaks-div {
+    text-align: center;
+    margin-bottom: 70px;
+}
+
+#wpbooklist-upload-stylepaks-div {
+    text-align: center;
+    margin-top: 20px;
+}
+
+#wpbooklist-stylepak-table-container table {
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 40px;
+    border: solid 1px $primary-color;
+    padding: 5px;
+    padding-bottom: 15px;
+    padding-top: 10px;
+    border-radius: 5px;
+    text-align: center;
+    background-color: $verylight-primary-color;
+}
+
+.wpbooklist-stylepak-heading-img {
+    width: 30px;
+}
+
+.wpbooklist-stylepak-table-heading {
+    margin-bottom: 5px;
+    font-size: 17px;
+    font-weight: bold;
+    margin-right: 20px;
+    margin-left: 20px;
+}
+
+#wpbooklist-stylepak-heading-left {
+    margin-right: 20px;
+}
+
+#wpbooklist-stylepak-heading-row {
+    text-decoration-line: underline;
+    text-decoration-color: $primary-color;
+    font-variant: small-caps;
+    text-underline-position: under;
+    border: solid 1px black;
+    @extend %wpbooklist-margin-auto-centered;
+    width: 100%;
+}
+
+.wpbooklist-stylepak-table-num {
+    font-weight: bold;
+    text-align: right;
+    position: absolute;
+    left: 8px;
+    width: 32px;
+}
+
+.wpbooklist-stylepaks-col1 {
+    position: relative;
+    text-align: left;
+    padding-left: 45px;
+}
+
+#wpbooklist-stylepak-select-stylepak-label {
+    text-align: center;
+    margin-top: 30px;
+    line-height:1.5;
+}
+
+#wpbooklist-select-library-stylepak, #wpbooklist-select-post-template, #wpbooklist-select-page-template {
+    @extend %wpbooklist-margin-auto-centered;
+    width: 200px;
+    display: block;
+    margin-top: 10px;
+}
+
+#wpbooklist-stylepak-select-library-label, #wpbooklist-backup-select-library-label {
+    text-align: center;
+    margin-top: 20px;
+}
+
+#wpbooklist-apply-library-stylepak, #wpbooklist-apply-page-template, #wpbooklist-apply-post-template {
+    @extend %wpbooklist-margin-auto-centered;
+    display: block;
+    position: relative;
+    bottom: 20px;
+}
+
+.wpbooklist-stylepak-select-default {
+    @extend %wpbooklist-margin-auto-centered;
+    width: 150px;
+    display: block;
+    margin-top: 10px;
+    margin-bottom: 40px;
+}
+
+#wpbooklist-apply-stylepak-wrapper {
+    @extend %wpbooklist-indiv-row-container-div;
+    width: 300px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 42px;
+}
+
+
+

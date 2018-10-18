@@ -50,12 +50,13 @@ if ( ! class_exists( 'WPBookList_Backup_Settings_Form', false ) ) :
 			}
 
 			$string1 = '<div id="wpbooklist-backup-settings-container">
-							<p>' . $this->trans->trans_56 . ' <span class="wpbooklist-color-orange-italic">' . $this->trans->trans_57 . '</span> ' . $this->trans->trans_58 . '</p>';
+							<p class="wpbooklist-tab-intro-para">' . $this->trans->trans_56 . ' <span class="wpbooklist-color-orange-italic">' . $this->trans->trans_57 . '</span> ' . $this->trans->trans_58 . '</p>';
 
-			$string2 = '<div id="wpbooklist-backup-select-library-label" for="wpbooklist-backup-select-library">' . $this->trans->trans_59 . '</div>
-						<select class="wpbooklist-backup-select-default" id="wpbooklist-backup-select-library">
-							<option selected disabled value="' . $this->trans->trans_60 . '...">' . $this->trans->trans_60 . '...</option>
-							<option value="' . $wpdb->prefix . 'wpbooklist_jre_saved_book_log">' . $this->trans->trans_61 . '</option> ';
+			$string2 = '<div id="wpbooklist-apply-stylepak-wrapper">
+							<div id="wpbooklist-backup-select-library-label" for="wpbooklist-backup-select-library">' . $this->trans->trans_59 . '</div>
+								<select class="wpbooklist-stylepak-select-default" id="wpbooklist-backup-select-library">
+									<option selected disabled value="' . $this->trans->trans_60 . '...">' . $this->trans->trans_60 . '...</option>
+									<option value="' . $wpdb->prefix . 'wpbooklist_jre_saved_book_log">' . $this->trans->trans_61 . '</option> ';
 
 			$string3 = '';
 			foreach ( $db_row as $db ) {
@@ -65,14 +66,16 @@ if ( ! class_exists( 'WPBookList_Backup_Settings_Form', false ) ) :
 			}
 
 			$string4 = '</select>
-						<button disabled id="wpbooklist-apply-library-backup">' . $this->trans->trans_62 . '</button>
-						<div class="wpbooklist-spinner" id="wpbooklist-spinner-backup"></div>';
+							<button disabled class="wpbooklist-response-success-fail-button" id="wpbooklist-apply-library-backup">' . $this->trans->trans_62 . '</button>
+							<div class="wpbooklist-spinner" id="wpbooklist-spinner-backup"></div>
+						</div>';
 
-			$string5 = '<p>' . $this->trans->trans_63 . ' <span class="wpbooklist-color-orange-italic">' . $this->trans->trans_57 . '</span> ' . $this->trans->trans_64 . '</p>
-			<div id="wpbooklist-backup-select-library-label">' . $this->trans->trans_65 . ':</div>
-							<select id="wpbooklist-select-library-backup">	
-								<option selected disabled>' . $this->trans->trans_65 . '...</option>
-								<option value="' . $wpdb->prefix . 'wpbooklist_jre_saved_book_log">' . $this->trans->trans_61 . '</option>';
+			$string5 = '<p class="wpbooklist-tab-intro-para">' . $this->trans->trans_63 . ' <span class="wpbooklist-color-orange-italic">' . $this->trans->trans_57 . '</span> ' . $this->trans->trans_64 . '</p>
+			<div id="wpbooklist-apply-stylepak-wrapper">
+				<div id="wpbooklist-backup-select-library-label">' . $this->trans->trans_65 . ':</div>
+					<select class="wpbooklist-stylepak-select-default" id="wpbooklist-select-library-backup">	
+						<option selected disabled>' . $this->trans->trans_65 . '...</option>
+						<option value="' . $wpdb->prefix . 'wpbooklist_jre_saved_book_log">' . $this->trans->trans_61 . '</option>';
 
 			$string6 = '';
 			foreach ( $db_row as $db ) {
@@ -84,7 +87,7 @@ if ( ! class_exists( 'WPBookList_Backup_Settings_Form', false ) ) :
 			$string7 = '</select>';
 
 			$string8 = '<div id="wpbooklist-backup-select-library-label">Select a Backup:</div>
-							<select disabled id="wpbooklist-select-actual-backup">	
+							<select disabled class="wpbooklist-stylepak-select-default" id="wpbooklist-select-actual-backup">	
 								<option selected disabled>' . $this->trans->trans_66 . '...</option>';
 
 			$string9 = '';
@@ -99,16 +102,21 @@ if ( ! class_exists( 'WPBookList_Backup_Settings_Form', false ) ) :
 			}
 
 			$string10 = '</select>
-						 <button disabled id="wpbooklist-apply-library-restore">' . $this->trans->trans_67 . '</button>
-						 <div class="wpbooklist-spinner" id="wpbooklist-spinner-restore-backup"></div>';
+						 <button disabled class="wpbooklist-response-success-fail-button" id="wpbooklist-apply-library-restore">' . $this->trans->trans_67 . '</button>
+						 <div class="wpbooklist-spinner" id="wpbooklist-spinner-restore-backup"></div>
+						 </div>';
 
 			$string11 = '<div id="wpbooklist-backup-create-csv-div">
-							<p>' . $this->trans->trans_68 . ' <span class="wpbooklist-color-orange-italic"><a href="https://wpbooklist.com/index.php/downloads/bulk-upload-extension/">' . $this->trans->trans_69 . '!</a></span> ' . $this->trans->trans_70 . ' <span class="wpbooklist-color-orange-italic">' . $this->trans->trans_57 . '</span> ' . $this->trans->trans_71 . '.</p>
-							<select class="wpbooklist-backup-csv-select-default" id="wpbooklist-backup-csv-select-library">
-								<option selected disabled value="' . $this->trans->trans_60 . '...">' . $this->trans->trans_60 . '...</option>
-								<option value="' . $wpdb->prefix . 'wpbooklist_jre_saved_book_log">' . $this->trans->trans_61 . '</option>' . $string3 . '</select>
-						<button disabled id="wpbooklist-apply-library-backup-csv">' . $this->trans->trans_72 . '</button>
-						<div class="wpbooklist-spinner" id="wpbooklist-spinner-backup-csv"></div></div>';
+							<p class="wpbooklist-tab-intro-para">' . $this->trans->trans_68 . ' <span class="wpbooklist-color-orange-italic"><a href="https://wpbooklist.com/index.php/downloads/bulk-upload-extension/">' . $this->trans->trans_69 . '!</a></span> ' . $this->trans->trans_70 . ' <span class="wpbooklist-color-orange-italic">' . $this->trans->trans_57 . '</span> ' . $this->trans->trans_71 . '.</p>
+							<div id="wpbooklist-apply-stylepak-wrapper">
+								<div id="wpbooklist-backup-select-library-label" for="wpbooklist-backup-select-library">' . $this->trans->trans_370 . '</div>
+								<select class="wpbooklist-stylepak-select-default" id="wpbooklist-backup-csv-select-library">
+									<option selected disabled value="' . $this->trans->trans_60 . '...">' . $this->trans->trans_60 . '...</option>
+									<option value="' . $wpdb->prefix . 'wpbooklist_jre_saved_book_log">' . $this->trans->trans_61 . '</option>' . $string3 . '</select>
+								<button disabled class="wpbooklist-response-success-fail-button" id="wpbooklist-apply-library-backup-csv">' . $this->trans->trans_72 . '</button>
+								<div class="wpbooklist-spinner" id="wpbooklist-spinner-backup-csv"></div>
+							</div>
+						</div>';
 
 			$string12 = '<div id="wpbooklist-addbackup-success-div"></div></div>';
 

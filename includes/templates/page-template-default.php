@@ -52,6 +52,34 @@ $string49 = '';
 $string50 = '';
 $string51 = '';
 
+
+// Modify the Categories to include string from the 'Genres' as well.
+if ( '' !== $book_row->genres && null !== $book_row->genres ) {
+
+	if ( false !== stripos( $book_row->genres, '---' ) ) {
+		$book_row->genres = explode( '---', $book_row->genres );
+
+		foreach ( $book_row->genres as $key => $indivgenre ) {
+			if ( false === stripos( $indivgenre, $book_row->category ) ) {
+				if ( '' !==  $indivgenre ) {
+					$book_row->category = $book_row->category . ', ' . $indivgenre;
+				}
+			}
+		}
+	} else {
+		if ( false === stripos( $book_row->genres, $book_row->category ) ) {
+				if ( '' !==  $book_row->genres ) {
+					$book_row->category = $book_row->category . ', ' . $book_row->genres;
+				}
+			}
+	}
+
+}
+
+
+
+
+
 $string1 =  '<div id="wpbl-pagetd-top-container">
 	<div id="wpbl-pagetd-left-row">
 		<div id="wpbl-pagetd-image">';
@@ -171,7 +199,7 @@ $string1 =  '<div id="wpbl-pagetd-top-container">
 
 			if($options_page_row->hidecategory == null || $options_page_row->hidecategory == 0){
 				$string22 =  '<div id="wpbl-pagetd-book-details-3">
-					<span>'.__('Category:','wpbooklist').' </span>'.$book_row->category.'
+					<span>'.__('Genre(s):','wpbooklist').' </span>'.$book_row->category.'
 				</div>';
 			}
 

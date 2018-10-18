@@ -97,6 +97,11 @@
 /*
  * BEGIN COMMON ELEMENTS INSIDE OF TOP ADMIN CONTAINERS
  */
+
+ .wpbooklist-color-orange-italic{
+    @extend  %wpbooklist-color-orange-italic;
+ }
+
 .wpbooklist-tab-intro-para{
     @extend %wpbooklist-tab-intro-para;
 }
@@ -181,6 +186,15 @@
 #wpbooklist-dynamic-shortcode-button, .wpbooklist_delete_custom_lib{
     width: 200px;
 }
+
+.wpbooklist-response-success-fail-button{
+   @extend %wpbooklist-response-success-fail-button;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+}
+
+
 
 /*
  * END COMMON ELEMENTS INSIDE OF TOP ADMIN CONTAINERS

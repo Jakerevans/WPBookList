@@ -1,0 +1,29 @@
+/**
+ * SCSS - _wpbooklist-admin-book-form.scss - Hold CSS specific to the Book Form for adding and editing books.
+ *
+ * @author   Jake Evans
+ * @category SCSS
+ * @package  Includes/Assets/CSS
+ * @version  6.0.0
+ */
+
+#wpbooklist-api-settings-container table {
+    width: 500px;
+    @extend %wpbooklist-margin-auto-centered;
+    margin-top: 40px;
+    margin-bottom: 20px;
+}
+
+#wpbooklist-api-settings-container label {
+    width: 145px;
+    display: inline-block;
+    font-weight: bold;
+}
+
+#wpbooklist-api-settings-container input {
+    margin-right: 5px;
+}
+
+.wpbooklist-jre-backend-localization-table {
+    @extend %wpbooklist-margin-auto-centered;
+}

@@ -244,6 +244,35 @@ class WPBookList_Show_Book_In_Colorbox {
 		if($this->review_iframe == 'https'){
 			$this->review_iframe = null;
 		}
+
+		// Make changes to the bn_link, if it's empty
+		if ( '' === $this->bn_link ) {
+			$this->bn_link = 'http://www.barnesandnoble.com/s/' . $this->isbn;
+		}
+
+		// Modify the Categories to include string from the 'Genres' as well.
+		if ( '' !== $saved_book->genres && null !== $saved_book->genres ) {
+
+			if ( false !== stripos( $saved_book->genres, '---' ) ) {
+				$saved_book->genres = explode( '---', $saved_book->genres );
+
+				foreach ( $saved_book->genres as $key => $indivgenre ) {
+					if ( false === stripos( $indivgenre, $this->category ) ) {
+						if ( '' !==  $indivgenre ) {
+							$this->category = $this->category . ', ' . $indivgenre;
+						}
+					}
+				}
+			} else {
+				if ( false === stripos( $saved_book->genres, $this->category ) ) {
+						if ( '' !==  $saved_book->genres ) {
+							$this->category = $this->category . ', ' . $saved_book->genres;
+						}
+					}
+			}
+
+		}
+		
 	}
 
 	private function gather_user_options(){
@@ -616,9 +645,9 @@ class WPBookList_Show_Book_In_Colorbox {
 							                                    <td>';
 
 														if($this->category == null){
-							                            	$string21 = '<span class="wpbooklist-bold-stats-class" id="wpbooklist_bold">' . __('Category:', 'wpbooklist') . ' </span><span class="wpbooklist-bold-stats-value">' . __('Not Available', 'wpbooklist') . '</span>';
+							                            	$string21 = '<span class="wpbooklist-bold-stats-class" id="wpbooklist_bold">' . __('Genre(s):', 'wpbooklist') . ' </span><span class="wpbooklist-bold-stats-value">' . __('Not Available', 'wpbooklist') . '</span>';
 							                            } else {
-							                            	$string21 = '<span class="wpbooklist-bold-stats-class" id="wpbooklist_bold">' . __('Category:', 'wpbooklist') . ' </span><span class="wpbooklist-bold-stats-value">'.$this->category.'</span>';
+							                            	$string21 = '<span class="wpbooklist-bold-stats-class" id="wpbooklist_bold">' . __('Genre(s):', 'wpbooklist') . ' </span><span class="wpbooklist-bold-stats-value">'.$this->category.'</span>';
 							                            }
 
 							                            $string22 = '</td>

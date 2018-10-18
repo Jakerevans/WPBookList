@@ -84,7 +84,12 @@ if ( ! class_exists( 'WPBookList_Backup', false ) ) :
 		 */
 		private function create_csv_file() {
 			global $wpdb;
+			// Initialize the WP filesystem.
 			global $wp_filesystem;
+			if ( empty( $wp_filesystem ) ) {
+				require_once ABSPATH . '/wp-admin/includes/file.php';
+				WP_Filesystem();
+			}
 
 			$result = $wpdb->get_results( 'SELECT * FROM ' . $this->library );
 
@@ -95,7 +100,14 @@ if ( ! class_exists( 'WPBookList_Backup', false ) ) :
 
 			$isbn_string = ltrim( $isbn_string );
 			$isbn_string = ltrim( $isbn_string, ',' );
-			$result      = $wp_filesystem->put_contents( LIBRARY_DB_BACKUPS_UPLOAD_DIR . 'isbn_asin_' . $this->library . '.txt', $isbn_string );
+
+			// Make the backup directory if needed .
+			$mkdir1 = null;
+			if ( ! file_exists( LIBRARY_DB_BACKUPS_UPLOAD_DIR ) ) {
+				$mkdir1 = mkdir( LIBRARY_DB_BACKUPS_UPLOAD_DIR, 0777, true );
+			}
+
+			$result = $wp_filesystem->put_contents( LIBRARY_DB_BACKUPS_UPLOAD_DIR . 'isbn_asin_' . $this->library . '.txt', $isbn_string );
 
 			if ( $result ) {
 
@@ -122,6 +134,10 @@ if ( ! class_exists( 'WPBookList_Backup', false ) ) :
 
 			// Initialize the WP filesystem.
 			global $wp_filesystem;
+			if ( empty( $wp_filesystem ) ) {
+				require_once ABSPATH . '/wp-admin/includes/file.php';
+				WP_Filesystem();
+			}
 
 			$result   = $wpdb->get_results( 'SELECT * FROM ' . $this->library );
 			$num_rows = $wpdb->num_rows;
@@ -185,6 +201,10 @@ if ( ! class_exists( 'WPBookList_Backup', false ) ) :
 
 			// Initialize the WP filesystem.
 			global $wp_filesystem;
+			if ( empty( $wp_filesystem ) ) {
+				require_once ABSPATH . '/wp-admin/includes/file.php';
+				WP_Filesystem();
+			}
 
 			$templine  = '';
 			$set_error = 0;

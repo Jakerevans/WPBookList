@@ -12,13 +12,21 @@
 */
 $primary-color: #F05A1A;
 $primary-color-border: #b11c48;
-$verylight-primary-color: #FAE6EC;
+$verylight-primary-color: #FEF4F1;
+$tradlinkcolor: #0073aa;
+$verylight-gray: #F4F2F3;
+$verydark-gray: #333;
+$verydark-gray-border: #444;
 $slightly-darker-primary: #F8DEE6;
+$slightly-lighter-primary: #F86631;
 $input-border-gainsboro: #DDDDDD;
 $secondary-yellow: #F8C849;
 $purewhite: #FFFFFF;
 $pureblack: #000000;
-$lightgray: #CCCCCC;
+$darkgray: #999;
+$lightgray: #eee;
+$mediumgray: #CCCCCC;
+$storytimeblue: #00a0d2;
 
 
 /*
@@ -185,7 +193,7 @@ $lightgray: #CCCCCC;
 %wpbooklist-default-buttons-style{
     box-shadow: inset 0 -3px 0 rgba(0,0,0,.1);
     margin: 5px;
-    background-color: #F05A1A;
+    background-color: $primary-color;
     padding: 7px;
     padding-left: 10px;
     margin: 5px;
@@ -206,6 +214,21 @@ $lightgray: #CCCCCC;
     display:block;
 }
 
+%wpbooklist-response-success-fail-button{
+    margin: 50px;
+    margin-top: 20px;
+}
+
+
+ %wpbooklist-color-orange-italic{
+    color: $primary-color;
+    font-style: italic;
+ }
+
+ %wpbooklist-button-and-link-box-shadow{
+    box-shadow: inset 0 -3px 0 rgba(0,0,0,0.1);
+ }
+
 
 
 
@@ -223,7 +246,11 @@ $lightgray: #CCCCCC;
 @import '_wpbooklist-admin-ui.scss';
 @import '_wpbooklist-admin-book-form.scss';
 @import '_wpbooklist-admin-display-options.scss';
+@import '_wpbooklist-admin-stylepaks-pagetemplate-posttemplate';
 @import '_wpbooklist-admin-edit-book-tab.scss';
+@import '_wpbooklist-admin-storytime-tabs.scss';
+@import '_wpbooklist-admin-all-settings-tabs.scss';
+@import '_wpbooklist-admin-ext-style-temp-adverts';
 @import '_wpbooklist-admin-select2.scss';
 @import '_wpbooklist-colorbox.scss';
 
