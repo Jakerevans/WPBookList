@@ -1166,7 +1166,7 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 			$book->refresh_amazon_review( $book_id, $book_table );
 
 			// Instantiate the class that shows the book in colorbox.
-			require_once CLASS_DIR . 'class-show-book-in-colorbox.php';
+			require_once CLASS_DIR . 'class-wpbooklist-show-book-in-colorbox.php';
 			$colorbox = new WPBookList_Show_Book_In_Colorbox( $book_id, $book_table, null, $sortParam );
 
 			echo $colorbox->output . '---sep---' . $colorbox->isbn;

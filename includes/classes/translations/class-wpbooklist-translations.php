@@ -475,6 +475,8 @@ if ( ! class_exists( 'WPBookList_Translations', false ) ) :
 			$this->trans_443 = __( 'What is', 'wpbooklist' );
 			$this->trans_444 = __( 'is', 'wpbooklist' );
 			$this->trans_445 = __( 'WPBookList\'s', 'wpbooklist' );
+			$this->trans_446 = __( 'My Rating', 'wpbooklist' );
+			$this->trans_447 = __( 'Share This Book', 'wpbooklist' );
 
 
 
