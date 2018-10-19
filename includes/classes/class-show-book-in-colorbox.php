@@ -225,6 +225,7 @@ class WPBookList_Show_Book_In_Colorbox {
 		$this->finished = $saved_book->finished;
 		$this->date_finished = $saved_book->date_finished;
 		$this->signed = $saved_book->signed;
+		$this->edition = $saved_book->edition;
 		$this->first_edition = $saved_book->first_edition;
 		$this->page_yes = $saved_book->page_yes;
 		$this->post_yes = $saved_book->post_yes;
@@ -783,10 +784,10 @@ class WPBookList_Show_Book_In_Colorbox {
 						                        		$string39 = '<tr>
 						                                    <td>';	
 
-						                            	if($this->first_edition == 'true'){
-								                            $string40 = '<span class="wpbooklist-bold-stats-class" id="wpbooklist_bold">' . __('First Edition?', 'wpbooklist') . ' </span>' . __('Yes', 'wpbooklist') . '';
+						                            	if($this->edition !== ''){
+								                            $string40 = '<span class="wpbooklist-bold-stats-class" id="wpbooklist_bold">' . __('Edition:', 'wpbooklist') . ' </span>' . $this->edition . '';
 							                        	} else {
-							                        		$string40 = '<span class="wpbooklist-bold-stats-class" id="wpbooklist_bold">' . __('First Edition?', 'wpbooklist') . ' </span><span class="wpbooklist-bold-stats-value">' . __('No', 'wpbooklist') . '</span>';
+							                        		$string40 = '<span class="wpbooklist-bold-stats-class" id="wpbooklist_bold">' . __('Edition:', 'wpbooklist') . ' </span><span class="wpbooklist-bold-stats-value">' . __('N/A', 'wpbooklist') . '</span>';
 							                        	}
 
 							                        	$string41 = '</td>
@@ -1165,7 +1166,7 @@ class WPBookList_Show_Book_In_Colorbox {
 														}
 
 
-		$this->output = $string1.$string2.$string3.$string4.$string5.$string6.$string7.$string8.$string9.$string10.$string11.$string12.$string13.$string14.$string15.$string16.$string17.$string18.$string19.$string20.$string21.$string22.$string23.$string24.$string25.$string26.$string27.$string28.$string92.$string93.$string94.$string95.$string96.$string97.$string29.$string30.$string31.$string32.$string33.$string34.$string35.$string36.$string37.$string38.$string39.$string40.$string41.$string42.$string43.$string44.$string45.$string46.$string47.$string48.$string49.$string50.$string51.$string52.$string53.$string54.$string55.$string56.$string57.$string84.$string85.$string86.$string87.$string58.$string59.$string60.$string61.$string62.$string63.$string64.$string65.$string66.$string67.$string68.$string69.$string70.$string71.$string72.$string73.$string74.$string75.$string76.$string77.$string78.$string79.$string80.$string81.$string82.$string83.$string88.$string89.$string90.$string91;
+		$this->output = $string1.$string2.$string3.$string4.$string5.$string6.$string7.$string8.$string9.$string10.$string11.$string12.$string13.$string14.$string15.$string16.$string17.$string18.$string19.$string20.$string21.$string22.$string23.$string24.$string25.$string26.$string27.$string28.$string92.$string93.$string94.$string95.$string96.$string97.$string29.$string30.$string31.$string39.$string40.$string41.$string32.$string33.$string34.$string35.$string36.$string37.$string38.$string42.$string43.$string44.$string45.$string46.$string47.$string48.$string49.$string50.$string51.$string52.$string53.$string54.$string55.$string56.$string57.$string84.$string85.$string86.$string87.$string58.$string59.$string60.$string61.$string62.$string63.$string64.$string65.$string66.$string67.$string68.$string69.$string70.$string71.$string72.$string73.$string74.$string75.$string76.$string77.$string78.$string79.$string80.$string81.$string82.$string83.$string88.$string89.$string90.$string91;
 
    
 	}

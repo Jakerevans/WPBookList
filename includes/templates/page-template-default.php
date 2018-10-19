@@ -228,7 +228,7 @@ $string1 =  '<div id="wpbl-pagetd-top-container">
 			}
 
 			if($options_page_row->hidefinished == null || $options_page_row->hidefinished == 0){
-				if($book_row->finished != false && $book_row->finished != 'false'){
+				if($book_row->finished != false && $book_row->finished != 'false' && $book_row->finished != 'N/A'){
 					$string25 =  '<div id="wpbl-pagetd-book-details-6">
 						<span>'.__('Finished?','wpbooklist').'</span> '.__('Yes', 'wpbooklist');
 
@@ -247,7 +247,7 @@ $string1 =  '<div id="wpbl-pagetd-top-container">
 			if($options_page_row->hidesigned == null || $options_page_row->hidesigned == 0){
 				$string28 =  '<div id="wpbl-pagetd-book-details-7">
 					<span>'.__('Signed?','wpbooklist').'</span>'; 
-				if($book_row->signed == 'false'){
+				if($book_row->signed == 'false'|| $book_row->signed == 'N/A'){
 					$string29 =  __(' No','wpbooklist'); 
 				} else {
 					$string29 =  __(' Yes','wpbooklist');  
@@ -256,13 +256,13 @@ $string1 =  '<div id="wpbl-pagetd-top-container">
 				$string30 =  '</div>';
 			}
 
-			if($options_page_row->hidesigned == null || $options_page_row->hidesigned == 0){
+			if($options_page_row->hidefirstedition == null || $options_page_row->hidefirstedition == 0){
 				$string31 =  '<div id="wpbl-pagetd-book-details-8">
-				<span>'.__('First Edition?', 'wpbooklist').'</span>';
-				if($book_row->first_edition == 'false'){ 
-					$string32 =  __(' No','wpbooklist'); 
+				<span>'.__('Edition: ', 'wpbooklist').'</span>';
+				if($book_row->first_edition == ''){ 
+					$string32 =  __('N/A','wpbooklist'); 
 				} else { 
-					$string32 =  __(' Yes','wpbooklist');
+					$string32 =  $book_row->first_edition;
 				}
 				$string33 =  '</div>';
 			}

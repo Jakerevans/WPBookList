@@ -946,146 +946,6 @@ if ( ! class_exists( 'WPBookList_General_Functions', false ) ) :
 
 		}
 
-
-
-
-/*
-
-
-		public function wpbooklist_form_checks_js( $hook ) {
-			// Loading this up on just the WPBookList admin pages that need it.
-			if ( false !== stripos( $hook, 'WPBookList-Options' ) ) {
-				wp_register_script( 'wpbooklist_form_checks_js', JAVASCRIPT_URL . 'formchecks.js', array( 'jquery' ), WPBOOKLIST_VERSION_NUM, true );
-				wp_enqueue_script( 'wpbooklist_form_checks_js' );
-			}
-		}
-
-
-		public function wpbooklist_jquery_masked_input_js( $hook ) {
-			if ( ! wp_script_is( 'wpbooklist_jquery_masked_input_js' ) && ! wp_script_is( 'wpgamelist_jquery_masked_input_js' ) ) {
-
-				if ( stripos( $hook, 'WPBookList-Options' ) !== false ) {
-					wp_register_script( 'wpbooklist_jquery_masked_input_js', JAVASCRIPT_URL . 'jquery-masked-input/jquery-masked-input.js', array( 'jquery' ), WPBOOKLIST_VERSION_NUM, true );
-					wp_enqueue_script( 'wpbooklist_jquery_masked_input_js' );
-				}
-			}
-		}
-
-		public function wpbooklist_jquery_readmore_js() {
-			if ( ! wp_script_is( 'wpbooklist_jquery_readmore_js' ) && ! wp_script_is( 'wpgamelist_jquery_readmore_js' ) ) {
-				wp_register_script( 'wpbooklist_jquery_readmore_js', JAVASCRIPT_URL . 'jquery-readmore/readmore.min.js', array( 'jquery' ), WPBOOKLIST_VERSION_NUM, true );
-				wp_enqueue_script( 'wpbooklist_jquery_readmore_js' );
-			}
-		}
-
-
-		public function wpbooklist_jre_plugin_colorbox_script( $hook ) {
-			// If on an admin page, loading this up on just the WPBookList admin pages that need it. Else, load it on the frontend that has a WPBookList Shortcode.
-			if ( is_admin() ) {
-				if ( stripos( $hook, 'WPBookList-Options' ) !== false ) {
-					// If we don't already have Colorbox loaded from WPGameList...
-					if ( ! wp_script_is( 'colorboxjsforwpgamelist' ) && ! wp_script_is( 'colorboxjsforwpbooklist' ) ) {
-						wp_register_script( 'colorboxjsforwpbooklist', JAVASCRIPT_URL . 'jquery-colorbox/jquery.colorbox-min.js', array( 'jquery' ), WPBOOKLIST_VERSION_NUM, true );
-						wp_enqueue_script( 'colorboxjsforwpbooklist', JAVASCRIPT_URL . 'jquery-colorbox/jquery.colorbox-min.js', array( 'jquery' ), WPBOOKLIST_VERSION_NUM, true );
-					}
-				}
-			} else {
-				global $wpdb;
-				$id      = get_the_ID();
-				$post    = get_post( $id );
-				$content = '';
-				if ( $post ) {
-					$content = $post->post_content;
-				}
-
-				// If we find any of these in $content, load the colorbox js.
-				$shortcode_array = array(
-					'showbookcover',
-					'wpbooklist_shortcode',
-					'wpbooklist_bookfinder',
-					'wpbooklist_carousel',
-					'wpbooklist_categories',
-					'wpbooklist',
-				);
-
-				foreach ( $shortcode_array as $key => $value ) {
-					if ( stripos( $content, $value ) !== false ) {
-						// If we don't already have Colorbox loaded from WPGameList...
-						if ( ! wp_script_is( 'colorboxjsforwpgamelist' ) && ! wp_script_is( 'colorboxjsforwpbooklist' ) ) {
-							wp_register_script( 'colorboxjsforwpbooklist', JAVASCRIPT_URL . 'jquery-colorbox/jquery.colorbox-min.js', array( 'jquery' ), WPBOOKLIST_VERSION_NUM, true );
-							wp_enqueue_script( 'colorboxjsforwpbooklist', JAVASCRIPT_URL . 'jquery-colorbox/jquery.colorbox-min.js', array( 'jquery' ), WPBOOKLIST_VERSION_NUM, true );
-						}
-					}
-				}
-
-				// If we're on the homepage or the blog page, just go ahead and load.
-				if ( ! wp_script_is( 'colorboxjsforwpbooklist' ) ) {
-					if ( is_front_page() || is_home() ) {
-						// If we don't already have Colorbox loaded from WPGameList...
-						if ( ! wp_script_is( 'colorboxjsforwpgamelist' ) && ! wp_script_is( 'colorboxjsforwpbooklist' ) ) {
-							wp_register_script( 'colorboxjsforwpbooklist', JAVASCRIPT_URL . 'jquery-colorbox/jquery.colorbox-min.js', array( 'jquery' ), WPBOOKLIST_VERSION_NUM, true );
-							wp_enqueue_script( 'colorboxjsforwpbooklist', JAVASCRIPT_URL . 'jquery-colorbox/jquery.colorbox-min.js', array( 'jquery' ), WPBOOKLIST_VERSION_NUM, true );
-						}
-					}
-				}
-			}
-		}
-
-
-		public function wpbooklist_jre_plugin_addthis_script( $hook ) {
-			// If on an admin page, loading this up on just the WPBookList admin pages that need it. Else, load it on the frontend that has a WPBookList Shortcode.
-			if ( is_admin() ) {
-				if ( stripos( $hook, 'WPBookList-Options' ) !== false ) {
-					// If we don't already have addthis loaded from WPGameList...
-					if ( ! wp_script_is( 'addthisjsforwpgamelist' ) && ! wp_script_is( 'addthisjsforwpbooklist' ) ) {
-						wp_register_script( 'addthisjsforwpbooklist', JAVASCRIPT_URL . 'jquery-addthis/addthis.js', array( 'jquery' ), WPBOOKLIST_VERSION_NUM, true );
-						wp_enqueue_script( 'addthisjsforwpbooklist', JAVASCRIPT_URL . 'jquery-addthis/addthis.js', array( 'jquery' ), WPBOOKLIST_VERSION_NUM, true );
-					}
-				}
-			} else {
-				global $wpdb;
-				$id      = get_the_ID();
-				$post    = get_post( $id );
-				$content = '';
-				if ( $post ) {
-					$content = $post->post_content;
-				}
-
-				// If we find any of these in $content, load the addthis js.
-				$shortcode_array = array(
-					'showbookcover',
-					'wpbooklist_shortcode',
-					'wpbooklist_bookfinder',
-					'wpbooklist_carousel',
-					'wpbooklist_categories',
-					'wpbooklist',
-				);
-
-				foreach ( $shortcode_array as $key => $value ) {
-					if ( stripos( $content, $value ) !== false ) {
-						// If we don't already have Colorbox loaded from WPGameList...
-						if ( ! wp_script_is( 'addthisjsforwpgamelist' ) && ! wp_script_is( 'addthisjsforwpbooklist' ) ) {
-							wp_register_script( 'addthisjsforwpbooklist', JAVASCRIPT_URL . 'jquery-addthis/addthis.js', array( 'jquery' ), WPBOOKLIST_VERSION_NUM, true );
-							wp_enqueue_script( 'addthisjsforwpbooklist', JAVASCRIPT_URL . 'jquery-addthis/addthis.js', array( 'jquery' ), WPBOOKLIST_VERSION_NUM, true );
-						}
-					}
-				}
-
-				// If we're on the homepage or the blog page, just go ahead and load.
-				if ( ! wp_script_is( 'addthisjsforwpbooklist' ) ) {
-					if ( is_front_page() || is_home() ) {
-						// If we don't already have Colorbox loaded from WPGameList...
-						if ( ! wp_script_is( 'addthisjsforwpgamelist' ) && ! wp_script_is( 'addthisjsforwpbooklist' ) ) {
-							wp_register_script( 'addthisjsforwpbooklist', JAVASCRIPT_URL . 'jquery-addthis/addthis.js', array( 'jquery' ), WPBOOKLIST_VERSION_NUM, true );
-							wp_enqueue_script( 'addthisjsforwpbooklist', JAVASCRIPT_URL . 'jquery-addthis/addthis.js', array( 'jquery' ), WPBOOKLIST_VERSION_NUM, true );
-						}
-					}
-				}
-			}
-		}
-
-*/
-
 		/**
 		 * Adding the admin css file
 		 */
@@ -1372,11 +1232,10 @@ if ( ! class_exists( 'WPBookList_General_Functions', false ) ) :
 		public function wpbooklist_set_page_post_template( $content ) {
 			global $wpdb;
 
-			$id          = get_the_id();
-			$blog_url    = get_permalink( get_option( 'page_for_posts' ) );
-			$actual_link = ( isset( $_SERVER['HTTPS'] ) ? 'https' : 'http' ) . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
-
-			$table_name = $wpdb->prefix . 'wpbooklist_jre_saved_page_post_log';
+			$id            = get_the_id();
+			$blog_url      = get_permalink( get_option( 'page_for_posts' ) );
+			$actual_link   = ( isset( $_SERVER['HTTPS'] ) ? 'https' : 'http' ) . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+			$table_name    = $wpdb->prefix . 'wpbooklist_jre_saved_page_post_log';
 			$page_post_row = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM $table_name WHERE post_id = %d", $id ) );
 
 			// If current page/post is a WPBookList Page or Post...
@@ -1516,7 +1375,7 @@ if ( ! class_exists( 'WPBookList_General_Functions', false ) ) :
 					$asin = $arr[0];
 
 					// Removing my Affiliate ID, as it's only needed for initial API calls when Adding/Editing/Searching for books.
-					if ( $options_row->amazonaff == 'wpbooklistid-20' ) {
+					if ( 'wpbooklistid-20' === $options_row->amazonaff ) {
 						$options_row->amazonaff = '';
 					}
 
@@ -1534,9 +1393,8 @@ if ( ! class_exists( 'WPBookList_General_Functions', false ) ) :
 				}
 
 				$similar_string       = $similar_string . '</div>';
-
 				$table_name_options   = $wpdb->prefix . 'wpbooklist_jre_user_options';
-				$row = $wpdb->get_row( "SELECT * FROM $table_name_options" );
+				$row                  = $wpdb->get_row( "SELECT * FROM $table_name_options" );
 				$active_post_template = $row->activeposttemplate;
 				$active_page_template = $row->activepagetemplate;
 
@@ -1556,27 +1414,27 @@ if ( ! class_exists( 'WPBookList_General_Functions', false ) ) :
 						case 'Page-Template-1':
 							include PAGE_TEMPLATES_UPLOAD_DIR . 'Page-Template-1.php';
 							return $content . $string1 . $string2 . $string3 . $string4 . $string5 . $string6 . $string7 . $string8 . $string9 . $string10 . $string11 . $string12 . $string13 . $string14 . $string15 . $string16 . $string17 . $string18 . $string19 . $string20 . $string21 . $string22 . $string23 . $string24 . $string25 . $string26 . $string27 . $string28 . $string29 . $string30 . $string31 . $string32 . $string33 . $string34 . $string35 . $string36 . $string37 . $string38 . $string39 . $string40 . $string41 . $string42 . $string43 . $string44 . $string45 . $string46 . $string47;
-						break;
+
 						case 'Page-Template-2':
 							include PAGE_TEMPLATES_UPLOAD_DIR . 'Page-Template-2.php';
 							return $content . $string1 . $string2 . $string3 . $string4 . $string5 . $string6 . $string7 . $string8 . $string9 . $string10 . $string11 . $string12 . $string13 . $string14 . $string15 . $string16 . $string17 . $string18 . $string19 . $string20 . $string21 . $string22 . $string23 . $string24 . $string25 . $string26 . $string27 . $string28 . $string29 . $string30 . $string31 . $string32 . $string33 . $string34 . $string35 . $string36 . $string37 . $string38 . $string39 . $string40 . $string41 . $string42 . $string43 . $string44 . $string45 . $string46 . $string47;
-						break;
+
 						case 'Page-Template-3':
 							include PAGE_TEMPLATES_UPLOAD_DIR . 'Page-Template-3.php';
 							return $content . $string1 . $string2 . $string3 . $string4 . $string5 . $string6 . $string7 . $string8 . $string9 . $string10 . $string11 . $string12 . $string13 . $string14 . $string15 . $string16 . $string17 . $string18 . $string19 . $string20 . $string21 . $string22 . $string23 . $string24 . $string25 . $string26 . $string27 . $string28 . $string29 . $string30 . $string31 . $string32 . $string33 . $string34 . $string35 . $string36 . $string37 . $string38 . $string39 . $string40 . $string41 . $string42 . $string43 . $string44 . $string45 . $string46 . $string47;
-						break;
+
 						case 'Page-Template-4':
 							include PAGE_TEMPLATES_UPLOAD_DIR . 'Page-Template-4.php';
 							return $content . $string1 . $string2 . $string3 . $string4 . $string5 . $string6 . $string7 . $string8 . $string9 . $string10 . $string11 . $string12 . $string13 . $string14 . $string15 . $string16 . $string17 . $string18 . $string19 . $string20 . $string21 . $string22 . $string23 . $string24 . $string25 . $string26 . $string27 . $string28 . $string29 . $string30 . $string31 . $string32 . $string33 . $string34 . $string35 . $string36 . $string37 . $string38 . $string39 . $string40 . $string41 . $string42 . $string43 . $string44 . $string45 . $string46 . $string47;
-						break;
+
 						case 'Page-Template-5':
 							include PAGE_TEMPLATES_UPLOAD_DIR . 'Page-Template-5.php';
 							return $content . $string1 . $string2 . $string3 . $string4 . $string5 . $string6 . $string7 . $string8 . $string9 . $string10 . $string11 . $string12 . $string13 . $string14 . $string15 . $string16 . $string17 . $string18 . $string19 . $string20 . $string21 . $string22 . $string23 . $string24 . $string25 . $string26 . $string27 . $string28 . $string29 . $string30 . $string31 . $string32 . $string33 . $string34 . $string35 . $string36 . $string37 . $string38 . $string39 . $string40 . $string41 . $string42 . $string43 . $string44 . $string45 . $string46 . $string47;
-						break;
+
 						default:
 							include PAGE_POST_TEMPLATES_DEFAULT_DIR . 'page-template-default.php';
-							return $content . $string1 . $string2 . $string3 . $string4 . $string5 . $string6 . $string7 . $string8 . $string9 . $string10 . $string11 . $string12 . $string13 . $string14 . $string15 . $string16 . $string17 . $string18 . $string19 . $string20 . $string21 . $string22 . $string23 . $string50 . $string51 . $string24 . $string25 . $string26 . $string27 . $string28 . $string29 . $string30 . $string31 . $string32 . $string33 . $string34 . $string35 . $string36 . $string37 . $string38 . $string39 . $string40 . $string48 . $string49 . $string41 . $string42 . $string43 . $string44 . $string45 . $string46 . $string47;
-						break;
+							return $content . $string1 . $string2 . $string3 . $string4 . $string5 . $string6 . $string7 . $string8 . $string9 . $string10 . $string11 . $string12 . $string13 . $string14 . $string15 . $string16 . $string17 . $string18 . $string19 . $string20 . $string21 . $string22 . $string23 . $string50 . $string51 . $string24 . $string31 . $string32 . $string33 . $string25 . $string26 . $string27 . $string28 . $string29 . $string30 . $string34 . $string35 . $string36 . $string37 . $string38 . $string39 . $string40 . $string48 . $string49 . $string41 . $string42 . $string43 . $string44 . $string45 . $string46 . $string47;
+
 					}
 				}
 
@@ -1586,27 +1444,27 @@ if ( ! class_exists( 'WPBookList_General_Functions', false ) ) :
 						case 'Post-Template-1':
 							include POST_TEMPLATES_UPLOAD_DIR . 'Post-Template-1.php';
 							return $content . $string1 . $string2 . $string3 . $string4 . $string5 . $string6 . $string7 . $string8 . $string9 . $string10 . $string11 . $string12 . $string13 . $string14 . $string15 . $string16 . $string17 . $string18 . $string19 . $string20 . $string21 . $string22 . $string23 . $string24 . $string25 . $string26 . $string27 . $string28 . $string29 . $string30 . $string31 . $string32 . $string33 . $string34 . $string35 . $string36 . $string37 . $string38 . $string39 . $string40 . $string41 . $string42 . $string43 . $string44 . $string45 . $string46 . $string47;
-							break;
+
 						case 'Post-Template-2':
 							include POST_TEMPLATES_UPLOAD_DIR . 'Post-Template-2.php';
 							return $content . $string1 . $string2 . $string3 . $string4 . $string5 . $string6 . $string7 . $string8 . $string9 . $string10 . $string11 . $string12 . $string13 . $string14 . $string15 . $string16 . $string17 . $string18 . $string19 . $string20 . $string21 . $string22 . $string23 . $string24 . $string25 . $string26 . $string27 . $string28 . $string29 . $string30 . $string31 . $string32 . $string33 . $string34 . $string35 . $string36 . $string37 . $string38 . $string39 . $string40 . $string41 . $string42 . $string43 . $string44 . $string45 . $string46 . $string47;
-							break;
+
 						case 'Post-Template-3':
 							include POST_TEMPLATES_UPLOAD_DIR . 'Post-Template-3.php';
 							return $content . $string1 . $string2 . $string3 . $string4 . $string5 . $string6 . $string7 . $string8 . $string9 . $string10 . $string11 . $string12 . $string13 . $string14 . $string15 . $string16 . $string17 . $string18 . $string19 . $string20 . $string21 . $string22 . $string23 . $string24 . $string25 . $string26 . $string27 . $string28 . $string29 . $string30 . $string31 . $string32 . $string33 . $string34 . $string35 . $string36 . $string37 . $string38 . $string39 . $string40 . $string41 . $string42 . $string43 . $string44 . $string45 . $string46 . $string47;
-							break;
+
 						case 'Post-Template-4':
 							include POST_TEMPLATES_UPLOAD_DIR . 'Post-Template-4.php';
 							return $content . $string1 . $string2 . $string3 . $string4 . $string5 . $string6 . $string7 . $string8 . $string9 . $string10 . $string11 . $string12 . $string13 . $string14 . $string15 . $string16 . $string17 . $string18 . $string19 . $string20 . $string21 . $string22 . $string23 . $string24 . $string25 . $string26 . $string27 . $string28 . $string29 . $string30 . $string31 . $string32 . $string33 . $string34 . $string35 . $string36 . $string37 . $string38 . $string39 . $string40 . $string41 . $string42 . $string43 . $string44 . $string45 . $string46 . $string47;
-							break;
+
 						case 'Post-Template-5':
 							include POST_TEMPLATES_UPLOAD_DIR . 'Post-Template-5.php';
 							return $content . $string1 . $string2 . $string3 . $string4 . $string5 . $string6 . $string7 . $string8 . $string9 . $string10 . $string11 . $string12 . $string13 . $string14 . $string15 . $string16 . $string17 . $string18 . $string19 . $string20 . $string21 . $string22 . $string23 . $string24 . $string25 . $string26 . $string27 . $string28 . $string29 . $string30 . $string31 . $string32 . $string33 . $string34 . $string35 . $string36 . $string37 . $string38 . $string39 . $string40 . $string41 . $string42 . $string43 . $string44 . $string45 . $string46 . $string47;
-							break;
+
 						default:
 							include PAGE_POST_TEMPLATES_DEFAULT_DIR . 'post-template-default.php';
-							return $content . $string1 . $string2 . $string3 . $string4 . $string5 . $string6 . $string7 . $string8 . $string9 . $string10 . $string11 . $string12 . $string13 . $string14 . $string15 . $string16 . $string17 . $string18 . $string19 . $string20 . $string21 . $string22 . $string23 . $string50 . $string51 . $string24 . $string25 . $string26 . $string27 . $string28 . $string29 . $string30 . $string31 . $string32 . $string33 . $string34 . $string35 . $string36 . $string37 . $string38 . $string39 . $string40 . $string48 . $string49 . $string41 . $string42 . $string43 . $string44 . $string45 . $string46 . $string47;
-							break;
+							return $content . $string1 . $string2 . $string3 . $string4 . $string5 . $string6 . $string7 . $string8 . $string9 . $string10 . $string11 . $string12 . $string13 . $string14 . $string15 . $string16 . $string17 . $string18 . $string19 . $string20 . $string21 . $string22 . $string23 . $string50 . $string51 . $string24 . $string31 . $string32 . $string33 . $string25 . $string26 . $string27  . $string28 . $string29 . $string30  . $string34 . $string35 . $string36 . $string37 . $string38 . $string39 . $string40 . $string48 . $string49 . $string41 . $string42 . $string43 . $string44 . $string45 . $string46 . $string47;
+
 					}
 				}
 
@@ -1770,7 +1628,6 @@ if ( ! class_exists( 'WPBookList_General_Functions', false ) ) :
 			}
 
 			$class = 'class="wpbooklist_jre_book_cover_shortcode_link wpbooklist-show-book-colorbox"';
-
 			if ( isset( $atts['action'] ) ) {
 				switch ( $atts['action'] ) {
 					case 'amazon':
@@ -1815,14 +1672,14 @@ if ( ! class_exists( 'WPBookList_General_Functions', false ) ) :
 					case 'page':
 						$class = 'class="wpbooklist_jre_book_cover_shortcode_link"';
 						$link  = get_permalink( $options_row[0]->page_yes );
-						if ( null === $link ) {
+						if (  false === $link ) {
 							$link = $options_row[0]->amazon_detail_page;
 						}
 						break;
 					case 'post':
 						$class = 'class="wpbooklist_jre_book_cover_shortcode_link"';
 						$link  = get_permalink( $options_row[0]->post_yes );
-						if ( null === $link ) {
+						if ( false === $link ) {
 							$link = $options_row[0]->amazon_detail_post;
 						}
 						break;
@@ -1838,6 +1695,8 @@ if ( ! class_exists( 'WPBookList_General_Functions', false ) ) :
 				$link  = $link;
 				$class = 'class="wpbooklist_jre_book_cover_shortcode_link wpbooklist-show-book-colorbox"';
 			}
+
+
 
 			$final_link = '<div style="float:' . $align . '; margin:' . $margin . '; margin-bottom:50px;" class="wpbooklist-shortcode-entire-container"><a  style="z-index:9; float:' . $align . '; margin:' . $margin . ';" ' . $class . ' data-booktable="' . $table . '" data-bookid="' . $options_row[0]->ID . '" ' . $class . ' target="_blank" href="' . $link . '"><img style="min-width:150px; margin-right: 5px; width:' . $width . 'px!important" src="' . $image . '"/></a>';
 
