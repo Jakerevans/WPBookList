@@ -237,6 +237,10 @@ if ( ! class_exists( 'WPBookList_Book', false ) ) :
 					$this->bn_link = $book_array['bn_link'];
 				}
 
+				if ( isset( $book_array['book_uid'] ) ) {
+					$this->book_uid = $book_array['book_uid'];
+				}
+
 				if ( isset( $book_array['bam_link'] ) ) {
 					$this->bam_link = $book_array['bam_link'];
 				}
@@ -2470,6 +2474,9 @@ if ( ! class_exists( 'WPBookList_Book', false ) ) :
 					$post = new WPBookList_Post( $page_post_array );
 					$post = $post->post_id;
 				}
+			} else {
+				$page = $this->page_yes;
+				$post = $this->post_yes;
 			}
 
 			$data = array(

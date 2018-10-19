@@ -794,9 +794,7 @@ class WPBookList_Show_Book_In_Colorbox {
 							                        }
 
 							                        $string42 = '';
-							                        error_log('$page id!!');
-							                        error_log($this->page_id);
-							                        if($this->hidebookpage != 1 && $this->page_id != null && $this->page_id != 'false'){
+							                        if($this->hidebookpage != 1 && $this->page_id != null && $this->page_id != 'false' && $this->page_id != 'N/A'){
 							                        	$string42 = '<tr>
 						                                    <td>
 						                                    	<span class="wpbooklist-bold-stats-class" id="wpbooklist_bold"><a id="wpbooklist-purchase-book-view" href="'.get_permalink( $this->page_id ).'"><span class="wpbooklist-bold-stats-page">' . __('Book Page', 'wpbooklist') . '</span></a></span>
@@ -805,7 +803,7 @@ class WPBookList_Show_Book_In_Colorbox {
 							                        }
 
 							                        $string43 = '';
-							                        if($this->hidebookpost != 1 && $this->post_id != null && $this->post_id != 'false'){
+							                        if($this->hidebookpost != 1 && $this->post_id != null && $this->post_id != 'false' && $this->post_id != 'N/A' ){
 							                        	$string43 = '<tr>
 						                                    <td>
 						                                    	<span class="wpbooklist-bold-stats-class" id="wpbooklist_bold"><a id="wpbooklist-purchase-book-view" href="'.get_permalink( $this->post_id ).'"><span class="wpbooklist-bold-stats-page">' . __('Book Post', 'wpbooklist') . '</span></a></span>

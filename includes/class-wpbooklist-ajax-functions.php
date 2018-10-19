@@ -722,6 +722,10 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 				$bam_link = filter_var( wp_unslash( $_POST['bamlink'] ), FILTER_SANITIZE_URL );
 			}
 
+			if ( isset( $_POST['bookuid'] ) ) {
+				$book_uid = filter_var( wp_unslash( $_POST['bookuid'] ), FILTER_SANITIZE_STRING );
+			}
+
 			if ( isset( $_POST['callnumber'] ) ) {
 				$callnumber = filter_var( wp_unslash( $_POST['callnumber'] ), FILTER_SANITIZE_URL );
 			}
@@ -1010,6 +1014,7 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 				'author_url'         => $author_url,
 				'backcover'          => $backcover,
 				'bam_link'           => $bam_link,
+				'book_uid'			 => $book_uid,
 				'bn_link'            => $bn_link,
 				'callnumber'         => $callnumber,
 				'category'           => $category,
@@ -1100,6 +1105,9 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 					}
 				}
 			}
+
+			error_log('$book_array from ajax func');
+			error_log(print_r($book_array,true));
 
 			require_once CLASS_BOOK_DIR . 'class-wpbooklist-book.php';
 			$book_class  = new WPBookList_Book( 'edit', $book_array, $bookid );

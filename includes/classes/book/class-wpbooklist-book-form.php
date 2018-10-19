@@ -429,6 +429,7 @@ if ( ! class_exists( 'WPBookList_Book_Form', false ) ) :
 										<option>' . $this->trans->trans_131 . '</option>
 										<option>' . $this->trans->trans_132 . '</option>
 									</select>
+									<input type="hidden" id="wpbooklist-addbook-select-createpage-hidden-input"/>
 								</div>
 								<div class="wpbooklist-book-form-indiv-attribute-container">
 									<img class="wpbooklist-icon-image-question" data-label="book-form-createpost" src="' . ROOT_IMG_ICONS_URL . 'question-black.svg">
@@ -438,6 +439,7 @@ if ( ! class_exists( 'WPBookList_Book_Form', false ) ) :
 										<option>' . $this->trans->trans_131 . '</option>
 										<option>' . $this->trans->trans_132 . '</option>
 									</select>
+									<input type="hidden" id="wpbooklist-addbook-select-createpost-hidden-input"/>
 								</div>
 							</div>';
 
