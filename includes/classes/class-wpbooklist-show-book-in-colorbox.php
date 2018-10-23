@@ -817,9 +817,9 @@ if ( ! class_exists( 'WPBookList_Show_Book_In_Colorbox', false ) ) :
 					<td>';
 
 				if ( '' !== $this->edition ) {
-					$string40 = '<span class="wpbooklist-bold-stats-class" id="wpbooklist_bold">' . __('Edition:', 'wpbooklist' ) . ' </span>' . $this->edition . '';
+					$string40 = '<span class="wpbooklist-bold-stats-class" id="wpbooklist_bold">' . $this->trans->trans_155 . ': </span>' . $this->edition . '';
 				} else {
-					$string40 = '<span class="wpbooklist-bold-stats-class" id="wpbooklist_bold">' . __('Edition:', 'wpbooklist' ) . ' </span><span class="wpbooklist-bold-stats-value">' . __('N/A', 'wpbooklist' ) . '</span>';
+					$string40 = '<span class="wpbooklist-bold-stats-class" id="wpbooklist_bold">' . $this->trans->trans_155 . ': </span><span class="wpbooklist-bold-stats-value">' . __('N/A', 'wpbooklist' ) . '</span>';
 				}
 
 				$string41 = '</td>
