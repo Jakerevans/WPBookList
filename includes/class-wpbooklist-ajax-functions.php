@@ -549,6 +549,9 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 				}
 			}
 
+
+			
+
 			require_once CLASS_BOOK_DIR . 'class-wpbooklist-book.php';
 			$book_class    = new WPBookList_Book( $bookaction, $book_array, $bookid );
 			$insert_result = explode( ',', $book_class->add_result );

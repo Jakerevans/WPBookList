@@ -477,8 +477,10 @@ if ( ! class_exists( 'WPBookList_Translations', false ) ) :
 			$this->trans_445 = __( 'WPBookList\'s', 'wpbooklist' );
 			$this->trans_446 = __( 'My Rating', 'wpbooklist' );
 			$this->trans_447 = __( 'Share This Book', 'wpbooklist' );
-
-
+			$this->trans_448 = __( 'Not Available', 'wpbooklist' );
+			$this->trans_449 = __( 'Subject', 'wpbooklist' );
+			$this->trans_450 = __( 'Yes, on', 'wpbooklist' );
+			$this->trans_451 = __( 'Not Yet', 'wpbooklist' );
 
 
 

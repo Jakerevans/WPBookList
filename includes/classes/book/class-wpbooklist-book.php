@@ -791,6 +791,9 @@ if ( ! class_exists( 'WPBookList_Book', false ) ) :
 
 				$xml = simplexml_load_string( $this->amazonapiresult, 'SimpleXMLElement', LIBXML_NOCDATA );
 
+				error_log( '$this->amazonapiresult' );
+				error_log( $this->amazonapiresult );
+
 				// Checking to see if the XML conversion was successful.
 				if ( false === $xml ) {
 					$this->apireport = $this->apireport . 'Looks like something went wrong with converting the Amazon API result to XML. ';

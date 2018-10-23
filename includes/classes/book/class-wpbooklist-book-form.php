@@ -375,6 +375,11 @@ if ( ! class_exists( 'WPBookList_Book_Form', false ) ) :
 				$string_book_form = apply_filters( 'wpbooklist_append_to_book_form_basic_fields', $string_book_form );
 			}
 
+			// This filter allows the addition of the StoreFront Extension fields.
+			if ( has_filter( 'wpbooklist_append_to_book_form_storefront_fields' ) ) {
+				$string_book_form = apply_filters( 'wpbooklist_append_to_book_form_storefront_fields', $string_book_form );
+			}
+
 						$string_book_form = $string_book_form . '</div>
 						<div class="wpbooklist-book-form-inner-container-dropdown-fields">
 							<div class="wpbooklist-book-form-inner-container-dropdown-fields-row">
