@@ -57,6 +57,7 @@ if ( ! class_exists( 'WPBookList_Book', false ) ) :
 		public $google_preview;
 		public $illustrator;
 		public $image;
+		public $lowestusedprice;
 		public $isbn13;
 		public $isbn;
 		public $itunes_page;
@@ -511,7 +512,7 @@ if ( ! class_exists( 'WPBookList_Book', false ) ) :
 			}
 
 			if ( 'search' === $this->action ) {
-				$this->book_page       = $book_array['book_page'];
+				$this->book_page  = $book_array['book_page'];
 				$this->amazonauth = $book_array['amazonauth'];
 				if ( 'true' === $this->amazonauth && 'true' === $this->use_amazon_yes ) {
 					$this->go_amazon = true;
@@ -822,9 +823,27 @@ if ( ! class_exists( 'WPBookList_Book', false ) ) :
 						// Get values from the Amazon Array that has a '0' as a key.
 						if ( array_key_exists( 'Items', $this->amazon_array ) && array_key_exists( 'Item', $this->amazon_array['Items'] ) && array_key_exists( 0, $this->amazon_array['Items']['Item'] ) ) {
 
+							// Get ASIN number.
+							if ( null === $this->asin || '' === $this->asin ) {
+								if ( array_key_exists( 0, $this->amazon_array['Items']['Item'] ) ) {
+
+									if ( array_key_exists( 'ASIN', $this->amazon_array['Items']['Item'][0] ) ) {
+										$this->asin = $this->amazon_array['Items']['Item'][0]['ASIN'];
+									}
+								}
+							}
+
 							// Get title.
 							if ( null === $this->title || '' === $this->title ) {
 								$this->title = $this->amazon_array['Items']['Item'][0]['ItemAttributes']['Title'];
+							}
+
+							// Get lowest used price.
+							if ( null === $this->lowestusedprice || '' === $this->lowestusedprice ) {
+								if ( array_key_exists( 'OfferSummary', $this->amazon_array['Items']['Item'][0] ) && array_key_exists( 'LowestUsedPrice', $this->amazon_array['Items']['Item'][0]['OfferSummary'] ) && array_key_exists( 'FormattedPrice', $this->amazon_array['Items']['Item'][0]['OfferSummary']['LowestUsedPrice'] ) ) {
+
+									$this->lowestusedprice = $this->amazon_array['Items']['Item'][0]['OfferSummary']['LowestUsedPrice']['FormattedPrice'];
+								}
 							}
 
 							// Get cover image.
@@ -978,9 +997,24 @@ if ( ! class_exists( 'WPBookList_Book', false ) ) :
 						// Get values from the Amazon Array that does not have a '0' as a key.
 						if ( array_key_exists( 'Items', $this->amazon_array ) && array_key_exists( 'Item', $this->amazon_array['Items'] ) && ! array_key_exists( 0, $this->amazon_array['Items']['Item'] ) ) {
 
+							// Get ASIN number.
+							if ( null === $this->asin || '' === $this->asin ) {
+								if ( array_key_exists( 'ASIN', $this->amazon_array['Items']['Item'] ) ) {
+									$this->asin = $this->amazon_array['Items']['Item']['ASIN'];
+								}
+							}
+
 							// Get title.
 							if ( null === $this->title || '' === $this->title ) {
 								$this->title = $this->amazon_array['Items']['Item']['ItemAttributes']['Title'];
+							}
+
+							// Get lowest used price.
+							if ( null === $this->lowestusedprice || '' === $this->lowestusedprice ) {
+								if ( array_key_exists( 'OfferSummary', $this->amazon_array['Items']['Item'] ) && array_key_exists( 'LowestUsedPrice', $this->amazon_array['Items']['Item']['OfferSummary'] ) && array_key_exists( 'FormattedPrice', $this->amazon_array['Items']['Item']['OfferSummary']['LowestUsedPrice'] ) ) {
+
+									$this->lowestusedprice = $this->amazon_array['Items']['Item']['OfferSummary']['LowestUsedPrice']['FormattedPrice'];
+								}
 							}
 
 							// Get cover image.
@@ -1839,7 +1873,7 @@ if ( ! class_exists( 'WPBookList_Book', false ) ) :
 			if ( 'Yes' === $this->page_yes || 'Yes' === $this->post_yes ) {
 				$page_post_array = array(
 					'library'            => $this->library,
-					'amazonauth'    => $this->amazonauth,
+					'amazonauth'         => $this->amazonauth,
 					'use_amazon_yes'     => $this->use_amazon_yes,
 					'title'              => $this->title,
 					'isbn'               => $this->isbn,

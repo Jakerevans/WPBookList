@@ -481,6 +481,13 @@ if ( ! class_exists( 'WPBookList_Translations', false ) ) :
 			$this->trans_449 = __( 'Subject', 'wpbooklist' );
 			$this->trans_450 = __( 'Yes, on', 'wpbooklist' );
 			$this->trans_451 = __( 'Not Yet', 'wpbooklist' );
+			$this->trans_452 = __( 'Book Page', 'wpbooklist' );
+			$this->trans_453 = __( 'Book Post', 'wpbooklist' );
+			$this->trans_454 = __( 'Purchase This Book At', 'wpbooklist' );
+			$this->trans_455 = __( 'Similar Titles', 'wpbooklist' );
+			$this->trans_456 = __( 'Featured Titles', 'wpbooklist' );
+			$this->trans_457 = __( 'Description', 'wpbooklist' );
+			$this->trans_458 = __( 'None Provided', 'wpbooklist' );
 
 
 
