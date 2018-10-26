@@ -792,9 +792,6 @@ if ( ! class_exists( 'WPBookList_Book', false ) ) :
 
 				$xml = simplexml_load_string( $this->amazonapiresult, 'SimpleXMLElement', LIBXML_NOCDATA );
 
-				error_log( '$this->amazonapiresult' );
-				error_log( $this->amazonapiresult );
-
 				// Checking to see if the XML conversion was successful.
 				if ( false === $xml ) {
 					$this->apireport = $this->apireport . 'Looks like something went wrong with converting the Amazon API result to XML. ';
@@ -1736,7 +1733,7 @@ if ( ! class_exists( 'WPBookList_Book', false ) ) :
 
 			global $wpdb;
 
-			if ( 'true' === $this->woocommerce ) {
+			if ( 'Yes' === $this->woocommerce ) {
 
 				$price = '';
 				if ( null !== $this->price && '' !== $this->price ) {
@@ -1759,8 +1756,10 @@ if ( ! class_exists( 'WPBookList_Book', false ) ) :
 
 				$woocommerce_existing_id = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM $this->library WHERE ID = %d", $this->id ) );
 
-				include_once STOREFRONT_CLASS_DIR . 'class-storefront-woocommerce.php';
-				$this->woocommerce = new WPBookList_StoreFront_WooCommerce( $this->title, $this->description, $this->image, $price, $this->saleprice, $this->stock, $this->length, $this->width, $this->height, $this->weight, $this->sku, $this->virtual, $this->download, $this->woofile, $this->salebegin, $this->saleend, $this->purchasenote, $this->productcategory, $this->reviews, $woocommerce_existing_id->woocommerce, $this->upsells, $this->crosssells );
+error_log(print_r($this->book_array,true));
+
+				include_once STOREFRONT_CLASS_DIR . 'class-wpbooklist-storefront-woocommerce.php';
+				$this->woocommerce = new WPBookList_StoreFront_WooCommerce( $this->book_array, $woocommerce_existing_id->woocommerce, $this->title, $this->description, $this->image, $this->upsells, $this->crosssells );
 
 				$this->wooid = $this->woocommerce->post_id;
 			}

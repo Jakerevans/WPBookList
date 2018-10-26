@@ -5,7 +5,7 @@
  * @author   Jake Evans
  * @category Admin
  * @package  Includes/Classes
- * @version  1
+ * @version  6.0.0
  */
 
 if ( ! defined( 'ABSPATH' ) ) {

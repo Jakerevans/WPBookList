@@ -549,9 +549,6 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 				}
 			}
 
-
-			
-
 			require_once CLASS_BOOK_DIR . 'class-wpbooklist-book.php';
 			$book_class    = new WPBookList_Book( $bookaction, $book_array, $bookid );
 			$insert_result = explode( ',', $book_class->add_result );
@@ -1108,9 +1105,6 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 					}
 				}
 			}
-
-			error_log('$book_array from ajax func');
-			error_log(print_r($book_array,true));
 
 			require_once CLASS_BOOK_DIR . 'class-wpbooklist-book.php';
 			$book_class  = new WPBookList_Book( 'edit', $book_array, $bookid );
