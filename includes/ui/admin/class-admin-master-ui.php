@@ -47,9 +47,12 @@ class WPBookList_Admin_Menu {
         }
 
         // Controls UI for each Menu/Submenu page
-        switch ($this->page) {
+        switch ( $this->page ) {
             case 'WPBookList-Options-books':
                 $this->setup_books_ui();
+                break;
+            case 'WPBookList-Options-users':
+                $this->setup_users_ui();
                 break;
 
             case 'WPBookList-Options-display-options':
@@ -89,6 +92,25 @@ class WPBookList_Admin_Menu {
 
         if(has_filter('wpbooklist_add_tab_books')) {
             $this->tabs = apply_filters('wpbooklist_add_tab_books', $this->tabs);
+        }
+
+        if($this->activetab == 'default'){
+            $this->activetab = null;
+        }
+
+        $this->output_tabs_ui();
+        $this->output_indiv_tab();
+    }
+
+    // Sets up tabs for the 'Users' page
+    private function setup_users_ui() {
+        $this->tabs = array(
+            'user'   => __("Create a User", 'wpbooklist'),
+            'edit-users'  => __("Edit & Delete Users", 'wpbooklist'),
+        );
+
+        if(has_filter('wpbooklist_add_tab_users')) {
+            $this->tabs = apply_filters('wpbooklist_add_tab_users', $this->tabs);
         }
 
         if($this->activetab == 'default'){

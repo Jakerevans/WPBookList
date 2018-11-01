@@ -488,8 +488,26 @@ if ( ! class_exists( 'WPBookList_Translations', false ) ) :
 			$this->trans_456 = __( 'Featured Titles', 'wpbooklist' );
 			$this->trans_457 = __( 'Description', 'wpbooklist' );
 			$this->trans_458 = __( 'None Provided', 'wpbooklist' );
-
-
+			$this->trans_459 = __( 'Add a User', 'wpbooklist' );
+			$this->trans_460 = __( 'To Add a New WPBookList User, Simply fill out the form below and click the \'Create New User\' button at the bottom of the page. The only required fields are', 'wpbooklist' );
+			$this->trans_461 = __( 'First Name', 'wpbooklist' );
+			$this->trans_462 = __( 'E-Mail', 'wpbooklist' );
+			$this->trans_463 = __( 'Password', 'wpbooklist' );
+			$this->trans_464 = __( 'Username', 'wpbooklist' );
+			$this->trans_465 = __( 'Feel free to leave everything else blank!', 'wpbooklist' );
+			$this->trans_466 = __( 'Last Name', 'wpbooklist' );
+			$this->trans_467 = __( 'Confirm E-Mail', 'wpbooklist' );
+			$this->trans_468 = __( 'Confirm Password', 'wpbooklist' );
+			$this->trans_469 = __( 'User Permissions & Capabilities', 'wpbooklist' );
+			$this->trans_470 = __( 'All Libraries', 'wpbooklist' );
+			$this->trans_471 = __( 'Select the Libraries this User can access: ', 'wpbooklist' );
+			$this->trans_472 = __( 'Add Books?', 'wpbooklist' );
+			$this->trans_473 = __( 'Edit Books?', 'wpbooklist' );
+			$this->trans_474 = __( 'Delete Books?', 'wpbooklist' );
+			$this->trans_475 = __( 'Change Display Options?', 'wpbooklist' );
+			$this->trans_476 = __( 'Change Settings?', 'wpbooklist' );
+			$this->trans_477 = __( 'User Basics', 'wpbooklist' );
+			$this->trans_478 = __( 'Create New User', 'wpbooklist' );
 
 			// The array of translation strings.
 			$translation_array = array(

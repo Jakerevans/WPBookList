@@ -1,0 +1,26 @@
+/**
+ * SCSS - _wpbooklist-admin-users-form.scss - Hold CSS specific to the Users Form for adding and editing users.
+ *
+ * @author   Jake Evans
+ * @category SCSS
+ * @package  Includes/Assets/CSS
+ * @version  6.0.0
+ */
+
+#wpbooklist-smile-icon-2{
+    @extend %wpbooklist-smile-icon;
+    width: 16px;
+    position: relative;
+    top: 2px;
+    display: inline-block;
+    margin: 0;
+    left: 2px;
+}
+
+.wpbooklist-user-form-inner-container-auth-fields, #wpbooklist-user-form-container{
+    margin-top: 100px;
+}
+
+.wpbooklist-user-form-inner-container-auth-fields .wpbooklist-book-form-indiv-attribute-container-exception{
+    display:block;
+}

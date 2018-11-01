@@ -34,6 +34,7 @@ if ( ! class_exists( 'WPBookList_General_Functions', false ) ) :
 
 			$submenu_array = array(
 				'Books',
+				'Users',
 				'Display Options',
 				'Settings',
 				'StoryTime',

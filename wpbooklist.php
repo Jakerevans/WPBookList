@@ -63,6 +63,9 @@ global $wpdb;
 	// Root REST Classes Directory.
 	define( 'CLASS_REST_DIR', ROOT_DIR . 'includes/classes/rest/' );
 
+	// Root Users Classes Directory.
+	define( 'CLASS_USERS_DIR', ROOT_DIR . 'includes/classes/users/' );
+
 	// Root Storytime Classes Directory.
 	define( 'CLASS_STORYTIME_DIR', ROOT_DIR . 'includes/classes/storytime/' );
 

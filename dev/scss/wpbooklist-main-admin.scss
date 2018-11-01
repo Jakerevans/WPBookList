@@ -229,7 +229,13 @@ $storytimeblue: #00a0d2;
     box-shadow: inset 0 -3px 0 rgba(0,0,0,0.1);
  }
 
-
+%wpbooklist-smile-icon{
+    @extend %wpbooklist-margin-auto-centered;
+    width: 30px;
+    display: block;
+    margin-top: 20px;
+    margin-bottom: 15px;
+}
 
 
 
@@ -253,6 +259,7 @@ $storytimeblue: #00a0d2;
 @import '_wpbooklist-admin-ext-style-temp-adverts';
 @import '_wpbooklist-admin-select2.scss';
 @import '_wpbooklist-colorbox.scss';
+@import '_wpbooklist-admin-users-form.scss';
 
 /*
  *  END IMPORTS

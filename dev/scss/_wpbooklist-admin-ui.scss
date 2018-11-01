@@ -145,10 +145,7 @@
 
 #wpbooklist-smile-icon-1{
     @extend %wpbooklist-margin-auto-centered;
-    width: 30px;
-    display: block;
-    margin-top: 20px;
-    margin-bottom: 15px;
+    @extend %wpbooklist-smile-icon;
 }
 
 #wpbooklist-success-span{
