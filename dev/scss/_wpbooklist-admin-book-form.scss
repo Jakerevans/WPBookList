@@ -13,7 +13,7 @@
     vertical-align:top;
 }
 
-.wpbooklist-book-form-container input[type="text"], .wpbooklist-book-form-container input[type="date"], .wpbooklist-book-form-container input[type="number"], .wpbooklist-book-form-indiv-attribute-container select{
+.wpbooklist-book-form-container input[type="text"], .wpbooklist-book-form-container input[type="password"], .wpbooklist-book-form-container input[type="date"], .wpbooklist-book-form-container input[type="number"], .wpbooklist-book-form-indiv-attribute-container select{
     width: 175px;
     display: block;
 }
@@ -50,7 +50,7 @@
     width:45%;
 }
 
-.wpbooklist-book-form-inner-container-multiple-fields .wpbooklist-book-form-indiv-attribute-container input[type="text"], .wpbooklist-book-form-inner-container-textarea-fields .wpbooklist-book-form-indiv-attribute-container textarea{
+.wpbooklist-book-form-inner-container-multiple-fields .wpbooklist-book-form-indiv-attribute-container input[type="text"], .wpbooklist-book-form-inner-container-multiple-fields .wpbooklist-book-form-indiv-attribute-container input[type="password"], .wpbooklist-book-form-inner-container-textarea-fields .wpbooklist-book-form-indiv-attribute-container textarea{
     width:100%;
 }
 

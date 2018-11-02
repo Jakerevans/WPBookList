@@ -24,3 +24,36 @@
 .wpbooklist-user-form-inner-container-auth-fields .wpbooklist-book-form-indiv-attribute-container-exception{
     display:block;
 }
+
+.wpbooklist-adduser-field-checks-div{
+	min-height: 65px;
+	position: relative;
+    top: 20px;
+    display: inline-block;
+    margin-left: 10px;
+    margin-right: 10px;
+    vertical-align: top;
+}
+
+#wpbooklist-user-form-show-passwords{
+	font-size: 11px;
+    font-variant: all-small-caps;
+    cursor: pointer;
+}
+
+#wpbooklist-smile-icon-3{
+    @extend %wpbooklist-smile-icon;
+    margin-top: 5px;
+    margin-bottom: 0px;
+}
+
+.wpbooklist-missing-user-data-red{
+	color:red;
+}
+
+.wpbooklist-ajax-return-img{
+    width: 30px;
+    display: block;
+    margin-top: 20px;
+    margin-bottom: 15px;
+}

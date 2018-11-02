@@ -121,12 +121,12 @@ if ( ! class_exists( 'WPBookList_User_Form', false ) ) :
 									<div class="wpbooklist-book-form-indiv-attribute-container">
 										<img class="wpbooklist-icon-image-question" data-label="user-form-passwordname" src="' . ROOT_IMG_ICONS_URL . 'question-black.svg">
 										<label class="wpbooklist-question-icon-label" for="user-passwordname">' . $this->trans->trans_463 . '</label>
-										<input type="text" id="wpbooklist-adduser-passwordname" name="user-passwordname">
+										<input type="password" id="wpbooklist-adduser-passwordname" name="user-passwordname">
 									</div>
 									<div class="wpbooklist-book-form-indiv-attribute-container">
 										<img class="wpbooklist-icon-image-question" data-label="user-form-confirmpasswordname" src="' . ROOT_IMG_ICONS_URL . 'question-black.svg">
 										<label class="wpbooklist-question-icon-label" for="user-confirmpasswordname">' . $this->trans->trans_468 . '</label>
-										<input type="text" id="wpbooklist-adduser-confirmpasswordname" name="user-confirmpasswordname">
+										<input type="password" id="wpbooklist-adduser-confirmpasswordname" name="user-confirmpasswordname">
 									</div>
 									<div class="wpbooklist-book-form-indiv-attribute-container">
 										<img class="wpbooklist-icon-image-question" data-label="user-form-usernamename" src="' . ROOT_IMG_ICONS_URL . 'question-black.svg">
@@ -139,7 +139,9 @@ if ( ! class_exists( 'WPBookList_User_Form', false ) ) :
 				$string2 = apply_filters( 'wpbooklist_append_to_user_form_basic_fields', $string2 );
 			}
 
-			$string2 = $string2 . '</div>
+			$string2 = $string2 . '<div id="wpbooklist-user-form-show-passwords">' . $this->trans->trans_481 . '</div><br/><div class="wpbooklist-adduser-field-checks-div" id="wpbooklist-adduser-field-checks-email-div"></div>
+									<div class="wpbooklist-adduser-field-checks-div" id="wpbooklist-adduser-field-checks-password-div"></div>
+								</div>
 								<div class="wpbooklist-user-form-inner-container-auth-fields">
 									<div id="wpbooklist-addbook-select-library-label">
 										<p>

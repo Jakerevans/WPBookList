@@ -1,6 +1,6 @@
 <?php
 /**
- * Class WPHealthTracker_Save_Users_Data - class-save-users-data.php
+ * Class WPBookList_Save_Users_Data - class-save-users-data.php
  *
  * @author   Jake Evans
  * @category Admin
@@ -12,12 +12,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-if ( ! class_exists( 'WPHEALTHTRACKER_Save_Users_Data', false ) ) :
+if ( ! class_exists( 'WPBOOKLIST_Save_Users_Data', false ) ) :
 
 	/**
-	 * WPHEALTHTRACKER_Save_Users_Data class. This class will hold all of the logic needed to save the user's Users data.
+	 * WPBOOKLIST_Save_Users_Data class. This class will hold all of the logic needed to save the user's Users data.
 	 */
-	class WPHEALTHTRACKER_Save_Users_Data {
+	class WPBOOKLIST_Save_Users_Data {
 
 		/** Common member variable
 		 *
@@ -97,21 +97,21 @@ if ( ! class_exists( 'WPHEALTHTRACKER_Save_Users_Data', false ) ) :
 			$this->wpuserid         = $users_save_array['wpuserid'];
 			$this->first_name       = $users_save_array['firstname'];
 			$this->last_name        = $users_save_array['lastname'];
-			$this->users_table      = $wpdb->prefix . 'wphealthtracker_users';
+			$this->users_table      = $wpdb->prefix . 'wpbooklist_jre_users_table';
 
 			// Require the Transients file.
-			require_once WPHEALTHTRACKER_CLASSES_TRANSIENTS_DIR . 'class-wphealthtracker-transients.php';
-			$this->transients = new WPHealthTracker_Transients();
+			require_once CLASS_TRANSIENTS_DIR . 'class-wpbooklist-transients.php';
+			$this->transients = new WPBookList_Transients();
 
 			// Determine if we're updating a row or inserting a new row.
-			$this->wphealthtracker_jre_determine_insert_or_update();
+			$this->wpbooklist_jre_determine_insert_or_update();
 
 		}
 
 		/**
 		 *  Determine if we're updating a row or inserting a new row.
 		 */
-		public function wphealthtracker_jre_determine_insert_or_update() {
+		public function wpbooklist_jre_determine_insert_or_update() {
 
 			global $wpdb;
 			$query = $wpdb->prepare( "SELECT * FROM $this->users_table WHERE (wpuserid = %d AND email = %s)", $this->wpuserid, $this->email );
@@ -130,7 +130,7 @@ if ( ! class_exists( 'WPHEALTHTRACKER_Save_Users_Data', false ) ) :
 		/**
 		 *  Actually save the user's Users data.
 		 */
-		public function wphealthtracker_jre_save_users_actual() {
+		public function wpbooklist_jre_save_users_actual() {
 
 			global $wpdb;
 
@@ -151,7 +151,7 @@ if ( ! class_exists( 'WPHEALTHTRACKER_Save_Users_Data', false ) ) :
 			// If we don't have data saved for this user.
 			if ( 'insert' === $this->dbmode ) {
 
-				$this->db_result = $wpdb->insert( $this->users_table, $this->users_save_array, array( '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%d', '%s', '%s', '%s', '%s', '%d', '%d', '%s', '%s', '%s', '%d', '%s' ) );
+				$this->db_result = $wpdb->insert( $this->users_table, $this->users_save_array, array( '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%d', '%s', '%s', '%s', '%s', '%d', '%d', '%s', '%s', '%s', '%d', '%s', '%s' ) );
 
 			}
 
@@ -162,8 +162,8 @@ if ( ! class_exists( 'WPHEALTHTRACKER_Save_Users_Data', false ) ) :
 
 			// If we modified the DB in any way (if there were no errors and if more than 0 rows were affected), then check for an existing applicable Transient and delete it.
 			if ( $this->db_result > 0 ) {
-				require_once WPHEALTHTRACKER_CLASSES_TRANSIENTS_DIR . 'class-wphealthtracker-transients.php';
-				$transients = new WPHealthTracker_Transients();
+				require_once CLASS_TRANSIENTS_DIR . 'class-wpbooklist-transients.php';
+				$transients = new WPBookList_Transients();
 
 				// Transients to check for and delete if they exist.
 				$transient_name1 = 'wpht_' . md5( 'SELECT * FROM ' . $this->users_table . ' ORDER BY firstname' );

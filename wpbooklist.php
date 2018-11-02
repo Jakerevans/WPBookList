@@ -90,6 +90,9 @@ global $wpdb;
 	// Root Backup Directory.
 	define( 'CLASS_BACKUP_DIR', ROOT_DIR . 'includes/classes/backup/' );
 
+	// Root Utilities directory.
+	define( 'CLASS_UTILITIES_DIR', ROOT_DIR . 'includes/classes/utilities/' );
+
 	// Root Image URL .
 	define( 'ROOT_IMG_URL', ROOT_URL . 'assets/img/' );
 
@@ -195,6 +198,8 @@ global $wpdb;
 			'adminnonce44' => 'wpbooklist_dashboard_save_book_display_options_action_callback',
 			'adminnonce45' => 'wpbooklist_get_post_display_options_action_callback',
 			'adminnonce46' => 'wpbooklist_get_page_display_options_action_callback',
+			'adminnonce47' => 'wpbooklist_dashboard_create_wp_user_action_callback',
+			'adminnonce48' => 'wpbooklist_save_user_data_action_callback',
 		))
 	);
 
@@ -344,6 +349,12 @@ global $wpdb;
 
 	// For adding a book from the admin dashboard.
 	add_action( 'wp_ajax_wpbooklist_dashboard_add_book_action', array( $wp_book_list_ajax_functions, 'wpbooklist_dashboard_add_book_action_callback' ) );
+
+	// For creating a WordPress User.
+	add_action( 'wp_ajax_wpbooklist_dashboard_create_wp_user_action', array( $wp_book_list_ajax_functions, 'wpbooklist_dashboard_create_wp_user_action_callback' ) );
+
+	// For saving user data.
+	add_action( 'wp_ajax_wpbooklist_save_user_data_action', array( $wp_book_list_ajax_functions, 'wpbooklist_save_user_data_action_callback' ) );
 
 	// For editing a book from the admin dashboard.
 	add_action( 'wp_ajax_wpbooklist_dashboard_edit_book_action', array( $wp_book_list_ajax_functions, 'wpbooklist_dashboard_edit_book_action_callback' ) );

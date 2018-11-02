@@ -898,6 +898,7 @@ if ( ! class_exists( 'WPBookList_General_Functions', false ) ) :
 						instagram varchar(255),
 						googleplus varchar(255),
 						snapchat varchar(255),
+						libraries varchar(255),
 			            PRIMARY KEY  (ID),
 			              KEY firstname (firstname)
      				) $charset_collate; ";

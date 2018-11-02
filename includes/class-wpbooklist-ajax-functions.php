@@ -27,6 +27,11 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 			require_once CLASS_TRANSLATIONS_DIR . 'class-wpbooklist-translations.php';
 			$this->trans = new WPBookList_Translations();
 			$this->trans->trans_strings();
+
+			// Set the date.
+			require_once CLASS_UTILITIES_DIR . 'class-wpbooklist-utilities-date.php';
+			$utilities_date = new WPBookList_Utilities_Date();
+			$this->date     = $utilities_date->wpbooklist_get_date_via_current_time( 'mysql' );
 		}
 
 		/**
@@ -579,6 +584,168 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 			} else {
 				wp_die( $insert_result[0] . '--sep--' . $insert_result[1] );
 			}
+		}
+
+		/**
+		 * Callback function for creating a WordPress user.
+		 */
+		public function wpbooklist_dashboard_create_wp_user_action_callback() {
+			global $wpdb;
+			check_ajax_referer( 'wpbooklist_dashboard_create_wp_user_action_callback', 'security' );
+
+			$username = '';
+			$email    = '';
+			$password = '';
+
+			if ( isset( $_POST['email'] ) ) {
+				$email = filter_var( $_POST['email'], FILTER_SANITIZE_STRING );
+			}
+
+			if ( isset( $_POST['password'] ) ) {
+				$password = filter_var( $_POST['password'], FILTER_SANITIZE_STRING );
+			}
+
+			if ( isset( $_POST['username'] ) ) {
+				$username = filter_var( $_POST['username'], FILTER_SANITIZE_STRING );
+			}
+
+			$error   = '';
+			$user_id = username_exists( $username );
+
+			if ( $user_id ) {
+				$error = 'Username Exists';
+				wp_die( $error );
+			}
+
+			if ( email_exists( $email ) ) {
+				$error = 'E-Mail Exists';
+				wp_die( $error );
+			}
+
+			if ( ! $user_id && false === email_exists( $email ) ) {
+				$user_id = wp_create_user( $username, $password, $email );
+				if ( ! is_wp_error( $user_id ) ) {
+					$user = get_user_by( 'id', $user_id );
+					$user->set_role( 'wpbooklist_basic_user' );
+					wp_die( '$user_id--' . $user_id );
+				}
+			}
+
+
+		}
+
+		/**
+		 * Callback function for adding a user.
+		 */
+		public function wpbooklist_save_user_data_action_callback() {
+			global $wpdb;
+			check_ajax_referer( 'wpbooklist_save_user_data_action_callback', 'security' );
+
+			$firstname       = '';
+			$lastname        = '';
+			$email           = '';
+			$emailconfirm    = '';
+			$password        = '';
+			$passwordconfirm = '';
+			$username        = '';
+			$addbooks        = '';
+			$editbooks       = '';
+			$deletebooks     = '';
+			$displayoptions  = '';
+			$settings        = '';
+			$wpuserid        = '';
+			$librarystring   = '';
+
+			if ( isset( $_POST['firstname'] ) ) {
+				$firstname = filter_var( $_POST['firstname'], FILTER_SANITIZE_STRING );
+			}
+
+			if ( isset( $_POST['lastname'] ) ) {
+				$lastname = filter_var( $_POST['lastname'], FILTER_SANITIZE_STRING );
+			}
+
+			if ( isset( $_POST['email'] ) ) {
+				$email = filter_var( $_POST['email'], FILTER_SANITIZE_STRING );
+			}
+
+			if ( isset( $_POST['emailconfirm'] ) ) {
+				$emailconfirm = filter_var( $_POST['emailconfirm'], FILTER_SANITIZE_STRING );
+			}
+
+			if ( isset( $_POST['password'] ) ) {
+				$password = filter_var( $_POST['password'], FILTER_SANITIZE_STRING );
+			}
+
+			if ( isset( $_POST['passwordconfirm'] ) ) {
+				$passwordconfirm = filter_var( $_POST['passwordconfirm'], FILTER_SANITIZE_STRING );
+			}
+
+			if ( isset( $_POST['username'] ) ) {
+				$username = filter_var( $_POST['username'], FILTER_SANITIZE_STRING );
+			}
+
+			if ( isset( $_POST['addbooks'] ) ) {
+				$addbooks = filter_var( $_POST['addbooks'], FILTER_SANITIZE_STRING );
+			}
+
+			if ( isset( $_POST['editbooks'] ) ) {
+				$editbooks = filter_var( $_POST['editbooks'], FILTER_SANITIZE_STRING );
+			}
+
+			if ( isset( $_POST['deletebooks'] ) ) {
+				$deletebooks = filter_var( $_POST['deletebooks'], FILTER_SANITIZE_STRING );
+			}
+
+			if ( isset( $_POST['displayoptions'] ) ) {
+				$displayoptions = filter_var( $_POST['displayoptions'], FILTER_SANITIZE_STRING );
+			}
+
+			if ( isset( $_POST['settings'] ) ) {
+				$settings = filter_var( $_POST['settings'], FILTER_SANITIZE_STRING );
+			}
+
+			if ( isset( $_POST['wpuserid'] ) ) {
+				$wpuserid = filter_var( $_POST['wpuserid'], FILTER_SANITIZE_STRING );
+			}
+
+			if ( isset( $_POST['librarystring'] ) ) {
+				$librarystring = filter_var( $_POST['librarystring'], FILTER_SANITIZE_STRING );
+			}
+
+			// Create the permissions string.
+			$permissions = $addbooks . '-' . $editbooks . '-' . $deletebooks . '-' . $displayoptions . '-' . $settings;
+
+			$users_save_array = array(
+				'firstname'   => $firstname,
+				'lastname'    => $lastname,
+				'email'       => $email,
+				'username'    => $username,
+				'permissions' => $permissions,
+				'wpuserid'    => $wpuserid,
+				'datecreated' => $this->date,
+				'libraries'   => $librarystring,
+			);
+
+			// Requiring & Calling the file/class that will insert or update our data.
+			require_once CLASS_USERS_DIR . 'class-wpbooklist-save-users-data.php';
+			$save_class      = new WPBOOKLIST_Save_Users_Data( $users_save_array );
+			$db_write_result = $save_class->wpbooklist_jre_save_users_actual();
+
+			// Build array of values to return to browser.
+			$return_array = array(
+				$db_write_result,
+				$save_class->dbmode,
+				$save_class->email,
+				$save_class->wpuserid,
+				$save_class->last_query,
+				$save_class->transients_deleted,
+				wp_json_encode( $save_class->users_save_array ),
+			);
+
+			// Serialize array.
+			$return_array = wp_json_encode( $return_array );
+			wp_die( $return_array );
+
 		}
 
 		/**
