@@ -19,6 +19,16 @@ if ( ! class_exists( 'WPBookList_General_Functions', false ) ) :
 	class WPBookList_General_Functions {
 
 		/**
+		 * Create new WPBookList User Role on plugin activation.
+		 */
+		public function wpbooklist_add_wpbooklist_role_on_plugin_activation() {
+
+			require_once CLASS_UTILITIES_DIR . 'class-wpbooklist-utilities-accesscheck.php';
+			$this->access          = new WPBookList_Utilities_Accesscheck();
+			$this->currentwphtuser = $this->access->wpbooklist_accesscheck_create_role( 'WPBookList Basic User' );
+		}
+
+		/**
 		 *  Functions that loads up all menu pages/contents, etc.
 		 */
 		public function wpbooklist_jre_admin_page_function() {
@@ -30,7 +40,12 @@ if ( ! class_exists( 'WPBookList_General_Functions', false ) ) :
 		 *  Function to add the admin menu
 		 */
 		public function wpbooklist_jre_my_admin_menu() {
-			add_menu_page( 'WPBookList Options', 'WPBookList', 'manage_options', 'WPBookList-Options', array( $this, 'wpbooklist_jre_admin_page_function' ), ROOT_IMG_URL . 'icon-256x256.png', 6 );
+
+
+$wp_roles = new WP_Roles();
+//$wp_roles->remove_role("wpbooklist_basic_user");
+
+			add_menu_page( 'WPBookList Options', 'WPBookList', 'wpbooklist_dashboard_access', 'WPBookList-Options', array( $this, 'wpbooklist_jre_admin_page_function' ), ROOT_IMG_URL . 'icon-256x256.png', 6 );
 
 			$submenu_array = array(
 				'Books',
@@ -55,9 +70,7 @@ if ( ! class_exists( 'WPBookList_General_Functions', false ) ) :
 
 			remove_submenu_page( 'WPBookList-Options', 'WPBookList-Options' );
 		}
-
 		
-
 		/**
 		 *  Code for adding ajax
 		 */
