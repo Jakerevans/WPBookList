@@ -148,6 +148,37 @@ if ( ! class_exists( 'WPBookList_Book_Form', false ) ) :
 
 			global $wpdb;
 
+			// Set the current WordPress user.
+			$currentwpuser = wp_get_current_user();
+
+			// Now we'll determine access, and stop all execution if user isn't allowed in.
+			require_once CLASS_UTILITIES_DIR . 'class-wpbooklist-utilities-accesscheck.php';
+			$this->access          = new WPBookList_Utilities_Accesscheck();
+			$this->currentwpbluser = $this->access->wpbooklist_accesscheck( $currentwpuser->ID, 'addbook' );
+
+			// If we received false from accesscheck class, display permissions message and stop all further execution.
+			if ( false === $this->currentwpbluser ) {
+
+				// Outputs the 'No Permission!' message.
+				$this->initial_output = $this->access->wpbooklist_accesscheck_no_permission_message();
+				return $this->initial_output;
+			}
+
+			// Now we'll get what libraries the user is allowed to access.
+			require_once CLASS_TRANSIENTS_DIR . 'class-wpbooklist-transients.php';
+			$transients          = new WPBookList_Transients();
+			$settings_table_name = $wpdb->prefix . 'wpbooklist_jre_users_table';
+			$transient_name      = 'wpht_' . md5( 'SELECT * FROM ' . $settings_table_name . " WHERE wpuserid = " . $currentwpuser->ID );
+			$transient_exists    = $transients->existing_transient_check( $transient_name );
+			if ( $transient_exists ) {
+				$this->wpbl_user = $transient_exists;
+			} else {
+				$query                  = 'SELECT * FROM ' . $settings_table_name . " WHERE wpuserid = " . $currentwpuser->ID;
+				$this->wpbl_user = $transients->create_transient( $transient_name, 'wpdb->get_row', $query, MONTH_IN_SECONDS );
+			}
+
+			$wpuser = $this->wpbl_user;
+
 			$string1 = '<p class="wpbooklist-tab-intro-para">' . $this->trans->trans_74 . '<span class="wpbooklist-color-orange-italic"> ' . $this->trans->trans_75 . ' </span>' . $this->trans->trans_76 . ',  <span class="wpbooklist-color-orange-italic">' . $this->trans->trans_77 . '</span>.<br/><br/><span ';
 
 			// Determine if we need to display the Amazon Authorization.
@@ -193,13 +224,52 @@ if ( ! class_exists( 'WPBookList_Book_Form', false ) ) :
 						<div id="wpbooklist-addbook-select-library-label" for="wpbooklist-addbook-select-library"><p><img class="wpbooklist-icon-image-question-with-link" data-label="book-form-libraries" src="' . ROOT_IMG_ICONS_URL . 'question-black.svg"/>' . $this->trans->trans_133 . '</p></div>
 						<div class="wpbooklist-libraries-dropdown-container" id="wpbooklist-libraries-dropdown-container-id">
 							<select class="wpbooklist-addbook-select-default select2-input-libraries" id="wpbooklist-addbook-select-library" name="libraries[]" multiple="multiple">
-							<option selected default value="' . $wpdb->prefix . 'wpbooklist_jre_saved_book_log">' . $this->trans->trans_61 . '</option> ';
+							';
+
+			// If user has 'alllibraries' in the 'Libraries' DB Column, add in the default Library.
+			$string6 = '';
+			$defaultflag = true;
+			if ( false !== stripos( $wpuser->libraries, 'alllibraries' ) || false !== stripos( $wpuser->libraries, 'wpbooklist_jre_saved_book_log' ) ) {
+				$string6     = $string6 . '<option selected default value="' . $wpdb->prefix . 'wpbooklist_jre_saved_book_log">' . $this->trans->trans_61 . '</option> ';
+				$defaultflag = false;
+			}
 
 			// Building drop-down of all libraries.
-			$string6 = '';
-			foreach ( $this->dynamic_libs as $db ) {
+			foreach ( $this->dynamic_libs as $key => $db ) {
 				if ( ( '' !== $db->user_table_name ) || ( null !== $db->user_table_name ) ) {
-					$string6 = $string6 . '<option value="' . $wpdb->prefix . 'wpbooklist_jre_' . $db->user_table_name . '">' . ucfirst( $db->user_table_name ) . '</option>';
+
+					// Making sure the user is allowed to access this particular library - first check for 'alllibraries' access.
+					if ( false !== stripos( $wpuser->libraries, 'alllibraries' ) ) {
+
+						// If we're on the first iteration of the foreach, make this the selected default value.
+						if ( 0 === $key ) {
+
+							// If we haven't already set a default...
+							if ( $defaultflag ) {
+								$string6 = $string6 . '<option selected default value="' . $wpdb->prefix . 'wpbooklist_jre_' . $db->user_table_name . '">' . ucfirst( $db->user_table_name ) . '</option>';
+							} else {
+								$string6 = $string6 . '<option value="' . $wpdb->prefix . 'wpbooklist_jre_' . $db->user_table_name . '">' . ucfirst( $db->user_table_name ) . '</option>';
+							}
+						} else {
+							$string6 = $string6 . '<option value="' . $wpdb->prefix . 'wpbooklist_jre_' . $db->user_table_name . '">' . ucfirst( $db->user_table_name ) . '</option>';
+						}
+					} else {
+
+						if ( false !== stripos( $wpuser->libraries, $db->user_table_name ) ) {
+
+							// If we're on the first iteration of the foreach, make this the selected default value.
+							if ( 0 === $key ) {
+								// If we haven't already set a default...
+								if ( $defaultflag ) {
+									$string6 = $string6 . '<option selected default value="' . $wpdb->prefix . 'wpbooklist_jre_' . $db->user_table_name . '">' . ucfirst( $db->user_table_name ) . '</option>';
+								} else {
+									$string6 = $string6 . '<option value="' . $wpdb->prefix . 'wpbooklist_jre_' . $db->user_table_name . '">' . ucfirst( $db->user_table_name ) . '</option>';
+								}
+							} else {
+								$string6 = $string6 . '<option value="' . $wpdb->prefix . 'wpbooklist_jre_' . $db->user_table_name . '">' . ucfirst( $db->user_table_name ) . '</option>';
+							}
+						}
+					}
 				}
 			}
 

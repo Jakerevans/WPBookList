@@ -26,6 +26,39 @@ if ( ! class_exists( 'WPBookList_General_Functions', false ) ) :
 			require_once CLASS_UTILITIES_DIR . 'class-wpbooklist-utilities-accesscheck.php';
 			$this->access          = new WPBookList_Utilities_Accesscheck();
 			$this->currentwphtuser = $this->access->wpbooklist_accesscheck_create_role( 'WPBookList Basic User' );
+
+			// Set the date.
+			require_once CLASS_UTILITIES_DIR . 'class-wpbooklist-utilities-date.php';
+			$utilities_date = new WPBookList_Utilities_Date();
+			$this->date     = $utilities_date->wpbooklist_get_date_via_current_time( 'mysql' );
+		}
+
+		/**
+		 * Creates new WPBookList User on plugin activation, with info of currently logged-in user, with all permissions to all Libraries.
+		 */
+		public function wpbooklist_create_wpbooklist_user_on_plugin_activation() {
+
+			// Create the permissions string.
+			$permissions = 'Yes-Yes-Yes-Yes-Yes';
+
+			$current_user = wp_get_current_user();
+
+			$users_save_array = array(
+				'firstname'   => $current_user->user_firstname,
+				'lastname'    => $current_user->user_lastname,
+				'email'       => $current_user->user_email,
+				'username'    => $current_user->user_login,
+				'permissions' => $permissions,
+				'wpuserid'    => $current_user->ID,
+				'datecreated' => $this->date,
+				'libraries'   => 'alllibraries',
+				'role'        => 'SuperAdmin',
+			);
+
+			// Requiring & Calling the file/class that will insert or update our data.
+			require_once CLASS_USERS_DIR . 'class-wpbooklist-save-users-data.php';
+			$save_class      = new WPBOOKLIST_Save_Users_Data( $users_save_array );
+			$db_write_result = $save_class->wpbooklist_jre_save_users_actual();
 		}
 
 		/**
@@ -40,10 +73,6 @@ if ( ! class_exists( 'WPBookList_General_Functions', false ) ) :
 		 *  Function to add the admin menu
 		 */
 		public function wpbooklist_jre_my_admin_menu() {
-
-
-$wp_roles = new WP_Roles();
-//$wp_roles->remove_role("wpbooklist_basic_user");
 
 			add_menu_page( 'WPBookList Options', 'WPBookList', 'wpbooklist_dashboard_access', 'WPBookList-Options', array( $this, 'wpbooklist_jre_admin_page_function' ), ROOT_IMG_URL . 'icon-256x256.png', 6 );
 
@@ -65,7 +94,7 @@ $wp_roles = new WP_Roles();
 
 			foreach ( $submenu_array as $key => $submenu ) {
 				$menu_slug = strtolower( str_replace( ' ', '-', $submenu ) );
-				add_submenu_page( 'WPBookList-Options', 'WPBookList', $submenu, 'manage_options', 'WPBookList-Options-' . $menu_slug, array( $this, 'wpbooklist_jre_admin_page_function' ) );
+				add_submenu_page( 'WPBookList-Options', 'WPBookList', $submenu, 'wpbooklist_dashboard_access', 'WPBookList-Options-' . $menu_slug, array( $this, 'wpbooklist_jre_admin_page_function' ) );
 			}
 
 			remove_submenu_page( 'WPBookList-Options', 'WPBookList-Options' );
@@ -144,7 +173,7 @@ $wp_roles = new WP_Roles();
 			$this->user_options = $wpdb->get_row( 'SELECT * FROM ' . $wpdb->prefix . 'wpbooklist_jre_user_options' );
 			$final_array_of_php_values['CUSTOM_FIELDS_STRING'] = $this->user_options->customfields;
 
-			// Now registering/localizing our JavaScript file, passing all the PHP variables we'll need in our $final_array_of_php_values array, to be accessed from 'wphealthtracker_php_variables' object (like wphealthtracker_php_variables.nameofkey, like any other JavaScript object).
+			// Now registering/localizing our JavaScript file, passing all the PHP variables we'll need in our $final_array_of_php_values array, to be accessed from 'wpbooklist_php_variables' object (like wpbooklist_php_variables.nameofkey, like any other JavaScript object).
 			wp_localize_script( 'adminjs', 'wpbooklistPhpVariables', $final_array_of_php_values );
 
 			wp_enqueue_script( 'adminjs' );
@@ -182,7 +211,7 @@ $wp_roles = new WP_Roles();
 			$final_array_of_php_values['ROOT_IMG_URL']       = ROOT_IMG_URL;
 			$final_array_of_php_values['SOUNDS_URL']         = SOUNDS_URL;
 
-			// Now registering/localizing our JavaScript file, passing all the PHP variables we'll need in our $final_array_of_php_values array, to be accessed from 'wphealthtracker_php_variables' object (like wphealthtracker_php_variables.nameofkey, like any other JavaScript object).
+			// Now registering/localizing our JavaScript file, passing all the PHP variables we'll need in our $final_array_of_php_values array, to be accessed from 'wpbooklist_php_variables' object (like wpbooklist_php_variables.nameofkey, like any other JavaScript object).
 			wp_localize_script( 'frontendjs', 'wpbooklistPhpVariables', $final_array_of_php_values );
 
 			wp_enqueue_script( 'frontendjs' );

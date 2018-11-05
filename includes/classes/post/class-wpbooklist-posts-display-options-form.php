@@ -36,6 +36,22 @@ if ( ! class_exists( 'WPBookList_Posts_Display_Options_Form', false ) ) :
 		public function output_posts_display_options_form() {
 			global $wpdb;
 
+			// Set the current WordPress user.
+			$currentwpuser = wp_get_current_user();
+
+			// Now we'll determine access, and stop all execution if user isn't allowed in.
+			require_once CLASS_UTILITIES_DIR . 'class-wpbooklist-utilities-accesscheck.php';
+			$this->access          = new WPBookList_Utilities_Accesscheck();
+			$this->currentwpbluser = $this->access->wpbooklist_accesscheck( $currentwpuser->ID, 'displayoptions' );
+
+			// If we received false from accesscheck class, display permissions message.
+			if ( false === $this->currentwpbluser ) {
+
+				// Outputs the 'No Permission!' message.
+				$this->initial_output = $this->access->wpbooklist_accesscheck_no_permission_message();
+				return $this->initial_output;
+			}
+
 			// Getting the settings for posts.
 			$table_name  = $wpdb->prefix . 'wpbooklist_jre_post_options';
 			$options_row = $wpdb->get_row( "SELECT * FROM $table_name" );

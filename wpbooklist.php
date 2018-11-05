@@ -256,6 +256,9 @@ global $wpdb;
 	// Creates basic WPBookList User role on activation.
 	register_activation_hook( __FILE__, array( $wp_book_list_general_functions, 'wpbooklist_add_wpbooklist_role_on_plugin_activation' ) );
 
+	// Creates new WPBookList User on plugin activation, with info of currently logged-in user.
+	register_activation_hook( __FILE__, array( $wp_book_list_general_functions, 'wpbooklist_create_wpbooklist_user_on_plugin_activation' ) );
+
 	// Creates default table upon activation.
 	register_activation_hook( __FILE__, array( $wp_book_list_general_functions, 'wpbooklist_jre_create_default_lib' ) );
 

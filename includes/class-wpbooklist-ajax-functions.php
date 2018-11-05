@@ -3994,9 +3994,22 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 			global $wpdb;
 			check_ajax_referer( 'wpbooklist_get_library_view_display_options_action_callback', 'security' );
 
+			if ( isset( $_POST['library'] ) ) {
+				$library = filter_var( wp_unslash( $_POST['library'] ), FILTER_SANITIZE_STRING );
+
+			}
+
+			if ( false === stripos( $library, 'wpbooklist_jre_saved_book_log' ) ) {
+				$library = filter_var( wp_unslash( $_POST['library'] ), FILTER_SANITIZE_STRING );
+				$library = explode( '_wpbooklist_jre_', $library );
+				$library = $wpdb->prefix . 'wpbooklist_jre_settings_' . $library[1];
+			} else {
+				$library = $wpdb->prefix . 'wpbooklist_jre_user_options';
+			}
+
 			// Now get the Display Options.
 			global $wpdb;
-			$this->user_options = $wpdb->get_row( 'SELECT * FROM ' . $wpdb->prefix . 'wpbooklist_jre_user_options' );
+			$this->user_options = $wpdb->get_row( 'SELECT * FROM ' . $library );
 			wp_die( wp_json_encode( $this->user_options ) );
 		}
 

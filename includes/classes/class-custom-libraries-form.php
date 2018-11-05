@@ -31,6 +31,24 @@ class WPBookList_Custom_Libraries_Form {
 
 	public function output_custom_libraries_form(){
 		global $wpdb;
+
+		// Set the current WordPress user.
+		$currentwpuser = wp_get_current_user();
+
+		// Now we'll determine access, and stop all execution if user isn't allowed in.
+		require_once CLASS_UTILITIES_DIR . 'class-wpbooklist-utilities-accesscheck.php';
+		$this->access          = new WPBookList_Utilities_Accesscheck();
+		$this->currentwpbluser = $this->access->wpbooklist_accesscheck( $currentwpuser->ID, 'settings' );
+
+		// If we received false from accesscheck class, display permissions message.
+		if ( false === $this->currentwpbluser ) {
+
+			// Outputs the 'No Permission!' message.
+			$this->initial_output = $this->access->wpbooklist_accesscheck_no_permission_message();
+			return $this->initial_output;
+		}
+
+
 		$table_name = $wpdb->prefix . 'wpbooklist_jre_list_dynamic_db_names';
 		$db_row = $wpdb->get_results("SELECT * FROM $table_name");
 

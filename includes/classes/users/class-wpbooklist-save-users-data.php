@@ -134,15 +134,6 @@ if ( ! class_exists( 'WPBOOKLIST_Save_Users_Data', false ) ) :
 
 			global $wpdb;
 
-			// Also make the God check here - if role is godmode...
-			$this->prev_god = '';
-			if ( 'SuperAdmin' === $this->users_save_array['role'] ) {
-				$godmode        = 'godmode';
-				$this->prev_god = $wpdb->get_row(  $wpdb->prepare( "SELECT * FROM $this->users_table WHERE role = %s", $godmode ) );
-
-				$this->users_save_array['role'] = 'godmode';
-			}
-
 			// If we already have a row of saved data for this user on humandate, just update.
 			if ( 'update' === $this->dbmode ) {
 
@@ -179,16 +170,6 @@ if ( ! class_exists( 'WPBOOKLIST_Save_Users_Data', false ) ) :
 					$this->transients_deleted = $this->transients_deleted . 'SELECT * FROM ' . $this->users_table . ' ORDER BY firstname';
 				}
 
-				if ( '' !== $this->prev_god ) {
-
-					// Resetting God.
-					$data_format           = array( '%s' );
-					$where                 = array(
-						'wpuserid' => $this->prev_god->wpuserid,
-					);
-					$where_format          = array( '%d' );
-					$this->prev_god_result = $wpdb->update( $this->users_table, array( 'role' => 'admin' ), $where, $data_format, $where_format );
-				}
 			}
 
 			return $this->db_result;

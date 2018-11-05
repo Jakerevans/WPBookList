@@ -37,6 +37,40 @@ if ( ! class_exists( 'WPBookList_LibraryStylePaks_Display_Options_Form', false )
 		public function output_add_edit_form() {
 			global $wpdb;
 
+			// Set the current WordPress user.
+			$currentwpuser = wp_get_current_user();
+
+			// Now we'll get what libraries the user is allowed to access.
+			require_once CLASS_TRANSIENTS_DIR . 'class-wpbooklist-transients.php';
+			$transients          = new WPBookList_Transients();
+			$settings_table_name = $wpdb->prefix . 'wpbooklist_jre_users_table';
+			$transient_name      = 'wpht_' . md5( 'SELECT * FROM ' . $settings_table_name . " WHERE wpuserid = " . $currentwpuser->ID );
+			$transient_exists    = $transients->existing_transient_check( $transient_name );
+			if ( $transient_exists ) {
+				$this->wpbl_user = $transient_exists;
+			} else {
+				$query                  = 'SELECT * FROM ' . $settings_table_name . " WHERE wpuserid = " . $currentwpuser->ID;
+				$this->wpbl_user = $transients->create_transient( $transient_name, 'wpdb->get_row', $query, MONTH_IN_SECONDS );
+			}
+
+			$wpuser = $this->wpbl_user;
+
+			// Set the current WordPress user.
+			$currentwpuser = wp_get_current_user();
+
+			// Now we'll determine access, and stop all execution if user isn't allowed in.
+			require_once CLASS_UTILITIES_DIR . 'class-wpbooklist-utilities-accesscheck.php';
+			$this->access          = new WPBookList_Utilities_Accesscheck();
+			$this->currentwpbluser = $this->access->wpbooklist_accesscheck( $currentwpuser->ID, 'displayoptions' );
+
+			// If we received false from accesscheck class, display permissions message.
+			if ( false === $this->currentwpbluser ) {
+
+				// Outputs the 'No Permission!' message.
+				$this->initial_output = $this->access->wpbooklist_accesscheck_no_permission_message();
+				return $this->initial_output;
+			}
+
 			$table_name = $wpdb->prefix . 'wpbooklist_jre_list_dynamic_db_names';
 			$db_row     = $wpdb->get_results( "SELECT * FROM $table_name" );
 
@@ -111,15 +145,12 @@ if ( ! class_exists( 'WPBookList_LibraryStylePaks_Display_Options_Form', false )
 									<option value="Default StylePak">' . $this->trans->trans_324 . '</option>';
 
 			foreach ( glob( LIBRARY_STYLEPAKS_UPLOAD_DIR . '*.*' ) as $filename ) {
-				error_log('yo');
 				$filename     = basename( $filename );
 				$display_name = str_replace( '.css', '', $filename );
 				$display_name = str_replace( '.zip', '', $display_name );
 				$display_name = str_replace( ' .css', '', $display_name );
 				$display_name = str_replace( ' .zip', '', $display_name );
-				error_log($filename);
 				//if ( false !== stripos( $filename, ' .css' ) || false !== stripos( $filename, ' .zip' ) ) {
-					error_log('yo2');
 					$filename = str_replace( ' .zip', '', $filename );
 					$string2  = $string2 . '<option id="' . $filename . '" value="' . $filename . '">' . $display_name . '</option>';
 				//}
@@ -128,13 +159,52 @@ if ( ! class_exists( 'WPBookList_LibraryStylePaks_Display_Options_Form', false )
 			$string2 = $string2 . '</select>';
 
 			$string3 = '<div id="wpbooklist-stylepak-select-library-label" for="wpbooklist-stylepak-select-library">Select a Library to Apply This StylePak to:</div>
-						<select class="wpbooklist-stylepak-select-default" id="wpbooklist-stylepak-select-library">
-							<option value="' . $wpdb->prefix . 'wpbooklist_jre_saved_book_log">' . $this->trans->trans_61 . '</option> ';
+						<select class="wpbooklist-stylepak-select-default" id="wpbooklist-stylepak-select-library">';
 
-			$string4 = '';
-			foreach ( $db_row as $db ) {
+			// If user has 'alllibraries' in the 'Libraries' DB Column, add in the default Library.
+			$string4     = '';
+			$defaultflag = true;
+			if ( false !== stripos( $wpuser->libraries, 'alllibraries' ) || false !== stripos( $wpuser->libraries, 'wpbooklist_jre_saved_book_log' ) ) {
+				$string4     = $string4 . '<option selected default value="' . $wpdb->prefix . 'wpbooklist_jre_saved_book_log">' . $this->trans->trans_61 . '</option> ';
+				$defaultflag = false;
+			}
+
+			// Building drop-down of all libraries.
+			foreach ( $db_row as $key => $db ) {
 				if ( ( '' !== $db->user_table_name ) || ( null !== $db->user_table_name ) ) {
-					$string4 = $string4 . '<option value="' . $wpdb->prefix . 'wpbooklist_jre_' . $db->user_table_name . '">' . ucfirst( $db->user_table_name ) . '</option>';
+
+					// Making sure the user is allowed to access this particular library - first check for 'alllibraries' access.
+					if ( false !== stripos( $wpuser->libraries, 'alllibraries' ) ) {
+
+						// If we're on the first iteration of the foreach, make this the selected default value.
+						if ( 0 === $key ) {
+
+							// If we haven't already set a default...
+							if ( $defaultflag ) {
+								$string4 = $string4 . '<option selected default value="' . $wpdb->prefix . 'wpbooklist_jre_' . $db->user_table_name . '">' . ucfirst( $db->user_table_name ) . '</option>';
+							} else {
+								$string4 = $string4 . '<option value="' . $wpdb->prefix . 'wpbooklist_jre_' . $db->user_table_name . '">' . ucfirst( $db->user_table_name ) . '</option>';
+							}
+						} else {
+							$string4 = $string4 . '<option value="' . $wpdb->prefix . 'wpbooklist_jre_' . $db->user_table_name . '">' . ucfirst( $db->user_table_name ) . '</option>';
+						}
+					} else {
+
+						if ( false !== stripos( $wpuser->libraries, $db->user_table_name ) ) {
+
+							// If we're on the first iteration of the foreach, make this the selected default value.
+							if ( 0 === $key ) {
+								// If we haven't already set a default...
+								if ( $defaultflag ) {
+									$string4 = $string4 . '<option selected default value="' . $wpdb->prefix . 'wpbooklist_jre_' . $db->user_table_name . '">' . ucfirst( $db->user_table_name ) . '</option>';
+								} else {
+									$string4 = $string4 . '<option value="' . $wpdb->prefix . 'wpbooklist_jre_' . $db->user_table_name . '">' . ucfirst( $db->user_table_name ) . '</option>';
+								}
+							} else {
+								$string4 = $string4 . '<option value="' . $wpdb->prefix . 'wpbooklist_jre_' . $db->user_table_name . '">' . ucfirst( $db->user_table_name ) . '</option>';
+							}
+						}
+					}
 				}
 			}
 

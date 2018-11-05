@@ -1,6 +1,6 @@
 <?php
 /**
- * Class WPHealthTracker_Users_Ajax_Functions - wphealthtracker-users-ajax.php
+ * Class WPHealthTracker_Users_Ajax_Functions - wpbooklist-users-ajax.php
  *
  * @author   Jake Evans
  * @category Admin
@@ -16,7 +16,7 @@ if ( ! class_exists( 'WPHealthTracker_Users_Ajax_Functions', false ) ) :
 	/**
 	 * WPHealthTracker_Users_Ajax_Functions class. Here we'll house all of the Ajax Callback functions we'll need to
 	 * make the Users tab run as expected. The initial functions that send calls to the functions in this file are
-	 * located in the wphealthtracker-users-js.js JavaScript file.
+	 * located in the wpbooklist-users-js.js JavaScript file.
 	 */
 	class WPHealthTracker_Users_Ajax_Functions {
 
@@ -26,18 +26,18 @@ if ( ! class_exists( 'WPHealthTracker_Users_Ajax_Functions', false ) ) :
 		public function __construct() {
 
 			// Set the date.
-			require_once WPHEALTHTRACKER_CLASSES_UTILITIES_DIR . 'class-wphealthtracker-utilities-date.php';
-			$utilities_date = new WPHealthTracker_Utilities_Date();
-			$this->date     = $utilities_date->wphealthtracker_get_date_via_current_time( 'mysql' );
+			require_once CLASS_UTILITIES_DIR . 'class-wpbooklist-utilities-date.php';
+			$utilities_date = new WPBookList_Utilities_Date();
+			$this->date     = $utilities_date->wpbooklist_get_date_via_current_time( 'mysql' );
 
 		}
 
 		/**
-		 * Callback function for the wphealthtracker_jre_save_users_data() function found in wphealthtracker-users-js.js - for saving user's data.
+		 * Callback function for the wpbooklist_jre_save_users_data() function found in wpbooklist-users-js.js - for saving user's data.
 		 */
-		public function wphealthtracker_jre_create_wp_users_data_action_callback() {
+		public function wpbooklist_jre_create_wp_users_data_action_callback() {
 			global $wpdb;
-			check_ajax_referer( 'wphealthtracker_jre_create_wp_users_data_action', 'security' );
+			check_ajax_referer( 'wpbooklist_jre_create_wp_users_data_action', 'security' );
 
 			$username = '';
 			$email    = '';
@@ -72,18 +72,18 @@ if ( ! class_exists( 'WPHealthTracker_Users_Ajax_Functions', false ) ) :
 				$user_id = wp_create_user( $username, $password, $email );
 				if ( ! is_wp_error( $user_id ) ) {
 					$user = get_user_by( 'id', $user_id );
-					$user->set_role( 'wphealthtracker_basic_user' );
+					$user->set_role( 'wpbooklist_basic_user' );
 					wp_die( '$user_id' );
 				}
 			}
 		}
 
 		/**
-		 * Callback function for the wphealthtracker_jre_save_users_data() function found in wphealthtracker-users-js.js - for saving user's data.
+		 * Callback function for the wpbooklist_jre_save_users_data() function found in wpbooklist-users-js.js - for saving user's data.
 		 */
-		public function wphealthtracker_jre_save_users_data_action_callback() {
+		public function wpbooklist_jre_save_users_data_action_callback() {
 			global $wpdb;
-			check_ajax_referer( 'wphealthtracker_jre_save_users_data_action_callback', 'security' );
+			check_ajax_referer( 'wpbooklist_jre_save_users_data_action_callback', 'security' );
 
 			$firstname         = '';
 			$lastname          = '';
@@ -231,9 +231,9 @@ if ( ! class_exists( 'WPHealthTracker_Users_Ajax_Functions', false ) ) :
 			);
 
 			// Requiring & Calling the file/class that will insert or update our data.
-			require_once WPHEALTHTRACKER_USERS_DIR . 'class-wphealthtracker-save-users-data.php';
+			require_once WPHEALTHTRACKER_USERS_DIR . 'class-wpbooklist-save-users-data.php';
 			$save_class      = new WPHEALTHTRACKER_Save_Users_Data( $users_save_array );
-			$db_write_result = $save_class->wphealthtracker_jre_save_users_actual();
+			$db_write_result = $save_class->wpbooklist_jre_save_users_actual();
 
 			// Build array of values to return to browser.
 			$return_array = array(

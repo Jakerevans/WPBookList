@@ -39,6 +39,37 @@ if ( ! class_exists( 'WPBookList_Backup_Settings_Form', false ) ) :
 		public function output_backup_settings_form() {
 			global $wpdb;
 
+			// Set the current WordPress user.
+			$currentwpuser = wp_get_current_user();
+
+			// Now we'll determine access, and stop all execution if user isn't allowed in.
+			require_once CLASS_UTILITIES_DIR . 'class-wpbooklist-utilities-accesscheck.php';
+			$this->access          = new WPBookList_Utilities_Accesscheck();
+			$this->currentwpbluser = $this->access->wpbooklist_accesscheck( $currentwpuser->ID, 'settings' );
+
+			// If we received false from accesscheck class, display permissions message.
+			if ( false === $this->currentwpbluser ) {
+
+				// Outputs the 'No Permission!' message.
+				$this->initial_output = $this->access->wpbooklist_accesscheck_no_permission_message();
+				return $this->initial_output;
+			}
+
+			// Now we'll get what libraries the user is allowed to access.
+			require_once CLASS_TRANSIENTS_DIR . 'class-wpbooklist-transients.php';
+			$transients          = new WPBookList_Transients();
+			$settings_table_name = $wpdb->prefix . 'wpbooklist_jre_users_table';
+			$transient_name      = 'wpht_' . md5( 'SELECT * FROM ' . $settings_table_name . " WHERE wpuserid = " . $currentwpuser->ID );
+			$transient_exists    = $transients->existing_transient_check( $transient_name );
+			if ( $transient_exists ) {
+				$this->wpbl_user = $transient_exists;
+			} else {
+				$query                  = 'SELECT * FROM ' . $settings_table_name . " WHERE wpuserid = " . $currentwpuser->ID;
+				$this->wpbl_user = $transients->create_transient( $transient_name, 'wpdb->get_row', $query, MONTH_IN_SECONDS );
+			}
+
+			$wpuser = $this->wpbl_user;
+
 			$table_name       = $wpdb->prefix . 'wpbooklist_jre_list_dynamic_db_names';
 			$transient_name   = 'wpbl_' . md5( 'SELECT * FROM ' . $table_name );
 			$transient_exists = $this->transients->existing_transient_check( $transient_name );
@@ -55,13 +86,32 @@ if ( ! class_exists( 'WPBookList_Backup_Settings_Form', false ) ) :
 			$string2 = '<div id="wpbooklist-apply-stylepak-wrapper">
 							<div id="wpbooklist-backup-select-library-label" for="wpbooklist-backup-select-library">' . $this->trans->trans_59 . '</div>
 								<select class="wpbooklist-stylepak-select-default" id="wpbooklist-backup-select-library">
-									<option selected disabled value="' . $this->trans->trans_60 . '...">' . $this->trans->trans_60 . '...</option>
-									<option value="' . $wpdb->prefix . 'wpbooklist_jre_saved_book_log">' . $this->trans->trans_61 . '</option> ';
+									<option selected disabled value="' . $this->trans->trans_60 . '...">' . $this->trans->trans_60 . '...</option>';
 
-			$string3 = '';
-			foreach ( $db_row as $db ) {
+			// If user has 'alllibraries' in the 'Libraries' DB Column, add in the default Library.
+			$string3     = '';
+			$defaultflag = true;
+			if ( false !== stripos( $wpuser->libraries, 'alllibraries' ) || false !== stripos( $wpuser->libraries, 'wpbooklist_jre_saved_book_log' ) ) {
+				$string3     = $string3 . '<option selected default value="' . $wpdb->prefix . 'wpbooklist_jre_saved_book_log">' . $this->trans->trans_61 . '</option> ';
+				$defaultflag = false;
+			}
+
+			// Building drop-down of all libraries.
+			foreach ( $db_row as $key => $db ) {
 				if ( ( '' !== $db->user_table_name ) || ( null !== $db->user_table_name ) ) {
-					$string3 = $string3 . '<option value="' . $wpdb->prefix . 'wpbooklist_jre_' . $db->user_table_name . '">' . ucfirst( $db->user_table_name ) . '</option>';
+
+					// Making sure the user is allowed to access this particular library - first check for 'alllibraries' access.
+					if ( false !== stripos( $wpuser->libraries, 'alllibraries' ) ) {
+
+						$string3 = $string3 . '<option value="' . $wpdb->prefix . 'wpbooklist_jre_' . $db->user_table_name . '">' . ucfirst( $db->user_table_name ) . '</option>';
+
+					} else {
+
+						if ( false !== stripos( $wpuser->libraries, $db->user_table_name ) ) {
+
+							$string3 = $string3 . '<option value="' . $wpdb->prefix . 'wpbooklist_jre_' . $db->user_table_name . '">' . ucfirst( $db->user_table_name ) . '</option>';
+						}
+					}
 				}
 			}
 
@@ -74,13 +124,32 @@ if ( ! class_exists( 'WPBookList_Backup_Settings_Form', false ) ) :
 			<div id="wpbooklist-apply-stylepak-wrapper">
 				<div id="wpbooklist-backup-select-library-label">' . $this->trans->trans_65 . ':</div>
 					<select class="wpbooklist-stylepak-select-default" id="wpbooklist-select-library-backup">	
-						<option selected disabled>' . $this->trans->trans_65 . '...</option>
-						<option value="' . $wpdb->prefix . 'wpbooklist_jre_saved_book_log">' . $this->trans->trans_61 . '</option>';
+						<option selected disabled>' . $this->trans->trans_65 . '...</option>';
 
-			$string6 = '';
-			foreach ( $db_row as $db ) {
+			// If user has 'alllibraries' in the 'Libraries' DB Column, add in the default Library.
+			$string6     = '';
+			$defaultflag = true;
+			if ( false !== stripos( $wpuser->libraries, 'alllibraries' ) || false !== stripos( $wpuser->libraries, 'wpbooklist_jre_saved_book_log' ) ) {
+				$string6     = $string6 . '<option selected default value="' . $wpdb->prefix . 'wpbooklist_jre_saved_book_log">' . $this->trans->trans_61 . '</option> ';
+				$defaultflag = false;
+			}
+
+			// Building drop-down of all libraries.
+			foreach ( $db_row as $key => $db ) {
 				if ( ( '' !== $db->user_table_name ) || ( null !== $db->user_table_name ) ) {
-					$string6 = $string6 . '<option value="' . $wpdb->prefix . 'wpbooklist_jre_' . $db->user_table_name . '">' . ucfirst( $db->user_table_name ) . '</option>';
+
+					// Making sure the user is allowed to access this particular library - first check for 'alllibraries' access.
+					if ( false !== stripos( $wpuser->libraries, 'alllibraries' ) ) {
+
+						$string6 = $string6 . '<option value="' . $wpdb->prefix . 'wpbooklist_jre_' . $db->user_table_name . '">' . ucfirst( $db->user_table_name ) . '</option>';
+
+					} else {
+
+						if ( false !== stripos( $wpuser->libraries, $db->user_table_name ) ) {
+
+							$string6 = $string6 . '<option value="' . $wpdb->prefix . 'wpbooklist_jre_' . $db->user_table_name . '">' . ucfirst( $db->user_table_name ) . '</option>';
+						}
+					}
 				}
 			}
 
@@ -111,8 +180,35 @@ if ( ! class_exists( 'WPBookList_Backup_Settings_Form', false ) ) :
 							<div id="wpbooklist-apply-stylepak-wrapper">
 								<div id="wpbooklist-backup-select-library-label" for="wpbooklist-backup-select-library">' . $this->trans->trans_370 . '</div>
 								<select class="wpbooklist-stylepak-select-default" id="wpbooklist-backup-csv-select-library">
-									<option selected disabled value="' . $this->trans->trans_60 . '...">' . $this->trans->trans_60 . '...</option>
-									<option value="' . $wpdb->prefix . 'wpbooklist_jre_saved_book_log">' . $this->trans->trans_61 . '</option>' . $string3 . '</select>
+									<option selected disabled value="' . $this->trans->trans_60 . '...">' . $this->trans->trans_60 . '...</option>';
+
+			// If user has 'alllibraries' in the 'Libraries' DB Column, add in the default Library.
+			$defaultflag = true;
+			if ( false !== stripos( $wpuser->libraries, 'alllibraries' ) || false !== stripos( $wpuser->libraries, 'wpbooklist_jre_saved_book_log' ) ) {
+				$string11    = $string11 . '<option selected default value="' . $wpdb->prefix . 'wpbooklist_jre_saved_book_log">' . $this->trans->trans_61 . '</option> ';
+				$defaultflag = false;
+			}
+
+			// Building drop-down of all libraries.
+			foreach ( $db_row as $key => $db ) {
+				if ( ( '' !== $db->user_table_name ) || ( null !== $db->user_table_name ) ) {
+
+					// Making sure the user is allowed to access this particular library - first check for 'alllibraries' access.
+					if ( false !== stripos( $wpuser->libraries, 'alllibraries' ) ) {
+
+						$string11 = $string11 . '<option value="' . $wpdb->prefix . 'wpbooklist_jre_' . $db->user_table_name . '">' . ucfirst( $db->user_table_name ) . '</option>';
+
+					} else {
+
+						if ( false !== stripos( $wpuser->libraries, $db->user_table_name ) ) {
+
+							$string11 = $string11 . '<option value="' . $wpdb->prefix . 'wpbooklist_jre_' . $db->user_table_name . '">' . ucfirst( $db->user_table_name ) . '</option>';
+						}
+					}
+				}
+			}
+
+			$string11 = $string11 . '</select>
 								<button disabled class="wpbooklist-response-success-fail-button" id="wpbooklist-apply-library-backup-csv">' . $this->trans->trans_72 . '</button>
 								<div class="wpbooklist-spinner" id="wpbooklist-spinner-backup-csv"></div>
 							</div>

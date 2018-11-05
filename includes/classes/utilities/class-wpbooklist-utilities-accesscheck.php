@@ -29,12 +29,12 @@ if ( ! class_exists( 'WPBookList_Utilities_Accesscheck', false ) ) :
 		 *
 		 * @param int $wpuserid - The users ID we're checking access on.
 		 */
-		public function wpbooklist_accesscheck( $wpuserid ) {
+		public function wpbooklist_accesscheck( $wpuserid, $request ) {
 
 			global $wpdb;
 
 			// Get all saved Users from the WPBookList Users table.
-			$users_table_name = $wpdb->prefix . 'wpbooklist_users';
+			$users_table_name = $wpdb->prefix . 'wpbooklist_jre_users_table';
 
 			// Make call to Transients class to see if Transient currently exists. If so, retrieve it, if not, make call to create_transient() with all required Parameters.
 			require_once CLASS_TRANSIENTS_DIR . 'class-wpbooklist-transients.php';
@@ -53,14 +53,55 @@ if ( ! class_exists( 'WPBookList_Utilities_Accesscheck', false ) ) :
 
 				// Get user's specific permissions.
 				$perms = $this->user->permissions;
-				$perms = explode( ',', $perms );
+				$perms = explode( '-', $perms );
 
-				// Now check permissions - if user is just a regular user or a reviewer, and they haven't been granted specific access to this page, then they have no access to this page.
-				if ( ( 'admin' !== $this->user->role && 'godmode' !== $this->user->role ) && '1' !== $perms[0] ) {
-					return false;
-				} else {
-					return $this->user;
+				$return_val = false;
+
+				// Now check permissions.
+				switch ( $request ) {
+					case 'addbook':
+						if ( 'Yes' === $perms[0] ) {
+							$return_val = true;
+						}
+						break;
+					case 'displayoptions':
+						if ( 'Yes' === $perms[3] ) {
+							$return_val = true;
+						}
+						break;
+					case 'settings':
+						if ( 'Yes' === $perms[4] ) {
+							$return_val = true;
+						}
+						break;
+					case 'editdelete':
+						if ( 'Yes' === $perms[1] && 'Yes' === $perms[2] || ( 'No' === $perms[1] && 'Yes' === $perms[2] ) || ( 'Yes' === $perms[1] && 'No' === $perms[2] ) ) {
+							$return_val = true;
+						}
+						break;
+					case 'deleteonly':
+						if ( 'Yes' === $perms[2] ) {
+							$return_val = true;
+						}
+						break;
+					case 'editonly':
+						if ( 'Yes' === $perms[1] ) {
+							$return_val = true;
+						}
+						break;
+					case 'createuser':
+						if ( 'SuperAdmin' === $this->user->role ) {
+							$return_val = true;
+						}
+						break;
+					
+					default:
+						# code...
+						break;
 				}
+
+				return $return_val;
+
 			} else {
 
 				// No registered WPBookList user was found - return false.
@@ -79,37 +120,86 @@ if ( ! class_exists( 'WPBookList_Utilities_Accesscheck', false ) ) :
 			// Make call to Transients class to see if Transient currently exists. If so, retrieve it, if not, make call to create_transient() with all required Parameters.
 			require_once CLASS_TRANSIENTS_DIR . 'class-wpbooklist-transients.php';
 			$transients          = new WPBookList_Transients();
-			$settings_table_name = $wpdb->prefix . 'wpbooklist_general_settings';
-			$transient_name      = 'wpht_' . md5( 'SELECT * FROM ' . $settings_table_name );
+			$settings_table_name = $wpdb->prefix . 'wpbooklist_jre_users_table';
+			$transient_name      = 'wpht_' . md5( 'SELECT * FROM ' . $settings_table_name . " WHERE role = 'SuperAdmin'" );
 			$transient_exists    = $transients->existing_transient_check( $transient_name );
 			if ( $transient_exists ) {
-				$this->general_settings = $transient_exists;
+				$this->wpbl_super_admin = $transient_exists;
 			} else {
-				$query                  = 'SELECT * FROM ' . $settings_table_name;
-				$this->general_settings = $transients->create_transient( $transient_name, 'wpdb->get_row', $query, MONTH_IN_SECONDS );
+				$query                  = 'SELECT * FROM ' . $settings_table_name . " WHERE role = 'SuperAdmin'";
+				$this->wpbl_super_admin = $transients->create_transient( $transient_name, 'wpdb->get_row', $query, MONTH_IN_SECONDS );
 			}
 
-			$gmuser = $this->general_settings->gmuser;
-			$gmuser = explode( ',', $gmuser );
+			$sauser = $this->wpbl_super_admin;
 
 			// First we'll get all the translations for this tab.
 			require_once CLASS_TRANSLATIONS_DIR . 'class-wpbooklist-translations.php';
 			$this->trans = new WPBookList_Translations();
-			$this->trans->common_trans_strings();
-			$this->trans->dashboard_trans_strings();
 			$this->trans->trans_strings();
 
-			return '<div class="wpbooklist-no-saved-data-stats-div">
-				<p>
-					<img class="wpbooklist-shocked-image" src="' . ROOT_IMG_ICONS_URL . 'shocked.svg">
-					<span class="wpbooklist-no-saved-span-stats-1">' . $this->trans->dashboard_trans_21 . '</span>
-					<br>
-					' . $this->trans->common_trans_75 . '
-					<br>
-					' . $this->trans->common_trans_76 . ' ' . $gmuser[0] . ' ' . $gmuser[1] . ' ' . $this->trans->common_trans_78 . ' ' . $gmuser[2] . ' ' . $this->trans->common_trans_77 . '
-					<br><br>
-				</p>
-			</div>';
+			// If SuperAdmin's First and last name have been set.
+			if ( '' !== $sauser->firstname && null !== $sauser->firstname && '' !== $sauser->lastname && null !== $sauser->lastname ) {
+
+				return '<div class="wpbooklist-no-saved-data-stats-div">
+					<p class="wpbooklist-tab-intro-para">
+						<img id="wpbooklist-smile-icon-3" src="' . ROOT_IMG_ICONS_URL . 'shocked.svg">
+						<span class="wpbooklist-no-saved-span-stats-1">' . $this->trans->trans_90 . '</span>
+						<br>
+						' . $this->trans->trans_490 . '
+						<br>
+						' . $this->trans->trans_491 . ' ' . $sauser->firstname . ' ' . $sauser->lastname . ' ' . $this->trans->trans_492 . ' ' . $sauser->email . ' ' . $this->trans->trans_493 . '
+						<br><br>
+					</p>
+				</div>';
+			}
+
+			// If SuperAdmin's First name has been set.
+			if ( '' !== $sauser->firstname && null !== $sauser->firstname && ( '' === $sauser->lastname || null === $sauser->lastname ) ) {
+
+				return '<div class="wpbooklist-no-saved-data-stats-div">
+					<p class="wpbooklist-tab-intro-para">
+						<img id="wpbooklist-smile-icon-3" src="' . ROOT_IMG_ICONS_URL . 'shocked.svg">
+						<span class="wpbooklist-no-saved-span-stats-1">' . $this->trans->trans_90 . '</span>
+						<br>
+						' . $this->trans->trans_490 . '
+						<br>
+						' . $this->trans->trans_491 . ' ' . $sauser->firstname . ' ' . $this->trans->trans_492 . ' <a href="mailto:' . $sauser->email . '"> ' .  $sauser->email . '</a> ' . $this->trans->trans_493 . '
+						<br><br>
+					</p>
+				</div>';
+			}
+
+			// If SuperAdmin's Last name has been set.
+				if ( ( '' === $sauser->firstname || null === $sauser->firstname ) && ( '' !== $sauser->lastname && null !== $sauser->lastname ) ) {
+
+				return '<div class="wpbooklist-no-saved-data-stats-div">
+					<p class="wpbooklist-tab-intro-para">
+						<img id="wpbooklist-smile-icon-3" src="' . ROOT_IMG_ICONS_URL . 'shocked.svg">
+						<span class="wpbooklist-no-saved-span-stats-1">' . $this->trans->trans_90 . '</span>
+						<br>
+						' . $this->trans->trans_490 . '
+						<br>
+						' . $this->trans->trans_491 . ' ' . $sauser->lastname . ' ' . $this->trans->trans_492 . ' <a href="mailto:' . $sauser->email . '"> ' .  $sauser->email . '</a> ' . $this->trans->trans_493 . '
+						<br><br>
+					</p>
+				</div>';
+			}
+
+			// If neither of SuperAdmin's names have been set.
+			if ( ( '' === $sauser->firstname || null === $sauser->firstname ) && ( '' === $sauser->lastname || null === $sauser->lastname ) ) {
+
+				return '<div class="wpbooklist-no-saved-data-stats-div">
+					<p class="wpbooklist-tab-intro-para">
+						<img id="wpbooklist-smile-icon-3" src="' . ROOT_IMG_ICONS_URL . 'shocked.svg">
+						<span class="wpbooklist-no-saved-span-stats-1">' . $this->trans->trans_90 . '</span>
+						<br>
+						' . $this->trans->trans_490 . '
+						<br>
+						' . $this->trans->trans_491 . ' <a href="mailto:' . $sauser->email . '"> ' .  $sauser->email . '</a> ' . $this->trans->trans_493 . '
+						<br><br>
+					</p>
+				</div>';
+			}
 		}
 
 		/**
@@ -132,27 +222,27 @@ if ( ! class_exists( 'WPBookList_Utilities_Accesscheck', false ) ) :
 					// Basic WPBookList User.
 					$role_caps = array(
 						'read'                   => true,
-						'edit_posts'             => true,
-						'delete_posts'           => true,
-						'edit_others_posts'      => true,
-						'edit_published_posts'   => true,
-						'publish_posts'          => true,
-						'delete_others_posts'    => true,
-						'delete_published_posts' => true,
-						'delete_private_posts'   => true,
-						'edit_private_posts'     => true,
-						'read_private_posts'     => true,
-						'edit_pages'             => true,
-						'delete_pages'           => true,
-						'edit_others_pages'      => true,
-						'edit_published_pages'   => true,
-						'publish_pages'          => true,
-						'delete_others_pages'    => true,
-						'delete_published_pages' => true,
-						'delete_private_pages'   => true,
-						'edit_private_pages'     => true,
-						'read_private_pages'     => true,
-						'moderate_comments'      => true,
+						'edit_posts'             => true, // Required for dashboard access - can't really modify anything still though.
+						'delete_posts'           => false,
+						'edit_others_posts'      => false,
+						'edit_published_posts'   => false,
+						'publish_posts'          => false,
+						'delete_others_posts'    => false,
+						'delete_published_posts' => false,
+						'delete_private_posts'   => false,
+						'edit_private_posts'     => false,
+						'read_private_posts'     => false,
+						'edit_pages'             => false,
+						'delete_pages'           => false,
+						'edit_others_pages'      => false,
+						'edit_published_pages'   => false,
+						'publish_pages'          => false,
+						'delete_others_pages'    => false,
+						'delete_published_pages' => false,
+						'delete_private_pages'   => false,
+						'edit_private_pages'     => false,
+						'read_private_pages'     => false,
+						'moderate_comments'      => false,
 
 					);
 
