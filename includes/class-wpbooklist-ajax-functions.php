@@ -2656,7 +2656,7 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 
 			$customfieldsarray = null;
 			if ( isset( $_POST['customfieldsarray'] ) ) {
-				$customfieldsarray = filter_var_array(  wp_unslash( $_POST['customfieldsarray'] ), FILTER_SANITIZE_STRING );
+				$customfieldsarray = filter_var_array( wp_unslash( $_POST['customfieldsarray'] ), FILTER_SANITIZE_STRING );
 			}
 
 			$settings_array = array(
@@ -2743,218 +2743,249 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 			wp_die( wp_json_encode( $row ) );
 		}
 
-		// Callback Function for showing the Edit Book form
+		/**
+		 * Callback Function for showing the Edit Book form.
+		 */
 		public function wpbooklist_edit_book_show_form_action_callback() {
 			global $wpdb;
 			check_ajax_referer( 'wpbooklist_edit_book_show_form_action_callback', 'security' );
-			$book_id = filter_var( wp_unslash( $_POST['bookId'] ), FILTER_SANITIZE_NUMBER_INT);
-			$table = filter_var( wp_unslash( $_POST['table'] ), FILTER_SANITIZE_STRING );
-			$book_data = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM $table WHERE ID = %d", $book_id ) );
-			$crosssell_ids = '';
-			$crosssell_titles = '';
-			$upsell_ids = '';
-			$upsell_titles = '';
-			$product = 'null';
-			$image_thumb = array();
-			$id = null;
-			$image_url["file"] = '';
-			$image_url["name"] = '';
-			$attachment = array();
 
-			// Get Woocommerce product, if one exists
-			// $product = array();
+			if ( isset( $_POST['bookId'] ) ) {
+				$book_id = filter_var( wp_unslash( $_POST['bookId'] ), FILTER_SANITIZE_NUMBER_INT );
+			}
+
+			if ( isset( $_POST['table'] ) ) {
+				$table = filter_var( wp_unslash( $_POST['table'] ), FILTER_SANITIZE_STRING );
+			}
+
+			$book_data         = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM $table WHERE ID = %d", $book_id ) );
+			$crosssell_ids     = '';
+			$crosssell_titles  = '';
+			$upsell_ids        = '';
+			$upsell_titles     = '';
+			$product           = 'null';
+			$image_thumb       = array();
+			$id                = null;
+			$image_url['file'] = '';
+			$image_url['name'] = '';
+			$attachment        = array();
+
+			// Get Woocommerce product, if one exists.
 			$cat = '';
-			if ( $book_data->woocommerce != null){
-				//$product = wc_get_product( $book_data->woocommerce );
-				$product = get_post_meta( $book_data->woocommerce ); 
+			if ( null !== $book_data->woocommerce ) {
+				$product = get_post_meta( $book_data->woocommerce );
 
-				// Get all downloadable files associated with product
-				if (array_key_exists( '_downloadable_files', $product ) && array_key_exists(0, $product["_downloadable_files"]) ) {
-					$df = json_encode(current(unserialize( $product["_downloadable_files"][0])) );
-					$image_url = current(unserialize( $product["_downloadable_files"][0]) );
-					$attachment = $wpdb->get_col( $wpdb->prepare( "SELECT ID FROM $wpdb->posts WHERE guid='%s';", $image_url["file"] ) );
+				// Get all downloadable files associated with product.
+				if ( array_key_exists( '_downloadable_files', $product ) && array_key_exists( 0, $product['_downloadable_files'] ) ) {
+					$df         = wp_json_encode( current( unserialize( $product['_downloadable_files'][0] ) ) );
+					$image_url  = current( unserialize( $product['_downloadable_files'][0] ) );
+					$attachment = $wpdb->get_col( $wpdb->prepare( "SELECT ID FROM $wpdb->posts WHERE guid = %s", $image_url['file'] ) );
 
-					if ( is_array( $attachment ) && array_key_exists(0, $attachment ) ) {
+					if ( is_array( $attachment ) && array_key_exists( 0, $attachment ) ) {
 						$image_thumb = wp_get_attachment_image_src( $attachment[0], 'thumbnail' );
 					}
 				}
-				//$attachment = $wpdb->get_col( $wpdb->prepare( "SELECT ID FROM $wpdb->posts WHERE guid='%s';", $image_url ) );
-				//$image_url = $attachment[0]
 
-				// Get crosssell IDs and titles
-				$cs = unserialize( $product["_crosssell_ids"][0]);
+				// Get crosssell IDs and titles.
+				$cs = unserialize( $product['_crosssell_ids'][0] );
 				foreach ( $cs as $key => $value ) {
-						$crosssell_ids = $crosssell_ids.',' . $value;
+						$crosssell_ids = $crosssell_ids . ',' . $value;
 				}
 
-				// Get upsell IDs and titles
-				$us = unserialize( $product["_upsell_ids"][0]);
+				// Get upsell IDs and titles.
+				$us = unserialize( $product['_upsell_ids'][0] );
 				foreach ( $us as $key => $value ) {
-						$upsell_ids = $upsell_ids.',' . $value;
+						$upsell_ids = $upsell_ids . ',' . $value;
 				}
 
-				// Get product category
+				// Get product category.
 				$cat = get_the_terms ( $book_data->woocommerce, 'product_cat' );
-				if ( is_array( $cat ) && array_key_exists(0, $cat ) ) {
+				if ( is_array( $cat ) && array_key_exists( 0, $cat ) ) {
 					$cat = $cat[0]->name;
 				} else {
 					$cat = '';
 				}
 
-				$product = json_encode( $product );
+				$product = wp_json_encode( $product );
 			}
 
 			require_once CLASS_BOOK_DIR . 'class-wpbooklist-book-form.php';
-			$form = new WPBookList_Book_Form;
+			$form      = new WPBookList_Book_Form();
 			$edit_form = $form->output_book_form();
 
-			// Convert html entites back to normal as needed
-			$book_data->title = stripslashes(html_entity_decode( $book_data->title, ENT_QUOTES | ENT_XML1, 'UTF-8') );
+			// Convert html entites back to normal as needed.
+			$book_data->title = stripslashes( html_entity_decode( $book_data->title, ENT_QUOTES | ENT_XML1, 'UTF-8' ) );
 
-			// Encode all book data for return trip
-			$book_data = json_encode( $book_data);
+			// Encode all book data for return trip.
+			$book_data = wp_json_encode( $book_data );
 
-			// Check to see if Storefront extension is active
-			include_once( ABSPATH . 'wp-admin/includes/plugin.php' );
-			if ( is_plugin_active( 'wpbooklist-storefront/wpbooklist-storefront.php') ) {
+			// Check to see if Storefront extension is active.
+			include_once ABSPATH . 'wp-admin/includes/plugin.php';
+			if ( is_plugin_active( 'wpbooklist-storefront/wpbooklist-storefront.php' ) ) {
 				$storefront = 'true';
 			} else {
 				$storefront = 'false';
 			}
 
-
-			if ( is_array( $attachment ) && array_key_exists(0, $attachment ) ) {
+			if ( is_array( $attachment ) && array_key_exists( 0, $attachment ) ) {
 				$attachment = $attachment[0];
 			} else {
 				$attachment = '';
 			}
 
-			
-
-			echo $book_data.'–sep-seperator-sep–' . $edit_form.'–sep-seperator-sep–' . $product . '–sep-seperator-sep–' . $storefront . '–sep-seperator-sep–' . $crosssell_ids.'–sep-seperator-sep–' . $crosssell_ids.'–sep-seperator-sep–' . $upsell_ids.'–sep-seperator-sep–' . $upsell_ids.'–sep-seperator-sep–' . $cat . '–sep-seperator-sep–'.basename( $image_url["file"]).'–sep-seperator-sep–' . $attachment;
+			echo $book_data . '–sep-seperator-sep–' . $edit_form . '–sep-seperator-sep–' . $product . '–sep-seperator-sep–' . $storefront . '–sep-seperator-sep–' . $crosssell_ids . '–sep-seperator-sep–' . $crosssell_ids . '–sep-seperator-sep–' . $upsell_ids . '–sep-seperator-sep–' . $upsell_ids . '–sep-seperator-sep–' . $cat . '–sep-seperator-sep–' . basename( $image_url['file'] ) . '–sep-seperator-sep–' . $attachment;
 
 			wp_die();
 		}
 
-		// Callback function for the Edit Book pagination.
+		/**
+		 * Callback function for the Edit Book pagination.
+		 */
 		public function wpbooklist_edit_book_pagination_action_callback() {
 			global $wpdb;
 			check_ajax_referer( 'wpbooklist_edit_book_pagination_action_callback', 'security' );
-			$currentOffset = filter_var( wp_unslash( $_POST['currentOffset'] ), FILTER_SANITIZE_NUMBER_INT);
-			$library = filter_var( wp_unslash( $_POST['library'] ), FILTER_SANITIZE_STRING );
+
+			if ( isset( $_POST['currentOffset'] ) ) {
+				$current_offset = filter_var( wp_unslash( $_POST['currentOffset'] ), FILTER_SANITIZE_NUMBER_INT );
+			}
+
+			if ( isset( $_POST['library'] ) ) {
+				$library = filter_var( wp_unslash( $_POST['library'] ), FILTER_SANITIZE_STRING );
+			}
 
 			require_once CLASS_BOOK_DIR . 'class-edit-book-form.php';
-			$form = new WPBookList_Edit_Book_Form;
-			echo $form->output_edit_book_form( $library, $currentOffset ).'_Separator_' . $library;
+			$form = new WPBookList_Edit_Book_Form();
+			echo $form->output_edit_book_form( $library, $current_offset ) . '_Separator_' . $library;
 			wp_die();
 		}
 
-		// Callback Function for switching libraries on the Edit Book tab
+		/**
+		 * Callback Function for switching libraries on the Edit Book tab.
+		 */
 		public function wpbooklist_edit_book_switch_lib_action_callback() {
 			global $wpdb;
 			check_ajax_referer( 'wpbooklist_edit_book_switch_lib_action_callback', 'security' );
-			$library = filter_var( wp_unslash( $_POST['library'] ), FILTER_SANITIZE_STRING );
+
+			if ( isset( $_POST['library'] ) ) {
+				$library = filter_var( wp_unslash( $_POST['library'] ), FILTER_SANITIZE_STRING );
+			}
 
 			require_once CLASS_BOOK_DIR . 'class-edit-book-form.php';
-			$form = new WPBookList_Edit_Book_Form;
-			echo $form->output_edit_book_form( $library, 0).'_Separator_' . $library;
+			$form = new WPBookList_Edit_Book_Form();
+			echo $form->output_edit_book_form( $library, 0 ) . '_Separator_' . $library;
 
 			wp_die();
 		}
 
-		// Callback Function for searching for a title to edit.
+		/**
+		 * Callback Function for searching for a title to edit.
+		 */
 		public function wpbooklist_edit_book_search_action_callback() {
 			global $wpdb;
 			check_ajax_referer( 'wpbooklist_edit_book_search_action_callback', 'security' );
-			$search_term = filter_var( wp_unslash( $_POST['searchTerm'] ), FILTER_SANITIZE_STRING );
-			$author_check = filter_var( wp_unslash( $_POST['authorCheck'] ), FILTER_SANITIZE_STRING );
-			$title_check = filter_var( wp_unslash( $_POST['titleCheck'] ), FILTER_SANITIZE_STRING );
-			$library = filter_var( wp_unslash( $_POST['library'] ), FILTER_SANITIZE_STRING );
 
-			if ( $title_check == 'true'){
+			if ( isset( $_POST['searchTerm'] ) ) {
+				$search_term = filter_var( wp_unslash( $_POST['searchTerm'] ), FILTER_SANITIZE_STRING );
+			}
+
+			if ( isset( $_POST['authorCheck'] ) ) {
+				$author_check = filter_var( wp_unslash( $_POST['authorCheck'] ), FILTER_SANITIZE_STRING );
+			}
+
+			if ( isset( $_POST['titleCheck'] ) ) {
+				$title_check = filter_var( wp_unslash( $_POST['titleCheck'] ), FILTER_SANITIZE_STRING );
+			}
+
+			if ( isset( $_POST['library'] ) ) {
+				$library = filter_var( wp_unslash( $_POST['library'] ), FILTER_SANITIZE_STRING );
+			}
+
+			if ( 'true' === $title_check ) {
 				$search_mode = 'title';
 			}
 
-			if ( $author_check == 'true'){
+			if ( 'true' === $author_check ) {
 				$search_mode = 'author';
 			}
 
-			if ( $author_check == 'true' && $title_check == 'true'){
+			if ( 'true' === $author_check && 'true' === $title_check ) {
 				$search_mode = 'both';
 			}
 
-			if ( $author_check != 'true' && $title_check != 'true'){
+			if ( 'true' !== $author_check && 'true' !== $title_check ) {
 				$search_mode = 'both';
 			}
 
 			require_once CLASS_BOOK_DIR . 'class-edit-book-form.php';
-			$form = new WPBookList_Edit_Book_Form;
-			echo $form->output_edit_book_form( $library, 0, $search_mode, $search_term).'_Separator_' . $library.'_Separator_' . $form->limit;
+			$form = new WPBookList_Edit_Book_Form();
+			echo $form->output_edit_book_form( $library, 0, $search_mode, $search_term ) . '_Separator_' . $library . '_Separator_' . $form->limit;
 			wp_die();
 		}
 
 
-		// Callback function editing a book
+		/**
+		 * Callback function editing a book.
+		 */
 		public function wpbooklist_edit_book_actual_action_callback() {
 			global $wpdb;
 			check_ajax_referer( 'wpbooklist_edit_book_actual_action_callback', 'security' );
-			
-			// First set the variables we'll be passing to class-wpbooklist-book.php to ''
-			$amazonauth = '';    
-			$library = '';    
-			$use_amazon_yes = '';    
-			$isbn = '';    
-			$title = '';    
-			$author = '';    
-			$author_url = '';    
-			$category = '';    
-			$price = '';    
-			$pages = '';    
-			$pub_year = '';    
-			$publisher = '';    
-			$description = '';    
-			$subject = '';    
-			$country = '';    
-			$notes = '';    
-			$rating = '';    
-			$image = '';    
-			$finished = '';    
-			$date_finished = '';    
-			$signed = '';    
-			$first_edition = '';    
-			$page_yes = '';    
-			$post_yes = '';    
-			$lendable = '';    
-			$copies = '';    
-			$page_id = '';    
-			$post_id = '';    
-			$book_uid = '';    
-			$book_id = '';    
-			$woocommerce = '';    
-			$saleprice = '';    
-			$regularprice = '';    
-			$stock = '';    
-			$length = '';    
-			$width = '';    
-			$height = '';    
-			$weight = '';    
-			$sku = '';    
-			$virtual = '';    
-			$download = '';    
-			$woofile = '';    
-			$salebegin = '';    
-			$saleend = '';    
-			$purchasenote = '';    
-			$productcategory = '';    
-			$reviews = '';    
-			$crosssells = '';    
-			$upsells = '';    
-			$amazonbuylink = '';    
-			$bnbuylink = '';    
-			$googlebuylink = '';    
-			$itunesbuylink = '';    
-			$booksamillionbuylink = '';    
-			$kobobuylink = ''; 
+
+			// First set the variables we'll be passing to class-wpbooklist-book.php to ''.
+			$amazonauth           = '';
+			$library              = '';
+			$use_amazon_yes       = '';
+			$isbn                 = '';
+			$title                = '';
+			$author               = '';
+			$author_url           = '';
+			$category             = '';
+			$price                = '';
+			$pages                = '';
+			$pub_year             = '';
+			$publisher            = '';
+			$description          = '';
+			$subject              = '';
+			$country              = '';
+			$notes                = '';
+			$rating               = '';
+			$image                = '';
+			$finished             = '';
+			$date_finished        = '';
+			$signed               = '';
+			$first_edition        = '';
+			$page_yes             = '';
+			$post_yes             = '';
+			$lendable             = '';
+			$copies               = '';
+			$page_id              = '';
+			$post_id              = '';
+			$book_uid             = '';
+			$book_id              = '';
+			$woocommerce          = '';
+			$saleprice            = '';
+			$regularprice         = '';
+			$stock                = '';
+			$length               = '';
+			$width                = '';
+			$height               = '';
+			$weight               = '';
+			$sku                  = '';
+			$virtual              = '';
+			$download             = '';
+			$woofile              = '';
+			$salebegin            = '';
+			$saleend              = '';
+			$purchasenote         = '';
+			$productcategory      = '';
+			$reviews              = '';
+			$crosssells           = '';
+			$upsells              = '';
+			$amazonbuylink        = '';
+			$bnbuylink            = '';
+			$googlebuylink        = '';
+			$itunesbuylink        = '';
+			$booksamillionbuylink = '';
+			$kobobuylink          = '';
 
 			if ( isset( $_POST['amazonauth'] ) ) {
 				$amazonauth = filter_var( wp_unslash( $_POST['amazonauth'] ), FILTER_SANITIZE_STRING );
@@ -3006,7 +3037,7 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 
 			if ( isset( $_POST['description'] ) ) {
 				$description = filter_var( htmlentities( wp_unslash( $_POST['description'] ) ), FILTER_SANITIZE_STRING );
-			}	
+			}
 
 			if ( isset( $_POST['subject'] ) ) {
 				$subject = filter_var( wp_unslash( $_POST['subject'] ), FILTER_SANITIZE_STRING );
@@ -3176,78 +3207,74 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 				$book_id = filter_var( wp_unslash( $_POST['bookId'] ), FILTER_SANITIZE_STRING );
 			}
 
-
-
-
-
 			$book_array = array(
-				'amazon_auth_yes' => $amazonauth,
-				'library' => $library,
-				'use_amazon_yes' => $use_amazon_yes,
-				'isbn' => $isbn,
-				'title' => $title,
-				'author' => $author,
-				'author_url' => $author_url,
-				'category' => $category,
-				'price' => $price,
-				'pages' => $pages,
-				'pub_year' => $pub_year,
-				'publisher' => $publisher,
-				'description' => $description,
-				'subject' => $subject,
-				'country' => $country,
-				'notes' => $notes,
-				'rating' => $rating,
-				'image' => $image,
-				'finished' => $finished,
-				'date_finished' => $date_finished,
-				'signed' => $signed,
-				'first_edition' => $first_edition,
-				'page_yes' => $page_yes,
-				'post_yes' => $post_yes,
-				'lendable' => $lendable,
-				'copies' => $copies,
-				'page_id' => $page_id,
-				'post_id' => $post_id,
-				'book_uid' => $book_uid,
-				'woocommerce' => $woocommerce,
-				'saleprice' => $saleprice,
-				'regularprice' => $regularprice,
-				'stock' => $stock,
-				'length' => $length,
-				'width' => $width,
-				'height' => $height,
-				'weight' => $weight,
-				'sku' => $sku,
-				'virtual' => $virtual,
-				'download' => $download,
-				'woofile' => $woofile,
-				'salebegin' => $salebegin,
-				'saleend' => $saleend,
-				'purchasenote' => $purchasenote,
-				'productcategory' => $productcategory,
-				'reviews' => $reviews,
-				'crosssells' => $crosssells,
-				'upsells' => $upsells,
-				'amazonbuylink' => $amazonbuylink,
-				'bnbuylink' => $bnbuylink,
-				'googlebuylink' => $googlebuylink,
-				'itunesbuylink' => $itunesbuylink,
+				'amazon_auth_yes'      => $amazonauth,
+				'library'              => $library,
+				'use_amazon_yes'       => $use_amazon_yes,
+				'isbn'                 => $isbn,
+				'title'                => $title,
+				'author'               => $author,
+				'author_url'           => $author_url,
+				'category'             => $category,
+				'price'                => $price,
+				'pages'                => $pages,
+				'pub_year'             => $pub_year,
+				'publisher'            => $publisher,
+				'description'          => $description,
+				'subject'              => $subject,
+				'country'              => $country,
+				'notes'                => $notes,
+				'rating'               => $rating,
+				'image'                => $image,
+				'finished'             => $finished,
+				'date_finished'        => $date_finished,
+				'signed'               => $signed,
+				'first_edition'        => $first_edition,
+				'page_yes'             => $page_yes,
+				'post_yes'             => $post_yes,
+				'lendable'             => $lendable,
+				'copies'               => $copies,
+				'page_id'              => $page_id,
+				'post_id'              => $post_id,
+				'book_uid'             => $book_uid,
+				'woocommerce'          => $woocommerce,
+				'saleprice'            => $saleprice,
+				'regularprice'         => $regularprice,
+				'stock'                => $stock,
+				'length'               => $length,
+				'width'                => $width,
+				'height'               => $height,
+				'weight'               => $weight,
+				'sku'                  => $sku,
+				'virtual'              => $virtual,
+				'download'             => $download,
+				'woofile'              => $woofile,
+				'salebegin'            => $salebegin,
+				'saleend'              => $saleend,
+				'purchasenote'         => $purchasenote,
+				'productcategory'      => $productcategory,
+				'reviews'              => $reviews,
+				'crosssells'           => $crosssells,
+				'upsells'              => $upsells,
+				'amazonbuylink'        => $amazonbuylink,
+				'bnbuylink'            => $bnbuylink,
+				'googlebuylink'        => $googlebuylink,
+				'itunesbuylink'        => $itunesbuylink,
 				'booksamillionbuylink' => $booksamillionbuylink,
-				'kobobuylink' => $kobobuylink
+				'kobobuylink'          => $kobobuylink,
 			);
 
 			require_once CLASS_BOOK_DIR . 'class-wpbooklist-book.php';
-			$book_class = new WPBookList_Book( 'edit', $book_array, $book_id);
+			$book_class = new WPBookList_Book( 'edit', $book_array, $book_id );
 
 			$edit_result = $book_class->edit_result;
 
-			// If book was succesfully edited, and return the page/post results
-			if ( $edit_result == 1 ){
+			// If book was succesfully edited, and return the page/post results.
+			if ( 1 === $edit_result ) {
 				$row = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM $library WHERE ID = %d", $book_id ) );
 
-				// Get saved page URL
-				$table_name = $wpdb->prefix . 'wpbooklist_jre_saved_page_post_log';
+				// Get saved page URL.
+				$table_name   = $wpdb->prefix . 'wpbooklist_jre_saved_page_post_log';
 				$page_results = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM $table_name WHERE book_uid = %s AND type = 'page'", $row->book_uid ) );
 				if ( is_object( $page_results ) ) {
 					$page_url = $page_results->post_url;
@@ -3255,8 +3282,8 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 					$page_url = '';
 				}
 
-				// Get saved post URL
-				$table_name = $wpdb->prefix . 'wpbooklist_jre_saved_page_post_log';
+				// Get saved post URL.
+				$table_name   = $wpdb->prefix . 'wpbooklist_jre_saved_page_post_log';
 				$post_results = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM $table_name WHERE book_uid = %s AND type = 'post'", $row->book_uid ) );
 				if ( is_object( $page_results ) ) {
 					$post_url = $post_results->post_url;
@@ -3264,171 +3291,200 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 					$post_url = '';
 				}
 
-				echo $edit_result . '--sep--' . $book_id.'--sep--' . $library.'--sep--' . $page_yes.'--sep--' . $post_yes.'--sep--' . $page_url.'--sep--' . $post_url.'--sep--' . $wpdb->prefix . '--sep--' . $book_class->apireport . '--sep--'.json_encode( $book_class->whichapifound).'--sep--' . $book_class->apiamazonfailcount . '---sep--' . $book_class->amazon_transient_use;
+				echo $edit_result . '--sep--' . $book_id . '--sep--' . $library . '--sep--' . $page_yes . '--sep--' . $post_yes . '--sep--' . $page_url . '--sep--' . $post_url . '--sep--' . $wpdb->prefix . '--sep--' . $book_class->apireport . '--sep--' . wp_json_encode( $book_class->whichapifound ) . '--sep--' . $book_class->apiamazonfailcount . '---sep--' . $book_class->amazon_transient_use;
 
-
-				} else {
+			} else {
 				echo $edit_result;
-				}
+			}
 
 			wp_die();
 		}
 
-		// Callback function for deleting books 
+		/**
+		 * Callback function for deleting books.
+		 */
 		public function wpbooklist_delete_book_action_callback() {
 			global $wpdb;
 			check_ajax_referer( 'wpbooklist_delete_book_action_callback', 'security' );
-			$library = filter_var( wp_unslash( $_POST['library'] ), FILTER_SANITIZE_STRING );
-			$delete_string = filter_var( wp_unslash( $_POST['deleteString'] ), FILTER_SANITIZE_STRING );
-			$book_id = filter_var( wp_unslash( $_POST['bookId'] ), FILTER_SANITIZE_NUMBER_INT);
 
+			if ( isset( $_POST['deleteString'] ) ) {
+				$delete_string = filter_var( wp_unslash( $_POST['deleteString'] ), FILTER_SANITIZE_STRING );
+			}
+
+			if ( isset( $_POST['bookId'] ) ) {
+				$book_id = filter_var( wp_unslash( $_POST['bookId'] ), FILTER_SANITIZE_NUMBER_INT );
+			}
+
+			if ( isset( $_POST['library'] ) ) {
+				$library = filter_var( wp_unslash( $_POST['library'] ), FILTER_SANITIZE_STRING );
+			}
 
 			require_once CLASS_BOOK_DIR . 'class-wpbooklist-book.php';
-			$book_class = new WPBookList_Book;
+			$book_class = new WPBookList_Book();
 			$delete_result = $book_class->delete_book( $library, $book_id, $delete_string );
 			echo $delete_result;
 			wp_die();
 		}
 
-		// Callback function for saving user's API info.
+		/**
+		 * Callback function for saving user's API info.
+		 */
 		public function wpbooklist_user_apis_action_callback() {
 			global $wpdb;
 			check_ajax_referer( 'wpbooklist_user_apis_action_callback', 'security' );
-			$amazonapipublic = filter_var( wp_unslash( $_POST['amazonapipublic'] ), FILTER_SANITIZE_STRING );
-			$amazonapisecret = filter_var( wp_unslash( $_POST['amazonapisecret'] ), FILTER_SANITIZE_STRING );
-			$googleapi = filter_var( wp_unslash( $_POST['googleapi'] ), FILTER_SANITIZE_STRING );
 
-			$table_name = $wpdb->prefix . 'wpbooklist_jre_user_options';
-			$data = array(
-					'amazonapipublic' => $amazonapipublic, 
-					'amazonapisecret' => $amazonapisecret, 
-					'googleapi' => $googleapi, 
-			  );
-			  $format = array( '%s' );  
-			  $where = array( 'ID' => ( 1 ) );
-			  $where_format = array( '%d' );
-			  $result = $wpdb->update( $table_name, $data, $where, $format, $where_format );
+			if ( isset( $_POST['amazonapipublic'] ) ) {
+				$amazonapipublic = filter_var( wp_unslash( $_POST['amazonapipublic'] ), FILTER_SANITIZE_STRING );
+			}
+
+			if ( isset( $_POST['amazonapisecret'] ) ) {
+				$amazonapisecret = filter_var( wp_unslash( $_POST['amazonapisecret'] ), FILTER_SANITIZE_STRING );
+			}
+
+			if ( isset( $_POST['googleapi'] ) ) {
+				$googleapi = filter_var( wp_unslash( $_POST['googleapi'] ), FILTER_SANITIZE_STRING );
+			}
+
+			$table_name   = $wpdb->prefix . 'wpbooklist_jre_user_options';
+			$data         = array(
+				'amazonapipublic' => $amazonapipublic,
+				'amazonapisecret' => $amazonapisecret,
+				'googleapi'       => $googleapi,
+			);
+			$format       = array( '%s' );
+			$where        = array( 'ID' => ( 1 ) );
+			$where_format = array( '%d' );
+			$result       = $wpdb->update( $table_name, $data, $where, $format, $where_format );
 
 			echo $result;
 			wp_die();
 		}
 
-		
-
-		// Callback function for uploading a new StylePak after purchase.
+		/**
+		 * Callback function for uploading a new StylePak after purchase.
+		 */
 		public function wpbooklist_upload_new_stylepak_action_callback() {
 
 			global $wpdb;
 			check_ajax_referer( 'wpbooklist_upload_new_stylepak_action_callback', 'security' );
-			
-			// Create file structure in the uploads dir 
+
+			// Create file structure in the uploads dir.
 			$mkdir1 = null;
-			if (!file_exists(UPLOADS_BASE_DIR."wpbooklist")) {
-				// TODO: create log file entry 
-				$mkdir1 = mkdir(UPLOADS_BASE_DIR."wpbooklist", 0777, true );
+			if ( ! file_exists( UPLOADS_BASE_DIR . 'wpbooklist' ) ) {
+				$mkdir1 = mkdir( UPLOADS_BASE_DIR . 'wpbooklist', 0777, true );
 			}
 
-			// Create file structure in the uploads dir 
+			// Create file structure in the uploads dir.
 			$mkdir2 = null;
-			if (!file_exists(LIBRARY_STYLEPAKS_UPLOAD_DIR)) {
-				// TODO: create log file entry 
-				$mkdir2 = mkdir(LIBRARY_STYLEPAKS_UPLOAD_DIR, 0777, true );
+			if ( ! file_exists( LIBRARY_STYLEPAKS_UPLOAD_DIR ) ) {
+				$mkdir2 = mkdir( LIBRARY_STYLEPAKS_UPLOAD_DIR, 0777, true );
 			}
 
-			// TODO: create log file entry 
-			$move_result = move_uploaded_file( $_FILES['my_uploaded_file']['tmp_name'], LIBRARY_STYLEPAKS_UPLOAD_DIR."{$_FILES['my_uploaded_file'] ['name']}" );
+			if ( isset( $_FILES['my_uploaded_file']['tmp_name'] ) ) {
 
-			// Unzip the file if it's zipped
-			if (strpos( $_FILES['my_uploaded_file']['name'], '.zip') !== false ){
-				$zip = new ZipArchive;
-				$res = $zip->open(LIBRARY_STYLEPAKS_UPLOAD_DIR.$_FILES['my_uploaded_file']['name'] );
-				if ( $res === TRUE) {
-					$zip->extractTo(LIBRARY_STYLEPAKS_UPLOAD_DIR);
-					$zip->close();
-					unlink(LIBRARY_STYLEPAKS_UPLOAD_DIR.$_FILES['my_uploaded_file']['name'] );
+				$tmp_name = filter_var( wp_unslash( $_FILES['my_uploaded_file']['tmp_name'] ), FILTER_SANITIZE_STRING );
+
+				$move_result = move_uploaded_file( wp_unslash( $tmp_name ), LIBRARY_STYLEPAKS_UPLOAD_DIR . $tmp_name );
+			}
+
+			// Unzip the file if it's zipped.
+			if ( isset( $_FILES['my_uploaded_file']['name'] ) ) {
+
+				$name = filter_var( wp_unslash( $_FILES['my_uploaded_file']['name'] ), FILTER_SANITIZE_STRING );
+
+				if ( strpos( $name, '.zip' ) !== false ) {
+					$zip = new ZipArchive();
+					$res = $zip->open( LIBRARY_STYLEPAKS_UPLOAD_DIR . $name );
+					if ( true === $res ) {
+						$zip->extractTo( LIBRARY_STYLEPAKS_UPLOAD_DIR );
+						$zip->close();
+						unlink( LIBRARY_STYLEPAKS_UPLOAD_DIR . $name );
+					}
 				}
 			}
 
-			echo $mkdir1.'sep' . $mkdir2.'sep' . $move_result;
+			echo $mkdir1 . 'sep' . $mkdir2 .'sep' . $move_result;
 			wp_die();
 		}
 
 
-
-
-		// Callback function for assigning a StylePak to a library.
+		/**
+		 * Callback function for assigning a StylePak to a library.
+		 */
 		public function wpbooklist_assign_stylepak_action_callback() {
 
 			global $wpdb;
 			check_ajax_referer( 'wpbooklist_assign_stylepak_action_callback', 'security' );
 
-			// For assigning a StylePak to a Library
-			$stylepak = filter_var( wp_unslash( $_POST["stylepak"] ), FILTER_SANITIZE_STRING );
-			$library = filter_var( wp_unslash( $_POST["library"] ), FILTER_SANITIZE_STRING );
+			if ( isset( $_POST['stylepak'] ) ) {
+				$stylepak = filter_var( wp_unslash( $_POST['stylepak'] ), FILTER_SANITIZE_STRING );
+			}
 
-			$stylepak = str_replace( '.css', '', $stylepak);
-			$stylepak = str_replace( '.zip', '', $stylepak);
+			if ( isset( $_POST['library'] ) ) {
+				$library = filter_var( wp_unslash( $_POST['library'] ), FILTER_SANITIZE_STRING );
+			}
 
-			// Build table name to store StylePak in
-			if (strpos( $library, 'wpbooklist_jre_saved_book_log') !== false ){
-				$table_name = $wpdb->prefix . 'wpbooklist_jre_user_options';
-				$data = array(
+			$stylepak = str_replace( '.css', '', $stylepak );
+			$stylepak = str_replace( '.zip', '', $stylepak );
+
+			// Build table name to store StylePak in.
+			if ( false !== strpos( $library, 'wpbooklist_jre_saved_book_log' ) ) {
+				$table_name   = $wpdb->prefix . 'wpbooklist_jre_user_options';
+				$data         = array(
 					'stylepak' => $stylepak,
-					);
-					$format = array( '%s' );   
-					$where = array( 'ID' => 1 );
-					$where_format = array( '%d' );
-					echo $wpdb->update( $table_name, $data, $where, $format, $where_format );
+				);
+				$format       = array( '%s' );
+				$where        = array( 'ID' => 1 );
+				$where_format = array( '%d' );
+				echo $wpdb->update( $table_name, $data, $where, $format, $where_format );
 			} else {
-				$table_name = $wpdb->prefix . 'wpbooklist_jre_list_dynamic_db_names';
-				$library = substr( $library, strrpos( $library, '_') + 1 );
-				$data = array(
+				$table_name   = $wpdb->prefix . 'wpbooklist_jre_list_dynamic_db_names';
+				$library      = substr( $library, strrpos( $library, '_' ) + 1 );
+				$data         = array(
 					'stylepak' => $stylepak,
-					);
-					$format = array( '%s' );   
-					$where = array( 'user_table_name' => $library );
-					$where_format = array( '%s' );
-					echo $stylepak.' ' . $library;
-					echo $wpdb->update( $table_name, $data, $where, $format, $where_format );
+				);
+				$format       = array( '%s' );
+				$where        = array( 'user_table_name' => $library );
+				$where_format = array( '%s' );
+				echo $stylepak . ' ' . $library;
+				echo $wpdb->update( $table_name, $data, $where, $format, $where_format );
 			}
 
 			wp_die();
 		}
 
-		// Callback function for uploading a new Post Template after purchase
+		/**
+		 *  Callback function for uploading a new Post Template after purchase.
+		 */
 		public function wpbooklist_upload_new_post_template_action_callback() {
 
 			global $wpdb;
 			check_ajax_referer( 'wpbooklist_upload_new_post_template_action_callback', 'security' );
 
-			
-				// Create file structure in the uploads dir 
-				$mkdir1 = null;
-				if (!file_exists(UPLOADS_BASE_DIR."wpbooklist")) {
-					// TODO: create log file entry 
-					$mkdir1 = mkdir(UPLOADS_BASE_DIR."wpbooklist", 0777, true );
-				}
+			// Create file structure in the uploads dir.
+			$mkdir1 = null;
+			if ( ! file_exists( UPLOADS_BASE_DIR . 'wpbooklist' ) ) {
+				$mkdir1 = mkdir( UPLOADS_BASE_DIR . 'wpbooklist', 0777, true );
+			}
 
-				// Create file structure in the uploads dir 
-				$mkdir2 = null;
-				if (!file_exists(POST_TEMPLATES_UPLOAD_DIR)) {
-					// TODO: create log file entry 
-					$mkdir2 = mkdir(POST_TEMPLATES_UPLOAD_DIR, 0777, true );
-				}
+			// Create file structure in the uploads dir.
+			$mkdir2 = null;
+			if ( ! file_exists( POST_TEMPLATES_UPLOAD_DIR ) ) {
+				$mkdir2 = mkdir( POST_TEMPLATES_UPLOAD_DIR, 0777, true );
+			}
 
-				// TODO: create log file entry 
-				$move_result = move_uploaded_file( $_FILES['my_uploaded_file']['tmp_name'], POST_TEMPLATES_UPLOAD_DIR."{$_FILES['my_uploaded_file'] ['name']}" );
+			$move_result = move_uploaded_file( $_FILES['my_uploaded_file']['tmp_name'], POST_TEMPLATES_UPLOAD_DIR . "{$_FILES['my_uploaded_file']['name']}" );
 
-				// Unzip the file if it's zipped
-				if (strpos( $_FILES['my_uploaded_file']['name'], '.zip') !== false ){
-					$zip = new ZipArchive;
-					$res = $zip->open(POST_TEMPLATES_UPLOAD_DIR.$_FILES['my_uploaded_file']['name'] );
-					if ( $res === TRUE) {
-						$zip->extractTo(POST_TEMPLATES_UPLOAD_DIR);
-						$zip->close();
-						unlink(POST_TEMPLATES_UPLOAD_DIR.$_FILES['my_uploaded_file']['name'] );
-					}
+			// Unzip the file if it's zipped.
+			if (strpos( $_FILES['my_uploaded_file']['name'], '.zip') !== false ){
+				$zip = new ZipArchive;
+				$res = $zip->open(POST_TEMPLATES_UPLOAD_DIR.$_FILES['my_uploaded_file']['name'] );
+				if ( $res === TRUE) {
+					$zip->extractTo(POST_TEMPLATES_UPLOAD_DIR);
+					$zip->close();
+					unlink(POST_TEMPLATES_UPLOAD_DIR.$_FILES['my_uploaded_file']['name'] );
 				}
+			}
 
 				echo $mkdir1.'sep' . $mkdir2.'sep' . $move_result;
 			wp_die();
