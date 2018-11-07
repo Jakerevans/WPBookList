@@ -1037,8 +1037,6 @@ if ( ! class_exists( 'WPBookList_Show_Book_In_Colorbox', false ) ) :
 					$comments_string = apply_filters( 'wpbooklist_append_to_colorbox_comments', $comments_array );
 			}
 
-			error_log($comments_string);
-
 			$string65 = '';
 			$string66 = '';
 			$string67 = '';
