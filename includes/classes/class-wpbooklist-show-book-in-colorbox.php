@@ -55,6 +55,7 @@ if ( ! class_exists( 'WPBookList_Show_Book_In_Colorbox', false ) ) :
 		public $similar_products;
 		public $kobo_link;
 		public $bam_link;
+		public $book_uid;
 
 		# All settings properties
 		public $enablepurchase;
@@ -252,6 +253,7 @@ if ( ! class_exists( 'WPBookList_Show_Book_In_Colorbox', false ) ) :
 			$this->featured_results       = array();
 			$this->kobo_link              = $saved_book->kobo_link;
 			$this->bam_link               = $saved_book->bam_link;
+			$this->book_uid               = $saved_book->book_uid;
 
 			if ( 'https' === $this->review_iframe ) {
 				$this->review_iframe = null;
@@ -1028,6 +1030,15 @@ if ( ! class_exists( 'WPBookList_Show_Book_In_Colorbox', false ) ) :
 				}
 			}
 
+			// If the Comments Extension is active...
+			$comments_array = array( $this->id, $this->library, $this->book_uid );
+			$comments_string = '';
+			if ( has_filter( 'wpbooklist_append_to_colorbox_comments' ) ) {
+					$comments_string = apply_filters( 'wpbooklist_append_to_colorbox_comments', $comments_array );
+			}
+
+			error_log($comments_string);
+
 			$string65 = '';
 			$string66 = '';
 			$string67 = '';
@@ -1184,7 +1195,7 @@ if ( ! class_exists( 'WPBookList_Show_Book_In_Colorbox', false ) ) :
 				$string83 = '</div>';
 			}
 
-			$this->output = $string1 . $string2 . $string3 . $string4 . $string5 . $string6 . $string7 . $string8 . $string9 . $string10 . $string11 . $string12 . $string13 . $string14 . $string15 . $string16 . $string17 . $string18 . $string19 . $string20 . $string21 . $string22 . $string23 . $string24 . $string25 . $string26 . $string27 . $string28 . $string92 . $string93 . $string94 . $string95 . $string96 . $string97 . $string29 . $string30 . $string31 . $string39 . $string40 . $string41 . $string32 . $string33 . $string34 . $string35 . $string36 . $string37 . $string38 . $string42 . $string43 . $string44 . $string45 . $string46 . $string47 . $string48 . $string49 . $string50 . $string51 . $string52 . $string53 . $string54 . $string55 . $string56 . $string57 . $string84 . $string85 . $string86 . $string87 . $string58 . $string59 . $string60 . $string61 . $string62 . $string63 . $string64 . $string65 . $string66 . $string67 . $string68 . $string69 . $string70 . $string71 . $string72 . $string73 . $string74 . $string75 . $string76 . $string77 . $string78 . $string79 . $string80 . $string81 . $string82 . $string83 . $string88 . $string89 . $string90 . $string91;
+			$this->output = $string1 . $string2 . $string3 . $string4 . $string5 . $string6 . $string7 . $string8 . $string9 . $string10 . $string11 . $string12 . $string13 . $string14 . $string15 . $string16 . $string17 . $string18 . $string19 . $string20 . $string21 . $string22 . $string23 . $string24 . $string25 . $string26 . $string27 . $string28 . $string92 . $string93 . $string94 . $string95 . $string96 . $string97 . $string29 . $string30 . $string31 . $string39 . $string40 . $string41 . $string32 . $string33 . $string34 . $string35 . $string36 . $string37 . $string38 . $string42 . $string43 . $string44 . $string45 . $string46 . $string47 . $string48 . $string49 . $string50 . $string51 . $string52 . $string53 . $string54 . $string55 . $string56 . $string57 . $string84 . $string85 . $string86 . $string87 . $string58 . $string59 . $string60 . $string61 . $string62 . $string63 . $string64 . $comments_string . $string65 . $string66 . $string67 . $string68 . $string69 . $string70 . $string71 . $string72 . $string73 . $string74 . $string75 . $string76 . $string77 . $string78 . $string79 . $string80 . $string81 . $string82 . $string83 . $string88 . $string89 . $string90 . $string91;
 		}
 
 		/**
