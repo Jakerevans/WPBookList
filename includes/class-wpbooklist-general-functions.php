@@ -34,34 +34,6 @@ if ( ! class_exists( 'WPBookList_General_Functions', false ) ) :
 		}
 
 		/**
-		 * Creates new WPBookList User on plugin activation, with info of currently logged-in user, with all permissions to all Libraries.
-		 */
-		public function wpbooklist_create_wpbooklist_user_on_plugin_activation() {
-
-			// Create the permissions string.
-			$permissions = 'Yes-Yes-Yes-Yes-Yes';
-
-			$current_user = wp_get_current_user();
-
-			$users_save_array = array(
-				'firstname'   => $current_user->user_firstname,
-				'lastname'    => $current_user->user_lastname,
-				'email'       => $current_user->user_email,
-				'username'    => $current_user->user_login,
-				'permissions' => $permissions,
-				'wpuserid'    => $current_user->ID,
-				'datecreated' => $this->date,
-				'libraries'   => 'alllibraries',
-				'role'        => 'SuperAdmin',
-			);
-
-			// Requiring & Calling the file/class that will insert or update our data.
-			require_once CLASS_USERS_DIR . 'class-wpbooklist-save-users-data.php';
-			$save_class      = new WPBOOKLIST_Save_Users_Data( $users_save_array );
-			$db_write_result = $save_class->wpbooklist_jre_save_users_actual();
-		}
-
-		/**
 		 *  Functions that loads up all menu pages/contents, etc.
 		 */
 		public function wpbooklist_jre_admin_page_function() {
@@ -938,7 +910,6 @@ if ( ! class_exists( 'WPBookList_General_Functions', false ) ) :
 						facebook varchar(255),
 						twitter varchar(255),
 						instagram varchar(255),
-						googleplus varchar(255),
 						snapchat varchar(255),
 						libraries varchar(255),
 			            PRIMARY KEY  (ID),
@@ -955,32 +926,26 @@ if ( ! class_exists( 'WPBookList_General_Functions', false ) ) :
 						return;
 					}
 
-					$firstname = '';
-					$lastname  = '';
-					if ( '' === $current_user->user_firstname || null === $current_user->user_firstname ) {
+					// Create the permissions string.
+					$permissions = 'Yes-Yes-Yes-Yes-Yes';
 
-						if ( '' === $current_user->display_name || null === $current_user->display_name ) {
-							$firstname = 'Admin';
-							$lastname  = '';
-						} else {
-							$firstname = $current_user->display_name;
-							$lastname  = '';
-						}
-					} else {
-						$firstname = $current_user->user_firstname;
-						$lastname  = $current_user->user_lastname;
-					}
-
-					$wpdb->insert( $table_name,
-						array(
-							'role'      => 'godmode',
-							'username'  => $current_user->user_login,
-							'email'     => $current_user->user_email,
-							'firstname' => $firstname,
-							'lastname'  => $lastname,
-							'wpuserid'  => $current_user->ID,
-						)
+					$users_save_array = array(
+						'firstname'   => $current_user->user_firstname,
+						'lastname'    => $current_user->user_lastname,
+						'email'       => $current_user->user_email,
+						'username'    => $current_user->user_login,
+						'permissions' => $permissions,
+						'wpuserid'    => $current_user->ID,
+						'datecreated' => $this->date,
+						'libraries'   => 'alllibraries',
+						'role'        => 'SuperAdmin',
 					);
+
+					// Requiring & Calling the file/class that will insert or update our data.
+					require_once CLASS_USERS_DIR . 'class-wpbooklist-save-users-data.php';
+					$save_class      = new WPBOOKLIST_Save_Users_Data( $users_save_array );
+					$db_write_result = $save_class->wpbooklist_jre_save_users_actual();
+
 				}
 				$key = $wpdb->prefix . 'wpbooklist_jre_users_table';
 				return $db_delta_result[ $key ];

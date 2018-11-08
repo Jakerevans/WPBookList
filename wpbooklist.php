@@ -257,7 +257,6 @@ global $wpdb;
 	register_activation_hook( __FILE__, array( $wp_book_list_general_functions, 'wpbooklist_add_wpbooklist_role_on_plugin_activation' ) );
 
 	// Creates new WPBookList User on plugin activation, with info of currently logged-in user.
-	register_activation_hook( __FILE__, array( $wp_book_list_general_functions, 'wpbooklist_create_wpbooklist_user_on_plugin_activation' ) );
 
 	// Creates default table upon activation.
 	register_activation_hook( __FILE__, array( $wp_book_list_general_functions, 'wpbooklist_jre_create_default_lib' ) );
@@ -289,7 +288,7 @@ global $wpdb;
 	// Creates the one master display options table.
 	register_activation_hook( __FILE__, array( $wp_book_list_general_functions, 'wpbooklist_jre_create_storytime_stories_settings_table' ) );
 
-	// Creates the WPBookList Users table.
+	// Creates the WPBookList Users table and the default WPBookList User.
 	register_activation_hook( __FILE__, array( $wp_book_list_general_functions, 'wpbooklist_jre_create_user_table' ) );
 
 	// Adding the front-end library ui css file.
