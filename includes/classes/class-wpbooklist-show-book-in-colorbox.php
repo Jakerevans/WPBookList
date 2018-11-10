@@ -1031,7 +1031,7 @@ if ( ! class_exists( 'WPBookList_Show_Book_In_Colorbox', false ) ) :
 			}
 
 			// If the Comments Extension is active...
-			$comments_array = array( $this->id, $this->library, $this->book_uid );
+			$comments_array = array( $this->id, $this->library, $this->book_uid, $this->title );
 			$comments_string = '';
 			if ( has_filter( 'wpbooklist_append_to_colorbox_comments' ) ) {
 					$comments_string = apply_filters( 'wpbooklist_append_to_colorbox_comments', $comments_array );
