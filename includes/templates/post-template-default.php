@@ -327,6 +327,37 @@ $string1 =  '<div id="wpbl-posttd-top-container">
 			<div id="wpbl-posttd-book-notes-contents">'.html_entity_decode(stripslashes($book_row->notes)) .'</div>
 		</div>';
 		} 
+
+		// If the Comments Extension is active...
+		$comments_array = array( $book_row->ID, $table_name, $book_row->book_uid, $book_row->title );
+		$comments_string = '';
+		if ( has_filter( 'wpbooklist_append_to_colorbox_comments' ) ) {
+				$comments_string = '<div id="wpbl-posttd-book-comments-div">
+				<h5 id="wpbl-posttd-book-description-h5">'.__('Ratings & Comments','wpbooklist').'</h5>
+				<div id="wpbl-posttd-book-comments-contents">' . apply_filters( 'wpbooklist_append_to_colorbox_comments', $comments_array ) . '</div></div>';
+
+				// Hide the inner title.
+				if ( false !== stripos( $comments_string, 'id="wpbooklist_desc_id"' ) ) {
+					$comments_string = str_replace( 'id="wpbooklist_desc_id"', 'id="wpbooklist_desc_id" style="display:none;"', $comments_string );
+				}
+
+				// Replace some elements with an H5.
+				if ( false !== stripos( $comments_string, '<p class="wpbooklist-comments-add-comment-title"' ) ) {
+
+					$comments_string = str_replace( '<p class="wpbooklist-comments-add-comment-title"', '<h5 class="wpbooklist-comments-add-comment-title"', $comments_string );
+
+					$comments_string = str_replace( '</p><span class="wpbooklist-comments-for-php-string-mod" style="display:none"></span>', '</h5>', $comments_string );
+				}
+
+				// Replace some elements with an H5.
+				if ( false !== stripos( $comments_string, '<p class="wpbooklist-comments-add-comment-rating-title"' ) ) {
+
+					$comments_string = str_replace( '<p class="wpbooklist-comments-add-comment-rating-title"', '<h5 class="wpbooklist-comments-add-comment-rating-title"', $comments_string );
+
+					$comments_string = str_replace( '</p><span class="wpbooklist-comments-for-php-string-mod" style="display:none"></span>', '</h5>', $comments_string );
+				}
+		}
+
 		if(($options_post_row->hideamazonreview == null || $options_post_row->hideamazonreview == 0) && $book_row->review_iframe != null){
 		$string45 =  '<div id="wpbl-posttd-book-amazon-review-div">
 			<h5 id="wpbl-posttd-book-amazon-review-h5">'.__('Amazon Reviews','wpbooklist').'</h5>

@@ -147,6 +147,32 @@
     display:none;
 }
 
+@keyframes rotate360 {
+  to { transform: rotate(360deg); }
+}
+
+#wpbl-pagetd-right-row .wpbooklist-comments-add-comment-submit-button, #wpbl-posttd-right-row .wpbooklist-comments-add-comment-submit-button{
+    width:100%;
+}
+
+#wpbl-pagetd-right-row .wpbooklist-spinner, #wpbl-posttd-right-row .wpbooklist-spinner{
+    opacity: 0;
+    height: 20px;
+    width: 20px;
+    margin: 10px auto;
+    animation: 0.5s rotate360 infinite linear;
+    border-left: 1px solid white;
+    border-right: 1px solid white;
+    border-bottom: 1px solid white;
+    border-top: 1px solid #F05A1A;
+    border-radius: 100%;
+    position: relative;
+}
+
+#wpbl-pagetd-right-row .wpbooklist-comments-add-comment-rating-title, #wpbl-posttd-right-row .wpbooklist-comments-add-comment-rating-title{
+    margin-top:0px;
+}
+
 @media (max-width: 550px) {
     #wpbl-posttd-top-container, #wpbl-pagetd-top-container {
         display: block;

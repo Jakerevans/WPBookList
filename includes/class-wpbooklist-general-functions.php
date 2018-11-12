@@ -1442,7 +1442,7 @@ if ( ! class_exists( 'WPBookList_General_Functions', false ) ) :
 
 						default:
 							include PAGE_POST_TEMPLATES_DEFAULT_DIR . 'page-template-default.php';
-							return $content . $string1 . $string2 . $string3 . $string4 . $string5 . $string6 . $string7 . $string8 . $string9 . $string10 . $string11 . $string12 . $string13 . $string14 . $string15 . $string16 . $string17 . $string18 . $string19 . $string20 . $string21 . $string22 . $string23 . $string50 . $string51 . $string24 . $string31 . $string32 . $string33 . $string25 . $string26 . $string27 . $string28 . $string29 . $string30 . $string34 . $string35 . $string36 . $string37 . $string38 . $string39 . $string40 . $string48 . $string49 . $string41 . $string42 . $string43 . $string44 . $string45 . $string46 . $string47;
+							return $content . $string1 . $string2 . $string3 . $string4 . $string5 . $string6 . $string7 . $string8 . $string9 . $string10 . $string11 . $string12 . $string13 . $string14 . $string15 . $string16 . $string17 . $string18 . $string19 . $string20 . $string21 . $string22 . $string23 . $string50 . $string51 . $string24 . $string31 . $string32 . $string33 . $string25 . $string26 . $string27 . $string28 . $string29 . $string30 . $string34 . $string35 . $string36 . $string37 . $string38 . $string39 . $string40 . $string48 . $string49 . $string41 . $string42 . $string43 . $string44 . $comments_string . $string45 . $string46 . $string47;
 
 					}
 				}
@@ -1472,7 +1472,7 @@ if ( ! class_exists( 'WPBookList_General_Functions', false ) ) :
 
 						default:
 							include PAGE_POST_TEMPLATES_DEFAULT_DIR . 'post-template-default.php';
-							return $content . $string1 . $string2 . $string3 . $string4 . $string5 . $string6 . $string7 . $string8 . $string9 . $string10 . $string11 . $string12 . $string13 . $string14 . $string15 . $string16 . $string17 . $string18 . $string19 . $string20 . $string21 . $string22 . $string23 . $string50 . $string51 . $string24 . $string31 . $string32 . $string33 . $string25 . $string26 . $string27  . $string28 . $string29 . $string30  . $string34 . $string35 . $string36 . $string37 . $string38 . $string39 . $string40 . $string48 . $string49 . $string41 . $string42 . $string43 . $string44 . $string45 . $string46 . $string47;
+							return $content . $string1 . $string2 . $string3 . $string4 . $string5 . $string6 . $string7 . $string8 . $string9 . $string10 . $string11 . $string12 . $string13 . $string14 . $string15 . $string16 . $string17 . $string18 . $string19 . $string20 . $string21 . $string22 . $string23 . $string50 . $string51 . $string24 . $string31 . $string32 . $string33 . $string25 . $string26 . $string27  . $string28 . $string29 . $string30  . $string34 . $string35 . $string36 . $string37 . $string38 . $string39 . $string40 . $string48 . $string49 . $string41 . $string42 . $string43 . $string44 . $comments_string . $string45 . $string46 . $string47;
 
 					}
 				}
