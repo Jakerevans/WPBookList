@@ -533,8 +533,8 @@ if ( ! class_exists( 'WPBookList_Book_Display_Options_Form', false ) ) :
 				</div>';
 
 			// This filter allows the addition of one or more rows of items into the 'Book View Display Options' form.
-			if ( has_filter( 'wpbooklist_append_to_book_view_display_options' ) ) {
-				$string4 = apply_filters( 'wpbooklist_append_to_book_view_display_options', $string4 );
+			if ( has_filter( 'wpbooklist_add_to_book_display_options' ) ) {
+				$string4 = $string4 . apply_filters( 'wpbooklist_add_to_book_display_options', null );
 			}
 
 			$string5 =

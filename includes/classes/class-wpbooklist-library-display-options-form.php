@@ -221,8 +221,14 @@ if ( ! class_exists( 'WPBookList_Library_Display_Options_Form', false ) ) :
 						<div class="wpbooklist-margin-right-td">
 							<input type="checkbox" name="hide-library-display-form-finishedsort"></input>
 						</div>
-					</div>
-				</div>';
+					</div>';
+
+			if ( has_filter( 'wpbooklist_add_to_library_display_options' ) ) {
+
+				$string4 = $string4 . apply_filters( 'wpbooklist_add_to_library_display_options', null );
+			}
+
+			$string4 = $string4 . '</div>';
 
 			$string5 =
 				'<div id="wpbooklist-display-opt-check-div">
