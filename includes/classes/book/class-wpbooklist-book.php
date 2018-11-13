@@ -2564,6 +2564,9 @@ if ( ! class_exists( 'WPBookList_Book', false ) ) :
 				'authorlast'         => $this->finalauthorlastnames,
 			);
 
+			error_log( 'Here is the Array being saved to the DB in the edit_book() function in class-wpbooklist-book.php' );
+			error_log( print_r( $book_array, true ) );
+
 			$format       = array( '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%d', '%s', '%s', '%s', '%s', '%s', '%s' );
 			$where        = array( 'ID' => $this->id );
 			$where_format = array( '%d' );

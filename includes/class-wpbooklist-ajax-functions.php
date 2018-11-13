@@ -1285,6 +1285,9 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 				}
 			}
 
+			error_log( 'Here is the Array being sent to Class-wpbooklist-book.php' );
+			error_log( print_r( $book_array, true ) );
+
 			require_once CLASS_BOOK_DIR . 'class-wpbooklist-book.php';
 			$book_class  = new WPBookList_Book( 'edit', $book_array, $bookid );
 			$edit_result = $book_class->edit_result;

@@ -665,7 +665,7 @@ if ( ! class_exists( 'WPBookList_Show_Book_In_Colorbox', false ) ) :
 			}
 
 			$string19 = '';
-			if ( ( null !== $this->enablepurchase && 0 !== $this->enablepurchase ) && null !== $this->price && 1 !== $this->hidecolorboxbuyprice ) {
+			if ( ( null !== $this->enablepurchase && 0 !== $this->enablepurchase ) && null !== $this->price && '1' !== $this->hidecolorboxbuyprice ) {
 
 				if ( has_filter( 'wpbooklist_append_to_colorbox_price' ) ) {
 					$string19 = apply_filters( 'wpbooklist_append_to_colorbox_price', $this->price );
@@ -863,7 +863,7 @@ if ( ! class_exists( 'WPBookList_Show_Book_In_Colorbox', false ) ) :
 
 				}
 
-				if ( ( null !== $this->enablepurchase && 0 !== $this->enablepurchase ) && null !== $this->author_url && '' !== $this->author_url && 1 !== $this->hidecolorboxbuyprice ) {
+				if ( ( null !== $this->enablepurchase && 0 !== $this->enablepurchase ) && null !== $this->author_url && '' !== $this->author_url && '1' !== $this->hidecolorboxbuyprice ) {
 					$string46 = '';
 					if ( has_filter( 'wpbooklist_append_to_colorbox_purchase_text_link' ) ) {
 						$string46 = apply_filters( 'wpbooklist_append_to_colorbox_purchase_text_link', $this->author_url );
@@ -937,7 +937,7 @@ if ( ! class_exists( 'WPBookList_Show_Book_In_Colorbox', false ) ) :
 					<img src="' . ROOT_IMG_URL . 'ibooks.png" id="wpbooklist-itunes-img" /></a><a ';
 
 			$string56 = '';
-			if ( ( null === $this->author_url ) || ( null !== $this->hidecolorboxbuyimg && 0 !== $this->hidecolorboxbuyimg ) ) {
+			if ( ( null === $this->author_url ) || ( null !== $this->hidecolorboxbuyimg && '0' !== $this->hidecolorboxbuyimg ) ) {
 				$string56 = ' style="display:none;"';
 			}
 
@@ -957,7 +957,7 @@ if ( ! class_exists( 'WPBookList_Show_Book_In_Colorbox', false ) ) :
 			$string87 = ' class="wpbooklist-purchase-img" href="' . $this->bam_link . '" target="_blank">
 					<img src="' . ROOT_IMG_URL . 'bam-icon.jpg" /></a>';
 
-			if ( ( null !== $this->enablepurchase && 0 !== $this->enablepurchase ) && null !== $this->author_url && '' !== $this->author_url && 1 !== $this->hidecolorboxbuyimg ) {
+			if ( ( null !== $this->enablepurchase && 0 !== $this->enablepurchase ) && null !== $this->author_url && '' !== $this->author_url && '1' !== $this->hidecolorboxbuyimg ) {
 				if ( has_filter( 'wpbooklist_append_to_colorbox_purchase_image_link' ) ) {
 					$string57 = $string57 . apply_filters( 'wpbooklist_append_to_colorbox_purchase_image_link', $this->author_url );
 				}
@@ -1180,7 +1180,7 @@ if ( ! class_exists( 'WPBookList_Show_Book_In_Colorbox', false ) ) :
 			$string91 = ' class="wpbooklist-purchase-img" href="' . $this->bam_link . '" target="_blank">
 					<img src="' . ROOT_IMG_URL . 'bam-icon.jpg" /></a>';
 
-			if ( ( null !== $this->enablepurchase && 0 !== $this->enablepurchase ) && null !== $this->author_url && '' !== $this->author_url && 1 !== $this->hidecolorboxbuyimg ) {
+			if ( ( null !== $this->enablepurchase && 0 !== $this->enablepurchase ) && null !== $this->author_url && '' !== $this->author_url && '1' !== $this->hidecolorboxbuyimg ) {
 				if ( has_filter( 'wpbooklist_append_to_colorbox_purchase_image_link' ) ) {
 					$string91 = $string91 . apply_filters( 'wpbooklist_append_to_colorbox_purchase_image_link', $this->author_url );
 				}
