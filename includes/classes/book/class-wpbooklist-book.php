@@ -29,6 +29,7 @@ if ( ! class_exists( 'WPBookList_Book', false ) ) :
 		public $author3;
 		public $author;
 		public $author_url;
+		public $sale_url;
 		public $backcover;
 		public $bam_link;
 		public $bn_link;
@@ -228,6 +229,10 @@ if ( ! class_exists( 'WPBookList_Book', false ) ) :
 
 				if ( isset( $book_array['author_url'] ) ) {
 					$this->author_url = $book_array['author_url'];
+				}
+
+				if ( isset( $book_array['sale_url'] ) ) {
+					$this->sale_url = $book_array['sale_url'];
 				}
 
 				if ( isset( $book_array['backcover'] ) ) {
@@ -1756,12 +1761,11 @@ if ( ! class_exists( 'WPBookList_Book', false ) ) :
 
 				$woocommerce_existing_id = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM $this->library WHERE ID = %d", $this->id ) );
 
-error_log(print_r($this->book_array,true));
-
 				include_once STOREFRONT_CLASS_DIR . 'class-wpbooklist-storefront-woocommerce.php';
 				$this->woocommerce = new WPBookList_StoreFront_WooCommerce( $this->book_array, $woocommerce_existing_id->woocommerce, $this->title, $this->description, $this->image, $this->upsells, $this->crosssells );
 
 				$this->wooid = $this->woocommerce->post_id;
+
 			}
 		}
 
@@ -1878,6 +1882,7 @@ error_log(print_r($this->book_array,true));
 					'isbn'               => $this->isbn,
 					'author'             => $this->author,
 					'author_url'         => $this->author_url,
+					'sale_url'           => $this->sale_url,
 					'price'              => $this->price,
 					'finished'           => $this->finished,
 					'date_finished'      => $this->date_finished,
@@ -1952,6 +1957,8 @@ error_log(print_r($this->book_array,true));
 				'author2'            => $this->author2,
 				'author3'            => $this->author3,
 				'author_url'         => $this->author_url,
+				'sale_url'           => $this->sale_url,
+				'price'              => $this->price,
 				'backcover'          => $this->backcover,
 				'bam_link'           => $this->bam_link,
 				'bn_link'            => $this->bn_link,
@@ -1996,11 +2003,13 @@ error_log(print_r($this->book_array,true));
 				'subgenre'           => $this->subgenre,
 				'subject'            => $this->subject,
 				'title'              => $this->title,
-				'woocommerce'        => $this->woocommerce,
+				'woocommerce'        => $this->wooid,
 			);
 
 			// Building mask array to add to DB.
 			$db_mask_insert_array = array(
+				'%s',
+				'%s',
 				'%s',
 				'%s',
 				'%s',
@@ -2468,6 +2477,7 @@ error_log(print_r($this->book_array,true));
 					'isbn'               => $this->isbn,
 					'author'             => $this->author,
 					'author_url'         => $this->author_url,
+					'sale_url'           => $this->sale_url,
 					'price'              => $this->price,
 					'finished'           => $this->finished,
 					'date_finished'      => $this->date_finished,
@@ -2520,6 +2530,7 @@ error_log(print_r($this->book_array,true));
 				'isbn'               => $this->isbn,
 				'author'             => $this->author,
 				'author_url'         => $this->author_url,
+				'sale_url'           => $this->sale_url,
 				'price'              => $this->price,
 				'finished'           => $this->finished,
 				'date_finished'      => $this->date_finished,
@@ -2553,7 +2564,7 @@ error_log(print_r($this->book_array,true));
 				'authorlast'         => $this->finalauthorlastnames,
 			);
 
-			$format       = array( '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%d', '%s', '%s', '%s', '%s', '%s', '%s' );
+			$format       = array( '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%d', '%s', '%s', '%s', '%s', '%s', '%s' );
 			$where        = array( 'ID' => $this->id );
 			$where_format = array( '%d' );
 			$result       = $wpdb->update( $this->library, $data, $where, $format, $where_format );

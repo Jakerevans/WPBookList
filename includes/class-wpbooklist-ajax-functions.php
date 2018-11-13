@@ -52,6 +52,7 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 			$author2            = '';
 			$author3            = '';
 			$author_url         = '';
+			$sale_url           = '';
 			$backcover          = '';
 			$bam_link           = '';
 			$bn_link            = '';
@@ -161,6 +162,10 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 
 			if ( isset( $_POST['authorurl'] ) ) {
 				$author_url = filter_var( wp_unslash( $_POST['authorurl'] ), FILTER_SANITIZE_URL );
+			}
+
+			if ( isset( $_POST['saleurl'] ) ) {
+				$sale_url = filter_var( wp_unslash( $_POST['saleurl'] ), FILTER_SANITIZE_URL );
 			}
 
 			if ( isset( $_POST['backcover'] ) ) {
@@ -461,6 +466,7 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 				'author2'            => $author2,
 				'author3'            => $author3,
 				'author_url'         => $author_url,
+				'sale_url'           => $sale_url,
 				'backcover'          => $backcover,
 				'bam_link'           => $bam_link,
 				'bn_link'            => $bn_link,
@@ -766,6 +772,7 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 			$author2            = '';
 			$author3            = '';
 			$author_url         = '';
+			$sale_url           = '';
 			$backcover          = '';
 			$bam_link           = '';
 			$bn_link            = '';
@@ -875,6 +882,10 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 
 			if ( isset( $_POST['authorurl'] ) ) {
 				$author_url = filter_var( wp_unslash( $_POST['authorurl'] ), FILTER_SANITIZE_URL );
+			}
+
+			if ( isset( $_POST['saleurl'] ) ) {
+				$sale_url = filter_var( wp_unslash( $_POST['saleurl'] ), FILTER_SANITIZE_URL );
 			}
 
 			if ( isset( $_POST['backcover'] ) ) {
@@ -1179,6 +1190,7 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 				'author2'            => $author2,
 				'author3'            => $author3,
 				'author_url'         => $author_url,
+				'sale_url'           => $sale_url,
 				'backcover'          => $backcover,
 				'bam_link'           => $bam_link,
 				'book_uid'			 => $book_uid,
@@ -1382,6 +1394,7 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 					author2 TEXT,
 					author3 TEXT,
 					author_url TEXT,
+					sale_url TEXT,
 					authorfirst TEXT,
 					authorfirst2 TEXT,
 					authorfirst3 TEXT,
@@ -1692,19 +1705,34 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 				$sortoption = filter_var( wp_unslash( $_POST['sortoption'] ), FILTER_SANITIZE_STRING );
 			}
 
+			if ( isset( $_POST['hidefrontendbuyimg'] ) ) {
+				$hidefrontendbuyimg = filter_var( wp_unslash( $_POST['hidefrontendbuyimg'] ), FILTER_SANITIZE_STRING );
+			}
+
+			if ( isset( $_POST['hidefrontendbuyprice'] ) ) {
+				$hidefrontendbuyprice = filter_var( wp_unslash( $_POST['hidefrontendbuyprice'] ), FILTER_SANITIZE_STRING );
+			}
+
+			if ( isset( $_POST['enablepurchase'] ) ) {
+				$enablepurchase = filter_var( wp_unslash( $_POST['enablepurchase'] ), FILTER_SANITIZE_STRING );
+			}
+
 			$settings_array = array(
-				'booksonpage'      => $booksonpage,
-				'hidefilter'       => $hidefilter,
-				'hidefinishedsort' => $hidefinishedsort,
-				'hidefirstsort'    => $hidefirstsort,
-				'hidelibrarytitle' => $hidelibrarytitle,
-				'hidequote'        => $hidequote,
-				'hiderating'       => $hiderating,
-				'hidesearch'       => $hidesearch,
-				'hidesignedsort'   => $hidesignedsort,
-				'hidestats'        => $hidestats,
-				'hidesubjectsort'  => $hidesubjectsort,
-				'sortoption'       => $sortoption,
+				'booksonpage'          => $booksonpage,
+				'hidefilter'           => $hidefilter,
+				'hidefinishedsort'     => $hidefinishedsort,
+				'hidefirstsort'        => $hidefirstsort,
+				'hidelibrarytitle'     => $hidelibrarytitle,
+				'hidequote'            => $hidequote,
+				'hiderating'           => $hiderating,
+				'hidesearch'           => $hidesearch,
+				'hidesignedsort'       => $hidesignedsort,
+				'hidestats'            => $hidestats,
+				'hidesubjectsort'      => $hidesubjectsort,
+				'sortoption'           => $sortoption,
+				'hidefrontendbuyimg'   => $hidefrontendbuyimg,
+				'hidefrontendbuyprice' => $hidefrontendbuyprice,
+				'enablepurchase'       => $enablepurchase,
 			);
 
 			require_once CLASS_DIR . 'class-display-options.php';
@@ -1924,20 +1952,12 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 				$hideitunespurchase = filter_var( wp_unslash( $_POST['hideitunespurchase'] ), FILTER_SANITIZE_STRING );
 			}
 
-			if ( isset( $_POST['hidefrontendbuyimg'] ) ) {
-				$hidefrontendbuyimg = filter_var( wp_unslash( $_POST['hidefrontendbuyimg'] ), FILTER_SANITIZE_STRING );
-			}
-
 			if ( isset( $_POST['hidecolorboxbuyimg'] ) ) {
 				$hidecolorboxbuyimg = filter_var( wp_unslash( $_POST['hidecolorboxbuyimg'] ), FILTER_SANITIZE_STRING );
 			}
 
 			if ( isset( $_POST['hidecolorboxbuyprice'] ) ) {
 				$hidecolorboxbuyprice = filter_var( wp_unslash( $_POST['hidecolorboxbuyprice'] ), FILTER_SANITIZE_STRING );
-			}
-
-			if ( isset( $_POST['hidefrontendbuyprice'] ) ) {
-				$hidefrontendbuyprice = filter_var( wp_unslash( $_POST['hidefrontendbuyprice'] ), FILTER_SANITIZE_STRING );
 			}
 
 			if ( isset( $_POST['hidekindleprev'] ) ) {
@@ -1964,12 +1984,19 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 				$booksonpage = filter_var( wp_unslash( $_POST['booksonpage'] ), FILTER_SANITIZE_NUMBER_INT );
 			}
 
+			if ( isset( $_POST['enablepurchase'] ) ) {
+				$enablepurchase = filter_var( wp_unslash( $_POST['enablepurchase'] ), FILTER_SANITIZE_STRING );
+			}
+
 			$customfieldsarray = null;
 			if ( isset( $_POST['customfieldsarray'] ) ) {
 				$customfieldsarray = filter_var_array(  wp_unslash( $_POST['customfieldsarray'] ), FILTER_SANITIZE_STRING );
 			}
 
 			$settings_array = array(
+				'hidecolorboxbuyimg'  => $hidecolorboxbuyimg,
+				'hidecolorboxbuyprice'=> $hidecolorboxbuyprice,
+				'enablepurchase'      => $enablepurchase,
 				'booksonpage'         => $booksonpage,
 				'hideamazonpurchase'  => $hideamazonpurchase,
 				'hideamazonreview'    => $hideamazonreview,
@@ -2938,6 +2965,7 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 			$title                = '';
 			$author               = '';
 			$author_url           = '';
+			$sale_url             = '';
 			$category             = '';
 			$price                = '';
 			$pages                = '';
@@ -3013,6 +3041,10 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 
 			if ( isset( $_POST['authorurl'] ) ) {
 				$author_url = filter_var( wp_unslash( $_POST['authorurl'] ), FILTER_SANITIZE_URL );
+			}
+
+			if ( isset( $_POST['saleurl'] ) ) {
+				$sale_url = filter_var( wp_unslash( $_POST['saleurl'] ), FILTER_SANITIZE_URL );
 			}
 
 			if ( isset( $_POST['category'] ) ) {
@@ -3215,6 +3247,7 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 				'title'                => $title,
 				'author'               => $author,
 				'author_url'           => $author_url,
+				'sale_url'             => $sale_url,
 				'category'             => $category,
 				'price'                => $price,
 				'pages'                => $pages,

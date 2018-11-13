@@ -503,6 +503,10 @@ if ( ! class_exists( 'WPBookList_Compat_Functions', false ) ) :
 				if ( 0 === $wpdb->query( "SHOW COLUMNS FROM `$table_name_default` LIKE 'subgenre'" ) ) {
 					$wpdb->query( "ALTER TABLE $table_name_default ADD subgenre TEXT" );
 				}
+				if ( 0 === $wpdb->query( "SHOW COLUMNS FROM `$table_name_default` LIKE 'sale_url'" ) ) {
+					$wpdb->query( "ALTER TABLE $table_name_default ADD sale_url TEXT" );
+				}
+				
 
 				// Modify the ISBN column in the default library to be varchar, which will allow the storage of ASIN numbers.
 				$wpdb->query( "ALTER TABLE $table_name_default MODIFY isbn varchar( 190 )" );
@@ -667,6 +671,9 @@ if ( ! class_exists( 'WPBookList_Compat_Functions', false ) ) :
 					if ( 0 === $wpdb->query( "SHOW COLUMNS FROM `$table` LIKE 'subgenre'" ) ) {
 						$wpdb->query( "ALTER TABLE $table ADD subgenre varchar(255)" );
 					}
+					if ( 0 === $wpdb->query( "SHOW COLUMNS FROM `$table` LIKE 'sale_url'" ) ) {
+						$wpdb->query( "ALTER TABLE $table ADD sale_url TEXT" );
+					}
 
 					// Now begin modifying the custom library's settings tables.
 					$table = $wpdb->prefix . "wpbooklist_jre_settings_" . $utable->user_table_name;
@@ -710,7 +717,7 @@ if ( ! class_exists( 'WPBookList_Compat_Functions', false ) ) :
 						$wpdb->query( "ALTER TABLE $table ADD hidesubjectsort bigint(255)" );
 					}
 
-					// Begin addition of version 6.0.0 columns.
+					// Begin addition of version 6.0.0 columns for the Custom Library's Settings table.
 					if ( 0 === $wpdb->query( "SHOW COLUMNS FROM `$table` LIKE 'hideasin'" ) ) {
 						$wpdb->query( "ALTER TABLE $table ADD hideasin bigint(255)" );
 					}

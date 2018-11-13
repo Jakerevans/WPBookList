@@ -543,7 +543,7 @@ if ( ! class_exists( 'WPBookList_Show_Book_In_Colorbox', false ) ) :
 
 			// Determine which image to use for the title.
 			$string2 = '';
-			if ( null === $this->hidebookimage || 0 === $this->hidebookimage ) {
+			if ( null === $this->hidebookimage || '0' === $this->hidebookimage ) {
 				if ( null === $this->image ) {
 					$string2 = '<img id="wpbooklist_cover_image_popup" src="' . ROOT_IMG_URL . 'image_unavaliable .png"/>';
 				} else {
@@ -554,7 +554,7 @@ if ( ! class_exists( 'WPBookList_Show_Book_In_Colorbox', false ) ) :
 			$string3 = '<input type="submit" id="wpbooklist_desc_button" value="Description, Notes & Reviews"></input>';
 
 			$string5 = '';
-			if ( ( null === $this->hideratingbook || 0 === $this->hideratingbook ) && ( 0 !== $this->rating ) ) {
+			if ( ( null === $this->hideratingbook || '0' === $this->hideratingbook ) && ( 0 !== $this->rating ) ) {
 				$string4 = '<p class="wpbooklist-share-text">' . $this->trans->trans_446 . '</p> 
 				<div class="wpbooklist-line-7"></div>';
 
@@ -582,18 +582,18 @@ if ( ! class_exists( 'WPBookList_Show_Book_In_Colorbox', false ) ) :
 				$string5 = '';
 			}
 
-			if ( ( null === $this->hidefacebook || 0 === $this->hidefacebook ) || ( null === $this->hidetwitter || 0 === $this->hidetwitter ) || ( null === $this->hidegoogleplus || 0 === $this->hidegoogleplus ) || ( null === $this->hidemessenger || 0 === $this->hidemessenger ) || ( null === $this->hidepinterest || 0 === $this->hidepinterest ) || ( null === $this->hideemail || 0 === $this->hideemail ) ) {
+			if ( ( null === $this->hidefacebook || '0' === $this->hidefacebook ) || ( null === $this->hidetwitter || '0' === $this->hidetwitter ) || ( null === $this->hidegoogleplus || '0' === $this->hidegoogleplus ) || ( null === $this->hidemessenger || '0' === $this->hidemessenger ) || ( null === $this->hidepinterest || '0' === $this->hidepinterest ) || ( null === $this->hideemail || '0' === $this->hideemail ) ) {
 
 				$string6 = '<p class="wpbooklist-share-text">' . $this->trans->trans_447 . '</p>
 				<div class="wpbooklist-line-4"></div>';
 
-				if ( null === $this->hidefacebook || 0 === $this->hidefacebook ) {
+				if ( null === $this->hidefacebook || '0' === $this->hidefacebook ) {
 					$string7 = '<div class="addthis_sharing_toolbox addthis_default_style" style="cursor:pointer"><a style="cursor:pointer;" href="" addthis:title="' . $this->title . '" addthis:description="' . htmlspecialchars( addslashes( $this->description ) ) . '" addthis:url="' . $this->amazon_detail_page . '" class="addthis_button_facebook"></a></div>';
 				} else {
 					$string7 = '';
 				}
 
-				if ( null === $this->hidetwitter || 0 === $this->hidetwitter ) {
+				if ( null === $this->hidetwitter || '0' === $this->hidetwitter ) {
 					$string8 = '<div class="addthis_sharing_toolbox addthis_default_style" style="cursor:pointer"><a style="cursor:pointer;" href="" addthis:title="' . $this->title . '" addthis:description="' . htmlspecialchars( addslashes( $this->description ) ) . '" addthis:url="' . $this->amazon_detail_page . '" class="addthis_button_twitter"></a></div>';
 				} else {
 					$string8 = '';
@@ -602,19 +602,19 @@ if ( ! class_exists( 'WPBookList_Show_Book_In_Colorbox', false ) ) :
 				// Google Plus no longer exists! Long Live Google Plus!
 				$string9 = '';
 
-				if ( null === $this->hidepinterest || 0 === $this->hidepinterest ) {
+				if ( null === $this->hidepinterest || '0' === $this->hidepinterest ) {
 					$string10 = '<div class="addthis_sharing_toolbox addthis_default_style" style="cursor:pointer"><a style="cursor:pointer;" href="" addthis:title="' . $this->title . '" addthis:description="' . htmlspecialchars( addslashes( $this->description ) ) . '" addthis:url="' . $this->amazon_detail_page . '" class="addthis_button_pinterest_share"></a></div>';
 				} else {
 					$string10 = '';
 				}
 
-				if ( null === $this->hidemessenger || 0 === $this->hidemessenger ) {
+				if ( null === $this->hidemessenger || '0' === $this->hidemessenger ) {
 					$string11 = '<div class="addthis_sharing_toolbox addthis_default_style" style="cursor:pointer"><a style="cursor:pointer;" href="" addthis:title="' . $this->title . '" addthis:description="' . htmlspecialchars( addslashes( $this->description ) ) . '" addthis:url="' . $this->amazon_detail_page . '" class="addthis_button_messenger"></a></div>';
 				} else {
 					$string11 = '';
 				}
 
-				if ( null === $this->hideemail || 0 === $this->hideemail ) {
+				if ( null === $this->hideemail || '0' === $this->hideemail ) {
 					$string12 = '<div class="addthis_sharing_toolbox addthis_default_style" style="cursor:pointer"><a style="cursor:pointer;" href="" addthis:title="' . $this->title . '" addthis:description="' . htmlspecialchars( addslashes( $this->description ) ) . '" addthis:url="' . $this->amazon_detail_page . '" class="addthis_button_gmail"></a></div>';
 				} else {
 					$string12 = '';
@@ -782,7 +782,7 @@ if ( ! class_exists( 'WPBookList_Show_Book_In_Colorbox', false ) ) :
 						<td>';
 
 				if ( 'true' === $this->finished ) {
-					if ( 0 === $this->date_finished ) {
+					if ( '0' === $this->date_finished ) {
 						$string33 = '<span class="wpbooklist-bold-stats-class" id="wpbooklist_bold">' . $this->trans->trans_223 . ' </span><span class="wpbooklist-bold-stats-value">' . $this->trans->trans_131 . '</span>';
 					} else {
 						$string33 = '<span class="wpbooklist-bold-stats-class" id="wpbooklist_bold">' . $this->trans->trans_223 . ' </span><span class="wpbooklist-bold-stats-value">' . $this->trans->trans_450 . ' ' . $this->date_finished . '</span>';
@@ -874,7 +874,7 @@ if ( ! class_exists( 'WPBookList_Show_Book_In_Colorbox', false ) ) :
 			$string46 = $string46 . '</a>';
 
 			// 1 for hidden, 0 for not hidden, null for not set.
-			if ( ( null === $this->hidekobopurchase || 0 === $this->hidekobopurchase && ( null !== $this->kobo_link && 'http://store .kobobooks.com/en-ca/Search?Query=' !== $this->kobo_link ) ) || ( null === $this->hidebampurchase || 0 === $this->hidebampurchase && ( null !== $this->bam_link && 'http://www.booksamillion.com/p/' !== $this->bam_link ) ) || ( null === $this->hideamazonpurchase || 0 === $this->hideamazonpurchase && ( null !== $this->amazon_detail_page ) ) || ( null === $this->hidebnpurchase || 0 === $this->hidebnpurchase && ( null !== $this->isbn ) ) || ( null === $this->hidegooglepurchase || 0 === $this->hidegooglepurchase && ( null !== $this->google_preview ) ) || ( null === $this->hideitunespurchase || 0 === $this->hideitunespurchase && ( null !== $this->itunes_page ) ) || ( ( true === $this->storefront_active ) && ( null === $this->hidecolorboxbuyimg || 0 === $this->hidecolorboxbuyimg ) && ( null !== $this->author_url && '' !== $this->author_url ) ) ) {
+			if ( ( null === $this->hidekobopurchase || '0' === $this->hidekobopurchase && ( null !== $this->kobo_link && 'http://store .kobobooks.com/en-ca/Search?Query=' !== $this->kobo_link ) ) || ( null === $this->hidebampurchase || '0' === $this->hidebampurchase && ( null !== $this->bam_link && 'http://www.booksamillion.com/p/' !== $this->bam_link ) ) || ( null === $this->hideamazonpurchase || '0' === $this->hideamazonpurchase && ( null !== $this->amazon_detail_page ) ) || ( null === $this->hidebnpurchase || '0' === $this->hidebnpurchase && ( null !== $this->isbn ) ) || ( null === $this->hidegooglepurchase || '0' === $this->hidegooglepurchase && ( null !== $this->google_preview ) ) || ( null === $this->hideitunespurchase || '0' === $this->hideitunespurchase && ( null !== $this->itunes_page ) ) || ( ( true === $this->storefront_active ) && ( null === $this->hidecolorboxbuyimg || '0' === $this->hidecolorboxbuyimg ) && ( null !== $this->author_url && '' !== $this->author_url ) ) ) {
 
 				$string47 = '</td></tr><tr>
 					<td><div class="wpbooklist-line-2"></div></td>
@@ -969,7 +969,7 @@ if ( ! class_exists( 'WPBookList_Show_Book_In_Colorbox', false ) ) :
 
 			$string59 = '';
 			// 1 for hidden, 0 for not hidden, null for not set.
-			if ( ( null === $this->hidekobopurchase || 0 === $this->hidekobopurchase && ( null !== $this->kobo_link && 'http://store .kobobooks.com/en-ca/Search?Query=' !== $this->kobo_link ) ) || ( null === $this->hidebampurchase || 0 === $this->hidebampurchase && ( null !== $this->bam_link && 'http://www.booksamillion.com/p/' !== $this->bam_link ) ) || ( null === $this->hideamazonpurchase || 0 === $this->hideamazonpurchase && ( null !== $this->amazon_detail_page ) ) || ( null === $this->hidebnpurchase || 0 === $this->hidebnpurchase && ( null !== $this->isbn ) ) || ( null === $this->hidegooglepurchase || 0 === $this->hidegooglepurchase && ( null !== $this->google_preview ) ) || ( null === $this->hideitunespurchase || 0 === $this->hideitunespurchase && ( null !== $this->itunes_page ) ) || ( ( true === $this->storefront_active ) && ( null === $this->hidecolorboxbuyimg || 0 === $this->hidecolorboxbuyimg ) && ( null !== $this->author_url && '' !== $this->author_url ) ) ) {
+			if ( ( null === $this->hidekobopurchase || '0' === $this->hidekobopurchase && ( null !== $this->kobo_link && 'http://store .kobobooks.com/en-ca/Search?Query=' !== $this->kobo_link ) ) || ( null === $this->hidebampurchase || '0' === $this->hidebampurchase && ( null !== $this->bam_link && 'http://www.booksamillion.com/p/' !== $this->bam_link ) ) || ( null === $this->hideamazonpurchase || '0' === $this->hideamazonpurchase && ( null !== $this->amazon_detail_page ) ) || ( null === $this->hidebnpurchase || '0' === $this->hidebnpurchase && ( null !== $this->isbn ) ) || ( null === $this->hidegooglepurchase || '0' === $this->hidegooglepurchase && ( null !== $this->google_preview ) ) || ( null === $this->hideitunespurchase || '0' === $this->hideitunespurchase && ( null !== $this->itunes_page ) ) || ( ( true === $this->storefront_active ) && ( null === $this->hidecolorboxbuyimg || '0' === $this->hidecolorboxbuyimg ) && ( null !== $this->author_url && '' !== $this->author_url ) ) ) {
 
 				$string59 = '</td>   
 				</tr>
@@ -980,7 +980,7 @@ if ( ! class_exists( 'WPBookList_Show_Book_In_Colorbox', false ) ) :
 			}
 
 			$string60 = '';
-			if ( null === $this->hidegoodreadswidget || 0 === $this->hidegoodreadswidget && ( '' !== $this->isbn || null !== $this->isbn ) ) {
+			if ( null === $this->hidegoodreadswidget || '0' === $this->hidegoodreadswidget && ( '' !== $this->isbn || null !== $this->isbn ) ) {
 				$string60 = '<td> 
 					<div id="gr_add_to_books">
 					<div class="gr_custom_each_container_">
@@ -999,7 +999,7 @@ if ( ! class_exists( 'WPBookList_Show_Book_In_Colorbox', false ) ) :
 			$string62 = '';
 			$string63 = '';
 			$string64 = '';
-			if ( ( null === $this->hidesimilar || 0 === $this->hidesimilar ) && null !== $this->similar_products_array ) {
+			if ( ( null === $this->hidesimilar || '0' === $this->hidesimilar ) && null !== $this->similar_products_array ) {
 				if ( null !== $this->similar_products ) {
 					$string62 = '<div class="wpbooklist-similar-featured-div">
 							<p id="wpbooklist-similar-titles-id" class="wpbooklist_description_p">' . $this->trans->trans_455 . '</p> 
@@ -1040,7 +1040,7 @@ if ( ! class_exists( 'WPBookList_Show_Book_In_Colorbox', false ) ) :
 			$string65 = '';
 			$string66 = '';
 			$string67 = '';
-			if ( null === $this->hidefeaturedtitles || 0 === $this->hidefeaturedtitles ) {
+			if ( null === $this->hidefeaturedtitles || '0' === $this->hidefeaturedtitles ) {
 				if ( 0 < count( $this->featured_results ) ) {
 					$string65 = '<div class="wpbooklist-similar-featured-div" style="margin-left:5px">
 						<p id="wpbooklist-similar-titles-id" class="wpbooklist_description_p">' . $this->trans->trans_456 . '</p> 
@@ -1074,20 +1074,20 @@ if ( ! class_exists( 'WPBookList_Show_Book_In_Colorbox', false ) ) :
 
 			$kindle_array = array( $this->isbn, $this->amazonaff );
 			$isbn_test    = preg_match( '/[a-z]/i', $this->isbn );
-			if ( ( null === $this->hidekindleprev || 0 === $this->hidekindleprev ) && $isbn_test ) {
+			if ( ( null === $this->hidekindleprev || '0' === $this->hidekindleprev ) && $isbn_test ) {
 				if ( has_filter( 'wpbooklist_add_to_colorbox_kindle' ) ) {
 					$string68 = $string68 . apply_filters( 'wpbooklist_add_to_colorbox_kindle', $kindle_array );
 				}
 			}
 
-			if ( null === $this->hidegoogleprev || 0 === $this->hidegoogleprev ) {
+			if ( null === $this->hidegoogleprev || '0' === $this->hidegoogleprev ) {
 				if ( has_filter( 'wpbooklist_add_to_colorbox_google' ) ) {
 					$string68 = $string68 . apply_filters( 'wpbooklist_add_to_colorbox_google', $this->isbn );
 				}
 			}
 
 			$string69 = '';
-			if ( null === $this->hidedescription || 0 === $this->hidedescription ) {
+			if ( null === $this->hidedescription || '0' === $this->hidedescription ) {
 				$string68 = $string68 . '<p class="wpbooklist_description_p" id="wpbooklist-desc-title-id">' . $this->trans->trans_457 . '</p>';
 
 				if ( null === $this->description ) {
@@ -1098,14 +1098,14 @@ if ( ! class_exists( 'WPBookList_Show_Book_In_Colorbox', false ) ) :
 			}
 
 			$string70 = '';
-			if ( ( null === $this->hideamazonreview || 0 === $this->hideamazonreview ) && ( null !== $this->review_iframe ) ) {
+			if ( ( null === $this->hideamazonreview || '0' === $this->hideamazonreview ) && ( null !== $this->review_iframe ) ) {
 				$string70 = '<p class="wpbooklist_description_p" id="wpbooklist-amazon-review-title-id">' . $this->trans->trans_266 . ':</p> 
 					<p class="wpbooklist_desc_p_class"><iframe id="wpbooklist-review-iframe" src="' . $this->review_iframe . '"></iframe></p>';
 			}
 
 			$string71 = '';
 			$string72 = '';
-			if ( null === $this->hidenotes || 0 === $this->hidenotes ) {
+			if ( null === $this->hidenotes || '0' === $this->hidenotes ) {
 				$string71 = '<p class="wpbooklist_description_p" id="wpbooklist-notes-title-id">' . $this->trans->trans_153 . '</p>';
 
 				if ( null === $this->notes ) {
@@ -1117,7 +1117,7 @@ if ( ! class_exists( 'WPBookList_Show_Book_In_Colorbox', false ) ) :
 
 			$string73 = '';
 			// 1 for hidden, 0 for not hidden, null for not set.
-			if ( ( null === $this->hidekobopurchase || 0 === $this->hidekobopurchase && ( null !== $this->kobo_link && 'http://store .kobobooks.com/en-ca/Search?Query=' !== $this->kobo_link ) ) || ( null === $this->hidebampurchase || 0 === $this->hidebampurchase && ( null !== $this->bam_link && 'http://www.booksamillion.com/p/' !== $this->bam_link ) ) || ( null === $this->hideamazonpurchase || 0 === $this->hideamazonpurchase && ( null !== $this->amazon_detail_page ) ) || ( null === $this->hidebnpurchase || 0 === $this->hidebnpurchase && ( null !== $this->isbn ) ) || ( null === $this->hidegooglepurchase || 0 === $this->hidegooglepurchase && ( null !== $this->google_preview ) ) || ( null === $this->hideitunespurchase || 0 === $this->hideitunespurchase && ( null !== $this->itunes_page ) ) || ( ( true === $this->storefront_active ) && ( null === $this->hidecolorboxbuyimg || 0 === $this->hidecolorboxbuyimg ) && ( null !== $this->author_url && '' !== $this->author_url ) ) ) {
+			if ( ( null === $this->hidekobopurchase || '0' === $this->hidekobopurchase && ( null !== $this->kobo_link && 'http://store .kobobooks.com/en-ca/Search?Query=' !== $this->kobo_link ) ) || ( null === $this->hidebampurchase || '0' === $this->hidebampurchase && ( null !== $this->bam_link && 'http://www.booksamillion.com/p/' !== $this->bam_link ) ) || ( null === $this->hideamazonpurchase || '0' === $this->hideamazonpurchase && ( null !== $this->amazon_detail_page ) ) || ( null === $this->hidebnpurchase || '0' === $this->hidebnpurchase && ( null !== $this->isbn ) ) || ( null === $this->hidegooglepurchase || '0' === $this->hidegooglepurchase && ( null !== $this->google_preview ) ) || ( null === $this->hideitunespurchase || '0' === $this->hideitunespurchase && ( null !== $this->itunes_page ) ) || ( ( true === $this->storefront_active ) && ( null === $this->hidecolorboxbuyimg || '0' === $this->hidecolorboxbuyimg ) && ( null !== $this->author_url && '' !== $this->author_url ) ) ) {
 
 			} else {
 				$string73 = '<div style="display:none;" >';
@@ -1187,7 +1187,7 @@ if ( ! class_exists( 'WPBookList_Show_Book_In_Colorbox', false ) ) :
 			}
 
 			$string83 = '';
-			if ( ( null === $this->hidekobopurchase || 0 === $this->hidekobopurchase && ( null !== $this->kobo_link && 'http://store .kobobooks.com/en-ca/Search?Query=' !== $this->kobo_link ) ) || ( null === $this->hidebampurchase || 0 === $this->hidebampurchase && ( null !== $this->bam_link && 'http://www.booksamillion.com/p/' !== $this->bam_link ) ) || ( null === $this->hideamazonpurchase || 0 === $this->hideamazonpurchase && ( null !== $this->amazon_detail_page ) ) || ( null === $this->hidebnpurchase || 0 === $this->hidebnpurchase && ( null !== $this->isbn ) ) || ( null === $this->hidegooglepurchase || 0 === $this->hidegooglepurchase && ( null !== $this->google_preview ) ) || ( null === $this->hideitunespurchase || 0 === $this->hideitunespurchase && ( null !== $this->itunes_page ) ) || ( ( true === $this->storefront_active ) && ( null === $this->hidecolorboxbuyimg || 0 === $this->hidecolorboxbuyimg ) && ( null !== $this->author_url && '' !== $this->author_url ) ) ) {
+			if ( ( null === $this->hidekobopurchase || '0' === $this->hidekobopurchase && ( null !== $this->kobo_link && 'http://store .kobobooks.com/en-ca/Search?Query=' !== $this->kobo_link ) ) || ( null === $this->hidebampurchase || '0' === $this->hidebampurchase && ( null !== $this->bam_link && 'http://www.booksamillion.com/p/' !== $this->bam_link ) ) || ( null === $this->hideamazonpurchase || '0' === $this->hideamazonpurchase && ( null !== $this->amazon_detail_page ) ) || ( null === $this->hidebnpurchase || '0' === $this->hidebnpurchase && ( null !== $this->isbn ) ) || ( null === $this->hidegooglepurchase || '0' === $this->hidegooglepurchase && ( null !== $this->google_preview ) ) || ( null === $this->hideitunespurchase || '0' === $this->hideitunespurchase && ( null !== $this->itunes_page ) ) || ( ( true === $this->storefront_active ) && ( null === $this->hidecolorboxbuyimg || '0' === $this->hidecolorboxbuyimg ) && ( null !== $this->author_url && '' !== $this->author_url ) ) ) {
 
 			} else {
 				$string83 = '</div>';

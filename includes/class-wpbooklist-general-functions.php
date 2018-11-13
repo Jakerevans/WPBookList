@@ -296,6 +296,7 @@ if ( ! class_exists( 'WPBookList_General_Functions', false ) ) :
 				author2 TEXT,
 				author3 TEXT,
 				author_url TEXT,
+				sale_url TEXT,
 				authorfirst TEXT,
 				authorfirst2 TEXT,
 				authorfirst3 TEXT,

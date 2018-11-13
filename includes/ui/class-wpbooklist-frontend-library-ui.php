@@ -174,11 +174,11 @@ if ( ! class_exists( 'WPBookList_Front_End_Library_UI', false ) ) :
 			$this->output_beginning_html();
 
 			// Output search if not hidden.
-			if ( 1 !== $this->display_options_actual->hidesearch ) {
+			if ( '1' !== $this->display_options_actual->hidesearch ) {
 				$this->output_search();
 			}
 			// Output filter if not hidden.
-			if ( 1 !== $this->display_options_actual->hidefilter ) {
+			if ( '1' !== $this->display_options_actual->hidefilter ) {
 				$this->build_filter_values();
 				$this->output_filter_html();
 			}
@@ -187,11 +187,11 @@ if ( ! class_exists( 'WPBookList_Front_End_Library_UI', false ) ) :
 			$this->output_close_sort_search();
 
 			// Output Stats if not hidden.
-			if ( 1 !== $this->display_options_actual->hidestats ) {
+			if ( '1' !== $this->display_options_actual->hidestats ) {
 				$this->output_stats();
 			}
 			// Output Quote if not hidden.
-			if ( 1 !== $this->display_options_actual->hidequote ) {
+			if ( '1' !== $this->display_options_actual->hidequote ) {
 				$this->output_quote();
 			}
 
@@ -746,17 +746,17 @@ if ( ! class_exists( 'WPBookList_Front_End_Library_UI', false ) ) :
 										 <option ' . $this->sortbyselected2 . ' value="alphabeticallybytitle">' . $this->trans->trans_4 . '</option>
 										<option ' . $this->sortbyselected3 . ' value="alphabeticallybyauthorfirst">' . $this->trans->trans_5 . '</option><option ' . $this->sortbyselected4 . ' value="alphabeticallybyauthorlast">' . $this->trans->trans_6 . '</option>';
 
-			if ( 1 !== $this->display_options_actual->hidefinishedsort ) {
+			if ( '1' !== $this->display_options_actual->hidefinishedsort ) {
 				$string1 = $string1 . '<option ' . $this->sortbyselected5 . ' value="year_read">' . $this->trans->trans_7 . '</option>';
 			}
 
 			$string1 = $string1 . '<option ' . $this->sortbyselected6 . ' value="pages_desc">' . $this->trans->trans_7 . '</option> <option ' . $this->sortbyselected7 . ' value="pages_asc">' . $this->trans->trans_8 . '</option>';
 
-			if ( 1 !== $this->display_options_actual->hidesignedsort ) {
+			if ( '1' !== $this->display_options_actual->hidesignedsort ) {
 				$string1 = $string1 . '<option ' . $this->sortbyselected8 . ' value="signed">' . $this->trans->trans_10 . '</option>';
 			}
 
-			if ( 1 !== $this->display_options_actual->hidefirstsort ) {
+			if ( '1' !== $this->display_options_actual->hidefirstsort ) {
 				$string1 = $string1 . '<option ' . $this->sortbyselected9 . ' value="first_edition">' . $this->trans->trans_11 . '</option>';
 			}
 
@@ -1329,7 +1329,7 @@ if ( ! class_exists( 'WPBookList_Front_End_Library_UI', false ) ) :
 					    </p>';
 				}
 
-				if ( 1 !== $this->display_options_actual->hiderating && 0 !== $book->rating && null !== $book->rating ) {
+				if ( '1' !== $this->display_options_actual->hiderating && 0 !== $book->rating && null !== $book->rating ) {
 
 					if ( 1 === $book->rating ) {
 						$string2 = $string2 . '<img style="opacity: 1;" class="wpbooklist-rating-image" src="' . ROOT_IMG_URL . '1star.png">';
@@ -1355,13 +1355,15 @@ if ( ! class_exists( 'WPBookList_Front_End_Library_UI', false ) ) :
 				$string2 = $string2 . '<div class="wpbooklist-library-frontend-purchase-div">';
 
 				$sales_array = array( $book->author_url, $book->price );
-				if ( 1 === $this->display_options_actual->enablepurchase && ( null !== $book->price && '' !== $book->price ) && 1 !== $this->display_options_actual->hidefrontendbuyprice ) {
+
+
+				if ( '1' === $this->display_options_actual->enablepurchase && ( null !== $book->price && '' !== $book->price ) && '1' !== $this->display_options_actual->hidefrontendbuyprice ) {
 					if ( has_filter( 'wpbooklist_append_to_frontend_library_price_purchase' ) ) {
 						$string2 = $string2 . apply_filters( 'wpbooklist_append_to_frontend_library_price_purchase', $sales_array );
 					}
 				}
 
-				if ( 1 === $this->display_options_actual->enablepurchase && '' !== $book->author_url && 1 !== $this->display_options_actual->hidefrontendbuyimg ) {
+				if ( '1' === $this->display_options_actual->enablepurchase && '' !== $book->author_url && '1' !== $this->display_options_actual->hidefrontendbuyimg ) {
 					if ( has_filter( 'wpbooklist_append_to_frontend_library_image_purchase' ) ) {
 						$string2 = $string2 . apply_filters( 'wpbooklist_append_to_frontend_library_image_purchase', $sales_array );
 					}
