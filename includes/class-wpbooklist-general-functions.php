@@ -19,6 +19,21 @@ if ( ! class_exists( 'WPBookList_General_Functions', false ) ) :
 	class WPBookList_General_Functions {
 
 		/**
+		 * This function hides the admin bar if the logged-in user is a basic WPBookList User.
+		 */
+		public function wpbooklist_hide_admin_bar_if_basic_wpbooklist_user() {
+
+			if ( is_user_logged_in() ) {
+				$user = wp_get_current_user();
+				$role = (array) $user->roles;
+
+				if ( 'wpbooklist_basic_user' === $role[0] ) {
+					show_admin_bar( false );
+				}
+			}
+		}
+
+		/**
 		 * Create new WPBookList User Role on plugin activation.
 		 */
 		public function wpbooklist_add_wpbooklist_role_on_plugin_activation() {
