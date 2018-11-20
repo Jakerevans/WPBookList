@@ -94,10 +94,6 @@ if ( ! class_exists( 'WPBookList_Utilities_Accesscheck', false ) ) :
 							$return_val = true;
 						}
 						break;
-					case 'adminbarcheck':
-						$return_val = true;
-						break;
-
 					default:
 						# code...
 						break;

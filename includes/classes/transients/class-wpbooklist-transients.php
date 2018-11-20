@@ -84,5 +84,15 @@ if ( ! class_exists( 'WPBookList_Transients', false ) ) :
 			return delete_transient( $transient_name );
 		}
 
+		/**
+		 *  Function that deletes all wpbl transients.
+		 */
+		public function delete_all_wpbl_transients() {
+
+			global $wpdb;
+			$result = $wpdb->query( 'DELETE FROM ' . $wpdb->prefix . "options WHERE option_name LIKE ('%wpbl\_%')" );
+
+			return $result;
+		}
 	}
 endif;
