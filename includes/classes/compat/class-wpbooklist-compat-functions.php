@@ -115,7 +115,7 @@ if ( ! class_exists( 'WPBookList_Compat_Functions', false ) ) :
 				if ( 0 === $wpdb->query( "SHOW COLUMNS FROM `$table_name` LIKE 'patreonack'" ) ) {
 					$wpdb->query( "ALTER TABLE $table_name ADD patreonack bigint(255)" );
 				}
-				
+
 				// Begin addition of version 6.0.0 columns.
 				if ( 0 === $wpdb->query( "SHOW COLUMNS FROM `$table_name` LIKE 'customfields'" ) ) {
 					$wpdb->query( "ALTER TABLE $table_name ADD customfields TEXT" );
@@ -511,6 +511,12 @@ if ( ! class_exists( 'WPBookList_Compat_Functions', false ) ) :
 				// Modify the ISBN column in the default library to be varchar, which will allow the storage of ASIN numbers.
 				$wpdb->query( "ALTER TABLE $table_name_default MODIFY isbn varchar( 190 )" );
 
+
+				// Modify the Rating column in the default library to be float, which will allow the storage of half-star numbers.
+				$wpdb->query( "ALTER TABLE $table_name_default MODIFY rating float" );
+
+
+
 			}
 		}
 
@@ -535,6 +541,12 @@ if ( ! class_exists( 'WPBookList_Compat_Functions', false ) ) :
 					$result = $wpdb->get_row( "SHOW COLUMNS FROM `$table` LIKE 'isbn'" );
 					if ( 'varchar(190)' !== $result->Type ) {
 						$wpdb->query( "ALTER TABLE $table MODIFY isbn varchar( 190 )" );
+					}
+
+					// Modify the Rating column in the default library to be float, which will allow the storage of half-star numbers.
+					$result = $wpdb->get_row( "SHOW COLUMNS FROM `$table` LIKE 'rating'" );
+					if ( 'float' !== $result->Type ) {
+						$wpdb->query( "ALTER TABLE $table MODIFY rating float" );
 					}
 
 					// Add WooCommerce column.

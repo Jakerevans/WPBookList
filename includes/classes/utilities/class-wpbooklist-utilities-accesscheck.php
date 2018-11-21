@@ -116,6 +116,11 @@ if ( ! class_exists( 'WPBookList_Utilities_Accesscheck', false ) ) :
 			// Grab Superadmin from the settings table to the user knows who to contact.
 			global $wpdb;
 
+			// First we'll get all the translations for this tab.
+			require_once CLASS_TRANSLATIONS_DIR . 'class-wpbooklist-translations.php';
+			$this->trans = new WPBookList_Translations();
+			$this->trans->trans_strings();
+
 			// Make call to Transients class to see if Transient currently exists. If so, retrieve it, if not, make call to create_transient() with all required Parameters.
 			require_once CLASS_TRANSIENTS_DIR . 'class-wpbooklist-transients.php';
 			$transients          = new WPBookList_Transients();
@@ -129,75 +134,81 @@ if ( ! class_exists( 'WPBookList_Utilities_Accesscheck', false ) ) :
 				$this->wpbl_super_admin = $transients->create_transient( $transient_name, 'wpdb->get_row', $query, MONTH_IN_SECONDS );
 			}
 
-			$sauser = $this->wpbl_super_admin;
+			if ( null !== $this->wpbl_super_admin && undefined !== $this->wpbl_super_admin ) {
+				$sauser = $this->wpbl_super_admin;
 
-			// First we'll get all the translations for this tab.
-			require_once CLASS_TRANSLATIONS_DIR . 'class-wpbooklist-translations.php';
-			$this->trans = new WPBookList_Translations();
-			$this->trans->trans_strings();
+				// If SuperAdmin's First and last name have been set.
+				if ( '' !== $sauser->firstname && null !== $sauser->firstname && '' !== $sauser->lastname && null !== $sauser->lastname ) {
 
-			// If SuperAdmin's First and last name have been set.
-			if ( '' !== $sauser->firstname && null !== $sauser->firstname && '' !== $sauser->lastname && null !== $sauser->lastname ) {
+					return '<div class="wpbooklist-no-saved-data-stats-div">
+						<p class="wpbooklist-tab-intro-para">
+							<img id="wpbooklist-smile-icon-3" src="' . ROOT_IMG_ICONS_URL . 'shocked.svg">
+							<span class="wpbooklist-no-saved-span-stats-1">' . $this->trans->trans_90 . '</span>
+							<br>
+							' . $this->trans->trans_490 . '
+							<br>
+							' . $this->trans->trans_491 . ' ' . $sauser->firstname . ' ' . $sauser->lastname . ' ' . $this->trans->trans_492 . ' ' . $sauser->email . ' ' . $this->trans->trans_493 . '
+							<br><br>
+						</p>
+					</div>';
+				}
 
+				// If SuperAdmin's First name has been set.
+				if ( '' !== $sauser->firstname && null !== $sauser->firstname && ( '' === $sauser->lastname || null === $sauser->lastname ) ) {
+
+					return '<div class="wpbooklist-no-saved-data-stats-div">
+						<p class="wpbooklist-tab-intro-para">
+							<img id="wpbooklist-smile-icon-3" src="' . ROOT_IMG_ICONS_URL . 'shocked.svg">
+							<span class="wpbooklist-no-saved-span-stats-1">' . $this->trans->trans_90 . '</span>
+							<br>
+							' . $this->trans->trans_490 . '
+							<br>
+							' . $this->trans->trans_491 . ' ' . $sauser->firstname . ' ' . $this->trans->trans_492 . ' <a href="mailto:' . $sauser->email . '"> ' .  $sauser->email . '</a> ' . $this->trans->trans_493 . '
+							<br><br>
+						</p>
+					</div>';
+				}
+
+				// If SuperAdmin's Last name has been set.
+					if ( ( '' === $sauser->firstname || null === $sauser->firstname ) && ( '' !== $sauser->lastname && null !== $sauser->lastname ) ) {
+
+					return '<div class="wpbooklist-no-saved-data-stats-div">
+						<p class="wpbooklist-tab-intro-para">
+							<img id="wpbooklist-smile-icon-3" src="' . ROOT_IMG_ICONS_URL . 'shocked.svg">
+							<span class="wpbooklist-no-saved-span-stats-1">' . $this->trans->trans_90 . '</span>
+							<br>
+							' . $this->trans->trans_490 . '
+							<br>
+							' . $this->trans->trans_491 . ' ' . $sauser->lastname . ' ' . $this->trans->trans_492 . ' <a href="mailto:' . $sauser->email . '"> ' .  $sauser->email . '</a> ' . $this->trans->trans_493 . '
+							<br><br>
+						</p>
+					</div>';
+				}
+
+				// If neither of SuperAdmin's names have been set.
+				if ( ( '' === $sauser->firstname || null === $sauser->firstname ) && ( '' === $sauser->lastname || null === $sauser->lastname ) ) {
+
+					return '<div class="wpbooklist-no-saved-data-stats-div">
+						<p class="wpbooklist-tab-intro-para">
+							<img id="wpbooklist-smile-icon-3" src="' . ROOT_IMG_ICONS_URL . 'shocked.svg">
+							<span class="wpbooklist-no-saved-span-stats-1">' . $this->trans->trans_90 . '</span>
+							<br>
+							' . $this->trans->trans_490 . '
+							<br>
+							' . $this->trans->trans_491 . ' <a href="mailto:' . $sauser->email . '"> ' .  $sauser->email . '</a> ' . $this->trans->trans_493 . '
+							<br><br>
+						</p>
+					</div>';
+				}
+			} else {
 				return '<div class="wpbooklist-no-saved-data-stats-div">
-					<p class="wpbooklist-tab-intro-para">
-						<img id="wpbooklist-smile-icon-3" src="' . ROOT_IMG_ICONS_URL . 'shocked.svg">
-						<span class="wpbooklist-no-saved-span-stats-1">' . $this->trans->trans_90 . '</span>
-						<br>
-						' . $this->trans->trans_490 . '
-						<br>
-						' . $this->trans->trans_491 . ' ' . $sauser->firstname . ' ' . $sauser->lastname . ' ' . $this->trans->trans_492 . ' ' . $sauser->email . ' ' . $this->trans->trans_493 . '
-						<br><br>
-					</p>
-				</div>';
-			}
-
-			// If SuperAdmin's First name has been set.
-			if ( '' !== $sauser->firstname && null !== $sauser->firstname && ( '' === $sauser->lastname || null === $sauser->lastname ) ) {
-
-				return '<div class="wpbooklist-no-saved-data-stats-div">
-					<p class="wpbooklist-tab-intro-para">
-						<img id="wpbooklist-smile-icon-3" src="' . ROOT_IMG_ICONS_URL . 'shocked.svg">
-						<span class="wpbooklist-no-saved-span-stats-1">' . $this->trans->trans_90 . '</span>
-						<br>
-						' . $this->trans->trans_490 . '
-						<br>
-						' . $this->trans->trans_491 . ' ' . $sauser->firstname . ' ' . $this->trans->trans_492 . ' <a href="mailto:' . $sauser->email . '"> ' .  $sauser->email . '</a> ' . $this->trans->trans_493 . '
-						<br><br>
-					</p>
-				</div>';
-			}
-
-			// If SuperAdmin's Last name has been set.
-				if ( ( '' === $sauser->firstname || null === $sauser->firstname ) && ( '' !== $sauser->lastname && null !== $sauser->lastname ) ) {
-
-				return '<div class="wpbooklist-no-saved-data-stats-div">
-					<p class="wpbooklist-tab-intro-para">
-						<img id="wpbooklist-smile-icon-3" src="' . ROOT_IMG_ICONS_URL . 'shocked.svg">
-						<span class="wpbooklist-no-saved-span-stats-1">' . $this->trans->trans_90 . '</span>
-						<br>
-						' . $this->trans->trans_490 . '
-						<br>
-						' . $this->trans->trans_491 . ' ' . $sauser->lastname . ' ' . $this->trans->trans_492 . ' <a href="mailto:' . $sauser->email . '"> ' .  $sauser->email . '</a> ' . $this->trans->trans_493 . '
-						<br><br>
-					</p>
-				</div>';
-			}
-
-			// If neither of SuperAdmin's names have been set.
-			if ( ( '' === $sauser->firstname || null === $sauser->firstname ) && ( '' === $sauser->lastname || null === $sauser->lastname ) ) {
-
-				return '<div class="wpbooklist-no-saved-data-stats-div">
-					<p class="wpbooklist-tab-intro-para">
-						<img id="wpbooklist-smile-icon-3" src="' . ROOT_IMG_ICONS_URL . 'shocked.svg">
-						<span class="wpbooklist-no-saved-span-stats-1">' . $this->trans->trans_90 . '</span>
-						<br>
-						' . $this->trans->trans_490 . '
-						<br>
-						' . $this->trans->trans_491 . ' <a href="mailto:' . $sauser->email . '"> ' .  $sauser->email . '</a> ' . $this->trans->trans_493 . '
-						<br><br>
-					</p>
-				</div>';
+						<p class="wpbooklist-tab-intro-para">
+							<img id="wpbooklist-smile-icon-3" src="' . ROOT_IMG_ICONS_URL . 'shocked.svg">
+							<span class="wpbooklist-no-saved-span-stats-1">' . $this->trans->trans_90 . '</span>
+							<br>
+							' . $this->trans->trans_490 . '
+						</p>
+					</div>';
 			}
 		}
 

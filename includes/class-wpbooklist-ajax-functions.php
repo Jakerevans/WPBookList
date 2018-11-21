@@ -755,6 +755,175 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 		}
 
 		/**
+		 * Callback function for deleting a user.
+		 */
+		public function wpbooklist_delete_user_data_action_callback() {
+			global $wpdb;
+			check_ajax_referer( 'wpbooklist_delete_user_data_action_callback', 'security' );
+
+			if ( isset( $_POST['wpuserid'] ) ) {
+				$wpuserid = filter_var( $_POST['wpuserid'], FILTER_SANITIZE_STRING );
+			}
+
+			// Let's make sure we're not deleting the SuperAdmin...
+			$custom_user_info = $wpdb->get_row( 'SELECT * FROM ' . $wpdb->prefix . 'wpbooklist_jre_users_table WHERE wpuserid = ' . $wpuserid );
+			if ( 'SuperAdmin' !== $custom_user_info->role  ) {
+
+				// Let's make sure we're not deleting the logged-in user...
+				$user = wp_get_current_user();
+				if ( $wpuserid !== $user->ID ) {
+
+					// First delete from our custom table.
+					$custom_delete_result = $wpdb->delete( $wpdb->prefix . 'wpbooklist_jre_users_table', array( 'wpuserid' => $wpuserid ), array( '%d' ) );
+
+					// Now delete the associated WordPress user.
+					$wp_delete_result = wp_delete_user( $wpuserid );
+
+					wp_die( $custom_delete_result . ' ' . $wp_delete_result );
+
+				}
+
+			}
+
+		}
+
+		/**
+		 * Callback function for editing a saved WPBookList Basic User.
+		 */
+		public function wpbooklist_edit_user_data_action_callback() {
+			global $wpdb;
+			check_ajax_referer( 'wpbooklist_edit_user_data_action_callback', 'security' );
+
+			$firstname       = '';
+			$lastname        = '';
+			$email           = '';
+			$emailconfirm    = '';
+			$password        = '';
+			$passwordconfirm = '';
+			$username        = '';
+			$addbooks        = '';
+			$editbooks       = '';
+			$deletebooks     = '';
+			$displayoptions  = '';
+			$settings        = '';
+			$wpuserid        = '';
+			$librarystring   = '';
+
+			if ( isset( $_POST['firstname'] ) ) {
+				$firstname = filter_var( $_POST['firstname'], FILTER_SANITIZE_STRING );
+			}
+
+			if ( isset( $_POST['lastname'] ) ) {
+				$lastname = filter_var( $_POST['lastname'], FILTER_SANITIZE_STRING );
+			}
+
+			if ( isset( $_POST['email'] ) ) {
+				$email = filter_var( $_POST['email'], FILTER_SANITIZE_STRING );
+			}
+
+			if ( isset( $_POST['emailconfirm'] ) ) {
+				$emailconfirm = filter_var( $_POST['emailconfirm'], FILTER_SANITIZE_STRING );
+			}
+
+			if ( isset( $_POST['password'] ) ) {
+				$password = filter_var( $_POST['password'], FILTER_SANITIZE_STRING );
+			}
+
+			if ( isset( $_POST['passwordconfirm'] ) ) {
+				$passwordconfirm = filter_var( $_POST['passwordconfirm'], FILTER_SANITIZE_STRING );
+			}
+
+			if ( isset( $_POST['username'] ) ) {
+				$username = filter_var( $_POST['username'], FILTER_SANITIZE_STRING );
+			}
+
+			if ( isset( $_POST['addbooks'] ) ) {
+				$addbooks = filter_var( $_POST['addbooks'], FILTER_SANITIZE_STRING );
+			}
+
+			if ( isset( $_POST['editbooks'] ) ) {
+				$editbooks = filter_var( $_POST['editbooks'], FILTER_SANITIZE_STRING );
+			}
+
+			if ( isset( $_POST['deletebooks'] ) ) {
+				$deletebooks = filter_var( $_POST['deletebooks'], FILTER_SANITIZE_STRING );
+			}
+
+			if ( isset( $_POST['displayoptions'] ) ) {
+				$displayoptions = filter_var( $_POST['displayoptions'], FILTER_SANITIZE_STRING );
+			}
+
+			if ( isset( $_POST['settings'] ) ) {
+				$settings = filter_var( $_POST['settings'], FILTER_SANITIZE_STRING );
+			}
+
+			if ( isset( $_POST['wpuserid'] ) ) {
+				$wpuserid = filter_var( $_POST['wpuserid'], FILTER_SANITIZE_STRING );
+			}
+
+			if ( isset( $_POST['librarystring'] ) ) {
+				$librarystring = filter_var( $_POST['librarystring'], FILTER_SANITIZE_STRING );
+			}
+
+			// Create the permissions string.
+			$permissions = $addbooks . '-' . $editbooks . '-' . $deletebooks . '-' . $displayoptions . '-' . $settings;
+
+			$users_save_array = array(
+				'firstname'   => $firstname,
+				'lastname'    => $lastname,
+				'email'       => $email,
+				'username'    => $username,
+				'permissions' => $permissions,
+				'wpuserid'    => $wpuserid,
+				'libraries'   => $librarystring,
+			);
+
+			// Requiring & Calling the file/class that will insert or update our data.
+			require_once CLASS_USERS_DIR . 'class-wpbooklist-save-users-data.php';
+			$save_class      = new WPBOOKLIST_Save_Users_Data( $users_save_array );
+			$db_write_result = $save_class->wpbooklist_jre_save_users_actual();
+
+			// Build array of values to return to browser.
+			$return_array = array(
+				$db_write_result,
+				$save_class->dbmode,
+				$save_class->email,
+				$save_class->wpuserid,
+				$save_class->last_query,
+				$save_class->transients_deleted,
+				wp_json_encode( $save_class->users_save_array ),
+			);
+
+			// Serialize array.
+			$return_array = wp_json_encode( $return_array );
+			wp_die( $return_array );
+
+		}
+
+		/**
+		 * Callback function for getting form for editing user.
+		 */
+		public function wpbooklist_edit_user_form_action_callback() {
+			global $wpdb;
+			check_ajax_referer( 'wpbooklist_edit_user_form_action_callback', 'security' );
+
+			if ( isset( $_POST['wpuserid'] ) ) {
+				$wpuserid = filter_var( wp_unslash( $_POST['wpuserid'], FILTER_SANITIZE_STRING ) );
+			}
+
+			// Now get this user's info.
+			$custom_user_info = $wpdb->get_row( 'SELECT * FROM ' . $wpdb->prefix . 'wpbooklist_jre_users_table WHERE wpuserid = ' . $wpuserid );
+
+			require_once CLASS_USERS_DIR . 'class-wpbooklist-users-form.php';
+			$this->form = new WPBookList_User_Form();
+			$form       = $this->form->output_users_edit_form( $custom_user_info );
+
+			wp_die( $form );
+
+		}
+
+
+		/**
 		 * Callback function for editing a book. Should be almost identical to wpbooklist_dashboard_add_book_action_callback() except for handling the response from class-wpbooklist-book.php.
 		 */
 		public function wpbooklist_dashboard_edit_book_action_callback() {
@@ -1285,8 +1454,8 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 				}
 			}
 
-			error_log( 'Here is the Array being sent to Class-wpbooklist-book.php' );
-			error_log( print_r( $book_array, true ) );
+			//error_log( 'Here is the Array being sent to Class-wpbooklist-book.php' );
+			//error_log( print_r( $book_array, true ) );
 
 			require_once CLASS_BOOK_DIR . 'class-wpbooklist-book.php';
 			$book_class  = new WPBookList_Book( 'edit', $book_array, $bookid );
@@ -1447,7 +1616,7 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 					price TEXT,
 					pub_year bigint(255),
 					publisher TEXT,
-					rating bigint(255),
+					rating float,
 					review_iframe TEXT,
 					series TEXT,
 					shortdescription MEDIUMTEXT, 

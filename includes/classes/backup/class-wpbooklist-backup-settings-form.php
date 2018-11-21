@@ -101,7 +101,7 @@ if ( ! class_exists( 'WPBookList_Backup_Settings_Form', false ) ) :
 				if ( ( '' !== $db->user_table_name ) || ( null !== $db->user_table_name ) ) {
 
 					// Making sure the user is allowed to access this particular library - first check for 'alllibraries' access.
-					if ( false !== stripos( $wpuser->libraries, 'alllibraries' ) ) {
+					if ( false !== stripos( $wpuser->libraries, 'alllibraries' ) || 'SuperAdmin' === $wpuser->role ) {
 
 						$string3 = $string3 . '<option value="' . $wpdb->prefix . 'wpbooklist_jre_' . $db->user_table_name . '">' . ucfirst( $db->user_table_name ) . '</option>';
 
@@ -139,7 +139,7 @@ if ( ! class_exists( 'WPBookList_Backup_Settings_Form', false ) ) :
 				if ( ( '' !== $db->user_table_name ) || ( null !== $db->user_table_name ) ) {
 
 					// Making sure the user is allowed to access this particular library - first check for 'alllibraries' access.
-					if ( false !== stripos( $wpuser->libraries, 'alllibraries' ) ) {
+					if ( false !== stripos( $wpuser->libraries, 'alllibraries' ) || 'SuperAdmin' === $wpuser->role ) {
 
 						$string6 = $string6 . '<option value="' . $wpdb->prefix . 'wpbooklist_jre_' . $db->user_table_name . '">' . ucfirst( $db->user_table_name ) . '</option>';
 
@@ -194,7 +194,7 @@ if ( ! class_exists( 'WPBookList_Backup_Settings_Form', false ) ) :
 				if ( ( '' !== $db->user_table_name ) || ( null !== $db->user_table_name ) ) {
 
 					// Making sure the user is allowed to access this particular library - first check for 'alllibraries' access.
-					if ( false !== stripos( $wpuser->libraries, 'alllibraries' ) ) {
+					if ( false !== stripos( $wpuser->libraries, 'alllibraries' ) || 'SuperAdmin' === $wpuser->role ) {
 
 						$string11 = $string11 . '<option value="' . $wpdb->prefix . 'wpbooklist_jre_' . $db->user_table_name . '">' . ucfirst( $db->user_table_name ) . '</option>';
 

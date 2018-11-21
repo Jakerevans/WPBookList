@@ -174,7 +174,7 @@ if ( ! class_exists( 'WPBookList_LibraryStylePaks_Display_Options_Form', false )
 				if ( ( '' !== $db->user_table_name ) || ( null !== $db->user_table_name ) ) {
 
 					// Making sure the user is allowed to access this particular library - first check for 'alllibraries' access.
-					if ( false !== stripos( $wpuser->libraries, 'alllibraries' ) ) {
+					if ( false !== stripos( $wpuser->libraries, 'alllibraries' ) || 'SuperAdmin' === $wpuser->role ) {
 
 						// If we're on the first iteration of the foreach, make this the selected default value.
 						if ( 0 === $key ) {

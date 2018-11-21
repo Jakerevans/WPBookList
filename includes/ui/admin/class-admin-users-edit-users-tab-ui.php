@@ -1,6 +1,6 @@
 <?php
 /**
- * WPBookList WPBookList_AddAUser_Tab Class - class-admin-books-book-tab-ui.php.
+ * WPBookList WPBookList_EditUsers_Tab Class - class-admin-books-book-tab-ui.php.
  *
  * @author   Jake Evans
  * @category Admin
@@ -12,11 +12,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-if ( ! class_exists( 'WPBookList_AddAUser_Tab', false ) ) :
+if ( ! class_exists( 'WPBookList_EditUsers_Tab', false ) ) :
 	/**
 	 * WPBookList_Admin_Menu Class.
 	 */
-	class WPBookList_AddAUser_Tab {
+	class WPBookList_EditUsers_Tab {
 
 
 		/**
@@ -24,7 +24,7 @@ if ( ! class_exists( 'WPBookList_AddAUser_Tab', false ) ) :
 		 */
 		public function __construct() {
 			require_once CLASS_DIR . 'class-admin-ui-template.php';
-			require_once CLASS_USERS_DIR . 'class-wpbooklist-users-form.php';
+			require_once CLASS_USERS_DIR . 'class-wpbooklist-edit-users-form.php';
 
 			// Get Translations.
 			require_once CLASS_TRANSLATIONS_DIR . 'class-wpbooklist-translations.php';
@@ -45,7 +45,7 @@ if ( ! class_exists( 'WPBookList_AddAUser_Tab', false ) ) :
 		 */
 		private function output_open_admin_container() {
 			$icon_url = ROOT_IMG_ICONS_URL . 'teamwork.svg';
-			$title    = $this->trans->trans_459;
+			$title    = $this->trans->trans_494;
 			echo $this->template->output_open_admin_container( $title, $icon_url );
 		}
 
@@ -53,7 +53,7 @@ if ( ! class_exists( 'WPBookList_AddAUser_Tab', false ) ) :
 		 * Outputs actual tab contents
 		 */
 		private function output_tab_content() {
-			echo $this->form->output_users_form();
+			echo $this->form->output_book_form();
 		}
 
 		/**
@@ -76,4 +76,4 @@ if ( ! class_exists( 'WPBookList_AddAUser_Tab', false ) ) :
 
 
 // Instantiate the class.
-$am = new WPBookList_AddAUser_Tab();
+$am = new WPBookList_EditUsers_Tab();

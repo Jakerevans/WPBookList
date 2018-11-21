@@ -116,7 +116,7 @@
     margin-top: 0px;
 }
 
-.wpbooklist-edit-actions-delete-button, .wpbooklist-edit-actions-edit-button {
+.wpbooklist-edit-actions-delete-button, .wpbooklist-edit-actions-edit-button, .wpbooklist-edituser-actions-delete-button, .wpbooklist-edituser-actions-edit-button {
    @extend %wpbooklist-default-buttons-style;
    display: block!important;
 }

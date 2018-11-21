@@ -200,6 +200,9 @@ global $wpdb;
 			'adminnonce46' => 'wpbooklist_get_page_display_options_action_callback',
 			'adminnonce47' => 'wpbooklist_dashboard_create_wp_user_action_callback',
 			'adminnonce48' => 'wpbooklist_save_user_data_action_callback',
+			'adminnonce49' => 'wpbooklist_edit_user_form_action_callback',
+			'adminnonce50' => 'wpbooklist_edit_user_data_action_callback',
+			'adminnonce51' => 'wpbooklist_delete_user_data_action_callback',
 		))
 	);
 
@@ -257,6 +260,7 @@ global $wpdb;
 	register_activation_hook( __FILE__, array( $wp_book_list_general_functions, 'wpbooklist_add_wpbooklist_role_on_plugin_activation' ) );
 
 	// Creates new WPBookList User on plugin activation, with info of currently logged-in user.
+	register_activation_hook( __FILE__, array( $wp_book_list_general_functions, 'wpbooklist_create_wpbooklist_user_on_plugin_activation' ) );
 
 	// Creates default table upon activation.
 	register_activation_hook( __FILE__, array( $wp_book_list_general_functions, 'wpbooklist_jre_create_default_lib' ) );
@@ -361,8 +365,17 @@ global $wpdb;
 	// For creating a WordPress User.
 	add_action( 'wp_ajax_wpbooklist_dashboard_create_wp_user_action', array( $wp_book_list_ajax_functions, 'wpbooklist_dashboard_create_wp_user_action_callback' ) );
 
+	// For getting the 'Edit User' form
+	add_action( 'wp_ajax_wpbooklist_edit_user_form_action', array( $wp_book_list_ajax_functions, 'wpbooklist_edit_user_form_action_callback' ) );
+
 	// For saving user data.
 	add_action( 'wp_ajax_wpbooklist_save_user_data_action', array( $wp_book_list_ajax_functions, 'wpbooklist_save_user_data_action_callback' ) );
+
+	// For deleting user data.
+	add_action( 'wp_ajax_wpbooklist_delete_user_data_action', array( $wp_book_list_ajax_functions, 'wpbooklist_delete_user_data_action_callback' ) );
+
+	// For editing WPBookList Basic User data.
+	add_action( 'wp_ajax_wpbooklist_edit_user_data_action', array( $wp_book_list_ajax_functions, 'wpbooklist_edit_user_data_action_callback' ) );
 
 	// For editing a book from the admin dashboard.
 	add_action( 'wp_ajax_wpbooklist_dashboard_edit_book_action', array( $wp_book_list_ajax_functions, 'wpbooklist_dashboard_edit_book_action_callback' ) );

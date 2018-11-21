@@ -1,6 +1,6 @@
 <?php
 /**
- * Class WPBookList_Save_Users_Data - class-save-users-data.php
+ * Class WPBookList_Save_Users_Data - class-wpbooklist--save-users-data.php
  *
  * @author   Jake Evans
  * @category Admin
@@ -137,10 +137,34 @@ if ( ! class_exists( 'WPBOOKLIST_Save_Users_Data', false ) ) :
 			// If we already have a row of saved data for this user on humandate, just update.
 			if ( 'update' === $this->dbmode ) {
 
+				// Update our custom table.
+				$format = array( '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%d', '%s', '%s', '%s', '%s', '%d', '%d', '%s', '%s', '%s', '%d', '%s', '%s' );
+				$where  = array( 'wpuserid' => $this->users_save_array['wpuserid'] );
+				$where_format = array( '%d' );
+				$this->db_result = $wpdb->update( $wpdb->prefix . 'wpbooklist_jre_users_table', $this->users_save_array, $where, $format, $where_format );
+
+				// Now we'll update the WordPress user.
+				$wp_user_array = array(
+					'ID' => $this->users_save_array['wpuserid'],
+					'user_email' => $this->users_save_array['email'],
+					'first_name' => $this->users_save_array['firstname'],
+					'last_name' => $this->users_save_array['lastname'],
+				);
+
+				$this->wp_db_result = wp_update_user( $wp_user_array );
+
 			}
 
 			// If we don't have data saved for this user.
 			if ( 'insert' === $this->dbmode ) {
+
+				// Try getting a profile image.
+				if ( ! array_key_exists( 'profileimage', $this->users_save_array ) ) {
+					$this->users_save_array['profileimage'] = null;
+				}
+				if ( '' === $this->users_save_array['profileimage'] || null === $this->users_save_array['profileimage'] ) {
+					$this->users_save_array['profileimage'] = get_avatar_url( $this->users_save_array['wpuserid'] );
+				}
 
 				$this->db_result = $wpdb->insert( $this->users_table, $this->users_save_array, array( '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%d', '%s', '%s', '%s', '%s', '%d', '%d', '%s', '%s', '%s', '%d', '%s', '%s' ) );
 

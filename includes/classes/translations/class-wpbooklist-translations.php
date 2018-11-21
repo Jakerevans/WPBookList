@@ -488,7 +488,7 @@ if ( ! class_exists( 'WPBookList_Translations', false ) ) :
 			$this->trans_456 = __( 'Featured Titles', 'wpbooklist' );
 			$this->trans_457 = __( 'Description', 'wpbooklist' );
 			$this->trans_458 = __( 'None Provided', 'wpbooklist' );
-			$this->trans_459 = __( 'Add a User', 'wpbooklist' );
+			$this->trans_459 = __( 'Add a WPBookList User', 'wpbooklist' );
 			$this->trans_460 = __( 'To Add a New WPBookList User, Simply fill out the form below and click the \'Create New User\' button at the bottom of the page. The only required fields are', 'wpbooklist' );
 			$this->trans_461 = __( 'First Name', 'wpbooklist' );
 			$this->trans_462 = __( 'E-Mail', 'wpbooklist' );
@@ -523,6 +523,13 @@ if ( ! class_exists( 'WPBookList_Translations', false ) ) :
 			$this->trans_491 = __( 'Contact', 'wphealthtracker-textdomain' );
 			$this->trans_492 = __( 'at', 'wphealthtracker-textdomain' );
 			$this->trans_493 = __( 'to request access.', 'wphealthtracker-textdomain' );
+			$this->trans_494 = __( 'Edit & Delete Users', 'wphealthtracker-textdomain' );
+			$this->trans_495 = __( 'To Edit or Delete a WPBookList User, Simply fill out the form below and click the \'Create New User\' button at the bottom of the page. The only required fields are', 'wpbooklist' );
+			$this->trans_496 = __( 'Created On', 'wphealthtracker-textdomain' );
+			$this->trans_497 = __( 'Save Changes To User', 'wpbooklist' );
+			$this->trans_498 = __( 'You\'ve just edited a WPBookList User', 'wpbooklist' );
+			$this->trans_499 = __( 'Not So Fast!', 'wpbooklist' );
+			$this->trans_500 = __( 'This user is special, and cannot be deleted!', 'wpbooklist' );
 
 			// The array of translation strings.
 			$translation_array = array(
@@ -1015,6 +1022,17 @@ if ( ! class_exists( 'WPBookList_Translations', false ) ) :
 				'trans487' => $this->trans_487,
 				'trans488' => $this->trans_488,
 				'trans489' => $this->trans_489,
+				'trans490' => $this->trans_490,
+				'trans491' => $this->trans_491,
+				'trans492' => $this->trans_492,
+				'trans493' => $this->trans_493,
+				'trans494' => $this->trans_494,
+				'trans495' => $this->trans_495,
+				'trans496' => $this->trans_496,
+				'trans497' => $this->trans_497,
+				'trans498' => $this->trans_498,
+				'trans499' => $this->trans_499,
+				'trans500' => $this->trans_500,
 
 			);
 

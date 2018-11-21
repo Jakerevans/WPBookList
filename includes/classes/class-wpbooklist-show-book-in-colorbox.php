@@ -554,32 +554,43 @@ if ( ! class_exists( 'WPBookList_Show_Book_In_Colorbox', false ) ) :
 			$string3 = '<input type="submit" id="wpbooklist_desc_button" value="Description, Notes & Reviews"></input>';
 
 			$string5 = '';
+			$string4 = '';
 			if ( ( null === $this->hideratingbook || '0' === $this->hideratingbook ) && ( 0 !== $this->rating ) ) {
 				$string4 = '<p class="wpbooklist-share-text">' . $this->trans->trans_446 . '</p> 
 				<div class="wpbooklist-line-7"></div>';
 
-				if ( 5 === $this->rating ) {
-					$string5 = '<img style="width: 50px;" src="' . ROOT_IMG_URL . '5star.png" />';
+				switch ( $this->rating ) {
+					case '5':
+						$string5 = '<img style="width: 50px;" src="' . ROOT_IMG_URL . '5star.jpg" />';
+						break;
+					case '4.5':
+						$string5 = '<img style="width: 50px;" src="' . ROOT_IMG_URL . '4halfstar.jpg" />';
+						break;
+					case '4':
+						$string5 = '<img style="width: 50px;" src="' . ROOT_IMG_URL . '4star.jpg" />';
+						break;
+					case '3.5':
+						$string5 = '<img style="width: 50px;" src="' . ROOT_IMG_URL . '3halfstar.jpg" />';
+						break;
+					case '3':
+						$string5 = '<img style="width: 50px;" src="' . ROOT_IMG_URL . '3star.jpg" />';
+						break;
+					case '2.5':
+						$string5 = '<img style="width: 50px;" src="' . ROOT_IMG_URL . '2halfstar.jpg" />';
+						break;
+					case '2':
+						$string5 = '<img style="width: 50px;" src="' . ROOT_IMG_URL . '2star.jpg" />';
+						break;
+					case '1.5':
+						$string5 = '<img style="width: 50px;" src="' . ROOT_IMG_URL . '1halfstar.jpg" />';
+						break;
+					case '1':
+						$string5 = '<img style="width: 50px;" src="' . ROOT_IMG_URL . '1star.jpg" />';
+						break;
+					default:
+						$string5 = '<p style="margin:0px;font-size:10px; font-variant:all-small-caps; margin-left:5px;">' . $this->trans->trans_448 . '</p>';
+						break;
 				}
-
-				if ( 4 === $this->rating ) {
-					$string5 = '<img style="width: 50px;" src="' . ROOT_IMG_URL . '4star.png" />';
-				}
-
-				if ( 3 === $this->rating ) {
-					$string5 = '<img style="width: 50px;" src="' . ROOT_IMG_URL . '3star.png" />';
-				}
-
-				if ( 2 === $this->rating ) {
-					$string5 = '<img style="width: 50px;" src="' . ROOT_IMG_URL . '2star.png" />';
-				}
-
-				if ( 1 === $this->rating ) {
-					$string5 = '<img style="width: 50px;" src="' . ROOT_IMG_URL . '1star.png" />';
-				}
-			} else {
-				$string4 = '';
-				$string5 = '';
 			}
 
 			if ( ( null === $this->hidefacebook || '0' === $this->hidefacebook ) || ( null === $this->hidetwitter || '0' === $this->hidetwitter ) || ( null === $this->hidegoogleplus || '0' === $this->hidegoogleplus ) || ( null === $this->hidemessenger || '0' === $this->hidemessenger ) || ( null === $this->hidepinterest || '0' === $this->hidepinterest ) || ( null === $this->hideemail || '0' === $this->hideemail ) ) {

@@ -27,8 +27,11 @@ if ( ! class_exists( 'WPBookList_General_Functions', false ) ) :
 				$user = wp_get_current_user();
 				$role = (array) $user->roles;
 
-				if ( 'wpbooklist_basic_user' === $role[0] ) {
-					show_admin_bar( false );
+				// If the array isn't empty...
+				if ( 0 < count( $role ) ) {
+					if ( 'wpbooklist_basic_user' === $role[0] ) {
+						show_admin_bar( false );
+					}
 				}
 			}
 		}
@@ -46,6 +49,88 @@ if ( ! class_exists( 'WPBookList_General_Functions', false ) ) :
 			require_once CLASS_UTILITIES_DIR . 'class-wpbooklist-utilities-date.php';
 			$utilities_date = new WPBookList_Utilities_Date();
 			$this->date     = $utilities_date->wpbooklist_get_date_via_current_time( 'mysql' );
+		}
+
+		/**
+		 * Create new WPBookList User on plugin activation based on logged-in user.
+		 */
+		public function wpbooklist_create_wpbooklist_user_on_plugin_activation() {
+
+			global $wpdb;
+
+			// Set the date.
+			require_once CLASS_UTILITIES_DIR . 'class-wpbooklist-utilities-date.php';
+			$utilities_date = new WPBookList_Utilities_Date();
+			$this->date     = $utilities_date->wpbooklist_get_date_via_current_time( 'mysql' );
+
+			// First let's check and see that we don't already have a user with the SuperAdmin role.
+			$superadmin = $wpdb->get_row( 'SELECT * FROM ' . $wpdb->prefix . "wpbooklist_jre_users_table WHERE role = 'SuperAdmin'" );
+
+			// If we don't have a user with the 'SuperAdmin' role, create a new user as a SuperAdmin with the logged-in user's info.
+			if ( null === $superadmin ) {
+				if ( is_user_logged_in() ) {
+
+					$current_user = wp_get_current_user();
+					if ( ! $current_user->exists() ) {
+						return;
+					}
+
+					// Create the permissions string.
+					$permissions = 'Yes-Yes-Yes-Yes-Yes';
+
+					$users_save_array = array(
+						'firstname'    => $current_user->user_firstname,
+						'lastname'     => $current_user->user_lastname,
+						'datecreated'  => $this->date,
+						'wpuserid'     => $current_user->ID,
+						'email'        => $current_user->user_email,
+						'username'     => $current_user->user_email,
+						'role'         => 'SuperAdmin',
+						'permissions'  => $permissions,
+						'libraries'    => 'alllibraries',
+						'profileimage' => get_avatar_url( $current_user->ID ),
+					);
+
+					// Requiring & Calling the file/class that will insert or update our data.
+					require_once CLASS_USERS_DIR . 'class-wpbooklist-save-users-data.php';
+					$save_class      = new WPBOOKLIST_Save_Users_Data( $users_save_array );
+					$db_write_result = $save_class->wpbooklist_jre_save_users_actual();
+				}
+			} else {
+
+				// If we already have a SuperAdmin, then add this user with a role of null, if they don't already exist.
+				$current_user = wp_get_current_user();
+				if ( ! $current_user->exists() ) {
+					return;
+				}
+
+				$regularadmin = $wpdb->get_row( 'SELECT * FROM ' . $wpdb->prefix . 'wpbooklist_jre_users_table WHERE wpuserid = ' . $current_user->ID );
+
+				// add this user if they don't already exist. Limit them to the Default Library, and prevent them from making any Display or Setting changes.
+				if ( null === $regularadmin ) {
+
+					// Create the permissions string.
+					$permissions = 'Yes-Yes-Yes-No-No';
+
+					$users_save_array = array(
+						'firstname'    => $current_user->user_firstname,
+						'lastname'     => $current_user->user_lastname,
+						'datecreated'  => $this->date,
+						'wpuserid'     => $current_user->ID,
+						'email'        => $current_user->user_email,
+						'username'     => $current_user->user_email,
+						'role'         => null,
+						'permissions'  => $permissions,
+						'libraries'    => '-wp_wpbooklist_jre_saved_book_log',
+						'profileimage' => get_avatar_url( $current_user->ID ),
+					);
+
+					// Requiring & Calling the file/class that will insert or update our data.
+					require_once CLASS_USERS_DIR . 'class-wpbooklist-save-users-data.php';
+					$save_class      = new WPBOOKLIST_Save_Users_Data( $users_save_array );
+					$db_write_result = $save_class->wpbooklist_jre_save_users_actual();
+				}
+			}
 		}
 
 		/**
@@ -361,7 +446,7 @@ if ( ! class_exists( 'WPBookList_General_Functions', false ) ) :
 				price TEXT,
 				pub_year bigint(255),
 				publisher TEXT,
-				rating bigint(255),
+				rating float,
 				review_iframe TEXT,
 				series TEXT,
 				shortdescription MEDIUMTEXT, 
