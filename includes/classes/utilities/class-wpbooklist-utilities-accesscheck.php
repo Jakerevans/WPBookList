@@ -134,7 +134,7 @@ if ( ! class_exists( 'WPBookList_Utilities_Accesscheck', false ) ) :
 				$this->wpbl_super_admin = $transients->create_transient( $transient_name, 'wpdb->get_row', $query, MONTH_IN_SECONDS );
 			}
 
-			if ( null !== $this->wpbl_super_admin && undefined !== $this->wpbl_super_admin ) {
+			if ( null !== $this->wpbl_super_admin && 'undefined' !== $this->wpbl_super_admin ) {
 				$sauser = $this->wpbl_super_admin;
 
 				// If SuperAdmin's First and last name have been set.
