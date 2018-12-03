@@ -1241,7 +1241,7 @@ if ( ! class_exists( 'WPBookList_Front_End_Library_UI', false ) ) :
 
 				// Displaying books based on provided action.
 				if ( 'post' === $this->action ) {
-					if ( 'false' !== $book->post_yes && 'N/A' !== $book->post_yes && 'no' !== $book->post_yes) {
+					if ( null !== $book->post_yes && 'false' !== $book->post_yes && 'N/A' !== $book->post_yes && 'no' !== $book->post_yes) {
 						$string2 = $string2 . '<div class="wpbooklist_entry_div">
 						<p style="display:none;" id="wpbooklist-hidden-isbn1">' . $book->isbn . '</p>
 						<div class="wpbooklist_inner_main_display_div">
@@ -1259,7 +1259,7 @@ if ( ! class_exists( 'WPBookList_Front_End_Library_UI', false ) ) :
 						    </p>';
 					}
 				} elseif ( 'page' === $this->action ) {
-					if ( 'false' !== $book->page_yes && 'N/A' !== $book->page_yes && 'no' !== $book->page_yes ) {
+					if ( null !== $book->page_yes && 'false' !== $book->page_yes && 'N/A' !== $book->page_yes && 'no' !== $book->page_yes ) {
 						$string2 = $string2 . '<div class="wpbooklist_entry_div">
 						<p style="display:none;" id="wpbooklist-hidden-isbn1">' . $book->isbn . '</p>
 						<div class="wpbooklist_inner_main_display_div">
