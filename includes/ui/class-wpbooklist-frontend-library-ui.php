@@ -750,7 +750,7 @@ if ( ! class_exists( 'WPBookList_Front_End_Library_UI', false ) ) :
 				$string1 = $string1 . '<option ' . $this->sortbyselected5 . ' value="year_read">' . $this->trans->trans_7 . '</option>';
 			}
 
-			$string1 = $string1 . '<option ' . $this->sortbyselected6 . ' value="pages_desc">' . $this->trans->trans_7 . '</option> <option ' . $this->sortbyselected7 . ' value="pages_asc">' . $this->trans->trans_8 . '</option>';
+			$string1 = $string1 . '<option ' . $this->sortbyselected6 . ' value="pages_desc">' . $this->trans->trans_8 . '</option> <option ' . $this->sortbyselected7 . ' value="pages_asc">' . $this->trans->trans_9 . '</option>';
 
 			if ( '1' !== $this->display_options_actual->hidesignedsort ) {
 				$string1 = $string1 . '<option ' . $this->sortbyselected8 . ' value="signed">' . $this->trans->trans_10 . '</option>';
