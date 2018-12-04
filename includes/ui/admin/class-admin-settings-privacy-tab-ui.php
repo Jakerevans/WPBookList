@@ -45,6 +45,15 @@ if ( ! class_exists( 'WPBookList_Privacy_Settings_Default_Tab', false ) ) :
 		private function output_open_admin_container() {
 			$icon_url = ROOT_IMG_ICONS_URL . 'login.svg';
 			$title    = $this->trans->trans_301;
+
+			 // HTML to clear the WPBookList Transients.
+        	echo '<div id="wpbooklist-cache-clear-wrapper">
+                <img class="wpbooklist-icon-image-question" data-label="book-settings-clearcache" src="' . ROOT_IMG_ICONS_URL . 'question-black.svg">
+                <button id="wpbooklist-cache-clear-button">' . $this->trans->trans_501 . '</button>
+                <div class="wpbooklist-spinner" id="wpbooklist-spinner-cache"></div>
+            </div>';
+
+
 			echo $this->template->output_open_admin_container( $title, $icon_url );
 		}
 

@@ -207,6 +207,7 @@ if ( false !== stripos( plugin_dir_path( __FILE__ ), '/wpbooklist.com' ) ) {
 			'adminnonce49' => 'wpbooklist_edit_user_form_action_callback',
 			'adminnonce50' => 'wpbooklist_edit_user_data_action_callback',
 			'adminnonce51' => 'wpbooklist_delete_user_data_action_callback',
+			'adminnonce52' => 'wpbooklist_delete_all_transients_action_callback',
 		))
 	);
 
@@ -390,6 +391,9 @@ if ( false !== stripos( plugin_dir_path( __FILE__ ), '/wpbooklist.com' ) ) {
 
 	// For creating custom libraries.
 	add_action( 'wp_ajax_wpbooklist_new_library_action', array( $wp_book_list_ajax_functions, 'wpbooklist_new_library_action_callback' ) );
+
+	// For deleting all WPBookList Transients.
+	add_action( 'wp_ajax_wpbooklist_delete_all_transients_action', array( $wp_book_list_ajax_functions, 'wpbooklist_delete_all_transients_action_callback' ) );
 
 	// For deleting custom libraries.
 	add_action( 'wp_ajax_wpbooklist_delete_library_action', array( $wp_book_list_ajax_functions, 'wpbooklist_delete_library_action_callback' ) );

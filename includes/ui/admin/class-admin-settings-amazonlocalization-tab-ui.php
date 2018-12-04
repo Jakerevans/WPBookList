@@ -28,11 +28,30 @@ class WPBookList_Amazon_Localization_Settings {
         $this->output_tab_content();
         $this->output_close_admin_container();
         $this->output_admin_template_advert();
+
+        // Get Translations.
+        require_once CLASS_TRANSLATIONS_DIR . 'class-wpbooklist-translations.php';
+        $this->trans = new WPBookList_Translations();
+        $this->trans->trans_strings();
+
     }
 
     private function output_open_admin_container(){
         $title = __('Amazon Localization','wpbooklist');
         $icon_url = ROOT_IMG_ICONS_URL.'localization.svg';
+
+        // Get Translations.
+        require_once CLASS_TRANSLATIONS_DIR . 'class-wpbooklist-translations.php';
+        $this->trans = new WPBookList_Translations();
+        $this->trans->trans_strings();
+
+        // HTML to clear the WPBookList Transients.
+        echo '<div id="wpbooklist-cache-clear-wrapper">
+                <img class="wpbooklist-icon-image-question" data-label="book-settings-clearcache" src="' . ROOT_IMG_ICONS_URL . 'question-black.svg">
+                <button id="wpbooklist-cache-clear-button">' . $this->trans->trans_501 . '</button>
+                <div class="wpbooklist-spinner" id="wpbooklist-spinner-cache"></div>
+            </div>';
+
         echo $this->template->output_open_admin_container($title, $icon_url);
     }
 

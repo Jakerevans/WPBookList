@@ -1882,39 +1882,39 @@ if ( ! class_exists( 'WPBookList_General_Functions', false ) ) :
 						if ( null !== $options_row[0]->amazon_detail_page ) {
 							$string1 = '
 							<a class="wpbooklist-purchase-img" href="' . $options_row[0]->amazon_detail_page . '" target="_blank">
-								<img src="' . ROOT_IMG_URL . 'amazon . png">
+								<img src="' . ROOT_IMG_URL . 'amazon.png">
 							</a>';
 						}
 
 						$string2 = '
 						<a class="wpbooklist-purchase-img" href="http://www . barnesandnoble . com/s/' . $options_row[0]->isbn . '" target="_blank">
-							<img src="' . ROOT_IMG_URL . 'bn . png">
+							<img src="' . ROOT_IMG_URL . 'bn.png">
 						</a>';
 
 						if ( null !== $options_row[0]->google_preview ) {
 							$string3 = '
 							<a class="wpbooklist-purchase-img" href="' . $options_row[0]->google_preview . '" target="_blank">
-								<img src="' . ROOT_IMG_URL . 'googlebooks . png">
+								<img src="' . ROOT_IMG_URL . 'googlebooks.png">
 							</a>';
 						}
 
 						if ( null !== $options_row[0]->itunes_page ) {
 							$string4 =
 							'<a class="wpbooklist-purchase-img" href="' . $options_row[0]->itunes_page . '" target="_blank">
-								<img src="' . ROOT_IMG_URL . 'ibooks . png" id="wpbooklist-itunes-img">
+								<img src="' . ROOT_IMG_URL . 'ibooks.png" id="wpbooklist-itunes-img">
 							</a>';
 						}
 
 						if ( null !== $options_row[0]->bam_link ) {
 							$string5 =
 							'<a class="wpbooklist-purchase-img" href="' . $options_row[0]->bam_link . '" target="_blank">
-								<img src="' . ROOT_IMG_URL . 'bam-icon . jpg">
+								<img src="' . ROOT_IMG_URL . 'bam-icon.jpg">
 							</a>';
 						}
 
 						if ( null !== $options_row[0]->kobo_link ) {
 							$string6 = '<a class="wpbooklist-purchase-img" href="' . $options_row[0]->kobo_link . '" target="_blank">
-								<img src="' . ROOT_IMG_URL . 'kobo-icon . png">
+								<img src="' . ROOT_IMG_URL . 'kobo-icon.png">
 							</a>';
 						}
 

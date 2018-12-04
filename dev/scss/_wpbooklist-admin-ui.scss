@@ -191,6 +191,31 @@
     display: block;
 }
 
+#wpbooklist-cache-clear-wrapper{
+    width: 70%;
+    margin: 25px;
+    margin-top: 0px;
+    position: relative;
+    text-align: center;
+    top: 5px;
+}
+
+
+#wpbooklist-cache-clear-wrapper img{
+    left: 0px;
+    top: 1px;
+}
+
+#wpbooklist-spinner-cache{
+    height: 10px;
+    width: 10px;
+    display: inline-block;
+    top: 10px;
+    border-left: 1px solid #F1F1F1;
+    border-right: 1px solid #F1F1F1;
+    border-bottom: 1px solid #F1F1F1;
+}
+
 
 
 /*

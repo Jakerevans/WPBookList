@@ -1534,6 +1534,20 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 		/**
 		 * Callback function for creating a new Custom Library.
 		 */
+		public function wpbooklist_delete_all_transients_action_callback() {
+
+			global $wpdb;
+			check_ajax_referer( 'wpbooklist_delete_all_transients_action_callback', 'security' );
+
+			$result = $wpdb->query( "DELETE FROM `{$wpdb->prefix}options` WHERE `option_name` LIKE ('%\_wpbl\_%')" );
+
+			error_log($result);
+
+		}
+
+		/**
+		 * Callback function for creating a new Custom Library.
+		 */
 		public function wpbooklist_new_library_action_callback() {
 
 			global $wpdb;

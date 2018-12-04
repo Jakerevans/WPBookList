@@ -530,6 +530,53 @@ if ( ! class_exists( 'WPBookList_Translations', false ) ) :
 			$this->trans_498 = __( 'You\'ve just edited a WPBookList User', 'wpbooklist' );
 			$this->trans_499 = __( 'Not So Fast!', 'wpbooklist' );
 			$this->trans_500 = __( 'This user is special, and cannot be deleted!', 'wpbooklist' );
+			$this->trans_501 = __( 'Clear WPBookList Cache', 'wpbooklist' );
+			$this->trans_502 = __( 'Extensions are the easiest way to add additional functionality to your', 'wpbooklist' );
+			$this->trans_503 = __( 'plugin. Simply purchase the extension of your choice and install it just like you’d install any other WordPress plugin. That’s all there is to it!', 'wpbooklist' );
+			$this->trans_504 = __( 'Extensions Bundle!', 'wpbooklist' );
+			$this->trans_505 = __( 'Can’t decide which Extension to buy? Get ’em all with the', 'wpbooklist' );
+			$this->trans_506 = __( 'More Details', 'wpbooklist' );
+			$this->trans_507 = __( '$26.00 - Purchase Now', 'wpbooklist' );
+			$this->trans_508 = __( 'Affiliates Extension', 'wpbooklist' );
+			$this->trans_509 = __( 'Affiliate', 'wpbooklist' );
+			$this->trans_510 = __( 'Let WPBookList work for you with the', 'wpbooklist' );
+			$this->trans_511 = __( 'WPBookList Affiliates Extension!', 'wpbooklist' );
+			$this->trans_512 = __( '$5.00 - Purchase Now', 'wpbooklist' );
+			$this->trans_513 = __( 'StoreFront', 'wpbooklist' );
+			$this->trans_514 = __( 'Got books to sell? Then you need the', 'wpbooklist' );
+			$this->trans_515 = __( 'WPBookList StoreFront Extension!', 'wpbooklist' );
+			$this->trans_516 = __( '$10.00 - Purchase Now', 'wpbooklist' );
+			$this->trans_517 = __( 'Comments', 'wpbooklist' );
+			$this->trans_518 = __( 'Enables Comments & Ratings for every book! Includes Like button for each comment.', 'wpbooklist' );
+			$this->trans_520 = __( 'Bulk-Upload Extension', 'wpbooklist' );
+			$this->trans_521 = __( 'Bulk-Upload', 'wpbooklist' );
+			$this->trans_522 = __( 'Tons of Books but no Time? Then get the', 'wpbooklist' );
+			$this->trans_523 = __( 'WPBookList Bulk-Upload Extension!', 'wpbooklist' );
+			$this->trans_524 = __( 'Mobile App Extension', 'wpbooklist' );
+			$this->trans_525 = __( 'Mobile App', 'wpbooklist' );
+			$this->trans_526 = __( 'Add books quickly and easily with the', 'wpbooklist' );
+			$this->trans_527 = __( 'WPBookList Mobile App Extension', 'wpbooklist' );
+			$this->trans_528 = __( 'Goodreads Extension', 'wpbooklist' );
+			$this->trans_529 = __( 'Goodreads', 'wpbooklist' );
+			$this->trans_530 = __( 'Got a Goodreads account? Then get the ', 'wpbooklist' );
+			$this->trans_531 = __( 'WPBookList Goodreads Extension', 'wpbooklist' );
+			$this->trans_532 = __( 'Kindle Preview Extension ', 'wpbooklist' );
+			$this->trans_533 = __( 'Kindle Preview', 'wpbooklist' );
+			$this->trans_534 = __( 'Provides Kindle Book Previews! Integrates with the', 'wpbooklist' );
+			$this->trans_535 = __( '$3.00 - Purchase Now', 'wpbooklist' );
+			$this->trans_536 = __( 'BookFinder Extension', 'wpbooklist' );
+			$this->trans_537 = __( 'BookFinder', 'wpbooklist' );
+			$this->trans_538 = __( 'Let your visitors add books with the', 'wpbooklist' );
+			$this->trans_539 = __( 'WPBookList BookFinder Extension', 'wpbooklist' );
+			$this->trans_540 = __( 'Try the Demo', 'wpbooklist' );
+			$this->trans_541 = __( 'Stylizer Extension', 'wpbooklist' );
+			$this->trans_542 = __( 'Stylizer', 'wpbooklist' );
+			$this->trans_543 = __( 'Easily customize the Look & Feel of your', 'wpbooklist' );
+			$this->trans_544 = __( 'Book and Library Views', 'wpbooklist' );
+			$this->trans_545 = __( 'Carousel', 'wpbooklist' );
+			$this->trans_546 = __( 'Add some Movement! Provides another way to creatively display your books', 'wpbooklist' );
+			$this->trans_547 = __( 'Display your Books by Category - Optimized for Mobile', 'wpbooklist' );
+
 
 			// The array of translation strings.
 			$translation_array = array(
@@ -1033,6 +1080,7 @@ if ( ! class_exists( 'WPBookList_Translations', false ) ) :
 				'trans498' => $this->trans_498,
 				'trans499' => $this->trans_499,
 				'trans500' => $this->trans_500,
+				'trans501' => $this->trans_501,
 
 			);
 
