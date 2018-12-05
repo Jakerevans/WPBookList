@@ -52,7 +52,7 @@ if ( ! class_exists( 'WPBookList_Translations', false ) ) :
 			$this->trans_21  = __( 'To', 'wpbooklist-textdomain' );
 			$this->trans_22  = __( 'Reset Filters, Sort & Search', 'wpbooklist-textdomain' );
 			$this->trans_23  = __( 'Total Books', 'wpbooklist-textdomain' );
-			$this->trans_24  = __( 'Search & Filter Results', 'wpbooklist-textdomain' );
+			$this->trans_24  = __( 'Sort, Search & Filter Results', 'wpbooklist-textdomain' );
 			$this->trans_25  = __( 'Finished', 'wpbooklist-textdomain' );
 			$this->trans_26  = __( 'Signed', 'wpbooklist-textdomain' );
 			$this->trans_27  = __( 'First Editions', 'wpbooklist-textdomain' );
@@ -576,7 +576,7 @@ if ( ! class_exists( 'WPBookList_Translations', false ) ) :
 			$this->trans_545 = __( 'Carousel', 'wpbooklist' );
 			$this->trans_546 = __( 'Add some Movement! Provides another way to creatively display your books', 'wpbooklist' );
 			$this->trans_547 = __( 'Display your Books by Category - Optimized for Mobile', 'wpbooklist' );
-
+			$this->trans_548 = __( 'Search & Filter Completion', 'wpbooklist-textdomain' );
 
 			// The array of translation strings.
 			$translation_array = array(

@@ -112,6 +112,10 @@ if ( ! class_exists( 'WPBookList_Front_End_Library_UI', false ) ) :
 			$this->trans = new WPBookList_Translations();
 			$this->trans->trans_strings();
 
+			// Require the Transients file.
+			require_once CLASS_TRANSIENTS_DIR . 'class-wpbooklist-transients.php';
+			$this->transients = new WPBookList_Transients();
+
 			// Get active plugins to see if any extensions are in play.
 			$this->active_plugins = (array) get_option( 'active_plugins', array() );
 			if ( is_multisite() ) {
@@ -260,6 +264,11 @@ if ( ! class_exists( 'WPBookList_Front_End_Library_UI', false ) ) :
 			// Getting all URL parameters.
 			$this->url_param_string = urldecode( http_build_query( array_merge( $_GET ) ) );
 
+			$this->params_true_flag = false;
+			$this->filterflag       = false;
+			$this->searchflag       = false;
+			$this->sortflag         = false;
+
 			if ( '' !== $this->url_param_string ) {
 
 				// Set a flag indicating there is some sort of URL parameter in existence.
@@ -326,6 +335,9 @@ if ( ! class_exists( 'WPBookList_Front_End_Library_UI', false ) ) :
 						if ( isset( $_GET['sortby'] ) ) {
 							$this->sortby = filter_var( wp_unslash( $_GET['sortby'] ), FILTER_SANITIZE_STRING );
 						}
+
+						// Setting the sort flag, indicating some kind of sorting is active.
+						$this->sortflag = true;
 					}
 
 					// Seeing if the searchbytitle parameter exists.
@@ -354,6 +366,9 @@ if ( ! class_exists( 'WPBookList_Front_End_Library_UI', false ) ) :
 						if ( isset( $_GET['searchterm'] ) ) {
 							$this->searchterm = filter_var( wp_unslash( $_GET['searchterm'] ), FILTER_SANITIZE_STRING );
 						}
+
+						// Setting the search flag, indicating a search is active.
+						$this->searchflag = true;
 					}
 
 					// Seeing if the Offset parameter exists.
@@ -1113,43 +1128,137 @@ if ( ! class_exists( 'WPBookList_Front_End_Library_UI', false ) ) :
 		 */
 		private function output_stats() {
 
-			// Setting two default variables for the Stats area.
-			$stats_books_string = $this->trans->trans_23 . ':';
-			$book_count         = $this->total_book_count;
+			global $wpdb;
+
+
 
 			// This is here to accommodate multiple libraries being displayed on the same page.
 			if ( $this->query_table === $this->table ) {
 				if ( $this->params_true_flag ) {
-					$stats_books_string = $this->trans->trans_24 . ':';
+					//$stats_books_string = $this->trans->trans_24 . ':';
 					$book_count         = $this->total_book_count;
 				}
 			}
 
-			// Getting total # of books read/finished.
-			foreach ( $this->books_actual as $book ) {
-				if ( 'true' === $book->finished ) {
-					$this->total_book_read_count++;
-				}
-			}
+			if ( ! $this->filterflag && ! $this->searchflag && ! $this->sortflag ) {
 
-			// Getting total # of pages read/finished.
-			foreach ( $this->books_actual as $book ) {
-				if ( 'true' === $book->finished ) {
-					$this->total_pages_read_count = $this->total_pages_read_count + $book->pages;
+				// Getting ALL results from particular Library - checking for Transients first!
+				$transient_name   = 'wpbl_' . md5( 'SELECT * FROM ' . $this->table );
+				$transient_exists = $this->transients->existing_transient_check( $transient_name );
+				if ( $transient_exists ) {
+					$all_results_for_stats = $transient_exists;
+				} else {
+					$query = 'SELECT * FROM ' . $this->table;
+					$all_results_for_stats = $this->transients->create_transient( $transient_name, 'wpdb->get_results', $query, MONTH_IN_SECONDS );
 				}
-			}
 
-			// Getting total # of books signed.
-			foreach ( $this->books_actual as $book ) {
-				if ( 'true' === $book->signed ) {
-					$this->total_book_signed_count++;
+				// Setting some variables and strings for the Stats section below.
+				$book_count               = count( $all_results_for_stats );
+				$stats_books_string       = $this->trans->trans_23 . ':';
+				$stats_completion_percent = $this->trans->trans_30 . ':';
+
+				// Getting total # of books read/finished.
+				foreach ( $all_results_for_stats as $book ) {
+					if ( 'Yes' === $book->finished ) {
+						$this->total_book_read_count++;
+					}
 				}
-			}
 
-			// Getting total # of books first edition.
-			foreach ( $this->books_actual as $book ) {
-				if ( 'true' === $book->first_edition ) {
-					$this->total_book_first_edition_count++;
+				// Getting total # of pages read/finished.
+				foreach ( $all_results_for_stats as $book ) {
+					if ( 'Yes' === $book->finished ) {
+						$this->total_pages_read_count = $this->total_pages_read_count + $book->pages;
+					}
+				}
+
+				// Getting total # of books signed.
+				foreach ( $all_results_for_stats as $book ) {
+					if ( 'true' === $book->signed ) {
+						$this->total_book_signed_count++;
+					}
+				}
+
+				// Getting total # of books first edition.
+				foreach ( $all_results_for_stats as $book ) {
+					if ( 'true' === $book->first_edition ) {
+						$this->total_book_first_edition_count++;
+					}
+				}
+			} else {
+
+				// Setting some variables and strings for the Stats section below.
+				$book_count               = $this->total_book_count;
+				$stats_books_string       = $this->trans->trans_24 . ':';
+				$stats_completion_percent = $this->trans->trans_548 . ':';
+
+				// If the Sort flag is true, and if the 'sortby' value equals specific terms, get all books for Stats calculations, otherwise stick with what we have.
+				if ( $this->sortflag && 'year_read' !== $this->sortby && 'signed' !== $this->sortby && 'first_edition' !== $this->sortby ) {
+
+					// Getting ALL results from particular Library - checking for Transients first!
+					$transient_name   = 'wpbl_' . md5( 'SELECT * FROM ' . $this->table );
+					$transient_exists = $this->transients->existing_transient_check( $transient_name );
+					if ( $transient_exists ) {
+						$all_results_for_stats = $transient_exists;
+					} else {
+						$query = 'SELECT * FROM ' . $this->table;
+						$all_results_for_stats = $this->transients->create_transient( $transient_name, 'wpdb->get_results', $query, MONTH_IN_SECONDS );
+					}
+
+					// Getting total # of books read/finished.
+					foreach ( $all_results_for_stats as $book ) {
+						if ( 'Yes' === $book->finished ) {
+							$this->total_book_read_count++;
+						}
+					}
+
+					// Getting total # of pages read/finished.
+					foreach ( $all_results_for_stats as $book ) {
+						if ( 'Yes' === $book->finished ) {
+							$this->total_pages_read_count = $this->total_pages_read_count + $book->pages;
+						}
+					}
+
+					// Getting total # of books signed.
+					foreach ( $all_results_for_stats as $book ) {
+						if ( 'true' === $book->signed ) {
+							$this->total_book_signed_count++;
+						}
+					}
+
+					// Getting total # of books first edition.
+					foreach ( $all_results_for_stats as $book ) {
+						if ( 'true' === $book->first_edition ) {
+							$this->total_book_first_edition_count++;
+						}
+					}
+				} else {
+					// Getting total # of books read/finished.
+					foreach ( $this->books_actual as $book ) {
+						if ( 'Yes' === $book->finished ) {
+							$this->total_book_read_count++;
+						}
+					}
+
+					// Getting total # of pages read/finished.
+					foreach ( $this->books_actual as $book ) {
+						if ( 'Yes' === $book->finished ) {
+							$this->total_pages_read_count = $this->total_pages_read_count + $book->pages;
+						}
+					}
+
+					// Getting total # of books signed.
+					foreach ( $this->books_actual as $book ) {
+						if ( 'true' === $book->signed ) {
+							$this->total_book_signed_count++;
+						}
+					}
+
+					// Getting total # of books first edition.
+					foreach ( $this->books_actual as $book ) {
+						if ( 'true' === $book->first_edition ) {
+							$this->total_book_first_edition_count++;
+						}
+					}
 				}
 			}
 
@@ -1161,12 +1270,12 @@ if ( ! class_exists( 'WPBookList_Front_End_Library_UI', false ) ) :
 				<p class="wpbooklist_control_panel_stat">' . $this->trans->trans_27 . ': ' . number_format( $this->total_book_first_edition_count ) . '</p>
 				<p class="wpbooklist_control_panel_stat">' . $this->trans->trans_28 . ': ' . number_format( $this->total_pages_read_count ) . '</p>
 				<p class="wpbooklist_control_panel_stat">' . $this->trans->trans_29 . ': ' . number_format( $this->total_category_count ) . '</p>
-				<p class="wpbooklist_control_panel_stat">' . $this->trans->trans_30 . ': ';
+				<p class="wpbooklist_control_panel_stat">' . $stats_completion_percent . ' ';
 
 			if ( ( 0 === $this->total_book_read_count ) || ( 0 === $this->total_book_count ) ) {
 				$string2 = '0%';
 			} else {
-				$string2 = number_format( ( ( $this->total_book_read_count / $this->total_book_count ) * 100 ), 2 ) . '%';
+				$string2 = number_format( ( ( $this->total_book_read_count / $book_count ) * 100 ), 2 ) . '%';
 			}
 
 			$string3 = '</p></div>';
@@ -1181,12 +1290,19 @@ if ( ! class_exists( 'WPBookList_Front_End_Library_UI', false ) ) :
 
 			global $wpdb;
 
-			// Getting quotes.
-			$this->quotes_table  = $wpdb->prefix . 'wpbooklist_jre_book_quotes';
-			$this->quotes_actual = $wpdb->get_results( "SELECT * FROM $this->quotes_table" );
+			// Getting quotes - checking for Transients first!
+			$this->quotes_table = $wpdb->prefix . 'wpbooklist_jre_book_quotes';
+			$transient_name     = 'wpbl_' . md5( 'SELECT * FROM ' . $this->quotes_table );
+			$transient_exists   = $this->transients->existing_transient_check( $transient_name );
+			if ( $transient_exists ) {
+				$this->quotes_actual = $transient_exists;
+			} else {
+				$query               = 'SELECT * FROM ' . $this->quotes_table;
+				$this->quotes_actual = $this->transients->create_transient( $transient_name, 'wpdb->get_results', $query, MONTH_IN_SECONDS );
+			}
 
 			// Getting number of quotes.
-			$this->total_quotes_count = $wpdb->num_rows;
+			$this->total_quotes_count = count( $this->quotes_actual );
 
 			$quote_num = wp_rand( 0, $this->total_quotes_count );
 			if ( null !== $quote_num ) {
@@ -1214,8 +1330,8 @@ if ( ! class_exists( 'WPBookList_Front_End_Library_UI', false ) ) :
 			$nobooksmessage = '';
 
 			// Check for zero results found - if so, display a error message.
-			if ( 0 === $this->total_books_filter || 0 === $this->total_book_count ) {
-				$nobooksmessage = '<p><img class="wpbooklist-storytime-shocked-img-front" src="' . ROOT_IMG_ICONS_URL . 'shocked . svg"/>' . $this->trans->trans_31 . '<br/>' . $this->trans->trans_32 . '<a href="https://wordpress.org/plugins/wpbooklist/">' . $this->trans->trans_33 . '</a><br/>' . $this->trans->trans_34 . '<a href="https://wpbooklist . com/">' . $this->trans->trans_35 . '</a></p>';
+			if ( '0' === $this->total_books_filter || '0' === $this->total_book_count ) {
+				$nobooksmessage = '<p><img class="wpbooklist-storytime-shocked-img-front" src="' . ROOT_IMG_ICONS_URL . 'shocked.svg"/>' . $this->trans->trans_31 . '<br/>' . $this->trans->trans_32 . ' <a href="https://wordpress.org/plugins/wpbooklist/">' . $this->trans->trans_33 . '</a><br/><br/>' . $this->trans->trans_34 . ' <a href="https://wpbooklist.com/">' . $this->trans->trans_35 . '</a></p>';
 			}
 
 			// Add the no books message to the HTML string.
