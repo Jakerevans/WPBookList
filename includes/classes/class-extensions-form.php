@@ -252,11 +252,6 @@ if ( ! class_exists( 'WPBookList_Add_Book_Form', false ) ) :
 						</div>
 					</div>
 				</div>
-
-
-
-
-
 				<div class="section group">
 					<div class="col span_1_of_2">
 						<p class="wpbooklist-extension-title"><img class="wpbooklist-extension-icon-img" src="http://wpbooklist.com/wp-content/uploads/2017/08/svgs/carousel-white.svg" />' . $this->trans->trans_536 . '</p>
@@ -302,55 +297,52 @@ if ( ! class_exists( 'WPBookList_Add_Book_Form', false ) ) :
 
 
 
-			<div class="section group">
-				<div class="col span_1_of_2">
-					<p class="wpbooklist-extension-title"><img class="wpbooklist-extension-icon-img" src="http://www.wpbooklist.com/wp-content/uploads/wpbooklist/icons/goodreads.svg" />'.__('TimeSaver Bundle','wpbooklist').'</p>
-					<a id="wpbooklist-extensions-page-img-link" href="https://wpbooklist.com/index.php/downloads/timesaver-bundle/">
-						<div class="wpbooklist-extension-page-ext-div" id="wpbooklist-extension-page-ext-div-8">
-						<img class="wpbooklist-extension-img-bundle-mult" src="http://wpbooklist.com/wp-content/uploads/2017/08/svgs/goodreads-letter-logo.svg"><p class="wpbooklist-tab-intro-para"></p>
-						<p class="wpbooklist-extension-p-bundle-ext">TimeSaver Bundle!</p>
-						<p class="wpbooklist-tab-intro-para"><img class="wpbooklist-extension-img-bundle-mult" src="http://wpbooklist.com/wp-content/uploads/2017/08/svgs/server.svg"><img class="wpbooklist-extension-img-bundle-mult" src="http://wpbooklist.com/wp-content/uploads/2017/08/svgs/ereader.svg">
-							   </p>
+				<div class="section group">
+					<div class="col span_1_of_2">
+						<p class="wpbooklist-extension-title"><img class="wpbooklist-extension-icon-img" src="http://www.wpbooklist.com/wp-content/uploads/wpbooklist/icons/goodreads.svg" />' . $this->trans->trans_549 . '</p>
+						<a id="wpbooklist-extensions-page-img-link" href="https://wpbooklist.com/index.php/downloads/timesaver-bundle/">
+							<div class="wpbooklist-extension-page-ext-div" id="wpbooklist-extension-page-ext-div-8">
+								<img class="wpbooklist-extension-img-bundle-mult" src="http://wpbooklist.com/wp-content/uploads/2017/08/svgs/goodreads-letter-logo.svg"/>
+								<p class="wpbooklist-tab-intro-para"></p>
+								<p class="wpbooklist-extension-p-bundle-ext">' . $this->trans->trans_549 . '!</p>
+								<p class="wpbooklist-tab-intro-para">
+									<img class="wpbooklist-extension-img-bundle-mult" src="http://wpbooklist.com/wp-content/uploads/2017/08/svgs/server.svg"/>
+									<img class="wpbooklist-extension-img-bundle-mult" src="http://wpbooklist.com/wp-content/uploads/2017/08/svgs/ereader.svg"/>
+								</p>
+							</div>
+						</a>
+						<p class="wpbooklist-extension-excerpt"><span class="wpbooklist-excerpt-span">' . $this->trans->trans_550 . ' <span class="wpbooklist-color-orange-italic">' . $this->trans->trans_549 . '!</span></span>
+							<span class="wpbooklist-top-line-span"></span>
+						</p>
+						<div class="wpbooklist-above-purchase-line"></div>
+						<p class="wpbooklist-to-download-page">
+							<a href="https://wpbooklist.com/index.php/downloads/timesaver-bundle/">' . $this->trans->trans_506 . '</a>
+						</p>
+						<div class="wpbooklist-extensions-purchase-button-link">
+							<a href="https://wpbooklist.com/index.php/downloads/timesaver-bundle/">' . $this->trans->trans_551 . '</a>
 						</div>
-					</a>
-					<p class="wpbooklist-extension-excerpt"><span class="wpbooklist-excerpt-span">'.__('Want the best of WPBookList as fast as possible? Then get the ','wpbooklist').'<span class="wpbooklist-color-orange-italic">'.__('TimeSaver Bundle!','wpbooklist').'</span></span><span class="wpbooklist-top-line-span"></span></p>
-					<div class="wpbooklist-above-purchase-line"></div>
-					<p class="wpbooklist-to-download-page">
-						<a href="https://wpbooklist.com/index.php/downloads/timesaver-bundle/">' . $this->trans->trans_506 . '</a>
-					</p>
-					<div class="wpbooklist-extensions-purchase-button-link">
-						<a href="https://wpbooklist.com/index.php/downloads/timesaver-bundle/">'.__('$12.00 - Purchase Now','wpbooklist').'</a>
+					</div>
+					<div class="col span_1_of_2">
+						<p class="wpbooklist-extension-title"><img class="wpbooklist-extension-icon-img" src="http://wpbooklist.com/wp-content/uploads/2017/08/svgs/computer-white.svg" />' . $this->trans->trans_552 . '</p>
+						<a id="wpbooklist-extensions-page-img-link" href="https://wpbooklist.com/index.php/downloads/branding-extension/">
+							<div class="wpbooklist-extension-page-ext-div" id="wpbooklist-extension-page-ext-div-14">
+								<img class="wpbooklist-extension-img" src="http://wpbooklist.com/wp-content/uploads/2017/08/svgs/computer-white.svg"  />
+								<p class="wpbooklist-extension-p" style="margin-top:33px;">' . $this->trans->trans_552 . '</p>
+							</div>
+						</a>
+						<p class="wpbooklist-extension-excerpt"><span class="wpbooklist-excerpt-span">' . $this->trans->trans_553 . ' </span>
+							<span class="wpbooklist-top-line-span"></span>
+						</p>
+						<div class="wpbooklist-above-purchase-line"></div>
+						<p class="wpbooklist-to-download-page">
+							<a href="https://wpbooklist.com/index.php/downloads/branding-extension/">' . $this->trans->trans_506 . '</a>
+						</p>
+						<div class="wpbooklist-extensions-purchase-button-link">
+							<a href="https://wpbooklist.com/index.php/downloads/branding-extension/">' . $this->trans->trans_512 . '</a>
+						</div>
 					</div>
 				</div>
-				<div class="col span_1_of_2">
-					<p class="wpbooklist-extension-title"><img class="wpbooklist-extension-icon-img" src="http://wpbooklist.com/wp-content/uploads/2017/08/svgs/computer-white.svg" />'.__('Branding','wpbooklist').'</p>
-					<a id="wpbooklist-extensions-page-img-link" href="https://wpbooklist.com/index.php/downloads/branding-extension/">
-						<div class="wpbooklist-extension-page-ext-div" id="wpbooklist-extension-page-ext-div-14">
-							<img class="wpbooklist-extension-img" src="http://wpbooklist.com/wp-content/uploads/2017/08/svgs/computer-white.svg"  />
-							<p class="wpbooklist-extension-p" style="margin-top:33px;">'.__('Branding','wpbooklist').'</p>
-						</div>
-					</a>
-					<p class="wpbooklist-extension-excerpt"><span class="wpbooklist-excerpt-span">'.__('Proudly display your site\'s logo and motto every time a book is opened!' ,'wpbooklist').' </span><span class="wpbooklist-top-line-span"></span></p>
-					<div class="wpbooklist-above-purchase-line"></div>
-					<p class="wpbooklist-to-download-page"><a href="https://wpbooklist.com/index.php/downloads/branding-extension/">' . $this->trans->trans_506 . '</a></p>
-					<div class="wpbooklist-extensions-purchase-button-link">
-						<a href="https://wpbooklist.com/index.php/downloads/branding-extension/">' . $this->trans->trans_512 . '</a>
-					</div>
-				</div>
-			</div>
-
-
-
-
-
-
-
-
-
-
-			</div>
-
-			';
+			</div>';
 
 			return $string1;
 		}

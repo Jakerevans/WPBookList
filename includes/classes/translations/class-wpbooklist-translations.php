@@ -577,6 +577,11 @@ if ( ! class_exists( 'WPBookList_Translations', false ) ) :
 			$this->trans_546 = __( 'Add some Movement! Provides another way to creatively display your books', 'wpbooklist' );
 			$this->trans_547 = __( 'Display your Books by Category - Optimized for Mobile', 'wpbooklist' );
 			$this->trans_548 = __( 'Search & Filter Completion', 'wpbooklist-textdomain' );
+			$this->trans_549 = __( 'TimeSaver Bundle', 'wpbooklist-textdomain' );
+			$this->trans_550 = __( 'Want the best of WPBookList as fast as possible? Then get the', 'wpbooklist-textdomain' );
+			$this->trans_551 = __( '$12.00 - Purchase Now', 'wpbooklist' );
+			$this->trans_552 = __( 'Branding', 'wpbooklist' );
+			$this->trans_553 = __( 'Proudly display your site\'s logo and motto every time a book is opened!', 'wpbooklist' );
 
 			// The array of translation strings.
 			$translation_array = array(
