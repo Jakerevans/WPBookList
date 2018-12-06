@@ -116,7 +116,7 @@ if ( ! class_exists( 'WPBookList_Backup_Settings_Form', false ) ) :
 			}
 
 			$string4 = '</select>
-							<button disabled class="wpbooklist-response-success-fail-button" id="wpbooklist-apply-library-backup">' . $this->trans->trans_62 . '</button>
+							<button class="wpbooklist-response-success-fail-button" id="wpbooklist-apply-library-backup">' . $this->trans->trans_62 . '</button>
 							<div class="wpbooklist-spinner" id="wpbooklist-spinner-backup"></div>
 						</div>';
 
@@ -171,7 +171,7 @@ if ( ! class_exists( 'WPBookList_Backup_Settings_Form', false ) ) :
 			}
 
 			$string10 = '</select>
-						 <button disabled class="wpbooklist-response-success-fail-button" id="wpbooklist-apply-library-restore">' . $this->trans->trans_67 . '</button>
+						 <button class="wpbooklist-response-success-fail-button" id="wpbooklist-apply-library-restore">' . $this->trans->trans_67 . '</button>
 						 <div class="wpbooklist-spinner" id="wpbooklist-spinner-restore-backup"></div>
 						 </div>';
 
@@ -209,7 +209,7 @@ if ( ! class_exists( 'WPBookList_Backup_Settings_Form', false ) ) :
 			}
 
 			$string11 = $string11 . '</select>
-								<button disabled class="wpbooklist-response-success-fail-button" id="wpbooklist-apply-library-backup-csv">' . $this->trans->trans_72 . '</button>
+								<button class="wpbooklist-response-success-fail-button" id="wpbooklist-apply-library-backup-csv">' . $this->trans->trans_72 . '</button>
 								<div class="wpbooklist-spinner" id="wpbooklist-spinner-backup-csv"></div>
 							</div>
 						</div>';

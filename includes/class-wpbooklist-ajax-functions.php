@@ -3599,26 +3599,16 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 				$mkdir2 = mkdir( LIBRARY_STYLEPAKS_UPLOAD_DIR, 0777, true );
 			}
 
-			if ( isset( $_FILES['my_uploaded_file']['tmp_name'] ) ) {
-
-				$tmp_name = filter_var( wp_unslash( $_FILES['my_uploaded_file']['tmp_name'] ), FILTER_SANITIZE_STRING );
-
-				$move_result = move_uploaded_file( wp_unslash( $tmp_name ), LIBRARY_STYLEPAKS_UPLOAD_DIR . $tmp_name );
-			}
+			$move_result = move_uploaded_file( $_FILES['my_uploaded_file']['tmp_name'], LIBRARY_STYLEPAKS_UPLOAD_DIR . "{$_FILES['my_uploaded_file']['name']}" );
 
 			// Unzip the file if it's zipped.
-			if ( isset( $_FILES['my_uploaded_file']['name'] ) ) {
-
-				$name = filter_var( wp_unslash( $_FILES['my_uploaded_file']['name'] ), FILTER_SANITIZE_STRING );
-
-				if ( strpos( $name, '.zip' ) !== false ) {
-					$zip = new ZipArchive();
-					$res = $zip->open( LIBRARY_STYLEPAKS_UPLOAD_DIR . $name );
-					if ( true === $res ) {
-						$zip->extractTo( LIBRARY_STYLEPAKS_UPLOAD_DIR );
-						$zip->close();
-						unlink( LIBRARY_STYLEPAKS_UPLOAD_DIR . $name );
-					}
+			if (strpos( $_FILES['my_uploaded_file']['name'], '.zip') !== false ){
+				$zip = new ZipArchive;
+				$res = $zip->open(LIBRARY_STYLEPAKS_UPLOAD_DIR.$_FILES['my_uploaded_file']['name'] );
+				if ( $res === TRUE) {
+					$zip->extractTo(LIBRARY_STYLEPAKS_UPLOAD_DIR);
+					$zip->close();
+					unlink(LIBRARY_STYLEPAKS_UPLOAD_DIR.$_FILES['my_uploaded_file']['name'] );
 				}
 			}
 

@@ -582,6 +582,7 @@ if ( ! class_exists( 'WPBookList_Translations', false ) ) :
 			$this->trans_551 = __( '$12.00 - Purchase Now', 'wpbooklist' );
 			$this->trans_552 = __( 'Branding', 'wpbooklist' );
 			$this->trans_553 = __( 'Proudly display your site\'s logo and motto every time a book is opened!', 'wpbooklist' );
+			$this->trans_554 = __( 'Looks like there was a problem uploading your StylePak! Try unzipping the StylePak first, and then uploading the resulting \'.css\' file instead (the file without the \'.zip\' at the end)', 'wpbooklist' );
 
 			// The array of translation strings.
 			$translation_array = array(
@@ -1086,7 +1087,58 @@ if ( ! class_exists( 'WPBookList_Translations', false ) ) :
 				'trans499' => $this->trans_499,
 				'trans500' => $this->trans_500,
 				'trans501' => $this->trans_501,
-
+				'trans502' => $this->trans_502,
+				'trans503' => $this->trans_503,
+				'trans504' => $this->trans_504,
+				'trans505' => $this->trans_505,
+				'trans506' => $this->trans_506,
+				'trans507' => $this->trans_507,
+				'trans508' => $this->trans_508,
+				'trans509' => $this->trans_509,
+				'trans510' => $this->trans_510,
+				'trans511' => $this->trans_511,
+				'trans512' => $this->trans_512,
+				'trans513' => $this->trans_513,
+				'trans514' => $this->trans_514,
+				'trans515' => $this->trans_514,
+				'trans516' => $this->trans_516,
+				'trans517' => $this->trans_517,
+				'trans518' => $this->trans_518,
+				'trans520' => $this->trans_520,
+				'trans521' => $this->trans_521,
+				'trans522' => $this->trans_522,
+				'trans523' => $this->trans_523,
+				'trans524' => $this->trans_524,
+				'trans525' => $this->trans_525,
+				'trans526' => $this->trans_526,
+				'trans527' => $this->trans_527,
+				'trans528' => $this->trans_528,
+				'trans529' => $this->trans_529,
+				'trans530' => $this->trans_530,
+				'trans531' => $this->trans_531,
+				'trans532' => $this->trans_532,
+				'trans533' => $this->trans_533,
+				'trans534' => $this->trans_534,
+				'trans535' => $this->trans_535,
+				'trans536' => $this->trans_536,
+				'trans537' => $this->trans_537,
+				'trans538' => $this->trans_538,
+				'trans539' => $this->trans_539,
+				'trans540' => $this->trans_540,
+				'trans541' => $this->trans_541,
+				'trans542' => $this->trans_542,
+				'trans543' => $this->trans_543,
+				'trans544' => $this->trans_544,
+				'trans545' => $this->trans_545,
+				'trans546' => $this->trans_546,
+				'trans547' => $this->trans_547,
+				'trans548' => $this->trans_548,
+				'trans549' => $this->trans_549,
+				'trans550' => $this->trans_550,
+				'trans551' => $this->trans_551,
+				'trans552' => $this->trans_552,
+				'trans553' => $this->trans_553,
+				'trans554' => $this->trans_554,
 			);
 
 			return $translation_array;

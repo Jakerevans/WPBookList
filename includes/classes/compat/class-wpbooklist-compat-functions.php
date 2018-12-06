@@ -646,6 +646,9 @@ if ( ! class_exists( 'WPBookList_Compat_Functions', false ) ) :
 					if ( 0 === $wpdb->query( "SHOW COLUMNS FROM `$table` LIKE 'genres'" ) ) {
 						$wpdb->query( "ALTER TABLE $table ADD genres varchar(255)" );
 					}
+					if ( 0 === $wpdb->query( "SHOW COLUMNS FROM `$table` LIKE 'goodreadslink'" ) ) {
+						$wpdb->query( "ALTER TABLE $table ADD goodreadslink TEXT" );
+					}
 					if ( 0 === $wpdb->query( "SHOW COLUMNS FROM `$table` LIKE 'illustrator'" ) ) {
 						$wpdb->query( "ALTER TABLE $table ADD illustrator varchar(255)" );
 					}

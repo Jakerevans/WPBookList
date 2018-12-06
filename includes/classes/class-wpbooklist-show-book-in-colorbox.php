@@ -161,7 +161,7 @@ if ( ! class_exists( 'WPBookList_Show_Book_In_Colorbox', false ) ) :
 
 			// Checking to see if the StoreFront extension is active .
 			foreach ( $this->active_plugins as $key => $plugin ) {
-				if ( false !== strpos( $plugin, 'wpbooklist-storefront .php' ) ) {
+				if ( false !== strpos( $plugin, 'wpbooklist-storefront.php' ) ) {
 					$this->storefront_active = true;
 				}
 			}
@@ -545,7 +545,7 @@ if ( ! class_exists( 'WPBookList_Show_Book_In_Colorbox', false ) ) :
 			$string2 = '';
 			if ( null === $this->hidebookimage || '0' === $this->hidebookimage ) {
 				if ( null === $this->image ) {
-					$string2 = '<img id="wpbooklist_cover_image_popup" src="' . ROOT_IMG_URL . 'image_unavaliable .png"/>';
+					$string2 = '<img id="wpbooklist_cover_image_popup" src="' . ROOT_IMG_URL . 'image_unavaliable.png"/>';
 				} else {
 					$string2 = '<img id="wpbooklist_cover_image_popup" src="' . $this->image . '"/>';
 				}
@@ -792,8 +792,8 @@ if ( ! class_exists( 'WPBookList_Show_Book_In_Colorbox', false ) ) :
 				$string32 = '<tr>
 						<td>';
 
-				if ( 'true' === $this->finished ) {
-					if ( '0' === $this->date_finished ) {
+				if ( 'Yes' === $this->finished ) {
+					if ( '0' === $this->date_finished || null === $this->date_finished ) {
 						$string33 = '<span class="wpbooklist-bold-stats-class" id="wpbooklist_bold">' . $this->trans->trans_223 . ' </span><span class="wpbooklist-bold-stats-value">' . $this->trans->trans_131 . '</span>';
 					} else {
 						$string33 = '<span class="wpbooklist-bold-stats-class" id="wpbooklist_bold">' . $this->trans->trans_223 . ' </span><span class="wpbooklist-bold-stats-value">' . $this->trans->trans_450 . ' ' . $this->date_finished . '</span>';
@@ -914,7 +914,7 @@ if ( ! class_exists( 'WPBookList_Show_Book_In_Colorbox', false ) ) :
 
 			if ( preg_match( '/[a-z]/i', $this->isbn ) ) {
 				$string49 = ' class="wpbooklist-purchase-img" href="' . $this->amazon_detail_page . '" target="_blank">
-					<img src="' . ROOT_IMG_URL . 'kindle .png" /></a>
+					<img src="' . ROOT_IMG_URL . 'kindle.png" /></a>
 					<a ';
 			} else {
 				$string49 = ' class="wpbooklist-purchase-img" href="' . $this->amazon_detail_page . '" target="_blank">
@@ -1147,7 +1147,7 @@ if ( ! class_exists( 'WPBookList_Show_Book_In_Colorbox', false ) ) :
 			}
 
 			if ( preg_match( '/[a-z]/i', $this->isbn ) ) {
-				$string76 = ' class="wpbooklist-purchase-img" href="' . $this->amazon_detail_page . '" target="_blank"><img src="' . ROOT_IMG_URL . 'kindle .png" /></a><a';
+				$string76 = ' class="wpbooklist-purchase-img" href="' . $this->amazon_detail_page . '" target="_blank"><img src="' . ROOT_IMG_URL . 'kindle.png" /></a><a';
 			} else {
 				$string76 = ' class="wpbooklist-purchase-img" href="' . $this->amazon_detail_page . '" target="_blank"><img src="' . ROOT_IMG_URL . 'amazon.png" /></a><a';
 			}
