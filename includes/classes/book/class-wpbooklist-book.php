@@ -619,6 +619,7 @@ if ( ! class_exists( 'WPBookList_Book', false ) ) :
 				$this->set_default_woocommerce_data();
 				$this->create_wpbooklist_woocommerce_product();
 				$this->create_author_first_last();
+				$this->create_similar_books();
 				$this->add_to_db();
 			} else {
 				// If $this->go_amazon is false, query the other apis and add the provided data to database.
@@ -630,6 +631,7 @@ if ( ! class_exists( 'WPBookList_Book', false ) ) :
 				$this->set_default_woocommerce_data();
 				$this->create_wpbooklist_woocommerce_product();
 				$this->create_author_first_last();
+				$this->create_similar_books();
 				$this->add_to_db();
 			}
 		}
@@ -1863,6 +1865,52 @@ if ( ! class_exists( 'WPBookList_Book', false ) ) :
 		}
 
 		/**
+		 * Function to handle the Similar books stuff - account for if the user has specificed similar books, and if not, replace with what might have been found by Amazon.
+		 */
+		private function create_similar_books() {
+
+			global $wpdb;
+
+			if ( false !== stripos( $this->similarbooks, '---' ) ) {
+				$similarbooks   = explode( '---', $this->similarbooks );
+				$similar_string = ';bsp;';
+				foreach ( $similarbooks as $key => $book ) {
+
+					if ( '' !== $book && false !== stripos( $book, ';' ) ) {
+						$split_book = explode( ';', $book );
+
+						// Get book from DB.
+						$bookinfo = $wpdb->get_row( 'SELECT * FROM ' . $split_book[1] . " WHERE book_uid = '" . $split_book[0] . "'" );
+
+						$final_isbn = $bookinfo->asin . 'asin';
+						if ( 'asin' === $final_isbn ) {
+							$final_isbn = $bookinfo->isbn;
+						}
+						if ( null === $final_isbn || '' === $final_isbn ) {
+							$final_isbn = $bookinfo->isbn13;
+						}
+
+						// Append the Post or Page ID, if one exists.
+						if ( null !== $bookinfo->post_yes && '' !== $bookinfo->post_yes ) {
+							$similar_string = $similar_string . $final_isbn . '---' . $bookinfo->title . '---' . $bookinfo->image . '---' . $bookinfo->post_yes . ';bsp;';
+						} elseif ( null !== $bookinfo->page_yes && '' !== $bookinfo->page_yes ) {
+							$similar_string = $similar_string . $final_isbn . '---' . $bookinfo->title . '---' . $bookinfo->image . '---' . $bookinfo->page_yes . ';bsp;';
+						} else {
+							$similar_string = $similar_string . $final_isbn . '---' . $bookinfo->title . '---' . $bookinfo->image . '---;bsp;';
+						}
+					}
+				}
+			}
+
+			$similar_string = rtrim( $similar_string, ';bsp;' );
+
+			// Now replace the Amazon-found Similar Products with this string, if it doesn't equal '' or ;bsp;...
+			if ( '' !== $similar_string && ';bsp;' !== $similar_string ) {
+				$this->similar_products = $similar_string;
+			}
+		}
+
+		/**
 		 * Function to handle actually adding the book to the Databas.
 		 */
 		private function add_to_db() {
@@ -2000,6 +2048,7 @@ if ( ! class_exists( 'WPBookList_Book', false ) ) :
 				'shortdescription'   => $this->shortdescription,
 				'signed'             => $this->signed,
 				'similarbooks'       => $this->similarbooks,
+				'similar_products'   => $this->similar_products,
 				'subgenre'           => $this->subgenre,
 				'subject'            => $this->subject,
 				'title'              => $this->title,
@@ -2064,6 +2113,7 @@ if ( ! class_exists( 'WPBookList_Book', false ) ) :
 				'%s',
 				'%s',
 				'%s',
+				'%s',
 			);
 
 			// Now adding in any custom fields to above arrays for insertion into DB.
@@ -2093,6 +2143,8 @@ if ( ! class_exists( 'WPBookList_Book', false ) ) :
 					}
 				}
 			}
+
+			error_log(print_r($db_insert_array, true));
 
 			// Actually Adding submitted values to the DB.
 			global $wpdb;

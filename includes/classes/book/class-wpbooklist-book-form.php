@@ -59,11 +59,26 @@ if ( ! class_exists( 'WPBookList_Book_Form', false ) ) :
 			$this->all_books_array = array();
 			$table_name            = $wpdb->prefix . 'wpbooklist_jre_saved_book_log';
 			$default_array         = $wpdb->get_results( 'SELECT * FROM ' . $table_name );
+
+			// Now add in the table name to each array entry.
+			foreach ( $default_array as $key => $value ) {
+				$default_array[ $key ]->table = $wpdb->prefix . 'wpbooklist_jre_saved_book_log';
+			}
+
+			// Merge with our new, empty array.
 			$this->all_books_array = array_merge( $this->all_books_array, $default_array );
+
+			// Now add all books from all dynamic libraries.
 			foreach ( $this->dynamic_libs as $db ) {
 				if ( ( '' !== $db->user_table_name ) || ( null !== $db->user_table_name ) ) {
 					$table_name            = $wpdb->prefix . 'wpbooklist_jre_' . $db->user_table_name;
 					$dyn_array             = $wpdb->get_results( 'SELECT * FROM ' . $table_name );
+
+					// Now add in the table name to each array entry.
+					foreach ( $dyn_array as $key2 => $value2 ) {
+						$dyn_array[ $key2 ]->table = $table_name;
+					}
+
 					$this->all_books_array = array_merge( $this->all_books_array, $dyn_array );
 				}
 			}
@@ -92,7 +107,6 @@ if ( ! class_exists( 'WPBookList_Book_Form', false ) ) :
 					array_push( $this->genre_array, $book->subgenre );
 				}
 
-
 				array_push( $this->genre_array, $book->subject );
 				array_push( $this->genre_array, $book->category );
 			}
@@ -115,10 +129,10 @@ if ( ! class_exists( 'WPBookList_Book_Form', false ) ) :
 				if ( '' !== $book->title && null !== $book->title && '' !== $identifier ) {
 					$final_string = $book->title . ' (' . $identifier . ')';
 					array_push( $this->similar_books_array, $final_string );
-					array_push( $this->keywords_uid_array, $book->book_uid );
+					array_push( $this->keywords_uid_array, $book->book_uid . ';' . $book->table );
 				}
 			}
-			$this->similar_books_array = array_unique( $this->similar_books_array );
+			//$this->similar_books_array = array_unique( $this->similar_books_array );
 
 			// Now build a unique Array of Keywords.
 			$this->keywords_array = array();

@@ -19,10 +19,10 @@ if ( ! class_exists( 'WPBookList_Show_Book_In_Colorbox', false ) ) :
 	 */
 	class WPBookList_Show_Book_In_Colorbox {
 
-		// The final html output for the colorbox
+		// The final html output for the colorbox.
 		public $output;
 
-		# All saved book properties
+		// All saved book properties.
 		public $amazon_auth_yes;
 		public $library;
 		public $settings_library;
@@ -74,12 +74,12 @@ if ( ! class_exists( 'WPBookList_Show_Book_In_Colorbox', false ) ) :
 		public $hidebooktitle;
 		public $hidelibrarytitle;
 		public $hideauthor;
-		public $hidecategory;
+		public $hidegenres;
 		public $hidepages;
 		public $hidebookpage;
 		public $hidebookpost;
 		public $hidepublisher;
-		public $hidesubject;
+		public $hidesubgenre;
 		public $hidecountry;
 		public $hidepubdate;
 		public $hidesigned;
@@ -179,7 +179,7 @@ if ( ! class_exists( 'WPBookList_Show_Book_In_Colorbox', false ) ) :
 			if ( null === $book_id && null === $book_table ) {
 				$this->book_array = $book_array;
 				$this->gather_user_options();
-				$this->flip_author_name();
+				$this->modify_author_name();
 				$this->gather_bookfinder_data();
 				$this->set_amazon_localization();
 				$this->modify_author_url();
@@ -191,7 +191,7 @@ if ( ! class_exists( 'WPBookList_Show_Book_In_Colorbox', false ) ) :
 				$this->book_id = $book_id;
 				$this->gather_user_options();
 				$this->gather_book_info();
-				$this->flip_author_name();
+				$this->modify_author_name();
 				$this->set_amazon_localization();
 				$this->modify_author_url();
 				$this->create_similar_products();
@@ -223,12 +223,13 @@ if ( ! class_exists( 'WPBookList_Show_Book_In_Colorbox', false ) ) :
 			$this->authorfirst            = $saved_book->authorfirst;
 			$this->authorlast             = $saved_book->authorlast;
 			$this->author_url             = $saved_book->author_url;
-			$this->category               = $saved_book->category;
+			$this->genres                 = $saved_book->category;
 			$this->price                  = $saved_book->price;
 			$this->pages                  = $saved_book->pages;
 			$this->pub_year               = $saved_book->pub_year;
 			$this->publisher              = $saved_book->publisher;
 			$this->description            = $saved_book->description;
+			$this->subgenres              = $saved_book->subgenre;
 			$this->subject                = $saved_book->subject;
 			$this->country                = $saved_book->country;
 			$this->notes                  = $saved_book->notes;
@@ -255,36 +256,70 @@ if ( ! class_exists( 'WPBookList_Show_Book_In_Colorbox', false ) ) :
 			$this->bam_link               = $saved_book->bam_link;
 			$this->book_uid               = $saved_book->book_uid;
 
+			// Let's see if isbn is empty, and if so, populate it with either isbn10 or asin.
+			if ( '' === $this->isbn || null === $this->isbn ) {
+				$this->isbn = $this->isbn13;
+			}
+			if ( '' === $this->isbn || null === $this->isbn ) {
+				$this->isbn = $this->asin;
+			}
+
 			if ( 'https' === $this->review_iframe ) {
 				$this->review_iframe = null;
 			}
 
 			// Make changes to the bn_link, if it's empty .
 			if ( '' === $this->bn_link ) {
-				$this->bn_link = 'http://www.barnesandnoble .com/s/' . $this->isbn;
+				$this->bn_link = 'http://www.barnesandnoble.com/s/' . $this->isbn;
 			}
 
-			// Modify the Categories to include string from the 'Genres' as well.
+			// Modify the 'Genres' for display.
 			if ( '' !== $saved_book->genres && null !== $saved_book->genres ) {
 
 				if ( false !== stripos( $saved_book->genres, '---' ) ) {
 					$saved_book->genres = explode( '---', $saved_book->genres );
 
 					foreach ( $saved_book->genres as $key => $indivgenre ) {
-						if ( false === stripos( $indivgenre, $this->category ) ) {
+						if ( false === stripos( $indivgenre, $this->genres ) ) {
 							if ( '' !== $indivgenre ) {
-								$this->category = $this->category . ', ' . $indivgenre;
+								$this->genres = $this->genres . ', ' . $indivgenre;
 							}
 						}
 					}
 				} else {
-					if ( false === stripos( $saved_book->genres, $this->category ) ) {
+					if ( false === stripos( $saved_book->genres, $this->genres ) ) {
 						if ( '' !== $saved_book->genres ) {
-							$this->category = $this->category . ', ' . $saved_book->genres;
+							$this->genres = $this->genres . ', ' . $saved_book->genres;
 						}
 					}
 				}
 			}
+
+			$this->genres = ltrim( $this->genres, ' ' );
+			$this->genres = ltrim( $this->genres, ',' );
+			$this->genres = ltrim( $this->genres, ' ' );
+
+			$final_subgenres = '';
+			// Modify the 'Genres' for display.
+			if ( '' !== $this->subgenres && null !== $this->subgenres ) {
+				if ( false !== stripos( $this->subgenres, '---' ) ) {
+
+					$this->subgenres = explode( '---', $this->subgenres );
+					foreach ( $this->subgenres as $key => $indivgenre ) {
+						if ( '' !== $indivgenre ) {
+							$final_subgenres = $final_subgenres . ', ' . $indivgenre;
+						}
+					}
+				} else {
+					$final_subgenres = $this->subgenres;
+				}
+			}
+
+			$this->subgenres = $final_subgenres;
+			$this->subgenres = ltrim( $this->subgenres, ' ' );
+			$this->subgenres = ltrim( $this->subgenres, ',' );
+			$this->subgenres = ltrim( $this->subgenres, ' ' );
+
 		}
 
 		/**
@@ -330,13 +365,13 @@ if ( ! class_exists( 'WPBookList_Show_Book_In_Colorbox', false ) ) :
 			$this->hidebooktitle        = $options_results->hidebooktitle;
 			$this->hidelibrarytitle     = $options_results->hidelibrarytitle;
 			$this->hideauthor           = $options_results->hideauthor;
-			$this->hidecategory         = $options_results->hidecategory;
+			$this->hidegenres           = $options_results->hidegenres;
 			$this->hidepages            = $options_results->hidepages;
 			$this->hidebookpage         = $options_results->hidebookpage;
 			$this->hidebookpost         = $options_results->hidebookpost;
 			$this->hidepages            = $options_results->hidepages;
 			$this->hidepublisher        = $options_results->hidepublisher;
-			$this->hidesubject          = $options_results->hidesubject;
+			$this->hidesubgenre         = $options_results->hidesubgenre;
 			$this->hidecountry          = $options_results->hidecountry;
 			$this->hidepubdate          = $options_results->hidepubdate;
 			$this->hidesigned           = $options_results->hidesigned;
@@ -365,9 +400,9 @@ if ( ! class_exists( 'WPBookList_Show_Book_In_Colorbox', false ) ) :
 		}
 
 		/**
-		 *  Function that handles the formatting of the Author's name .
+		 *  Function that handles the formatting of the Author's name.
 		 */
-		private function flip_author_name() {
+		private function modify_author_name() {
 
 			// The code to tell colorbox whether this string exists in the url: sortby=alphabeticallybyauthorlast, indicating that the Author names need to be swapped around.
 			if ( $this->sort_param ) {
@@ -387,12 +422,17 @@ if ( ! class_exists( 'WPBookList_Show_Book_In_Colorbox', false ) ) :
 					$finalauthstring = '';
 
 					foreach ( $authlastarray as $key => $value ) {
-						$finalauthstring = $finalauthstring . $value . ', ' . $authfirstarray[$key] . ' & ';
+						$finalauthstring = $finalauthstring . $value . ', ' . $authfirstarray[ $key ] . ' & ';
 					}
 
 					$finalauthstring = rtrim( $finalauthstring, ' ' );
 					$this->author    = rtrim( $finalauthstring, '&' );
 				}
+			}
+
+			// If there is no author or it's blank or null, set to 'Not Available'.
+			if ( '' === $this->author || null === $this->author ) {
+				$this->author = $this->trans->trans_448;
 			}
 		}
 
@@ -593,7 +633,7 @@ if ( ! class_exists( 'WPBookList_Show_Book_In_Colorbox', false ) ) :
 				}
 			}
 
-			if ( ( null === $this->hidefacebook || '0' === $this->hidefacebook ) || ( null === $this->hidetwitter || '0' === $this->hidetwitter ) || ( null === $this->hidegoogleplus || '0' === $this->hidegoogleplus ) || ( null === $this->hidemessenger || '0' === $this->hidemessenger ) || ( null === $this->hidepinterest || '0' === $this->hidepinterest ) || ( null === $this->hideemail || '0' === $this->hideemail ) ) {
+			if ( '1' !== $this->hidefacebook || '1' !== $this->hidetwitter || '1' !== $this->hidemessenger  || '1' !== $this->hidepinterest ) {
 
 				$string6 = '<p class="wpbooklist-share-text">' . $this->trans->trans_447 . '</p>
 				<div class="wpbooklist-line-4"></div>';
@@ -648,7 +688,7 @@ if ( ! class_exists( 'WPBookList_Show_Book_In_Colorbox', false ) ) :
 			$string15 = '';
 			$string16 = '';
 			$string17 = '';
-			if ( 1 !== $this->hidelibrarytitle ) {
+			if ( '1' !== $this->hidebooktitle ) {
 
 				$string15 = '<tr>
 					<td id="wpbooklist_title"><div';
@@ -666,7 +706,7 @@ if ( ! class_exists( 'WPBookList_Show_Book_In_Colorbox', false ) ) :
 
 			$string18 = '';
 
-			if ( 1 !== $this->hideauthor ) {
+			if ( '1' !== $this->hideauthor ) {
 				$string18 = '<tr>
 					<td>
 						<span class="wpbooklist-bold-stats-class" id="wpbooklist_bold">' . $this->trans->trans_14 . ': </span><span class="wpbooklist-bold-stats-value">' . $this->author . '</span>
@@ -676,24 +716,23 @@ if ( ! class_exists( 'WPBookList_Show_Book_In_Colorbox', false ) ) :
 			}
 
 			$string19 = '';
-			if ( ( null !== $this->enablepurchase && 0 !== $this->enablepurchase ) && null !== $this->price && '1' !== $this->hidecolorboxbuyprice ) {
-
+			if ( '1' === $this->enablepurchase && null !== $this->price && '' !== $this->price && '1' !== $this->hidecolorboxbuyprice ) {
 				if ( has_filter( 'wpbooklist_append_to_colorbox_price' ) ) {
-					$string19 = apply_filters( 'wpbooklist_append_to_colorbox_price', $this->price );
+					$string19 = apply_filters( 'wpbooklist_append_to_colorbox_price', $this->price . '---' . $this->author_url );
 				}
 			}
 
 			$string20 = '';
 			$string21 = '';
 			$string22 = '';
-			if ( 1 !== $this->hidecategory ) {
+			if ( '1' !== $this->hidegenres ) {
 				$string20 = '<tr>
 						<td>';
 
-				if ( null === $this->category ) {
+				if ( null === $this->genres || '' === $this->genres ) {
 					$string21 = '<span class="wpbooklist-bold-stats-class" id="wpbooklist_bold">' . $this->trans->trans_146 . ': </span><span class="wpbooklist-bold-stats-value">' . $this->trans->trans_448 . '</span>';
 				} else {
-					$string21 = '<span class="wpbooklist-bold-stats-class" id="wpbooklist_bold">' . $this->trans->trans_146 . ': </span><span class="wpbooklist-bold-stats-value">' . $this->category . '</span>';
+					$string21 = '<span class="wpbooklist-bold-stats-class" id="wpbooklist_bold">' . $this->trans->trans_146 . ': </span><span class="wpbooklist-bold-stats-value">' . $this->genres . '</span>';
 				}
 
 				$string22 = '</td>
@@ -703,7 +742,7 @@ if ( ! class_exists( 'WPBookList_Show_Book_In_Colorbox', false ) ) :
 			$string23 = '';
 			$string24 = '';
 			$string25 = '';
-			if ( 1 !== $this->hidepages ) {
+			if ( '1' !== $this->hidepages ) {
 				$string23 = '<tr>
 						<td>';
 
@@ -720,7 +759,7 @@ if ( ! class_exists( 'WPBookList_Show_Book_In_Colorbox', false ) ) :
 			$string26 = '';
 			$string27 = '';
 			$string28 = '';
-			if ( 1 !== $this->hidepublisher ) {
+			if ( '1' !== $this->hidepublisher ) {
 				$string26 = '<tr>
 						<td>';
 
@@ -737,14 +776,13 @@ if ( ! class_exists( 'WPBookList_Show_Book_In_Colorbox', false ) ) :
 			$string92 = '';
 			$string93 = '';
 			$string94 = '';
-			if ( 1 !== $this->hidesubject ) {
+			if ( '1' !== $this->hidesubgenre ) {
 				$string92 = '<tr>
 						<td>';
-
-				if ( null === $this->subject ) {
-					$string93 = '<span class="wpbooklist-bold-stats-class" id="wpbooklist_bold">' . $this->trans->trans_449 . ': </span><span class="wpbooklist-bold-stats-value">' . $this->trans->trans_448 . '</span>';
+				if ( null === $this->subgenres || '' === $this->subgenres ) {
+					$string93 = '<span class="wpbooklist-bold-stats-class" id="wpbooklist_bold">' . $this->trans->trans_147 . ': </span><span class="wpbooklist-bold-stats-value">' . $this->trans->trans_448 . '</span>';
 				} else {
-					$string93 = '<span class="wpbooklist-bold-stats-class" id="wpbooklist_bold">' . $this->trans->trans_449 . ': </span><span class="wpbooklist-bold-stats-value">' . stripslashes( stripslashes( $this->subject ) ) . '</span>';
+					$string93 = '<span class="wpbooklist-bold-stats-class" id="wpbooklist_bold">' . $this->trans->trans_147 . ': </span><span class="wpbooklist-bold-stats-value">' . stripslashes( stripslashes( $this->subgenres ) ) . '</span>';
 				}
 
 				$string94 = '</td>
@@ -754,11 +792,11 @@ if ( ! class_exists( 'WPBookList_Show_Book_In_Colorbox', false ) ) :
 			$string95 = '';
 			$string96 = '';
 			$string97 = '';
-			if ( 1 !== $this->hidecountry ) {
+			if ( '1' !== $this->hidecountry ) {
 				$string95 = '<tr>
 						<td>';
 
-				if ( null === $this->country ) {
+				if ( null === $this->country || '' === $this->country ) {
 					$string96 = '<span class="wpbooklist-bold-stats-class" id="wpbooklist_bold">' . $this->trans->trans_273 . ': </span><span class="wpbooklist-bold-stats-value">' . $this->trans->trans_448 . '</span>';
 				} else {
 					$string96 = '<span class="wpbooklist-bold-stats-class" id="wpbooklist_bold">' . $this->trans->trans_273 . ': </span><span class="wpbooklist-bold-stats-value">' . stripslashes( stripslashes( $this->country ) ) . '</span>';
@@ -771,7 +809,7 @@ if ( ! class_exists( 'WPBookList_Show_Book_In_Colorbox', false ) ) :
 			$string29 = '';
 			$string30 = '';
 			$string31 = '';
-			if ( 1 !== $this->hidepubdate ) {
+			if ( '1' !== $this->hidepubdate ) {
 				$string29 = '<tr>
 						<td>';
 				if ( null === $this->pub_year ) {
@@ -788,7 +826,7 @@ if ( ! class_exists( 'WPBookList_Show_Book_In_Colorbox', false ) ) :
 			$string33 = '';
 			$string34 = '';
 			$string35 = '';
-			if ( 1 !== $this->hidefinished ) {
+			if ( '1' !== $this->hidefinished ) {
 				$string32 = '<tr>
 						<td>';
 
@@ -809,7 +847,7 @@ if ( ! class_exists( 'WPBookList_Show_Book_In_Colorbox', false ) ) :
 			$string36 = '';
 			$string37 = '';
 			$string38 = '';
-			if ( 1 !== $this->hidesigned ) {
+			if ( '1' !== $this->hidesigned ) {
 
 				$string36 = '<tr>
 						<td>';
@@ -826,7 +864,7 @@ if ( ! class_exists( 'WPBookList_Show_Book_In_Colorbox', false ) ) :
 			$string39 = '';
 			$string40 = '';
 			$string41 = '';
-			if ( 1 !== $this->hidefirstedition ) {
+			if ( '1' !== $this->hidefirstedition ) {
 
 				$string39 = '<tr>
 					<td>';
@@ -842,7 +880,7 @@ if ( ! class_exists( 'WPBookList_Show_Book_In_Colorbox', false ) ) :
 			}
 
 			$string42 = '';
-			if ( 1 !== $this->hidebookpage && null !== $this->page_id && 'false' !== $this->page_id && $this->page_id !== $this->trans->trans_221 ) {
+			if ( '1' !== $this->hidebookpage && null !== $this->page_id && 'false' !== $this->page_id && $this->page_id !== $this->trans->trans_221 ) {
 				$string42 = '<tr>
 					<td>
 						<span class="wpbooklist-bold-stats-class" id="wpbooklist_bold"><a id="wpbooklist-purchase-book-view" href="' . get_permalink( $this->page_id ) . '"><span class="wpbooklist-bold-stats-page">' . $this->trans->trans_452 . '</span></a></span>
@@ -851,7 +889,7 @@ if ( ! class_exists( 'WPBookList_Show_Book_In_Colorbox', false ) ) :
 			}
 
 			$string43 = '';
-			if ( 1 !== $this->hidebookpost && null !== $this->post_id && 'false' !== $this->post_id && $this->post_id !== $this->trans->trans_221 ) {
+			if ( '1' !== $this->hidebookpost && null !== $this->post_id && 'false' !== $this->post_id && $this->post_id !== $this->trans->trans_221 ) {
 				$string43 = '<tr>
 					<td>
 						<span class="wpbooklist-bold-stats-class" id="wpbooklist_bold"><a id="wpbooklist-purchase-book-view" href="' . get_permalink( $this->post_id ) . '"><span class="wpbooklist-bold-stats-page">' . $this->trans->trans_453 . '</span></a></span>
@@ -904,7 +942,7 @@ if ( ! class_exists( 'WPBookList_Show_Book_In_Colorbox', false ) ) :
 			}
 
 			$string48 = '';
-			if ( ( null === $this->amazon_detail_page ) || ( null !== $this->hideamazonpurchase && 0 !== $this->hideamazonpurchase ) ) {
+			if ( null === $this->amazon_detail_page || '1' === $this->hideamazonpurchase ) {
 				$string48 = ' style="display:none;"';
 			}
 
@@ -923,7 +961,7 @@ if ( ! class_exists( 'WPBookList_Show_Book_In_Colorbox', false ) ) :
 			}
 
 			$string50 = '';
-			if ( ( null === $this->isbn ) || ( null !== $this->hidebnpurchase && 0 !== $this->hidebnpurchase ) ) {
+			if ( null === $this->isbn || '1' === $this->hidebnpurchase ) {
 				$string50 = ' style="display:none;"';
 			}
 
@@ -932,7 +970,7 @@ if ( ! class_exists( 'WPBookList_Show_Book_In_Colorbox', false ) ) :
 			<a ';
 
 			$string52 = '';
-			if ( ( null === $this->google_preview ) || ( null !== $this->hidegooglepurchase && 0 !== $this->hidegooglepurchase ) ) {
+			if ( null === $this->google_preview || '1' === $this->hidegooglepurchase ) {
 				$string52 = ' style="display:none;"';
 			}
 
@@ -940,37 +978,32 @@ if ( ! class_exists( 'WPBookList_Show_Book_In_Colorbox', false ) ) :
 			<img src="' . ROOT_IMG_URL . 'googlebooks.png" /></a><a ';
 
 			$string54 = '';
-			if ( ( null === $this->itunes_page ) || ( null !== $this->hideitunespurchase && 0 !== $this->hideitunespurchase ) ) {
+			if ( null === $this->itunes_page || '1' === $this->hideitunespurchase ) {
 				$string54 = ' style="display:none;"';
 			}
 
 			$string55 = ' class="wpbooklist-purchase-img" href="' . $this->itunes_page . '" target="_blank">
-					<img src="' . ROOT_IMG_URL . 'ibooks.png" id="wpbooklist-itunes-img" /></a><a ';
-
-			$string56 = '';
-			if ( ( null === $this->author_url ) || ( null !== $this->hidecolorboxbuyimg && '0' !== $this->hidecolorboxbuyimg ) ) {
-				$string56 = ' style="display:none;"';
-			}
-
-			$string57 = '></a>';
+					<img src="' . ROOT_IMG_URL . 'ibooks.png" id="wpbooklist-itunes-img" /></a>';
 
 			$string84 = '<a ';
-			if ( null !== $this->hidekobopurchase && 0 !== $this->hidekobopurchase || null === $this->kobo_link || ( 'http://store .kobobooks.com/en-ca/Search?Query=' === $this->kobo_link ) ) {
+			if ( '1' === $this->hidekobopurchase || null === $this->kobo_link || 'http://store.kobobooks.com/en-ca/Search?Query=' === $this->kobo_link ) {
 				$string84 = $string84 . ' style="display:none;"';
 			}
 			$string85 = ' class="wpbooklist-purchase-img" href="' . $this->kobo_link . '" target="_blank">
 					<img src="' . ROOT_IMG_URL . 'kobo-icon.png" /></a>';
 
 			$string86 = '<a ';
-			if ( null !== $this->hidebampurchase && 0 !== $this->hidebampurchase || null === $this->bam_link || ( 'http://www.booksamillion.com/p/' === $this->bam_link ) ) {
+			if ( '1' === $this->hidebampurchase || null === $this->bam_link || ( 'http://www.booksamillion.com/p/' === $this->bam_link ) ) {
 				$string86 = $string86 . ' style="display:none;"';
 			}
 			$string87 = ' class="wpbooklist-purchase-img" href="' . $this->bam_link . '" target="_blank">
 					<img src="' . ROOT_IMG_URL . 'bam-icon.jpg" /></a>';
 
-			if ( ( null !== $this->enablepurchase && 0 !== $this->enablepurchase ) && null !== $this->author_url && '' !== $this->author_url && '1' !== $this->hidecolorboxbuyimg ) {
+			// If we've enabled the Purchase Links on the settings page, if the title has a specified Author URL to link to, and if we haven't choosen to hide the Colorbox Purchase link...
+			$string57 = '';
+			if ( '1' === $this->enablepurchase && null !== $this->author_url && 'https://' !== $this->author_url && 'http://' !== $this->author_url && '1' !== $this->hidecolorboxbuyimg ) {
 				if ( has_filter( 'wpbooklist_append_to_colorbox_purchase_image_link' ) ) {
-					$string57 = $string57 . apply_filters( 'wpbooklist_append_to_colorbox_purchase_image_link', $this->author_url );
+					$string57 = apply_filters( 'wpbooklist_append_to_colorbox_purchase_image_link', $this->author_url );
 				}
 			}
 
@@ -1021,13 +1054,43 @@ if ( ! class_exists( 'WPBookList_Show_Book_In_Colorbox', false ) ) :
 
 						$arr   = explode( '---', $prod, 2 );
 						$asin  = $arr[0];
-						$image = 'http://images.amazon.com/images/P/' . $asin . ' .01.LZZZZZZZ.jpg?rand=' . uniqid();
-						$url   = 'https://www.amazon.com/dp/' . $asin . '?tag=' . $this->amazonaff;
+						$image = '';
+						$url = '';
+
+						if ( array_key_exists( 1, $arr ) && false !== stripos( $arr[1], '---' ) ) {
+							$split = explode( '---', $arr[1] );
+							$image = $split[1];
+						} else {
+							$image = 'http://images.amazon.com/images/P/' . $asin . '.01.LZZZZZZZ.jpg?rand=' . uniqid();
+							$url   = 'https://www.amazon.com/dp/' . $asin . '?tag=' . $this->amazonaff;
+						}
+
+						// Now build the link - first try building a Post link, then a page link, then an amazon link if the asin was provided, then just no link at all.
+						if ( '' === $url ) {
+							if ( false !== stripos( $arr[1], '---' ) ) {
+								$split = explode( '---', $arr[1] );
+								if ( array_key_exists( 2, $split ) && '' !== $split[2] && 'No' !== $split[2] && null !== $split[2] ) {
+									$url = get_permalink( $split[2] );
+								}
+							} elseif ( false !== stripos( $asin, 'asin' ) ) {
+
+								$finalasin = explode( 'asin', $asin );
+								$url       = 'https://www.amazon.com/dp/' . $finalasin[0] . '?tag=' . $this->amazonaff;
+							} else {
+								$url = 'nourl';
+							}
+						}
 
 						if ( null !== $asin && '' !== $asin ) {
-							if ( strlen( $image ) > 51 ) {
-								if ( 6 === $key ) {
+							if ( 6 === $key ) {
+								if ( 'nourl' === $url || '' === $url ) {
+									$string63 = $string63 . '</tr><tr><td><img class="wpbooklist-similar-image" src="' . $image . '" /></td>';
+								} else {
 									$string63 = $string63 . '</tr><tr><td><a class="wpbooklist-similar-link" target="_blank" href="' . $url . '"><img class="wpbooklist-similar-image" src="' . $image . '" /></a></td>';
+								}
+							} else {
+								if ( 'nourl' === $url  || '' === $url ) {
+									$string63 = $string63 . '<td><img class="wpbooklist-similar-image" src="' . $image . '" /></td>';
 								} else {
 									$string63 = $string63 . '<td><a class="wpbooklist-similar-link" target="_blank" href="' . $url . '"><img class="wpbooklist-similar-image" src="' . $image . '" /></a></td>';
 								}
@@ -1142,7 +1205,7 @@ if ( ! class_exists( 'WPBookList_Show_Book_In_Colorbox', false ) ) :
 			<a';
 
 			$string75 = '';
-			if ( ( null === $this->amazon_detail_page ) || ( null !== $this->hideamazonpurchase && 0 !== $this->hideamazonpurchase ) ) {
+			if ( null === $this->amazon_detail_page || '1' === $this->hideamazonpurchase ) {
 				$string75 = ' style="display:none;"';
 			}
 
@@ -1153,15 +1216,15 @@ if ( ! class_exists( 'WPBookList_Show_Book_In_Colorbox', false ) ) :
 			}
 
 			$string77 = '';
-			if ( ( null === $this->isbn ) || ( null !== $this->hidebnpurchase && 0 !== $this->hidebnpurchase ) ) {
+			if ( null === $this->isbn || '1' === $this->hidebnpurchase ) {
 				$string77 = ' style="display:none;"';
 			}
 
-			$string78 = ' class="wpbooklist-purchase-img" href="http://www.barnesandnoble .com/s/' . $this->isbn . '" target="_blank">
+			$string78 = ' class="wpbooklist-purchase-img" href="http://www.barnesandnoble.com/s/' . $this->isbn . '" target="_blank">
 			<img src="' . ROOT_IMG_URL . 'bn.png" /></a><a ';
 
 			$string79 = '';
-			if ( ( null === $this->google_preview ) || ( null !== $this->hidegooglepurchase && 0 !== $this->hidegooglepurchase ) ) {
+			if ( null === $this->google_preview || '1' === $this->hidegooglepurchase ) {
 				$string79 = ' style="display:none;"';
 			}
 
@@ -1169,7 +1232,7 @@ if ( ! class_exists( 'WPBookList_Show_Book_In_Colorbox', false ) ) :
 					<img src="' . ROOT_IMG_URL . 'googlebooks.png" /></a><a ';
 
 			$string81 = '';
-			if ( ( null === $this->itunes_page ) || ( null !== $this->hideitunespurchase && 0 !== $this->hideitunespurchase ) ) {
+			if ( null === $this->itunes_page || '1' === $this->hideitunespurchase ) {
 				$string81 = ' style="display:none;"';
 			}
 
@@ -1177,7 +1240,7 @@ if ( ! class_exists( 'WPBookList_Show_Book_In_Colorbox', false ) ) :
 					<img id="wpbooklist-itunes-img" src="' . ROOT_IMG_URL . 'ibooks.png" /></a>';
 
 			$string88 = '<a ';
-			if ( null !== $this->hidekobopurchase && 0 !== $this->hidekobopurchase || null === $this->kobo_link || ( 'http://store .kobobooks.com/en-ca/Search?Query=' === $this->kobo_link ) ) {
+			if ( '1' === $this->hidekobopurchase || null === $this->kobo_link || 'http://store.kobobooks.com/en-ca/Search?Query=' === $this->kobo_link ) {
 				$string88 = $string88 . ' style="display:none;"';
 			}
 
@@ -1185,13 +1248,14 @@ if ( ! class_exists( 'WPBookList_Show_Book_In_Colorbox', false ) ) :
 					<img src="' . ROOT_IMG_URL . 'kobo-icon.png" /></a>';
 
 			$string90 = '<a ';
-			if ( null !== $this->hidebampurchase && 0 !== $this->hidebampurchase || null === $this->bam_link || ( 'http://www.booksamillion.com/p/' === $this->bam_link ) ) {
+			if ( '1' === $this->hidebampurchase || null === $this->bam_link || ( 'http://www.booksamillion.com/p/' === $this->bam_link ) ) {
 				$string90 = $string90 . ' style="display:none;"';
 			}
 			$string91 = ' class="wpbooklist-purchase-img" href="' . $this->bam_link . '" target="_blank">
 					<img src="' . ROOT_IMG_URL . 'bam-icon.jpg" /></a>';
 
-			if ( ( null !== $this->enablepurchase && 0 !== $this->enablepurchase ) && null !== $this->author_url && '' !== $this->author_url && '1' !== $this->hidecolorboxbuyimg ) {
+			// If we've enabled the Purchase Links on the settings page, if the title has a specified Author URL to link to, and if we haven't choosen to hide the Colorbox Purchase link...
+			if ( '1' === $this->enablepurchase && null !== $this->author_url && 'https://' !== $this->author_url && 'http://' !== $this->author_url && '1' !== $this->hidecolorboxbuyimg ) {
 				if ( has_filter( 'wpbooklist_append_to_colorbox_purchase_image_link' ) ) {
 					$string91 = $string91 . apply_filters( 'wpbooklist_append_to_colorbox_purchase_image_link', $this->author_url );
 				}
@@ -1204,7 +1268,7 @@ if ( ! class_exists( 'WPBookList_Show_Book_In_Colorbox', false ) ) :
 				$string83 = '</div>';
 			}
 
-			$this->output = $string1 . $string2 . $string3 . $string4 . $string5 . $string6 . $string7 . $string8 . $string9 . $string10 . $string11 . $string12 . $string13 . $string14 . $string15 . $string16 . $string17 . $string18 . $string19 . $string20 . $string21 . $string22 . $string23 . $string24 . $string25 . $string26 . $string27 . $string28 . $string92 . $string93 . $string94 . $string95 . $string96 . $string97 . $string29 . $string30 . $string31 . $string39 . $string40 . $string41 . $string32 . $string33 . $string34 . $string35 . $string36 . $string37 . $string38 . $string42 . $string43 . $string44 . $string45 . $string46 . $string47 . $string48 . $string49 . $string50 . $string51 . $string52 . $string53 . $string54 . $string55 . $string56 . $string57 . $string84 . $string85 . $string86 . $string87 . $string58 . $string59 . $string60 . $string61 . $string62 . $string63 . $string64 . $comments_string . $string65 . $string66 . $string67 . $string68 . $string69 . $string70 . $string71 . $string72 . $string73 . $string74 . $string75 . $string76 . $string77 . $string78 . $string79 . $string80 . $string81 . $string82 . $string83 . $string88 . $string89 . $string90 . $string91;
+			$this->output = $string1 . $string2 . $string3 . $string4 . $string5 . $string6 . $string7 . $string8 . $string9 . $string10 . $string11 . $string12 . $string13 . $string14 . $string15 . $string16 . $string17 . $string18 . $string19 . $string20 . $string21 . $string22 . $string92 . $string93 . $string94 . $string23 . $string24 . $string25 . $string26 . $string27 . $string28 . $string95 . $string96 . $string97 . $string29 . $string30 . $string31 . $string39 . $string40 . $string41 . $string32 . $string33 . $string34 . $string35 . $string36 . $string37 . $string38 . $string42 . $string43 . $string44 . $string45 . $string46 . $string47 . $string48 . $string49 . $string50 . $string51 . $string52 . $string53 . $string54 . $string55 . $string84 . $string85 . $string86 . $string87 . $string57 . $string58 . $string59 . $string60 . $string61 . $string62 . $string63 . $string64 . $comments_string . $string65 . $string66 . $string67 . $string68 . $string69 . $string70 . $string71 . $string72 . $string73 . $string74 . $string75 . $string76 . $string77 . $string78 . $string79 . $string80 . $string81 . $string82 . $string83 . $string88 . $string89 . $string90 . $string91;
 		}
 
 		/**
@@ -1213,7 +1277,7 @@ if ( ! class_exists( 'WPBookList_Show_Book_In_Colorbox', false ) ) :
 		private function gather_bookfinder_data() {
 			$this->title                  = $this->book_array['title'];
 			$this->author                 = $this->book_array['author'];
-			$this->category               = $this->book_array['category'];
+			$this->genres               = $this->book_array['category'];
 			$this->itunes_page            = $this->book_array['itunes_page'];
 			$this->pages                  = $this->book_array['pages'];
 			$this->pub_year               = $this->book_array['pub_year'];

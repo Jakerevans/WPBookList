@@ -4,7 +4,7 @@ Donate link: https://ko-fi.com/A8385C9
 Tags: books, woocommerce, author, book, affiliate  
 Requires at least: 3.0.1
 Tested up to: 5.0
-Stable tag: 6.1.0
+Stable tag: 6.1.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -275,6 +275,8 @@ In order to become one of these "Official Translators", I'll need to know your o
 
 **6.1.0** - Added the Comments Extension on the Extensions page, added a 'Clear WPBookList Cache' button on the 4 WPBookList Settings pages, improved the Stats area on the front-end to report the values for an entire Library and not just which page the user is viewing, various other code improvements.
 
+**6.1.1** - Fixed the Similar Titles Section - If the user has specifed Similar Titles when adding a book, those titles will be displayed, as opposed to similar titles found from Amazon. The titles will link to various location in this order of importance: An existing WPBookList Post, An existing WPBookList Page, Amazon, or no link. Also fixed several bugs in the Showing/Hiding of items within the Book View.  
+
 == Upgrade Notice ==
 
 = 1.0.0 =
@@ -374,3 +376,5 @@ Modified the class-show-book-in-colorbox.php file, lines 130-148, to better dete
 =6.0.0= - Massive changes to WPBookList, including a new WPBookList User System, additional fields for each book, speed/caching improvements, support for upcoming Extensions, and more!
 
 =6.1.0= - Added the Comments Extension on the Extensions page, added a 'Clear WPBookList Cache' button on the 4 WPBookList Settings pages, improved the Stats area on the front-end to report the values for an entire Library and not just which page the user is viewing, various other code improvements.
+
+=6.1.1= - Fixed the Similar Titles Section - If the user has specifed Similar Titles when adding a book, those titles will be displayed, as opposed to similar titles found from Amazon. The titles will link to various location in this order of importance: An existing WPBookList Post, An existing WPBookList Page, Amazon, or no link. Also fixed several bugs in the Showing/Hiding of items within the Book View.  
