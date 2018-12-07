@@ -583,6 +583,43 @@ if ( ! class_exists( 'WPBookList_Translations', false ) ) :
 			$this->trans_552 = __( 'Branding', 'wpbooklist' );
 			$this->trans_553 = __( 'Proudly display your site\'s logo and motto every time a book is opened!', 'wpbooklist' );
 			$this->trans_554 = __( 'Looks like there was a problem uploading your StylePak! Try unzipping the StylePak first, and then uploading the resulting \'.css\' file instead (the file without the \'.zip\' at the end)', 'wpbooklist' );
+			$this->trans_555 = __( 'plugin', 'wpbooklist' );
+			$this->trans_556 = __( 'Library StylePak Bundle', 'wpbooklist' );
+			$this->trans_557 = __( 'Can\'t decide on just one StylePak? Get \'em all with the', 'wpbooklist' );
+			$this->trans_558 = __( 'View Demo', 'wpbooklist' );
+			$this->trans_559 = __( '$2.00 - Purchase Now!', 'wpbooklist' );
+			$this->trans_560 = __( '$8.00 - Purchase Now!', 'wpbooklist' );
+			$this->trans_561 = __( 'Library StylePak 1', 'wpbooklist' );
+			$this->trans_562 = __( 'Library StylePak 2', 'wpbooklist' );
+			$this->trans_563 = __( 'Library StylePak 3', 'wpbooklist' );
+			$this->trans_564 = __( 'Library StylePak 4', 'wpbooklist' );
+			$this->trans_565 = __( 'Library StylePak 5', 'wpbooklist' );
+			$this->trans_566 = __( 'Library StylePak 6', 'wpbooklist' );
+			$this->trans_567 = __( 'Provides larger images, and also removes the book title from being displayed', 'wpbooklist' );
+			$this->trans_568 = __( 'Combines the larger images of StylePak 1 while also displaying longer titles', 'wpbooklist' );
+			$this->trans_569 = __( 'Strives for a cleaner look. Perfect for sites with colored backgrounds', 'wpbooklist' );
+			$this->trans_570 = __( 'Introduces portrait-type book covers, and reduces the font-size of the titles', 'wpbooklist' );
+			$this->trans_571 = __( 'Introduces a fixed wood-grain background emulating a bookshelf', 'wpbooklist' );
+			$this->trans_572 = __( 'Features smaller cover images and longer, bolder titles, allowing more books per row to be displayed.', 'wpbooklist' );
+
+			$this->trans_573 = __( 'Template Pak 1', 'wpbooklist' );
+			$this->trans_574 = __( 'Template Pak 2', 'wpbooklist' );
+			$this->trans_575 = __( 'Template Pak 3', 'wpbooklist' );
+			$this->trans_576 = __( 'Template Pak 4', 'wpbooklist' );
+			$this->trans_577 = __( 'Template Pak 5', 'wpbooklist' );
+			$this->trans_578 = __( 'Moves Book Details and Purchase Links to the left side, placing focus on the Book Description and Amazon Reviews', 'wpbooklist' );
+			$this->trans_579 = __( 'Features a larger cover image, a horizontal Book Details section, and a centered left column.', 'wpbooklist' );
+			$this->trans_580 = __( 'Places the Social icons vertically, moves the purchase links to the right, and aligns the left column under the cover image', 'wpbooklist' );
+			$this->trans_581 = __( 'Larger images, vertical social icons, aligns the Book Details, Description, and Amazon reviews further right', 'wpbooklist' );
+			$this->trans_582 = __( 'Takes a cue from', 'wpbooklist' );
+			$this->trans_583 = __( 'sporting white text and a fixed wood-grain background', 'wpbooklist' );
+
+
+
+
+
+
+
 
 			// The array of translation strings.
 			$translation_array = array(
