@@ -613,6 +613,7 @@ if ( ! class_exists( 'WPBookList_Translations', false ) ) :
 			$this->trans_581 = __( 'Larger images, vertical social icons, aligns the Book Details, Description, and Amazon reviews further right', 'wpbooklist' );
 			$this->trans_582 = __( 'Takes a cue from', 'wpbooklist' );
 			$this->trans_583 = __( 'sporting white text and a fixed wood-grain background', 'wpbooklist' );
+			$this->trans_584 = __( 'Additional Images', 'wpbooklist' );
 
 
 

@@ -42,6 +42,9 @@ if ( ! class_exists( 'WPBookList_Show_Book_In_Colorbox', false ) ) :
 		public $notes;
 		public $rating;
 		public $image;
+		public $backcover;
+		public $additionalimage1;
+		public $additionalimage2;
 		public $finished;
 		public $date_finished;
 		public $signed;
@@ -70,6 +73,7 @@ if ( ! class_exists( 'WPBookList_Show_Book_In_Colorbox', false ) ) :
 		public $hidedescription;
 		public $hidesimilar;
 		public $hidebookimage;
+		public $hideadditionalimgs;
 		public $hidefinished;
 		public $hidebooktitle;
 		public $hidelibrarytitle;
@@ -235,6 +239,9 @@ if ( ! class_exists( 'WPBookList_Show_Book_In_Colorbox', false ) ) :
 			$this->notes                  = $saved_book->notes;
 			$this->rating                 = $saved_book->rating;
 			$this->image                  = $saved_book->image;
+			$this->backcover              = $saved_book->backcover;
+			$this->additionalimage1       = $saved_book->additionalimage1;
+			$this->additionalimage2       = $saved_book->additionalimage2;
 			$this->finished               = $saved_book->finished;
 			$this->date_finished          = $saved_book->date_finished;
 			$this->signed                 = $saved_book->signed;
@@ -255,6 +262,7 @@ if ( ! class_exists( 'WPBookList_Show_Book_In_Colorbox', false ) ) :
 			$this->kobo_link              = $saved_book->kobo_link;
 			$this->bam_link               = $saved_book->bam_link;
 			$this->book_uid               = $saved_book->book_uid;
+			$this->saved_book             = $saved_book;
 
 			// Let's see if isbn is empty, and if so, populate it with either isbn10 or asin.
 			if ( '' === $this->isbn || null === $this->isbn ) {
@@ -361,6 +369,7 @@ if ( ! class_exists( 'WPBookList_Show_Book_In_Colorbox', false ) ) :
 			$this->hidedescription      = $options_results->hidedescription;
 			$this->hidesimilar          = $options_results->hidesimilar;
 			$this->hidebookimage        = $options_results->hidebookimage;
+			$this->hideadditionalimgs   = $options_results->hideadditionalimgs;
 			$this->hidefinished         = $options_results->hidefinished;
 			$this->hidebooktitle        = $options_results->hidebooktitle;
 			$this->hidelibrarytitle     = $options_results->hidelibrarytitle;
@@ -861,6 +870,30 @@ if ( ! class_exists( 'WPBookList_Show_Book_In_Colorbox', false ) ) :
 					</tr>';
 			}
 
+
+			// If the Custom Fields Extension is active...
+			$customfields_basic_string = '';
+			if ( has_filter( 'wpbooklist_append_to_book_view_basic_fields' ) ) {
+					$customfields_basic_string = apply_filters( 'wpbooklist_append_to_book_view_basic_fields', $this->saved_book );
+			}
+
+			// If the Custom Fields Extension is active...
+			$customfields_text_link_string = '';
+			if ( has_filter( 'wpbooklist_append_to_book_view_text_link_fields' ) ) {
+					$customfields_text_link_string = apply_filters( 'wpbooklist_append_to_book_view_text_link_fields', $this->saved_book );
+			}
+
+
+
+
+
+
+
+
+
+
+
+
 			$string39 = '';
 			$string40 = '';
 			$string41 = '';
@@ -1104,6 +1137,28 @@ if ( ! class_exists( 'WPBookList_Show_Book_In_Colorbox', false ) ) :
 				}
 			}
 
+			// Building out the Additional Images section.
+			$additional_images = '';
+			if ( '1' !== $this->hideadditionalimgs && ( ( null !== $this->backcover && '' !== $this->backcover ) || ( null !== $this->additionalimage1 && '' !== $this->additionalimage1 ) || ( null !== $this->additionalimage2 && '' !== $this->additionalimage2 ) ) ) {
+
+				$additional_images = '<p class="wpbooklist_description_p">' . $this->trans->trans_584 . '</p><div class="wpbooklist_desc_p_class"  id="wpbooklist-additional-images-id">';
+
+				$img_array = array(
+					$this->backcover,
+					$this->additionalimage1,
+					$this->additionalimage2,
+				);
+
+				foreach ( $img_array as $key => $img ) {
+					if ( '' !== $img && null !== $img ) {
+						$additional_images = $additional_images . '<img class="wpbooklist-additional-img-colorbox" src="' . $img . '"  />';
+					}
+				}
+
+				$additional_images = $additional_images . '</div>';
+
+			}
+
 			// If the Comments Extension is active...
 			$comments_array = array( $this->id, $this->library, $this->book_uid, $this->title );
 			$comments_string = '';
@@ -1268,7 +1323,7 @@ if ( ! class_exists( 'WPBookList_Show_Book_In_Colorbox', false ) ) :
 				$string83 = '</div>';
 			}
 
-			$this->output = $string1 . $string2 . $string3 . $string4 . $string5 . $string6 . $string7 . $string8 . $string9 . $string10 . $string11 . $string12 . $string13 . $string14 . $string15 . $string16 . $string17 . $string18 . $string19 . $string20 . $string21 . $string22 . $string92 . $string93 . $string94 . $string23 . $string24 . $string25 . $string26 . $string27 . $string28 . $string95 . $string96 . $string97 . $string29 . $string30 . $string31 . $string39 . $string40 . $string41 . $string32 . $string33 . $string34 . $string35 . $string36 . $string37 . $string38 . $string42 . $string43 . $string44 . $string45 . $string46 . $string47 . $string48 . $string49 . $string50 . $string51 . $string52 . $string53 . $string54 . $string55 . $string84 . $string85 . $string86 . $string87 . $string57 . $string58 . $string59 . $string60 . $string61 . $string62 . $string63 . $string64 . $comments_string . $string65 . $string66 . $string67 . $string68 . $string69 . $string70 . $string71 . $string72 . $string73 . $string74 . $string75 . $string76 . $string77 . $string78 . $string79 . $string80 . $string81 . $string82 . $string83 . $string88 . $string89 . $string90 . $string91;
+			$this->output = $string1 . $string2 . $string3 . $string4 . $string5 . $string6 . $string7 . $string8 . $string9 . $string10 . $string11 . $string12 . $string13 . $string14 . $string15 . $string16 . $string17 . $string18 . $string19 . $string20 . $string21 . $string22 . $string92 . $string93 . $string94 . $string23 . $string24 . $string25 . $string26 . $string27 . $string28 . $string95 . $string96 . $string97 . $string29 . $string30 . $string31 . $string39 . $string40 . $string41 . $string32 . $string33 . $string34 . $string35 . $string36 . $string37 . $string38 . $customfields_basic_string . $customfields_text_link_string . $string42 . $string43 . $string44 . $string45 . $string46 . $string47 . $string48 . $string49 . $string50 . $string51 . $string52 . $string53 . $string54 . $string55 . $string84 . $string85 . $string86 . $string87 . $string57 . $string58 . $string59 . $string60 . $string61 . $string62 . $string63 . $string64 . $additional_images . $comments_string . $string65 . $string66 . $string67 . $string68 . $string69 . $string70 . $string71 . $string72 . $string73 . $string74 . $string75 . $string76 . $string77 . $string78 . $string79 . $string80 . $string81 . $string82 . $string83 . $string88 . $string89 . $string90 . $string91;
 		}
 
 		/**
@@ -1277,7 +1332,7 @@ if ( ! class_exists( 'WPBookList_Show_Book_In_Colorbox', false ) ) :
 		private function gather_bookfinder_data() {
 			$this->title                  = $this->book_array['title'];
 			$this->author                 = $this->book_array['author'];
-			$this->genres               = $this->book_array['category'];
+			$this->genres                 = $this->book_array['category'];
 			$this->itunes_page            = $this->book_array['itunes_page'];
 			$this->pages                  = $this->book_array['pages'];
 			$this->pub_year               = $this->book_array['pub_year'];

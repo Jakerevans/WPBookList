@@ -279,6 +279,8 @@ In order to become one of these "Official Translators", I'll need to know your o
 
 **6.1.2** - Removed the 'Filter_var' function call inside of the 'Empty' construct on line 1145 of class-wpbooklist-general-functions.php file.
 
+**6.2.0** - Github Issues #52, #53, Github Issue #1 and #2 in the Custom Fields Extension.
+
 == Upgrade Notice ==
 
 = 1.0.0 =
@@ -382,3 +384,5 @@ Modified the class-show-book-in-colorbox.php file, lines 130-148, to better dete
 =6.1.1= - Fixed the Similar Titles Section - If the user has specifed Similar Titles when adding a book, those titles will be displayed, as opposed to similar titles found from Amazon. The titles will link to various location in this order of importance: An existing WPBookList Post, An existing WPBookList Page, Amazon, or no link. Also fixed several bugs in the Showing/Hiding of items within the Book View.  
 
 =6.1.2= - Removed the 'Filter_var' function call inside of the 'Empty' construct on line 1145 of class-wpbooklist-general-functions.php file.
+
+=6.2.0= - Github Issues #52, #53, Github Issue #1 and #2 in the Custom Fields Extension.

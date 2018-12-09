@@ -173,6 +173,10 @@
     margin-top:0px;
 }
 
+#wpbooklist-additional-images-id img{
+    max-width:100px;
+}
+
 @media (max-width: 550px) {
     #wpbl-posttd-top-container, #wpbl-pagetd-top-container {
         display: block;

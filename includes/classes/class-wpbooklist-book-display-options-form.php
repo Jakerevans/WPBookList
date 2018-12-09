@@ -136,7 +136,16 @@ if ( ! class_exists( 'WPBookList_Book_Display_Options_Form', false ) ) :
 					<div class="wpbooklist-spinner" id="wpbooklist-spinner-2"></div>
 					<div class="wpbooklist-display-options-indiv-entry">
 						<div class="wpbooklist-display-options-label-div">
-							<img class="wpbooklist-icon-image-question-display-options wpbooklist-icon-image-question" data-label="library-display-form-amaonreviews" src="' . ROOT_IMG_ICONS_URL . 'question-black.svg">
+							<img class="wpbooklist-icon-image-question-display-options wpbooklist-icon-image-question" data-label="library-display-form-additionalimgs" src="' . ROOT_IMG_ICONS_URL . 'question-black.svg">
+							<label>' . $this->trans->trans_584 . '</label>
+						</div>
+						<div class="wpbooklist-margin-right-td">
+							<input type="checkbox" name="hide-library-display-form-additionalimgs"></input>
+						</div>
+					</div>
+					<div class="wpbooklist-display-options-indiv-entry">
+						<div class="wpbooklist-display-options-label-div">
+							<img class="wpbooklist-icon-image-question-display-options wpbooklist-icon-image-question" data-label="library-display-form-amazonreviews" src="' . ROOT_IMG_ICONS_URL . 'question-black.svg">
 							<label>' . $this->trans->trans_266 . '</label>
 						</div>
 						<div class="wpbooklist-margin-right-td">

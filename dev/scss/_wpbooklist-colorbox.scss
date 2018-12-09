@@ -611,3 +611,9 @@ q:before,  #colorbox q:after {
 #cboxClose, #cboxBottomLeft, #cboxBottomCenter, #cboxBottomRight, #cboxTopLeft, #cboxTopCenter, #cboxTopRight, #cboxMiddleLeft, #cboxMiddleRight{
     display:none;
 }
+
+#colorbox #wpbooklist-additional-images-id img{
+    max-width: 200px;
+    vertical-align: top;
+    margin: 10px;
+}

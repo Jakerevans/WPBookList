@@ -321,6 +321,32 @@ $string1 =  '<div id="wpbl-posttd-top-container">
 				<div id="wpbl-posttd-book-description-contents">'.html_entity_decode(stripslashes($book_row->description)).'</div>
 			</div>';
 		}
+
+		// Building out the Additional Images section.
+		$additional_images = '';
+		if ( '1' !== $options_post_row->hideadditionalimgs && ( ( null !== $book_row->backcover && '' !== $book_row->backcover ) || ( null !== $book_row->additionalimage1 && '' !== $book_row->additionalimage1 ) || ( null !== $book_row->additionalimage2 && '' !== $book_row->additionalimage2 ) ) ) {
+
+			$additional_images = '<div id="wpbl-posttd-book-description-div">
+				<h5 id="wpbl-posttd-book-description-h5">'.__('Additional Images','wpbooklist').'</h5><div class="wpbooklist_desc_p_class"  id="wpbooklist-additional-images-id">';
+
+			$img_array = array(
+				$book_row->backcover,
+				$book_row->additionalimage1,
+				$book_row->additionalimage2,
+			);
+
+			foreach ( $img_array as $key => $img ) {
+				if ( '' !== $img && null !== $img ) {
+					$additional_images = $additional_images . '<img style="max-width:100px;" class="wpbooklist-additional-img-colorbox" src="' . $img . '"  />';
+				}
+			}
+
+			$additional_images = $additional_images . '</div>';
+
+		}
+
+
+		
 		if(($options_post_row->hidenotes == null || $options_post_row->hidenotes == 0) && $book_row->notes != null){
 		$string44 =  '<div id="wpbl-posttd-book-notes-div">
 			<h5 id="wpbl-posttd-book-notes-h5">'.__('Notes','wpbooklist').'</h5>

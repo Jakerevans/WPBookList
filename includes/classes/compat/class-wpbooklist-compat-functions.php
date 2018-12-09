@@ -108,6 +108,12 @@ if ( ! class_exists( 'WPBookList_Compat_Functions', false ) ) :
 				if ( 0 === $wpdb->query( "SHOW COLUMNS FROM `$table_name` LIKE 'hidesubjectsort'" ) ) {
 					$wpdb->query( "ALTER TABLE $table_name ADD hidesubjectsort bigint(255)" );
 				}
+				if ( 0 === $wpdb->query( "SHOW COLUMNS FROM `$table_name` LIKE 'hideadditionalimgs'" ) ) {
+					$wpdb->query( "ALTER TABLE $table_name ADD hideadditionalimgs bigint(255)" );
+				}
+
+
+
 				if ( 0 === $wpdb->query( "SHOW COLUMNS FROM `$table_name` LIKE 'patreonaccess'" ) ) {
 					$wpdb->query( "ALTER TABLE $table_name ADD patreonaccess varchar(255)" );
 				}
@@ -265,6 +271,11 @@ if ( ! class_exists( 'WPBookList_Compat_Functions', false ) ) :
 				if ( 0 === $wpdb->query( "SHOW COLUMNS FROM `$table_name_page_options` LIKE 'hidesubgenre'" ) ) {
 					$wpdb->query( "ALTER TABLE $table_name_page_options ADD hidesubgenre bigint(255)" );
 				}
+				if ( 0 === $wpdb->query( "SHOW COLUMNS FROM `$table_name_page_options` LIKE 'hideadditionalimgs'" ) ) {
+					$wpdb->query( "ALTER TABLE $table_name_page_options ADD hideadditionalimgs bigint(255)" );
+				}
+
+				
 
 			}
 		}
@@ -354,6 +365,9 @@ if ( ! class_exists( 'WPBookList_Compat_Functions', false ) ) :
 				}
 				if ( 0 === $wpdb->query( "SHOW COLUMNS FROM `$table` LIKE 'hidesubgenre'" ) ) {
 					$wpdb->query( "ALTER TABLE $table ADD hidesubgenre bigint(255)" );
+				}
+				if ( 0 === $wpdb->query( "SHOW COLUMNS FROM `$table` LIKE 'hideadditionalimgs'" ) ) {
+					$wpdb->query( "ALTER TABLE $table ADD hideadditionalimgs bigint(255)" );
 				}
 
 			}
@@ -732,6 +746,9 @@ if ( ! class_exists( 'WPBookList_Compat_Functions', false ) ) :
 					}
 					if ( 0 === $wpdb->query( "SHOW COLUMNS FROM `$table` LIKE 'hidesubjectsort'" ) ) {
 						$wpdb->query( "ALTER TABLE $table ADD hidesubjectsort bigint(255)" );
+					}
+					if ( 0 === $wpdb->query( "SHOW COLUMNS FROM `$table` LIKE 'hideadditionalimgs'" ) ) {
+						$wpdb->query( "ALTER TABLE $table ADD hideadditionalimgs bigint(255)" );
 					}
 
 					// Begin addition of version 6.0.0 columns for the Custom Library's Settings table.
