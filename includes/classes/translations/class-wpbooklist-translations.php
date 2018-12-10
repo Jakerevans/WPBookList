@@ -614,7 +614,8 @@ if ( ! class_exists( 'WPBookList_Translations', false ) ) :
 			$this->trans_582 = __( 'Takes a cue from', 'wpbooklist' );
 			$this->trans_583 = __( 'sporting white text and a fixed wood-grain background', 'wpbooklist' );
 			$this->trans_584 = __( 'Additional Images', 'wpbooklist' );
-
+			$this->trans_585 = __( 'Easily add some Custom Fields for each book with the Custom Fields Extension!', 'wpbooklist' );
+			$this->trans_586 = __( 'Custom Fields', 'wpbooklist' );
 
 
 
