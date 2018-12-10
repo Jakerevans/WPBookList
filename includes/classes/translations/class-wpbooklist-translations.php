@@ -616,9 +616,10 @@ if ( ! class_exists( 'WPBookList_Translations', false ) ) :
 			$this->trans_584 = __( 'Additional Images', 'wpbooklist' );
 			$this->trans_585 = __( 'Easily add some Custom Fields for each book with the Custom Fields Extension!', 'wpbooklist' );
 			$this->trans_586 = __( 'Custom Fields', 'wpbooklist' );
-
-
-
+			$this->trans_587 = __( 'Author 1', 'wpbooklist' );
+			$this->trans_588 = __( 'Author 2', 'wpbooklist' );
+			$this->trans_589 = __( 'Author 3', 'wpbooklist' );
+			$this->trans_590  = __( 'Search in', 'wpbooklist-textdomain' );
 
 
 
