@@ -870,7 +870,6 @@ if ( ! class_exists( 'WPBookList_Show_Book_In_Colorbox', false ) ) :
 					</tr>';
 			}
 
-
 			// If the Custom Fields Extension is active...
 			$customfields_basic_string = '';
 			if ( has_filter( 'wpbooklist_append_to_book_view_basic_fields' ) ) {
@@ -883,16 +882,23 @@ if ( ! class_exists( 'WPBookList_Show_Book_In_Colorbox', false ) ) :
 					$customfields_text_link_string = apply_filters( 'wpbooklist_append_to_book_view_text_link_fields', $this->saved_book );
 			}
 
+			// If the Custom Fields Extension is active...
+			$customfields_dropdown_string = '';
+			if ( has_filter( 'wpbooklist_append_to_book_view_dropdown_fields' ) ) {
+					$customfields_dropdown_string = apply_filters( 'wpbooklist_append_to_book_view_dropdown_fields', $this->saved_book );
+			}
 
+			// If the Custom Fields Extension is active...
+			$customfields_image_link_string = '';
+			if ( has_filter( 'wpbooklist_append_to_book_view_image_link_fields' ) ) {
+					$customfields_image_link_string = apply_filters( 'wpbooklist_append_to_book_view_image_link_fields', $this->saved_book );
+			}
 
-
-
-
-
-
-
-
-
+			// If the Custom Fields Extension is active...
+			$customfields_paragraph_string = '';
+			if ( has_filter( 'wpbooklist_append_to_book_view_paragraph_fields' ) ) {
+					$customfields_paragraph_string = apply_filters( 'wpbooklist_append_to_book_view_paragraph_fields', $this->saved_book );
+			}
 
 			$string39 = '';
 			$string40 = '';
@@ -1323,7 +1329,7 @@ if ( ! class_exists( 'WPBookList_Show_Book_In_Colorbox', false ) ) :
 				$string83 = '</div>';
 			}
 
-			$this->output = $string1 . $string2 . $string3 . $string4 . $string5 . $string6 . $string7 . $string8 . $string9 . $string10 . $string11 . $string12 . $string13 . $string14 . $string15 . $string16 . $string17 . $string18 . $string19 . $string20 . $string21 . $string22 . $string92 . $string93 . $string94 . $string23 . $string24 . $string25 . $string26 . $string27 . $string28 . $string95 . $string96 . $string97 . $string29 . $string30 . $string31 . $string39 . $string40 . $string41 . $string32 . $string33 . $string34 . $string35 . $string36 . $string37 . $string38 . $customfields_basic_string . $customfields_text_link_string . $string42 . $string43 . $string44 . $string45 . $string46 . $string47 . $string48 . $string49 . $string50 . $string51 . $string52 . $string53 . $string54 . $string55 . $string84 . $string85 . $string86 . $string87 . $string57 . $string58 . $string59 . $string60 . $string61 . $string62 . $string63 . $string64 . $additional_images . $comments_string . $string65 . $string66 . $string67 . $string68 . $string69 . $string70 . $string71 . $string72 . $string73 . $string74 . $string75 . $string76 . $string77 . $string78 . $string79 . $string80 . $string81 . $string82 . $string83 . $string88 . $string89 . $string90 . $string91;
+			$this->output = $string1 . $string2 . $string3 . $string4 . $string5 . $string6 . $string7 . $string8 . $string9 . $string10 . $string11 . $string12 . $string13 . $string14 . $string15 . $string16 . $string17 . $string18 . $string19 . $string20 . $string21 . $string22 . $string92 . $string93 . $string94 . $string23 . $string24 . $string25 . $string26 . $string27 . $string28 . $string95 . $string96 . $string97 . $string29 . $string30 . $string31 . $string39 . $string40 . $string41 . $string32 . $string33 . $string34 . $string35 . $string36 . $string37 . $string38 . $customfields_basic_string . $customfields_text_link_string . $customfields_dropdown_string . $string42 . $string43 . $customfields_image_link_string . $string44 . $string45 . $string46 . $string47 . $string48 . $string49 . $string50 . $string51 . $string52 . $string53 . $string54 . $string55 . $string84 . $string85 . $string86 . $string87 . $string57 . $string58 . $string59 . $string60 . $string61 . $string62 . $string63 . $string64 . $additional_images . $comments_string . $string65 . $string66 . $string67 . $string68 . $string69 . $customfields_paragraph_string . $string70 . $string71 . $string72 . $string73 . $string74 . $string75 . $string76 . $string77 . $string78 . $string79 . $string80 . $string81 . $string82 . $string83 . $string88 . $string89 . $string90 . $string91;
 		}
 
 		/**

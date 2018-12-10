@@ -256,6 +256,39 @@ $string1 =  '<div id="wpbl-pagetd-top-container">
 				$string30 =  '</div>';
 			}
 
+			// If the Custom Fields Extension is active...
+			$customfields_basic_string = '';
+			if ( has_filter( 'wpbooklist_append_to_page_view_basic_fields' ) ) {
+					$customfields_basic_string = apply_filters( 'wpbooklist_append_to_page_view_basic_fields', $book_row );
+			}
+
+			// If the Custom Fields Extension is active...
+			$customfields_text_link_string = '';
+			if ( has_filter( 'wpbooklist_append_to_page_view_text_link_fields' ) ) {
+					$customfields_text_link_string = apply_filters( 'wpbooklist_append_to_page_view_text_link_fields', $book_row );
+			}
+
+			// If the Custom Fields Extension is active...
+			$customfields_dropdown_string = '';
+			if ( has_filter( 'wpbooklist_append_to_page_view_dropdown_fields' ) ) {
+					$customfields_dropdown_string = apply_filters( 'wpbooklist_append_to_page_view_dropdown_fields', $book_row );
+			}
+
+			// If the Custom Fields Extension is active...
+			$customfields_image_link_string = '';
+			if ( has_filter( 'wpbooklist_append_to_page_view_image_link_fields' ) ) {
+					$customfields_image_link_string = apply_filters( 'wpbooklist_append_to_page_view_image_link_fields', $book_row );
+			}
+
+			// If the Custom Fields Extension is active...
+			$customfields_paragraph_string = '';
+			if ( has_filter( 'wpbooklist_append_to_page_view_paragraph_fields' ) ) {
+					$customfields_paragraph_string = apply_filters( 'wpbooklist_append_to_page_view_paragraph_fields', $book_row );
+			}
+
+
+
+
 			if($options_page_row->hidefirstedition == null || $options_page_row->hidefirstedition == 0){
 				$string31 =  '<div id="wpbl-pagetd-book-details-8">
 				<span>'.__('Edition: ', 'wpbooklist').'</span>';
