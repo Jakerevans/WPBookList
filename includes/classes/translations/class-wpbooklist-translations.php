@@ -619,9 +619,13 @@ if ( ! class_exists( 'WPBookList_Translations', false ) ) :
 			$this->trans_587 = __( 'Author 1', 'wpbooklist' );
 			$this->trans_588 = __( 'Author 2', 'wpbooklist' );
 			$this->trans_589 = __( 'Author 3', 'wpbooklist' );
-			$this->trans_590  = __( 'Search in', 'wpbooklist-textdomain' );
-			$this->trans_591  = __( 'Search Results', 'wpbooklist-textdomain' );
-			$this->trans_592  = __( 'by', 'wpbooklist-textdomain' );
+			$this->trans_590 = __( 'Search in', 'wpbooklist-textdomain' );
+			$this->trans_591 = __( 'Search Results', 'wpbooklist-textdomain' );
+			$this->trans_592 = __( 'by', 'wpbooklist-textdomain' );
+			$this->trans_593 = __( 'Price', 'wpbooklist-textdomain' );
+			$this->trans_594 = __( 'Ratings & Comments', 'wpbooklist-textdomain' );
+			$this->trans_595 = __( 'Book Title Unavailable', 'wpbooklist-textdomain' );
+			$this->trans_596 = __( 'Book Author Unavailable', 'wpbooklist-textdomain' );
 
 
 

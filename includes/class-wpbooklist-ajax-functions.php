@@ -5,7 +5,7 @@
  * @author   Jake Evans
  * @category Admin
  * @package  Includes
- * @version  6.0.0
+ * @version  6.1.2
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -3083,7 +3083,7 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 				$library = filter_var( wp_unslash( $_POST['library'] ), FILTER_SANITIZE_STRING );
 			}
 
-			require_once CLASS_BOOK_DIR . 'class-edit-book-form.php';
+			require_once CLASS_BOOK_DIR . 'class-wpbooklist-edit-book-form.php';
 			$form = new WPBookList_Edit_Book_Form();
 			echo $form->output_edit_book_form( $library, $current_offset ) . '_Separator_' . $library;
 			wp_die();
@@ -3100,7 +3100,7 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 				$library = filter_var( wp_unslash( $_POST['library'] ), FILTER_SANITIZE_STRING );
 			}
 
-			require_once CLASS_BOOK_DIR . 'class-edit-book-form.php';
+			require_once CLASS_BOOK_DIR . 'class-wpbooklist-edit-book-form.php';
 			$form = new WPBookList_Edit_Book_Form();
 			echo $form->output_edit_book_form( $library, 0 ) . '_Separator_' . $library;
 
@@ -3146,7 +3146,7 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 				$search_mode = 'both';
 			}
 
-			require_once CLASS_BOOK_DIR . 'class-edit-book-form.php';
+			require_once CLASS_BOOK_DIR . 'class-wpbooklist-edit-book-form.php';
 			$form = new WPBookList_Edit_Book_Form();
 			echo $form->output_edit_book_form( $library, 0, $search_mode, $search_term ) . '_Separator_' . $library . '_Separator_' . $form->limit;
 			wp_die();
@@ -4316,10 +4316,5 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 			$this->page_options = $wpdb->get_row( 'SELECT * FROM ' . $wpdb->prefix . 'wpbooklist_jre_page_options' );
 			wp_die( wp_json_encode( $this->page_options ) );
 		}
-
-
-
-
-
 	}
 endif;

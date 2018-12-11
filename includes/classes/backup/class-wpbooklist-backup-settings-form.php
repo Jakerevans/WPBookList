@@ -3,9 +3,9 @@
  * WPBookList Backup Settings Form Tab Class - class-wpbooklist-backup-settings-form.php
  *
  * @author   Jake Evans
- * @category Settings
+ * @category Backup
  * @package  Includes/Classes/Backup
- * @version  6.0.0
+ * @version  6.1.2
  */
 
 if ( ! defined( 'ABSPATH' ) ) {

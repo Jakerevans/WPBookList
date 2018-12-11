@@ -5,7 +5,7 @@
  * @author   Jake Evans
  * @category Admin
  * @package  Includes/UI/Admin
- * @version  6.0.0
+ * @version  6.1.2
  */
 
 if ( ! defined( 'ABSPATH' ) ) {

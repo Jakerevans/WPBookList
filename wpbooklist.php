@@ -510,11 +510,6 @@ if ( false !== stripos( plugin_dir_path( __FILE__ ), '/wpbooklist.com' ) ) {
 	// Function to populate the Library View Display Options checkboxes.
 	add_action( 'wp_ajax_wpbooklist_get_page_display_options_action', array( $wp_book_list_ajax_functions, 'wpbooklist_get_page_display_options_action_callback' ) );
 
-
-
-
-
-
 /* END OF FUNCTIONS FOUND IN CLASS-WPBOOKLIST-AJAX-FUNCTIONS.PHP THAT APPLY PLUGIN-WIDE */
 
 /* FUNCTIONS FOUND IN CLASS-WPBOOKLIST-STORYTIME.PHP THAT APPLY PLUGIN-WIDE */

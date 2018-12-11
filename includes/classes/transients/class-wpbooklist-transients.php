@@ -5,7 +5,7 @@
  * @author   Jake Evans
  * @category Transients
  * @package  Includes/Classes/Transients
- * @version  6.0.0
+ * @version  6.1.2
  */
 
 if ( ! defined( 'ABSPATH' ) ) {

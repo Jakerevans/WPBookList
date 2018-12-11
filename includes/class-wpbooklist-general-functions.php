@@ -5,7 +5,7 @@
  * @author   Jake Evans
  * @category Admin
  * @package  Includes
- * @version  6.0.0
+ * @version  6.1.2
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -1340,7 +1340,11 @@ if ( ! class_exists( 'WPBookList_General_Functions', false ) ) :
 		 *  @param string $content - Post/Page content.
 		 */
 		public function wpbooklist_set_page_post_template( $content ) {
+
 			global $wpdb;
+
+			require_once CLASS_TRANSLATIONS_DIR . 'class-wpbooklist-translations.php';
+			$trans = new WPBookList_Translations();
 
 			$id            = get_the_id();
 			$blog_url      = get_permalink( get_option( 'page_for_posts' ) );

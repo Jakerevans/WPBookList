@@ -23,7 +23,7 @@ if ( ! class_exists( 'WPBookList_EditBook_Tab', false ) ) :
 		 */
 		public function __construct() {
 			require_once CLASS_DIR . 'class-admin-ui-template.php';
-			require_once CLASS_BOOK_DIR . 'class-edit-book-form.php';
+			require_once CLASS_BOOK_DIR . 'class-wpbooklist-edit-book-form.php';
 
 			// Instantiate the class.
 			$this->template = new WPBookList_Admin_UI_Template();

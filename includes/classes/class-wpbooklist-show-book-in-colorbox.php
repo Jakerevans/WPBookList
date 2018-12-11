@@ -5,7 +5,7 @@
  * @author   Jake Evans
  * @category Admin
  * @package  Includes/Classes
- * @version  6.0.0
+ * @version  6.1.2
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -642,7 +642,7 @@ if ( ! class_exists( 'WPBookList_Show_Book_In_Colorbox', false ) ) :
 				}
 			}
 
-			if ( '1' !== $this->hidefacebook || '1' !== $this->hidetwitter || '1' !== $this->hidemessenger  || '1' !== $this->hidepinterest ) {
+			if ( '1' !== $this->hidefacebook || '1' !== $this->hidetwitter || '1' !== $this->hidemessenger  || '1' !== $this->hidepinterest || '1' !== $this->hideemail ) {
 
 				$string6 = '<p class="wpbooklist-share-text">' . $this->trans->trans_447 . '</p>
 				<div class="wpbooklist-line-4"></div>';
