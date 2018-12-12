@@ -1539,9 +1539,9 @@ if ( ! class_exists( 'WPBookList_Front_End_Library_UI', false ) ) :
 				for ( $i = 1; $i <= ( $whole_pages + $remainder_pages ); $i++ ) {
 
 					if ( ( 1 + ( $this->offset / $this->display_options_actual->booksonpage ) ) === $i ) {
-						$pagination_options_string = $pagination_options_string . '<option value=' . ( ( $i - 1 ) * $this->display_options_actual->booksonpage ) . ' selected>Page ' . $i . '</option>';
+						$pagination_options_string = $pagination_options_string . '<option value=' . ( ( $i - 1 ) * $this->display_options_actual->booksonpage ) . ' selected>'. $this->trans->trans_37 .' ' . $i . '</option>';
 					} else {
-						$pagination_options_string = $pagination_options_string . '<option value=' . ( ( $i - 1 ) * $this->display_options_actual->booksonpage ) . '>Page ' . $i . '</option>';
+						$pagination_options_string = $pagination_options_string . '<option value=' . ( ( $i - 1 ) * $this->display_options_actual->booksonpage ) . '>'. $this->trans->trans_37 .' ' . $i . '</option>';
 					}
 				}
 			}
