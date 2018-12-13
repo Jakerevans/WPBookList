@@ -44,7 +44,7 @@ if ( ! class_exists( 'WPBookList_LibraryStylePaks_Display_Options_Form', false )
 			require_once CLASS_TRANSIENTS_DIR . 'class-wpbooklist-transients.php';
 			$transients          = new WPBookList_Transients();
 			$settings_table_name = $wpdb->prefix . 'wpbooklist_jre_users_table';
-			$transient_name      = 'wpht_' . md5( 'SELECT * FROM ' . $settings_table_name . " WHERE wpuserid = " . $currentwpuser->ID );
+			$transient_name      = 'wpbl_' . md5( 'SELECT * FROM ' . $settings_table_name . " WHERE wpuserid = " . $currentwpuser->ID );
 			$transient_exists    = $transients->existing_transient_check( $transient_name );
 			if ( $transient_exists ) {
 				$this->wpbl_user = $transient_exists;

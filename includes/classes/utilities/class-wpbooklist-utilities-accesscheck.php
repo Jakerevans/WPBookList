@@ -39,7 +39,7 @@ if ( ! class_exists( 'WPBookList_Utilities_Accesscheck', false ) ) :
 			// Make call to Transients class to see if Transient currently exists. If so, retrieve it, if not, make call to create_transient() with all required Parameters.
 			require_once CLASS_TRANSIENTS_DIR . 'class-wpbooklist-transients.php';
 			$transients       = new WPBookList_Transients();
-			$transient_name   = 'wpht_' . md5( 'SELECT * FROM ' . $users_table_name . ' WHERE wpuserid == ' . $wpuserid );
+			$transient_name   = 'wpbl_' . md5( 'SELECT * FROM ' . $users_table_name . ' WHERE wpuserid == ' . $wpuserid );
 			$transient_exists = $transients->existing_transient_check( $transient_name );
 			if ( $transient_exists ) {
 				$this->user = $transient_exists;
@@ -125,7 +125,7 @@ if ( ! class_exists( 'WPBookList_Utilities_Accesscheck', false ) ) :
 			require_once CLASS_TRANSIENTS_DIR . 'class-wpbooklist-transients.php';
 			$transients          = new WPBookList_Transients();
 			$settings_table_name = $wpdb->prefix . 'wpbooklist_jre_users_table';
-			$transient_name      = 'wpht_' . md5( 'SELECT * FROM ' . $settings_table_name . " WHERE role = 'SuperAdmin'" );
+			$transient_name      = 'wpbl_' . md5( 'SELECT * FROM ' . $settings_table_name . " WHERE role = 'SuperAdmin'" );
 			$transient_exists    = $transients->existing_transient_check( $transient_name );
 			if ( $transient_exists ) {
 				$this->wpbl_super_admin = $transient_exists;

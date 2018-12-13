@@ -43,7 +43,7 @@ if ( ! class_exists( 'WPBookList_General_Functions', false ) ) :
 
 			require_once CLASS_UTILITIES_DIR . 'class-wpbooklist-utilities-accesscheck.php';
 			$this->access          = new WPBookList_Utilities_Accesscheck();
-			$this->currentwphtuser = $this->access->wpbooklist_accesscheck_create_role( 'WPBookList Basic User' );
+			$this->currentwpbluser = $this->access->wpbooklist_accesscheck_create_role( 'WPBookList Basic User' );
 
 			// Set the date.
 			require_once CLASS_UTILITIES_DIR . 'class-wpbooklist-utilities-date.php';

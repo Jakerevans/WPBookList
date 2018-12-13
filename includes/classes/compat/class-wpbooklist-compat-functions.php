@@ -1281,7 +1281,7 @@ if ( ! class_exists( 'WPBookList_Compat_Functions', false ) ) :
 			if ( WPBOOKLIST_VERSION_NUM !== $this->version ) {
 				require_once CLASS_UTILITIES_DIR . 'class-wpbooklist-utilities-accesscheck.php';
 				$this->access          = new WPBookList_Utilities_Accesscheck();
-				$this->currentwphtuser = $this->access->wpbooklist_accesscheck_create_role( 'WPBookList Basic User' );
+				$this->currentwpbluser = $this->access->wpbooklist_accesscheck_create_role( 'WPBookList Basic User' );
 
 			}
 		}

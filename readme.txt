@@ -279,7 +279,7 @@ In order to become one of these "Official Translators", I'll need to know your o
 
 **6.1.2** - Removed the 'Filter_var' function call inside of the 'Empty' construct on line 1145 of class-wpbooklist-general-functions.php file.
 
-**6.2.0** - Github Issues #52, #53, Github Issue #1 and #2 in the Custom Fields Extension.
+**6.2.0** - Github Issues #52, #53, Github Issue #1 and #2 in the Custom Fields Extension. Github Issue #59 fixed. Several Translation modifications and some css tweaks in support of the WPBookList Search Extension.
 
 == Upgrade Notice ==
 
@@ -381,8 +381,8 @@ Modified the class-show-book-in-colorbox.php file, lines 130-148, to better dete
 
 =6.1.0= - Added the Comments Extension on the Extensions page, added a 'Clear WPBookList Cache' button on the 4 WPBookList Settings pages, improved the Stats area on the front-end to report the values for an entire Library and not just which page the user is viewing, various other code improvements.
 
-=6.1.1= - Fixed the Similar Titles Section - If the user has specifed Similar Titles when adding a book, those titles will be displayed, as opposed to similar titles found from Amazon. The titles will link to various location in this order of importance: An existing WPBookList Post, An existing WPBookList Page, Amazon, or no link. Also fixed several bugs in the Showing/Hiding of items within the Book View.  
+=6.1.1= - Fixed the Similar Titles Section - If the user has specified Similar Titles when adding a book, those titles will be displayed, as opposed to similar titles found from Amazon. The titles will link to various location in this order of importance: An existing WPBookList Post, An existing WPBookList Page, Amazon, or no link. Also fixed several bugs in the Showing/Hiding of items within the Book View.  
 
 =6.1.2= - Removed the 'Filter_var' function call inside of the 'Empty' construct on line 1145 of class-wpbooklist-general-functions.php file.
 
-=6.2.0= - Github Issues #52, #53, Github Issue #1 and #2 in the Custom Fields Extension.
+=6.2.0= - Github Issues #52, #53, Github Issue #1 and #2 in the Custom Fields Extension. Github Issue #59 fixed. Several Translation modifications and some css tweaks in support of the WPBookList Search Extension.

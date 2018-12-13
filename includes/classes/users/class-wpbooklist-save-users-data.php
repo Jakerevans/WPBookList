@@ -181,7 +181,7 @@ if ( ! class_exists( 'WPBOOKLIST_Save_Users_Data', false ) ) :
 				$transients = new WPBookList_Transients();
 
 				// Transients to check for and delete if they exist.
-				$transient_name1 = 'wpht_' . md5( 'SELECT * FROM ' . $this->users_table . ' ORDER BY firstname' );
+				$transient_name1 = 'wpbl_' . md5( 'SELECT * FROM ' . $this->users_table . ' ORDER BY firstname' );
 
 				// Actually attempting to delete transients.
 				$result1 = $transients->delete_transient( $transient_name1 );
