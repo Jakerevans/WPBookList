@@ -298,19 +298,19 @@ if ( ! class_exists( 'WPBookList_Edit_Book_Form', false ) ) :
 										</p>
 									</div>
 									<div class="wpbooklist-edit-book-delete-page-post-div">';
-										
-										if ( $book->page_yes != null && $book->page_yes != 'false') {
-											$string6 = $string6.'<input data-id="' . $book->page_yes.'" id="wpbooklist-delete-page-input" type="checkbox"/><label for="wpbooklist-edit-delete-page">Delete Page</label><br/>';
-										}
 
-										if ( $book->post_yes != null && $book->post_yes != 'false') {
-											$string6 = $string6.'<input data-id="' . $book->post_yes.'" id="wpbooklist-delete-post-input" type="checkbox"/><label for="wpbooklist-edit-delete-post">Delete Post</label>';
-										}
-										
-									$string6 = $string6.'</div>';
+							if ( null !== $book->page_yes && 'false' !== $book->page_yes ) {
+								$string6 = $string6 . '<input data-id="' . $book->page_yes . '" id="wpbooklist-delete-page-input" type="checkbox"/><label for="wpbooklist-edit-delete-page">' . $this->trans->trans_601 . '</label><br/>';
+							}
+
+							if ( null !== $book->post_yes && 'false' !== $book->post_yes ) {
+								$string6 = $string6 . '<input data-id="' . $book->post_yes . '" id="wpbooklist-delete-post-input" type="checkbox"/><label for="wpbooklist-edit-delete-post">' . $this->trans->trans_602 . '</label>';
+							}
+
+							$string6 = $string6 . '</div>';
 						}
-					
-					$string6 = $string6.'
+
+						$string6 = $string6 . '
 							</div>
 							<div class="wpbooklist-spinner" id="wpbooklist-spinner-' . $key . '"></div>
 							<div class="wpbooklist-delete-result" id="wpbooklist-delete-result-' . $key . '"></div>
@@ -325,17 +325,17 @@ if ( ! class_exists( 'WPBookList_Edit_Book_Form', false ) ) :
 			$string7 = '<div id="wpbooklist-edit_books-pagination-div">
 							<div ';
 
-							$string8 = '';
-							if(count($this->books_actual) == 0) {
-								$string8 = 'style="opacity:0.3; pointer-events:none;"';
-							}
+			$string8 = '';
+			if ( 0 === count( $this->books_actual ) ) {
+				$string8 = 'style="opacity:0.3; pointer-events:none;"';
+			}
 
-							$string9 = ' data-limit="' . $this->limit.'" id="wpbooklist-edit-next-100">Next '.EDIT_PAGE_OFFSET.' Results<img class="wpbooklist-edit-book-icon-next" src="'.ROOT_IMG_ICONS_URL.'next-page.svg"/></div>
-							<div data-limit="' . $this->limit.'" id="wpbooklist-edit-previous-100"><img class="wpbooklist-edit-book-icon-back" src="'.ROOT_IMG_ICONS_URL.'next-page.svg"/>Previous '.EDIT_PAGE_OFFSET.' Results</div>
+			$string9 = ' data-limit="' . $this->limit . '" id="wpbooklist-edit-next-100">' . $this->trans->trans_603 . ' ' . EDIT_PAGE_OFFSET . ' ' . $this->trans->trans_605 . '<img class="wpbooklist-edit-book-icon-next" src="' . ROOT_IMG_ICONS_URL . 'next-page.svg"/></div>
+							<div data-limit="' . $this->limit . '" id="wpbooklist-edit-previous-100"><img class="wpbooklist-edit-book-icon-back" src="' . ROOT_IMG_ICONS_URL . 'next-page.svg"/>' . $this->trans->trans_604 . ' ' . EDIT_PAGE_OFFSET . ' ' . $this->trans->trans_605 . '</div>
 						</div>
 						<div class="wpbooklist-spinner" id="wpbooklist-spinner-pagination"></div>' . $divclose;
 
-			return $string1.$string2.$string3.$string6.$string7.$string8.$string9;
+			return $string1 . $string2 . $string3 . $string6 . $string7 . $string8 . $string9;
 		}
 
 

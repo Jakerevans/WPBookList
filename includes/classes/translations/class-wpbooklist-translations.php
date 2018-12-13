@@ -630,8 +630,11 @@ if ( ! class_exists( 'WPBookList_Translations', false ) ) :
 			$this->trans_598 = __( 'Displaying', 'wpbooklist' );
 			$this->trans_599 = __( 'of', 'wpbooklist' );
 			$this->trans_600 = __( 'Page', 'wpbooklist' );
-
-
+			$this->trans_601 = __( 'Delete Page', 'wpbooklist' );
+			$this->trans_602 = __( 'Delete Post', 'wpbooklist' );
+			$this->trans_603 = __( 'Next', 'wpbooklist' );
+			$this->trans_604 = __( 'Previous', 'wpbooklist' );
+			$this->trans_605 = __( 'Results', 'wpbooklist' );
 
 			// The array of translation strings.
 			$translation_array = array(
