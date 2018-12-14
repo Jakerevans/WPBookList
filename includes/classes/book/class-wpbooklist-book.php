@@ -2144,8 +2144,6 @@ if ( ! class_exists( 'WPBookList_Book', false ) ) :
 				}
 			}
 
-			error_log(print_r($db_insert_array, true));
-
 			// Actually Adding submitted values to the DB.
 			global $wpdb;
 			$result = $wpdb->insert( $this->library, $db_insert_array, $db_mask_insert_array );
@@ -2615,9 +2613,6 @@ if ( ! class_exists( 'WPBookList_Book', false ) ) :
 				'authorfirst'        => $this->finalauthorfirstnames,
 				'authorlast'         => $this->finalauthorlastnames,
 			);
-
-			//error_log( 'Here is the Array being saved to the DB in the edit_book() function in class-wpbooklist-book.php' );
-			//error_log( print_r( $data, true ) );
 
 			$format       = array( '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%f', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%d', '%s', '%s', '%s', '%s', '%s', '%s' );
 			$where        = array( 'ID' => $this->id );

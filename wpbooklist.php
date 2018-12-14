@@ -528,8 +528,12 @@ if ( false !== stripos( plugin_dir_path( __FILE__ ), '/wpbooklist.com' ) ) {
 	// For the REST API update for validating patreon.
 	add_action( 'rest_api_init', function () {
 	  register_rest_route( 'wpbooklist/v1', '/firstkey/(?P<firstkey>[a-z0-9\-]+)/secondkey/(?P<secondkey>[a-z0-9\-]+)', array(
+	  	'callback' => function() {
+	  					// Call the class found in class-wpbooklist-rest-functions.php.
+						$wp_book_list_rest_functions = new WPBookList_Rest_Functions();
+						$wp_book_list_rest_functions->wpbooklist_jre_storytime_patreon_validate_rest_api_notice;
+					  },
 	    'methods' => 'GET',
-	    'callback' => array( $wp_book_list_rest_functions, 'wpbooklist_jre_storytime_patreon_validate_rest_api_notice' ),
 	  ) );
 	});
 

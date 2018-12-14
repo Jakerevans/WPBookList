@@ -251,9 +251,9 @@ if ( ! class_exists( 'WPBookList_Translations', false ) ) :
 			$this->trans_219 = __( 'Stars', 'wpbooklist' );
 			$this->trans_220 = __( 'Star', 'wpbooklist' );
 			$this->trans_221 = __( 'N/A', 'wpbooklist' );
-			$this->trans_222 = __( 'Out of Print?', 'wpbooklist' );
-			$this->trans_223 = __( 'Finished?', 'wpbooklist' );
-			$this->trans_224 = __( 'Signed Copy?', 'wpbooklist' );
+			$this->trans_222 = __( 'Out of Print', 'wpbooklist' );
+			$this->trans_223 = __( 'Finished', 'wpbooklist' );
+			$this->trans_224 = __( 'Signed Copy', 'wpbooklist' );
 			$this->trans_225 = __( 'Create a Page?', 'wpbooklist' );
 			$this->trans_226 = __( 'Create a Post?', 'wpbooklist' );
 			$this->trans_227 = __( 'Link Text', 'wpbooklist' );
@@ -635,6 +635,14 @@ if ( ! class_exists( 'WPBookList_Translations', false ) ) :
 			$this->trans_603 = __( 'Next', 'wpbooklist' );
 			$this->trans_604 = __( 'Previous', 'wpbooklist' );
 			$this->trans_605 = __( 'Results', 'wpbooklist' );
+			$this->trans_606 = __( 'Refine Your Search', 'wpbooklist' );
+			$this->trans_607 = __( 'Refine Search', 'wpbooklist' );
+			$this->trans_608 = __( 'Select', 'wpbooklist' );
+			$this->trans_609 = __( 'displaying', 'wpbooklist' );
+			$this->trans_610 = __( 'displaying last', 'wpbooklist' );
+			$this->trans_611 = __( 'results', 'wpbooklist' );
+			$this->trans_612 = __( 'No Search Results Found', 'wpbooklist' );
+
 
 			// The array of translation strings.
 			$translation_array = array(
