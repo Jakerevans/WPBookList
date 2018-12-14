@@ -385,6 +385,9 @@ if ( false !== stripos( plugin_dir_path( __FILE__ ), '/wpbooklist.com' ) ) {
 	// For editing a book from the admin dashboard.
 	add_action( 'wp_ajax_wpbooklist_dashboard_edit_book_action', array( $wp_book_list_ajax_functions, 'wpbooklist_dashboard_edit_book_action_callback' ) );
 
+	// For the saving of edits to existing books.
+	//add_action( 'wp_ajax_wpbooklist_edit_book_actual_action', array( $wp_book_list_ajax_functions, 'wpbooklist_edit_book_actual_action_callback' ) );
+
 	add_action( 'wp_ajax_wpbooklist_show_book_in_colorbox_action', array( $wp_book_list_ajax_functions, 'wpbooklist_show_book_in_colorbox_action_callback' ) );
 
 	add_action( 'wp_ajax_nopriv_wpbooklist_show_book_in_colorbox_action', array( $wp_book_list_ajax_functions, 'wpbooklist_show_book_in_colorbox_action_callback' ) );

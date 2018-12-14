@@ -2575,49 +2575,158 @@ if ( ! class_exists( 'WPBookList_Book', false ) ) :
 				$post = $this->post_yes;
 			}
 
-			$data = array(
-				'title'              => $this->title,
-				'isbn'               => $this->isbn,
+			// Building array to edit existing book.
+			$data_for_edits = array(
+				'additionalimage1'   => $this->additionalimage1,
+				'additionalimage2'   => $this->additionalimage2,
+				'amazon_detail_page' => $this->amazon_detail_page,
+				'appleibookslink'    => $this->appleibookslink,
+				'asin'               => $this->asin,
 				'author'             => $this->author,
+				'author2'            => $this->author2,
+				'author3'            => $this->author3,
 				'author_url'         => $this->author_url,
 				'sale_url'           => $this->sale_url,
 				'price'              => $this->price,
-				'finished'           => $this->finished,
+				'backcover'          => $this->backcover,
+				'bam_link'           => $this->bam_link,
+				'bn_link'            => $this->bn_link,
+				'book_uid'           => $this->book_uid,
+				'callnumber'         => $this->callnumber,
+				'category'           => $this->category,
+				'copies'             => $this->copies,
+				'country'            => $this->country,
 				'date_finished'      => $this->date_finished,
-				'signed'             => $this->signed,
+				'description'        => $this->description,
+				'edition'            => $this->edition,
+				'finished'           => $this->finished,
 				'first_edition'      => $this->first_edition,
+				'format'             => $this->format,
+				'genres'             => $this->genres,
+				'goodreadslink'      => $this->goodreadslink,
+				'google_preview'     => $this->google_preview,
+				'illustrator'        => $this->illustrator,
 				'image'              => $this->image,
+				'isbn'               => $this->isbn,
+				'isbn13'             => $this->isbn13,
+				'keywords'           => $this->keywords,
+				'kobo_link'          => $this->kobo_link,
+				'language'           => $this->language,
+				'notes'              => $this->notes,
+				'numberinseries'     => $this->numberinseries,
+				'othereditions'      => $this->othereditions,
+				'originalpubyear'    => $this->originalpubyear,
+				'originaltitle'      => $this->originaltitle,
+				'outofprint'         => $this->outofprint,
+				'page_yes'           => $page,
 				'pages'              => $this->pages,
+				'post_yes'           => $post,
 				'pub_year'           => $this->pub_year,
 				'publisher'          => $this->publisher,
-				'category'           => $this->category,
-				'subject'            => $this->subject,
-				'country'            => $this->country,
-				'description'        => $this->description,
-				'notes'              => $this->notes,
 				'rating'             => $this->rating,
-				'page_yes'           => $page,
-				'post_yes'           => $post,
-				'itunes_page'        => $this->itunes_page,
-				'google_preview'     => $this->google_preview,
-				'amazon_detail_page' => $this->amazon_detail_page,
 				'review_iframe'      => $this->review_iframe,
+				'series'             => $this->series,
+				'shortdescription'   => $this->shortdescription,
+				'signed'             => $this->signed,
+				'similarbooks'       => $this->similarbooks,
 				'similar_products'   => $this->similar_products,
-				'book_uid'           => $this->book_uid,
-				'lendable'           => $this->lendable,
-				'copies'             => $this->copies,
+				'subgenre'           => $this->subgenre,
+				'subject'            => $this->subject,
+				'title'              => $this->title,
 				'woocommerce'        => $this->wooid,
-				'bn_link'            => $this->bnbuylink,
-				'bam_link'           => $this->booksamillionbuylink,
-				'kobo_link'          => $this->kobo_link,
-				'authorfirst'        => $this->finalauthorfirstnames,
-				'authorlast'         => $this->finalauthorlastnames,
 			);
 
-			$format       = array( '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%f', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%d', '%s', '%s', '%s', '%s', '%s', '%s' );
+			// Building mask array to edit existing book.
+			$data_for_edits_format = array(
+				'%s',
+				'%s',
+				'%s',
+				'%s',
+				'%s',
+				'%s',
+				'%s',
+				'%s',
+				'%s',
+				'%s',
+				'%s',
+				'%s',
+				'%s',
+				'%s',
+				'%s',
+				'%s',
+				'%s',
+				'%d',
+				'%s',
+				'%s',
+				'%s',
+				'%s',
+				'%s',
+				'%s',
+				'%s',
+				'%s',
+				'%s',
+				'%s',
+				'%s',
+				'%s',
+				'%s',
+				'%s',
+				'%s',
+				'%s',
+				'%s',
+				'%s',
+				'%s',
+				'%s',
+				'%d',
+				'%s',
+				'%s',
+				'%s',
+				'%d',
+				'%s',
+				'%d',
+				'%s',
+				'%f',
+				'%s',
+				'%s',
+				'%s',
+				'%s',
+				'%s',
+				'%s',
+				'%s',
+				'%s',
+				'%s',
+				'%s',
+			);
+
+			// Now adding in any custom fields to above arrays for insertion into DB.
+			$this->user_options = $wpdb->get_row( 'SELECT * FROM ' . $wpdb->prefix . 'wpbooklist_jre_user_options' );
+			$this->user_options->customfields;
+
+			// Loop through the Custom Fields.
+			if ( false !== stripos( $this->user_options->customfields, '--' ) ) {
+				$fields = explode( '--', $this->user_options->customfields );
+
+				// Loop through each custom field entry.
+				foreach ( $fields as $key => $entry ) {
+
+					if ( false !== stripos( $entry, ';' ) ) {
+						$entry_details = explode( ';', $entry );
+
+						// All kinds of checks to make sure good value exists.
+						if ( array_key_exists( 0, $entry_details ) && isset( $entry_details[0] ) && '' !== $entry_details[0] && null !== $entry_details[0] ) {
+
+							// Add new value with key into DB array.
+							$data_for_edits[ $entry_details[0] ] = $this->book_array[ $entry_details[0] ];
+
+							// Adding a mask for new value.
+							array_push( $data_for_edits_format, '%s' );
+						}
+					}
+				}
+			}
+
 			$where        = array( 'ID' => $this->id );
 			$where_format = array( '%d' );
-			$result       = $wpdb->update( $this->library, $data, $where, $format, $where_format );
+			$result       = $wpdb->update( $this->library, $data_for_edits, $where, $data_for_edits_format, $where_format );
 
 			// Now delete the colorbox transient.
 			$transient_colorbox_name = 'wpbl_' . md5( 'SELECT * FROM ' . $this->library . ' WHERE ID = ' . $this->id );

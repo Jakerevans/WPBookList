@@ -1454,8 +1454,8 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 				}
 			}
 
-			//error_log( 'Here is the Array being sent to Class-wpbooklist-book.php' );
-			//error_log( print_r( $book_array, true ) );
+			error_log( 'Here is the Array being sent to Class-wpbooklist-book.php to Edit a book:' );
+			error_log( print_r( $book_array, true ) );
 
 			require_once CLASS_BOOK_DIR . 'class-wpbooklist-book.php';
 			$book_class  = new WPBookList_Book( 'edit', $book_array, $bookid );
@@ -1541,7 +1541,7 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 
 			$result = $wpdb->query( "DELETE FROM `{$wpdb->prefix}options` WHERE `option_name` LIKE ('%\_wpbl\_%')" );
 
-			error_log($result);
+			wp_die( $result );
 
 		}
 
@@ -3155,7 +3155,7 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 
 		/**
 		 * Callback function editing a book.
-		 */
+		 
 		public function wpbooklist_edit_book_actual_action_callback() {
 			global $wpdb;
 			check_ajax_referer( 'wpbooklist_edit_book_actual_action_callback', 'security' );
@@ -3500,6 +3500,9 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 				'kobobuylink'          => $kobobuylink,
 			);
 
+			error_log( 'Here is the Array being sent to Class-wpbooklist-book.php -actual' );
+			error_log( print_r( $book_array, true ) );
+
 			require_once CLASS_BOOK_DIR . 'class-wpbooklist-book.php';
 			$book_class = new WPBookList_Book( 'edit', $book_array, $book_id );
 
@@ -3535,6 +3538,7 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 
 			wp_die();
 		}
+		*/
 
 		/**
 		 * Callback function for deleting books.
