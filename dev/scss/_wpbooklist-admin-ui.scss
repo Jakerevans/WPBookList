@@ -9,7 +9,7 @@
 
 
 /*
- * BEGIN ADMIN CONTAINER BONES, ADVERTISMENT, AND DASHBOARD ICON CSS
+ * BEGIN ADMIN CONTAINER BONES, ADVERTISMENT, LICENSE UI ELEMENTS, AND DASHBOARD ICON CSS
  */
 .wpbooklist-admin-top-container, .wpbooklist-admin-advert-container{
     @extend %wpbooklist-admin-containers;
@@ -89,8 +89,20 @@
     @extend %wpbooklist-default-buttons-style-hover;
 }
 
+.wpbooklist-extension-licence-key-plugins-page-input{
+    margin-right:5px;
+}
+
+.wpbooklist-extension-licence-key-dashboard-input{
+    min-width:300px;
+}
+
+.wpbooklist-extension-licence-key-dashboard-form{
+    padding-bottom:10px;
+}
+
 /*
- * END ADMIN CONTAINER BONES, ADVERTISMENT, AND DASHBOARD ICON CSS
+ * BEGIN ADMIN CONTAINER BONES, ADVERTISMENT, LICENSE UI ELEMENTS, AND DASHBOARD ICON CSS
  */
 
 
