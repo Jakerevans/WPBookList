@@ -471,7 +471,7 @@ if ( ! class_exists( 'WPBookList_Book_Form', false ) ) :
 									<img class="wpbooklist-icon-image-question" data-label="book-form-rating" src="' . ROOT_IMG_ICONS_URL . 'question-black.svg">
 									<label class="wpbooklist-question-icon-label" for="book-rating">' . $this->trans->trans_211 . '</label>
 									<select class="wpbooklist-addbook-select-default" id="wpbooklist-addbook-select-book-rating" >
-										<option selected disabled default>' . $this->trans->trans_212 . '</option>
+										<option value="default" selected disabled default>' . $this->trans->trans_212 . '</option>
 										<option value="5">' . $this->trans->trans_213 . ' ' . $this->trans->trans_219 . '</option>
 										<option value="4.5">' . $this->trans->trans_214 . ' <span>' . $this->trans->trans_218 . '</span> ' . $this->trans->trans_219 . '  </option>
 										<option value="4">' . $this->trans->trans_214 . ' ' . $this->trans->trans_219 . '</option>

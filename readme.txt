@@ -279,7 +279,7 @@ In order to become one of these "Official Translators", I'll need to know your o
 
 **6.1.2** - Removed the 'Filter_var' function call inside of the 'Empty' construct on line 1145 of class-wpbooklist-general-functions.php file.
 
-**6.2.0** - Github Issues #52, #53, Github Issue #1 and #2 in the Custom Fields Extension. Github Issue #59 fixed. Several Translation modifications and some css tweaks in support of the WPBookList Search Extension. Completed Github Issue # 58.
+**6.2.0** - Github Issues #52, #53, Github Issue #1 and #2 in the Custom Fields Extension. Github Issue #59 fixed. Several Translation modifications and some css tweaks in support of the WPBookList Search Extension. Completed Github Issue # 58. Completed github issue #61
 
 == Upgrade Notice ==
 
@@ -385,4 +385,4 @@ Modified the class-show-book-in-colorbox.php file, lines 130-148, to better dete
 
 =6.1.2= - Removed the 'Filter_var' function call inside of the 'Empty' construct on line 1145 of class-wpbooklist-general-functions.php file.
 
-=6.2.0= - Github Issues #52, #53, Github Issue #1 and #2 in the Custom Fields Extension. Github Issue #59 fixed. Several Translation modifications and some css tweaks in support of the WPBookList Search Extension. Completed Github Issue # 58
+=6.2.0= - Github Issues #52, #53, Github Issue #1 and #2 in the Custom Fields Extension. Github Issue #59 fixed. Several Translation modifications and some css tweaks in support of the WPBookList Search Extension. Completed Github Issue # 58, Completed github issue #61

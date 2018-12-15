@@ -2144,6 +2144,9 @@ if ( ! class_exists( 'WPBookList_Book', false ) ) :
 				}
 			}
 
+			error_log( 'The array of Book values RIGHT before being added as a new book in DB:' );
+			error_log( print_r( $db_insert_array,true ) );
+
 			// Actually Adding submitted values to the DB.
 			global $wpdb;
 			$result = $wpdb->insert( $this->library, $db_insert_array, $db_mask_insert_array );
@@ -2724,6 +2727,11 @@ if ( ! class_exists( 'WPBookList_Book', false ) ) :
 				}
 			}
 
+			error_log( 'The array of Book values RIGHT before being updated/edited in DB:' );
+			error_log( print_r( $data_for_edits,true ) );
+
+
+			// Now actually updating the book in the db.
 			$where        = array( 'ID' => $this->id );
 			$where_format = array( '%d' );
 			$result       = $wpdb->update( $this->library, $data_for_edits, $where, $data_for_edits_format, $where_format );
