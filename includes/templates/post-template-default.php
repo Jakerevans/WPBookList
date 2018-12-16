@@ -208,7 +208,7 @@ if ( null === $options_post_row->hideauthor || '0' === $options_post_row->hideau
 
 if ( ( null !== $options_post_row->enablepurchase && '0' !== $options_post_row->enablepurchase ) && null !== $book_row->price && null !== $book_row->author_url ) {
 	$string19 = '<div id="wpbl-posttd-book-details-9">
-		<span>' . $trans->trans_14 . ': </span>' . $book_row->price;
+		<span>' . $trans->trans_593 . ': </span>' . $book_row->price;
 	$string20 = '</div>';
 }
 

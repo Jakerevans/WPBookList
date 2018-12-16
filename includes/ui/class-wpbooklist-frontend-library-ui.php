@@ -1472,7 +1472,6 @@ if ( ! class_exists( 'WPBookList_Front_End_Library_UI', false ) ) :
 
 				$sales_array = array( $book->author_url, $book->price );
 
-
 				if ( '1' === $this->display_options_actual->enablepurchase && ( null !== $book->price && '' !== $book->price ) && '1' !== $this->display_options_actual->hidefrontendbuyprice ) {
 					if ( has_filter( 'wpbooklist_append_to_frontend_library_price_purchase' ) ) {
 						$string2 = $string2 . apply_filters( 'wpbooklist_append_to_frontend_library_price_purchase', $sales_array );

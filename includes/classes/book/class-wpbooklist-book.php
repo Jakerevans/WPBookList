@@ -729,10 +729,6 @@ if ( ! class_exists( 'WPBookList_Book', false ) ) :
 				$this->apireport = $this->apireport . 'Results for Unknown Book: ';
 			}
 
-
-
-
-
 			// Before we do anything else, let's make sure we don't have a saved transient for this book - if we do, no sense in making a new api call - will cut down on requests. Also, do not use a transient at all if we're editing a book, and try to delete an existing transient in the 'else' part before creating a new one.
 			$transient_name   = 'wpbl_' . md5( $this->isbn . '_amazon' );
 			$transient_exists = $this->transients->existing_transient_check( $transient_name );

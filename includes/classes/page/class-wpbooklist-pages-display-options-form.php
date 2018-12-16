@@ -486,8 +486,14 @@ if ( ! class_exists( 'WPBookList_Pages_Display_Options_Form', false ) ) :
 							<input type="checkbox" name="hide-library-display-form-quote"></input>
 						</div>
 					</div>
-				</div>
-				<div id="wpbooklist-display-opt-check-div">
+				</div>';
+
+			// This filter allows the addition of one or more rows of items into the 'Book View Display Options' form.
+			if ( has_filter( 'wpbooklist_add_to_pages_display_options' ) ) {
+				$string1 = $string1 . apply_filters( 'wpbooklist_add_to_pages_display_options', null );
+			}
+
+			$string1 = $string1 . '<div id="wpbooklist-display-opt-check-div">
                     <label>' . $this->trans->trans_257 . '</label>
                     <input id="wpbooklist-check-all" type="checkbox" name="check-all">
                     <label>' . $this->trans->trans_258 . '</label>

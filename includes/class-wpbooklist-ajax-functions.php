@@ -1891,14 +1891,17 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 				$sortoption = filter_var( wp_unslash( $_POST['sortoption'] ), FILTER_SANITIZE_STRING );
 			}
 
+			$hidefrontendbuyimg = null;
 			if ( isset( $_POST['hidefrontendbuyimg'] ) ) {
 				$hidefrontendbuyimg = filter_var( wp_unslash( $_POST['hidefrontendbuyimg'] ), FILTER_SANITIZE_STRING );
 			}
 
+			$hidefrontendbuyprice = null;
 			if ( isset( $_POST['hidefrontendbuyprice'] ) ) {
 				$hidefrontendbuyprice = filter_var( wp_unslash( $_POST['hidefrontendbuyprice'] ), FILTER_SANITIZE_STRING );
 			}
 
+			$enablepurchase = null;
 			if ( isset( $_POST['enablepurchase'] ) ) {
 				$enablepurchase = filter_var( wp_unslash( $_POST['enablepurchase'] ), FILTER_SANITIZE_STRING );
 			}
@@ -2142,10 +2145,12 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 				$hideitunespurchase = filter_var( wp_unslash( $_POST['hideitunespurchase'] ), FILTER_SANITIZE_STRING );
 			}
 
+			$hidecolorboxbuyimg = null;
 			if ( isset( $_POST['hidecolorboxbuyimg'] ) ) {
 				$hidecolorboxbuyimg = filter_var( wp_unslash( $_POST['hidecolorboxbuyimg'] ), FILTER_SANITIZE_STRING );
 			}
 
+			$hidecolorboxbuyprice = null;
 			if ( isset( $_POST['hidecolorboxbuyprice'] ) ) {
 				$hidecolorboxbuyprice = filter_var( wp_unslash( $_POST['hidecolorboxbuyprice'] ), FILTER_SANITIZE_STRING );
 			}
@@ -2174,13 +2179,9 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 				$booksonpage = filter_var( wp_unslash( $_POST['booksonpage'] ), FILTER_SANITIZE_NUMBER_INT );
 			}
 
+			$enablepurchase = null;
 			if ( isset( $_POST['enablepurchase'] ) ) {
 				$enablepurchase = filter_var( wp_unslash( $_POST['enablepurchase'] ), FILTER_SANITIZE_STRING );
-			}
-
-			$customfieldsarray = null;
-			if ( isset( $_POST['customfieldsarray'] ) ) {
-				$customfieldsarray = filter_var_array( wp_unslash( $_POST['customfieldsarray'] ), FILTER_SANITIZE_STRING );
 			}
 
 			$settings_array = array(
@@ -2237,7 +2238,6 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 				'hidesubgenre'         => $hidesubgenre,
 				'hidetwitter'          => $hidetwitter,
 				'sortoption'           => $sortoption,
-				'customfieldsarray'    => $customfieldsarray,
 			);
 
 			require_once CLASS_DIR . 'class-display-options.php';
@@ -2441,18 +2441,22 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 				$hideitunespurchase = filter_var( wp_unslash( $_POST['hideitunespurchase'] ), FILTER_SANITIZE_STRING );
 			}
 
+			$hidefrontendbuyimg = null;
 			if ( isset( $_POST['hidefrontendbuyimg'] ) ) {
 				$hidefrontendbuyimg = filter_var( wp_unslash( $_POST['hidefrontendbuyimg'] ), FILTER_SANITIZE_STRING );
 			}
 
+			$hidecolorboxbuyimg = null;
 			if ( isset( $_POST['hidecolorboxbuyimg'] ) ) {
 				$hidecolorboxbuyimg = filter_var( wp_unslash( $_POST['hidecolorboxbuyimg'] ), FILTER_SANITIZE_STRING );
 			}
 
+			$hidecolorboxbuyprice = null;
 			if ( isset( $_POST['hidecolorboxbuyprice'] ) ) {
 				$hidecolorboxbuyprice = filter_var( wp_unslash( $_POST['hidecolorboxbuyprice'] ), FILTER_SANITIZE_STRING );
 			}
 
+			$hidefrontendbuyprice = null;
 			if ( isset( $_POST['hidefrontendbuyprice'] ) ) {
 				$hidefrontendbuyprice = filter_var( wp_unslash( $_POST['hidefrontendbuyprice'] ), FILTER_SANITIZE_STRING );
 			}
@@ -2533,61 +2537,61 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 				$hideadditionalimgs = filter_var( wp_unslash( $_POST['hideadditionalimgs'] ), FILTER_SANITIZE_STRING );
 			}
 
-			$customfieldsarray = null;
-			if ( isset( $_POST['customfieldsarray'] ) ) {
-				$customfieldsarray = filter_var_array(  wp_unslash( $_POST['customfieldsarray'] ), FILTER_SANITIZE_STRING );
+			$enablepurchase = null;
+			if ( isset( $_POST['enablepurchase'] ) ) {
+				$enablepurchase = filter_var( wp_unslash( $_POST['enablepurchase'] ), FILTER_SANITIZE_STRING );
 			}
 
-
-
 			$settings_array = array(
-				'hideadditionalimgs' => $hideadditionalimgs,
-				'hideamazonpurchase' => $hideamazonpurchase,
-				'hideamazonreview'   => $hideamazonreview,
-				'hideasin'           => $hideasin,
-				'hideauthor'         => $hideauthor,
-				'hidebnpurchase'     => $hidebnpurchase,
-				'hidefinished'       => $hidefinished,
-				'hidepages'          => $hidepages,
-				'hidebooktitle'      => $hidebooktitle,
-				'hidebampurchase'    => $hidebampurchase,
-				'hidecallnumber'     => $hidecallnumber,
-				'hidecountry'        => $hidecountry,
-				'hidefirstedition'   => $hidefirstedition,
-				'hideemail'          => $hideemail,
-				'hidemessenger'      => $hidemessenger,
-				'hidefacebook'       => $hidefacebook,
-				'hidefeaturedtitles' => $hidefeaturedtitles,
-				'hideformat'         => $hideformat,
-				'hidebookimage'      => $hidebookimage,
-				'hidedescription'    => $hidedescription,
-				'hidegenres'         => $hidegenres,
-				'hidegooglepurchase' => $hidegooglepurchase,
-				'hideillustrator'    => $hideillustrator,
-				'hideisbn10'         => $hideisbn10,
-				'hideisbn13'         => $hideisbn13,
-				'hideitunespurchase' => $hideitunespurchase,
-				'hidekeywords'       => $hidekeywords,
-				'hidekobopurchase'   => $hidekobopurchase,
-				'hidelanguage'       => $hidelanguage,
-				'hidenotes'          => $hidenotes,
-				'hidenumberinseries' => $hidenumberinseries,
-				'hideorigpubyear'    => $hideorigpubyear,
-				'hideorigtitle'      => $hideorigtitle,
-				'hideothereditions'  => $hideothereditions,
-				'hideoutofprint'     => $hideoutofprint,
-				'hidepinterest'      => $hidepinterest,
-				'hidepubdate'        => $hidepubdate,
-				'hidepublisher'      => $hidepublisher,
-				'hideseries'         => $hideseries,
-				'hideshortdesc'      => $hideshortdesc,
-				'hidesigned'         => $hidesigned,
-				'hidesimilar'        => $hidesimilar,
-				'hidesubgenre'       => $hidesubgenre,
-				'hidetwitter'        => $hidetwitter,
-				'hiderating'         => $hiderating,
-				'hidequote'          => $hidequote,
-				'customfieldsarray'  => $customfieldsarray,
+				'hideadditionalimgs'   => $hideadditionalimgs,
+				'hideamazonpurchase'   => $hideamazonpurchase,
+				'hideamazonreview'     => $hideamazonreview,
+				'hideasin'             => $hideasin,
+				'hideauthor'           => $hideauthor,
+				'hidebnpurchase'       => $hidebnpurchase,
+				'hidefinished'         => $hidefinished,
+				'hidepages'            => $hidepages,
+				'hidebooktitle'        => $hidebooktitle,
+				'hidebampurchase'      => $hidebampurchase,
+				'hidecallnumber'       => $hidecallnumber,
+				'hidecountry'          => $hidecountry,
+				'hidefirstedition'     => $hidefirstedition,
+				'hideemail'            => $hideemail,
+				'hidemessenger'        => $hidemessenger,
+				'hidefacebook'         => $hidefacebook,
+				'hidefeaturedtitles'   => $hidefeaturedtitles,
+				'hideformat'           => $hideformat,
+				'hidebookimage'        => $hidebookimage,
+				'hidedescription'      => $hidedescription,
+				'hidegenres'           => $hidegenres,
+				'hidegooglepurchase'   => $hidegooglepurchase,
+				'hideillustrator'      => $hideillustrator,
+				'hideisbn10'           => $hideisbn10,
+				'hideisbn13'           => $hideisbn13,
+				'hideitunespurchase'   => $hideitunespurchase,
+				'hidekeywords'         => $hidekeywords,
+				'hidekobopurchase'     => $hidekobopurchase,
+				'hidelanguage'         => $hidelanguage,
+				'hidenotes'            => $hidenotes,
+				'hidenumberinseries'   => $hidenumberinseries,
+				'hideorigpubyear'      => $hideorigpubyear,
+				'hideorigtitle'        => $hideorigtitle,
+				'hideothereditions'    => $hideothereditions,
+				'hideoutofprint'       => $hideoutofprint,
+				'hidepinterest'        => $hidepinterest,
+				'hidepubdate'          => $hidepubdate,
+				'hidepublisher'        => $hidepublisher,
+				'hideseries'           => $hideseries,
+				'hideshortdesc'        => $hideshortdesc,
+				'hidesigned'           => $hidesigned,
+				'hidesimilar'          => $hidesimilar,
+				'hidesubgenre'         => $hidesubgenre,
+				'hidetwitter'          => $hidetwitter,
+				'hiderating'           => $hiderating,
+				'hidequote'            => $hidequote,
+				'hidefrontendbuyimg'   => $hidefrontendbuyimg,
+				'hidefrontendbuyprice' => $hidefrontendbuyprice,
+				'enablepurchase'       => $enablepurchase,
 			);
 
 			require_once CLASS_DIR . 'class-display-options.php';
@@ -2791,18 +2795,22 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 				$hideitunespurchase = filter_var( wp_unslash( $_POST['hideitunespurchase'] ), FILTER_SANITIZE_STRING );
 			}
 
+			$hidefrontendbuyimg = null;
 			if ( isset( $_POST['hidefrontendbuyimg'] ) ) {
 				$hidefrontendbuyimg = filter_var( wp_unslash( $_POST['hidefrontendbuyimg'] ), FILTER_SANITIZE_STRING );
 			}
 
+			$hidecolorboxbuyimg = null;
 			if ( isset( $_POST['hidecolorboxbuyimg'] ) ) {
 				$hidecolorboxbuyimg = filter_var( wp_unslash( $_POST['hidecolorboxbuyimg'] ), FILTER_SANITIZE_STRING );
 			}
 
+			$hidecolorboxbuyprice = null;
 			if ( isset( $_POST['hidecolorboxbuyprice'] ) ) {
 				$hidecolorboxbuyprice = filter_var( wp_unslash( $_POST['hidecolorboxbuyprice'] ), FILTER_SANITIZE_STRING );
 			}
 
+			$hidefrontendbuyprice = null;
 			if ( isset( $_POST['hidefrontendbuyprice'] ) ) {
 				$hidefrontendbuyprice = filter_var( wp_unslash( $_POST['hidefrontendbuyprice'] ), FILTER_SANITIZE_STRING );
 			}
@@ -2883,59 +2891,61 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 				$hideadditionalimgs = filter_var( wp_unslash( $_POST['hideadditionalimgs'] ), FILTER_SANITIZE_STRING );
 			}
 
-			$customfieldsarray = null;
-			if ( isset( $_POST['customfieldsarray'] ) ) {
-				$customfieldsarray = filter_var_array( wp_unslash( $_POST['customfieldsarray'] ), FILTER_SANITIZE_STRING );
+			$enablepurchase = null;
+			if ( isset( $_POST['enablepurchase'] ) ) {
+				$enablepurchase = filter_var( wp_unslash( $_POST['enablepurchase'] ), FILTER_SANITIZE_STRING );
 			}
 
 			$settings_array = array(
-				'hideadditionalimgs' => $hideadditionalimgs,
-				'hideamazonpurchase' => $hideamazonpurchase,
-				'hideamazonreview'   => $hideamazonreview,
-				'hideasin'           => $hideasin,
-				'hideauthor'         => $hideauthor,
-				'hidebnpurchase'     => $hidebnpurchase,
-				'hidefinished'       => $hidefinished,
-				'hidepages'          => $hidepages,
-				'hidebooktitle'      => $hidebooktitle,
-				'hidebampurchase'    => $hidebampurchase,
-				'hidecallnumber'     => $hidecallnumber,
-				'hidecountry'        => $hidecountry,
-				'hidefirstedition'   => $hidefirstedition,
-				'hideemail'          => $hideemail,
-				'hidemessenger'      => $hidemessenger,
-				'hidefacebook'       => $hidefacebook,
-				'hidefeaturedtitles' => $hidefeaturedtitles,
-				'hideformat'         => $hideformat,
-				'hidebookimage'      => $hidebookimage,
-				'hidedescription'    => $hidedescription,
-				'hidegenres'         => $hidegenres,
-				'hidegooglepurchase' => $hidegooglepurchase,
-				'hideillustrator'    => $hideillustrator,
-				'hideisbn10'         => $hideisbn10,
-				'hideisbn13'         => $hideisbn13,
-				'hideitunespurchase' => $hideitunespurchase,
-				'hidekeywords'       => $hidekeywords,
-				'hidekobopurchase'   => $hidekobopurchase,
-				'hidelanguage'       => $hidelanguage,
-				'hidenotes'          => $hidenotes,
-				'hidenumberinseries' => $hidenumberinseries,
-				'hideorigpubyear'    => $hideorigpubyear,
-				'hideorigtitle'      => $hideorigtitle,
-				'hideothereditions'  => $hideothereditions,
-				'hideoutofprint'     => $hideoutofprint,
-				'hidepinterest'      => $hidepinterest,
-				'hidepubdate'        => $hidepubdate,
-				'hidepublisher'      => $hidepublisher,
-				'hideseries'         => $hideseries,
-				'hideshortdesc'      => $hideshortdesc,
-				'hidesigned'         => $hidesigned,
-				'hidesimilar'        => $hidesimilar,
-				'hidesubgenre'       => $hidesubgenre,
-				'hidetwitter'        => $hidetwitter,
-				'hiderating'         => $hiderating,
-				'hidequote'          => $hidequote,
-				'customfieldsarray'  => $customfieldsarray,
+				'hideadditionalimgs'   => $hideadditionalimgs,
+				'hideamazonpurchase'   => $hideamazonpurchase,
+				'hideamazonreview'     => $hideamazonreview,
+				'hideasin'             => $hideasin,
+				'hideauthor'           => $hideauthor,
+				'hidebnpurchase'       => $hidebnpurchase,
+				'hidefinished'         => $hidefinished,
+				'hidepages'            => $hidepages,
+				'hidebooktitle'        => $hidebooktitle,
+				'hidebampurchase'      => $hidebampurchase,
+				'hidecallnumber'       => $hidecallnumber,
+				'hidecountry'          => $hidecountry,
+				'hidefirstedition'     => $hidefirstedition,
+				'hideemail'            => $hideemail,
+				'hidemessenger'        => $hidemessenger,
+				'hidefacebook'         => $hidefacebook,
+				'hidefeaturedtitles'   => $hidefeaturedtitles,
+				'hideformat'           => $hideformat,
+				'hidebookimage'        => $hidebookimage,
+				'hidedescription'      => $hidedescription,
+				'hidegenres'           => $hidegenres,
+				'hidegooglepurchase'   => $hidegooglepurchase,
+				'hideillustrator'      => $hideillustrator,
+				'hideisbn10'           => $hideisbn10,
+				'hideisbn13'           => $hideisbn13,
+				'hideitunespurchase'   => $hideitunespurchase,
+				'hidekeywords'         => $hidekeywords,
+				'hidekobopurchase'     => $hidekobopurchase,
+				'hidelanguage'         => $hidelanguage,
+				'hidenotes'            => $hidenotes,
+				'hidenumberinseries'   => $hidenumberinseries,
+				'hideorigpubyear'      => $hideorigpubyear,
+				'hideorigtitle'        => $hideorigtitle,
+				'hideothereditions'    => $hideothereditions,
+				'hideoutofprint'       => $hideoutofprint,
+				'hidepinterest'        => $hidepinterest,
+				'hidepubdate'          => $hidepubdate,
+				'hidepublisher'        => $hidepublisher,
+				'hideseries'           => $hideseries,
+				'hideshortdesc'        => $hideshortdesc,
+				'hidesigned'           => $hidesigned,
+				'hidesimilar'          => $hidesimilar,
+				'hidesubgenre'         => $hidesubgenre,
+				'hidetwitter'          => $hidetwitter,
+				'hiderating'           => $hiderating,
+				'hidequote'            => $hidequote,
+				'hidefrontendbuyimg'   => $hidefrontendbuyimg,
+				'hidefrontendbuyprice' => $hidefrontendbuyprice,
+				'enablepurchase'       => $enablepurchase,
 			);
 
 			require_once CLASS_DIR . 'class-display-options.php';
