@@ -19,6 +19,41 @@ if ( ! class_exists( 'WPBookList_General_Functions', false ) ) :
 	class WPBookList_General_Functions {
 
 		/**
+		 * This function registers the 'wpbooklist_deactivate_all_extensions_later_hook' function with the "update_option_active_plugins" hook upon deactivaion of this core WPBookList plugin.
+		 */
+		public function wpbooklist_deactivate_all_extensions() {
+			add_action( 'update_option_active_plugins', array( $this, 'wpbooklist_deactivate_all_extensions_later_hook' ) );
+		}
+
+		/**
+		 * This function does the actual deactivation of the WPBookList Extensions, when the user deactivates the core WPBookList plugin.
+		 */
+		public function wpbooklist_deactivate_all_extensions_later_hook() {
+
+			$dependent_array = array(
+				'wpbooklist-affiliates/wpbooklist-affiliates.php',
+				'wpbooklist-bookfinder/wpbooklist-bookfinder.php',
+				'wpbooklist-branding/wpbooklist-branding.php',
+				'wpbooklist-bulkbookupload/wpbooklist-bulkbookupload.php',
+				'wpbooklist-carousel/wpbooklist-carousel.php',
+				'wpbooklist-categories/wpbooklist-categories.php',
+				'wpbooklist-comments/wpbooklist-comments.php',
+				'wpbooklist-customfields/wpbooklist-customfields.php',
+				'wpbooklist-goodreads/wpbooklist-goodreads.php',
+				'wpbooklist-kindlepreview/wpbooklist-kindlepreview.php',
+				'wpbooklist-googlepreview/wpbooklist-googlepreview.php',
+				'wpbooklist-mobile/wpbooklist-mobile.php',
+				'wpbooklist-search/wpbooklist-search.php',
+				'wpbooklist-storefront/wpbooklist-storefront.php',
+				'wpbooklist-stylizer/wpbooklist-stylizer.php',
+			);
+
+			foreach ( $dependent_array as $key => $extension ) {
+				deactivate_plugins( $extension );
+			}
+		}
+
+		/**
 		 * This function hides the admin bar if the logged-in user is a basic WPBookList User.
 		 */
 		public function wpbooklist_hide_admin_bar_if_basic_wpbooklist_user() {

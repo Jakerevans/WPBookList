@@ -33,11 +33,13 @@ global $wpdb;
 
 /* CONSTANT DEFINITIONS */
 
-	// Root plugin folder directory.
+// Root plugin folder directory.
+if ( ! defined( 'WPBOOKLIST_VERSION_NUM' ) ) {
 	define( 'WPBOOKLIST_VERSION_NUM', '6.1.2' );
+}
 
-	// Root plugin folder directory.
-	define( 'ROOT_DIR', plugin_dir_path( __FILE__ ) );
+// Root plugin folder directory.
+define( 'ROOT_DIR', plugin_dir_path( __FILE__ ) );
 
 // Root WordPress Plugin Directory - this conditional is to accomodate the wpbooklist.com website.
 if ( false !== stripos( plugin_dir_path( __FILE__ ), '/wpbooklist.com' ) ) {
@@ -299,6 +301,14 @@ if ( false !== stripos( plugin_dir_path( __FILE__ ), '/wpbooklist.com' ) ) {
 
 	// Creates the WPBookList Users table and the default WPBookList User.
 	register_activation_hook( __FILE__, array( $wp_book_list_general_functions, 'wpbooklist_jre_create_user_table' ) );
+
+	// 
+	register_deactivation_hook( __FILE__, array( $wp_book_list_general_functions, 'wpbooklist_deactivate_all_extensions' ) );
+
+
+
+
+
 
 	// Adding the front-end library ui css file.
 	add_action( 'wp_enqueue_scripts', array( $wp_book_list_general_functions, 'wpbooklist_jre_frontend_library_ui_default_style' ) );

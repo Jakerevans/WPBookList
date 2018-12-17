@@ -642,6 +642,32 @@ if ( ! class_exists( 'WPBookList_Translations', false ) ) :
 			$this->trans_610 = __( 'displaying last', 'wpbooklist' );
 			$this->trans_611 = __( 'results', 'wpbooklist' );
 			$this->trans_612 = __( 'No Search Results Found', 'wpbooklist' );
+			$this->trans_613 = __( 'Enter your License Key Here', 'wpbooklist-textdomain' );
+			$this->trans_614 = __( 'Save', 'wpbooklist-textdomain' );
+			$this->trans_615 = __( 'Uh-Oh! Looks like you haven\'t entered your License Key for the WPBookList Search Extension yet! Enter your License Key below to begin using WPBookList Search.', 'wpbooklist-textdomain' );
+			$this->trans_616 = __( 'Save License Key', 'wpbooklist-textdomain' );
+			$this->trans_617 = __( 'Uh-Oh! Looks like you haven\'t entered your License Key for the WPBookList Affiliates Extension yet! Enter your License Key below to begin using WPBookList Affiliates.', 'wpbooklist-textdomain' );
+			$this->trans_618 = __( 'Uh-Oh! Looks like you haven\'t entered your License Key for the WPBookList BookFinder Extension yet! Enter your License Key below to begin using WPBookList BookFinder.', 'wpbooklist-textdomain' );
+			$this->trans_619 = __( 'Uh-Oh! Looks like you haven\'t entered your License Key for the WPBookList Bulk-Book Upload Extension yet! Enter your License Key below to begin using WPBookList Bulk-Book Upload.', 'wpbooklist-textdomain' );
+			$this->trans_620 = __( 'Uh-Oh! Looks like you haven\'t entered your License Key for the WPBookList Carousel Extension yet! Enter your License Key below to begin using WPBookList Carousel.', 'wpbooklist-textdomain' );
+			$this->trans_621 = __( 'Uh-Oh! Looks like you haven\'t entered your License Key for the WPBookList Categories Extension yet! Enter your License Key below to begin using WPBookList Categories.', 'wpbooklist-textdomain' );
+			$this->trans_622 = __( 'Uh-Oh! Looks like you haven\'t entered your License Key for the WPBookList Comments Extension yet! Enter your License Key below to begin using WPBookList Comments.', 'wpbooklist-textdomain' );
+			$this->trans_623 = __( 'Uh-Oh! Looks like you haven\'t entered your License Key for the WPBookList CustomFields Extension yet! Enter your License Key below to begin using WPBookList CustomFields.', 'wpbooklist-textdomain' );
+			$this->trans_624 = __( 'Uh-Oh! Looks like you haven\'t entered your License Key for the WPBookList Goodreads Extension yet! Enter your License Key below to begin using WPBookList Goodreads.', 'wpbooklist-textdomain' );
+			$this->trans_625 = __( 'Uh-Oh! Looks like you haven\'t entered your License Key for the WPBookList Kindle Preview Extension yet! Enter your License Key below to begin using WPBookList Kindle Preview.', 'wpbooklist-textdomain' );
+			$this->trans_626 = __( 'Uh-Oh! Looks like you haven\'t entered your License Key for the WPBookList Mobile Extension yet! Enter your License Key below to begin using WPBookList Mobile.', 'wpbooklist-textdomain' );
+			$this->trans_627 = __( 'Uh-Oh! Looks like you haven\'t entered your License Key for the WPBookList Storefront Extension yet! Enter your License Key below to begin using WPBookList Storefront.', 'wpbooklist-textdomain' );
+			$this->trans_628 = __( 'Uh-Oh! Looks like you haven\'t entered your License Key for the WPBookList Stylizer Extension yet! Enter your License Key below to begin using WPBookList Stylizer.', 'wpbooklist-textdomain' );
+			$this->trans_629 = __( 'Uh-Oh! Looks like you haven\'t entered your License Key for the WPBookList Branding Extension yet! Enter your License Key below to begin using WPBookList Branding.', 'wpbooklist-textdomain' );
+			$this->trans_630 = __( 'Add Your Amazon Affiliate ID Here', 'wpbooklist-textdomain' );
+			$this->trans_631 = __( 'Add Your iTunes Affiliate ID Here', 'wpbooklist-textdomain' );
+			$this->trans_632 = __( 'Got some Affiliate IDs', 'wpbooklist-textdomain' );
+			$this->trans_633 = __( 'Then let', 'wpbooklist-textdomain' );
+			$this->trans_634 = __( 'work for you by simply placing your Affiliate IDs in the appropriate spots below and clicking \'Save Affiliate IDs\'. Start making money with', 'wpbooklist-textdomain' );
+			$this->trans_635 = __( 'today', 'wpbooklist-textdomain' );
+			$this->trans_636 = __( 'Save Affiliate IDs', 'wpbooklist-textdomain' );
+
+
 
 
 			// The array of translation strings.

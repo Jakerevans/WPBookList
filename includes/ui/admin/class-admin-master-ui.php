@@ -379,6 +379,8 @@ class WPBookList_Admin_Menu {
                         echo 'something wrong';
                     }
                 }
+
+
                 
                 if(!isset($path)){
                     $path = null;
