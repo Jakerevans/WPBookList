@@ -666,7 +666,10 @@ if ( ! class_exists( 'WPBookList_Translations', false ) ) :
 			$this->trans_634 = __( 'work for you by simply placing your Affiliate IDs in the appropriate spots below and clicking \'Save Affiliate IDs\'. Start making money with', 'wpbooklist-textdomain' );
 			$this->trans_635 = __( 'today', 'wpbooklist-textdomain' );
 			$this->trans_636 = __( 'Save Affiliate IDs', 'wpbooklist-textdomain' );
-
+			$this->trans_637 = __( 'Search General Settings', 'wpbooklist-textdomain' );
+			$this->trans_638 = __( 'Configure Search Fields', 'wpbooklist-textdomain' );
+			$this->trans_639 = __( 'Here you can configure individual Search Fields, to include whether the field should be selected by default, included by default and hidden from visitors, or removed as an option altogether. You can also set the same options for which of your Libraries are searchable.', 'wpbooklist-textdomain' );
+			$this->trans_640 = __( 'Configure Libraries to Search Within', 'wpbooklist-textdomain' );
 
 
 

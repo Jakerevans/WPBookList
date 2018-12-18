@@ -158,7 +158,9 @@ if ( ! class_exists( 'WPBookList_Front_End_Library_UI', false ) ) :
 			$this->display_options_actual = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM $this->display_options_table WHERE ID = %d", 1 ) );
 
 			// Setting how many books will be displayed per page, based on backend setting.
-			$this->booksonpage = $this->display_options_actual->booksonpage;
+			if ( null !== $this->display_options_actual->booksonpage && 0 !== $this->display_options_actual->booksonpage && '0' !== $this->display_options_actual->booksonpage) {
+				$this->booksonpage = $this->display_options_actual->booksonpage;
+			}
 
 			// Getting and Setting any and all Search/Sort/Filter stuff from URL.
 			$this->set_url_param_variables();
@@ -707,11 +709,11 @@ if ( ! class_exists( 'WPBookList_Front_End_Library_UI', false ) ) :
 			$temparray = array();
 			foreach ( $this->books_before_limit_offset_actual as $key => $value ) {
 				if ( $this->offset > 0 ) {
-					if ( $key >= $this->offset && $key < ( $this->offset + $this->display_options_actual->booksonpage ) ) {
+					if ( $key >= $this->offset && $key < ( $this->offset + $this->booksonpage ) ) {
 						array_push( $temparray, $value );
 					}
 				} else {
-					if ( $key < $this->display_options_actual->booksonpage ) {
+					if ( $key < $this->booksonpage ) {
 						array_push( $temparray, $value );
 					}
 				}
@@ -1501,7 +1503,7 @@ if ( ! class_exists( 'WPBookList_Front_End_Library_UI', false ) ) :
 
 			// Setting up variables to determine the previous offset to go back to, or to disable that ability if on Page 1.
 			if ( 0 !== $this->offset ) {
-				$prevnum          = $this->offset - $this->display_options_actual->booksonpage;
+				$prevnum          = $this->offset - $this->booksonpage;
 				$styledisableleft = '';
 			} else {
 				$prevnum          = 0;
@@ -1509,8 +1511,8 @@ if ( ! class_exists( 'WPBookList_Front_End_Library_UI', false ) ) :
 			}
 
 			// Setting up variables to determine the next offset to go to, or to disable that ability if on last Page.
-			if ( $this->offset < ( $this->total_book_count - $this->display_options_actual->booksonpage ) ) {
-				$nextnum           = $this->offset + $this->display_options_actual->booksonpage;
+			if ( $this->offset < ( $this->total_book_count - $this->booksonpage ) ) {
+				$nextnum           = $this->offset + $this->booksonpage;
 				$styledisableright = '';
 			} else {
 				$nextnum           = $this->offset;
@@ -1518,13 +1520,13 @@ if ( ! class_exists( 'WPBookList_Front_End_Library_UI', false ) ) :
 			}
 
 			// Getting total number of full pages and/or if there's only a partial/remainder page.
-			if ( $this->total_book_count > 0 && $this->display_options_actual->booksonpage > 0 ) {
+			if ( $this->total_book_count > 0 && $this->booksonpage > 0 ) {
 
 				// Getting whole pages. Can be zero if total number of books is less that amount set to be displayed per page in the backend settings.
-				$whole_pages = floor( $this->total_book_count / $this->display_options_actual->booksonpage );
+				$whole_pages = floor( $this->total_book_count / $this->booksonpage );
 
-				// Determing whether there is a partial page, whose contents contains less books than amount set to be displayed per page in the backend settings. Will only be 0 if total number of books is evenly divisible by $this->display_options_actual->booksonpage.
-				$remainder_pages = $this->total_book_count % $this->display_options_actual->booksonpage;
+				// Determing whether there is a partial page, whose contents contains less books than amount set to be displayed per page in the backend settings. Will only be 0 if total number of books is evenly divisible by $this->booksonpage.
+				$remainder_pages = $this->total_book_count % $this->booksonpage;
 				if ( 0 !== $remainder_pages ) {
 					$remainder_pages = 1;
 				}
@@ -1537,10 +1539,10 @@ if ( ! class_exists( 'WPBookList_Front_End_Library_UI', false ) ) :
 				// The loop that will create the <option> html for the <select>.
 				for ( $i = 1; $i <= ( $whole_pages + $remainder_pages ); $i++ ) {
 
-					if ( ( 1 + ( $this->offset / $this->display_options_actual->booksonpage ) ) === $i ) {
-						$pagination_options_string = $pagination_options_string . '<option value=' . ( ( $i - 1 ) * $this->display_options_actual->booksonpage ) . ' selected>'. $this->trans->trans_37 .' ' . $i . '</option>';
+					if ( ( 1 + ( $this->offset / $this->booksonpage ) ) === $i ) {
+						$pagination_options_string = $pagination_options_string . '<option value=' . ( ( $i - 1 ) * $this->booksonpage ) . ' selected>'. $this->trans->trans_37 .' ' . $i . '</option>';
 					} else {
-						$pagination_options_string = $pagination_options_string . '<option value=' . ( ( $i - 1 ) * $this->display_options_actual->booksonpage ) . '>'. $this->trans->trans_37 .' ' . $i . '</option>';
+						$pagination_options_string = $pagination_options_string . '<option value=' . ( ( $i - 1 ) * $this->booksonpage ) . '>'. $this->trans->trans_37 .' ' . $i . '</option>';
 					}
 				}
 			}
