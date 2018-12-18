@@ -5,7 +5,7 @@
  * @author   Jake Evans
  * @category Front-End UI
  * @package  Includes/UI
- * @version  6.1.2
+ * @version  6.1.3
  */
 
 if ( ! defined( 'ABSPATH' ) ) {

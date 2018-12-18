@@ -5,7 +5,7 @@
  * @author   Jake Evans
  * @category Backup
  * @package  Includes/Classes/Backup
- * @version  6.1.2
+ * @version  6.1.3
  */
 
 if ( ! defined( 'ABSPATH' ) ) {

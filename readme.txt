@@ -4,7 +4,7 @@ Donate link: https://ko-fi.com/A8385C9
 Tags: books, woocommerce, author, book, affiliate  
 Requires at least: 3.0.1
 Tested up to: 5.0
-Stable tag: 6.1.2
+Stable tag: 6.1.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -279,7 +279,11 @@ In order to become one of these "Official Translators", I'll need to know your o
 
 **6.1.2** - Removed the 'Filter_var' function call inside of the 'Empty' construct on line 1145 of class-wpbooklist-general-functions.php file.
 
-**6.2.0** - Github Issues #52, #53, Github Issue #1 and #2 in the Custom Fields Extension. Github Issue #59 fixed. Several Translation modifications and some css tweaks in support of the WPBookList Search Extension. Completed Github Issue # 58. Completed github issue #61. Completed Github #64, #65
+**6.1.3** - Introduced a new area in the Book View that displays the Additional Images that are specified when a book is added. Fixed quite a few bugs and other errors, including, but not limited to: An error with the WPBookList Cache not saving with the correct prefix, a bug preventing the editing of some fields, the inclusion of the 'Enable Storefront' Options on the 'Pages' and 'Posts' Display Options Pages, inclusion of a new function to deactivate all WPBookList Extensions when the Core WPBookList Plugin is deactivaed, to prevent any possible PHP errors, A bug that sometimes caused a book to be edited and/or added into the wrong Library, a bug that prevented the addition of exisitng Custom Fields into a newly-created Custom Library, removed the 'Set Default Sorting' area in the Book View Display Options pages, and various other Translation additions/modifications and other code improvements.
+
+
+
+
 
 == Upgrade Notice ==
 
@@ -385,4 +389,4 @@ Modified the class-show-book-in-colorbox.php file, lines 130-148, to better dete
 
 =6.1.2= - Removed the 'Filter_var' function call inside of the 'Empty' construct on line 1145 of class-wpbooklist-general-functions.php file.
 
-=6.2.0= - Github Issues #52, #53, Github Issue #1 and #2 in the Custom Fields Extension. Github Issue #59 fixed. Several Translation modifications and some css tweaks in support of the WPBookList Search Extension. Completed Github Issue # 58, Completed github issue #61. Completed Github #64, #65
+=6.1.3= - Introduced a new area in the Book View that displays the Additional Images that are specified when a book is added. Fixed quite a few bugs and other errors, including, but not limited to: An error with the WPBookList Cache not saving with the correct prefix, a bug preventing the editing of some fields, the inclusion of the 'Enable Storefront' Options on the 'Pages' and 'Posts' Display Options Pages, inclusion of a new function to deactivate all WPBookList Extensions when the Core WPBookList Plugin is deactivaed, to prevent any possible PHP errors, A bug that sometimes caused a book to be edited and/or added into the wrong Library, a bug that prevented the addition of exisitng Custom Fields into a newly-created Custom Library, removed the 'Set Default Sorting' area in the Book View Display Options pages, and various other Translation additions/modifications and other code improvements.

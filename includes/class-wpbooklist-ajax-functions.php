@@ -5,7 +5,7 @@
  * @author   Jake Evans
  * @category Admin
  * @package  Includes
- * @version  6.1.2
+ * @version  6.1.3
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -1647,6 +1647,25 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 				) $charset_collate; ";
 				dbDelta( $sql_create_table );
 
+				// Now we need to add any existing Custom Fields into this newly-created Library and it's settings table.
+				$default_settings = $wpdb->get_row( 'SELECT * FROM ' . $wpdb->prefix . 'wpbooklist_jre_user_options' );
+
+				if ( false !== stripos( $default_settings->customfields, '--' ) ) {
+
+					$fields = explode( '--', $default_settings->customfields );
+
+					foreach ( $fields as $key => $indivfield ) {
+
+						if ( false !== stripos( $indivfield, ';' ) ) {
+
+							$temp = explode( ';', $indivfield );
+							if ( 0 === $wpdb->query( "SHOW COLUMNS FROM `$wpdb->wpbooklist_jre_dynamic_db_name` LIKE '" . $temp[0] . "'" ) ) {
+								$wpdb->query( "ALTER TABLE $wpdb->wpbooklist_jre_dynamic_db_name ADD " . $temp[0] . " TEXT" );
+							}
+						}
+					}
+				}
+
 				$sql_create_table2 = "CREATE TABLE {$wpdb->wpbooklist_jre_dynamic_db_name_settings} 
 				(
 					ID bigint(190) auto_increment,
@@ -1746,9 +1765,6 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 				$wpdb->insert( $table_name, array( 'ID' => 1 ) );
 
 				$wpdb->insert( $table_name_dynamic, array( 'user_table_name' => $db_name ) );
-
-				// Now we need to add any existing Custom Fields into this newly-created Librarys settings table
-				$default_settings = $wpdb->get_row( 'SELECT * FROM ' . $wpdb->prefix . 'wpbooklist_jre_user_options' );
 
 				if ( false !== stripos( $default_settings->customfields, '--' ) ) {
 

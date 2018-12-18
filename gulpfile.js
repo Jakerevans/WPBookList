@@ -135,7 +135,7 @@ gulp.task( 'watch', function() {
 });
 
 // Default gulp task
-//gulp.task( 'default', [ 'sassFrontendSource', 'sassBackendSource', 'sassPostPagesSource', 'concatAdminJs', 'concatFrontendJs', 'watch' ]);
+gulp.task( 'default', [ 'sassFrontendSource', 'sassBackendSource', 'sassPostPagesSource', 'concatAdminJs', 'concatFrontendJs', 'watch' ]);
 
 //gulp.task( 'default', [ 'cleanzip' ]);
 
@@ -143,4 +143,4 @@ gulp.task( 'watch', function() {
 
 //gulp.task( 'default', [ 'zip' ]);
 
-gulp.task( 'default', [ 'clean' ]);
+//gulp.task( 'default', [ 'clean' ]);

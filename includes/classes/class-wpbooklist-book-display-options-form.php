@@ -5,7 +5,7 @@
  * @author   Jake Evans
  * @category Admin
  * @package  Includes/Classes
- * @version  6.1.2.
+ * @version  6.1.3.
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -561,30 +561,6 @@ if ( ! class_exists( 'WPBookList_Book_Display_Options_Form', false ) ) :
 					<label>' . $this->trans->trans_258 . '</label>
 					<input id="wpbooklist-uncheck-all" type="checkbox" name="uncheck-all">
 				</div>
-				<table id="wpbooklist-library-options-lower-table">
-					<tbody>
-						<tr></tr>
-						<tr>
-						  <td class="wpbooklist-display-bottom-4"><label>' . $this->trans->trans_259 . '</label></td>
-						  <td class="wpbooklist-display-bottom-4">
-							<select name="sort-value" id="wpbooklist-jre-sorting-select"><option selected="selected" value="default">' . $this->trans->trans_3 . '</option>
-							  <option value="alphabeticallybytitle">' . $this->trans->trans_4 . '</option>
-							  <option value="alphabeticallybyauthorfirst">' . $this->trans->trans_5 . '</option>
-							  <option value="alphabeticallybyauthorlast">' . $this->trans->trans_6 . '</option>
-							  <option value="year_read">' . $this->trans->trans_7 . '</option>
-							  <option value="pages_desc">' . $this->trans->trans_8 . '</option>
-							  <option value="pages_asc">' . $this->trans->trans_9 . '</option>
-							  <option value="signed">' . $this->trans->trans_10 . '</option>
-							  <option value="first_edition">' . $this->trans->trans_11 . '</option>
-							</select><br>
-						  </td>
-						</tr>
-						<tr>
-							<td class="wpbooklist-display-bottom-4"><label>' . $this->trans->trans_260 . '</label></td>
-							<td class="wpbooklist-display-bottom-4"><input class="wpbooklist-dynamic-input" id="wpbooklist-book-control" type="text" name="books-per-page" value="120"></td>
-						</tr>
-					</tbody>
-				</table>
 				<button class="wpbooklist-response-success-fail-button wpbooklist-admin-save-book-display-button" type="button">' . $this->trans->trans_245 . '</button>
 			</div>';
 
