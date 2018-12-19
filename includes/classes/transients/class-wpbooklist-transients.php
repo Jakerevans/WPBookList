@@ -53,6 +53,9 @@ if ( ! class_exists( 'WPBookList_Transients', false ) ) :
 				case 'wpdb->get_row':
 					$query_result = $wpdb->get_row( $query );
 					break;
+				case 'wpdb->get_var':
+					$query_result = $wpdb->get_var( $query );
+					break;
 
 				default:
 					// code...

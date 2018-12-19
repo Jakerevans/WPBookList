@@ -1144,48 +1144,79 @@ if ( ! class_exists( 'WPBookList_Front_End_Library_UI', false ) ) :
 
 			if ( ! $this->filterflag && ! $this->searchflag && ! $this->sortflag ) {
 
-				// Getting ALL results from particular Library - checking for Transients first!
-				$transient_name   = 'wpbl_' . md5( 'SELECT * FROM ' . $this->table );
+				// Getting the number of books finished - checking for Transients first!
+				$transient_name   = 'wpbl_' . md5( 'SELECT COUNT(*) FROM ' . $this->table . ' WHERE finished = Yes' );
 				$transient_exists = $this->transients->existing_transient_check( $transient_name );
 				if ( $transient_exists ) {
-					$all_results_for_stats = $transient_exists;
+					$all_results_for_stats_finished = $transient_exists;
+					$this->total_book_read_count    = $all_results_for_stats_finished;
 				} else {
-					$query = 'SELECT * FROM ' . $this->table;
-					$all_results_for_stats = $this->transients->create_transient( $transient_name, 'wpdb->get_results', $query, MONTH_IN_SECONDS );
+					$query = 'SELECT COUNT(*) FROM ' . $this->table . " WHERE finished = 'Yes'";
+					$all_results_for_stats_finished = $wpdb->get_var( $query );
+					$all_results_for_stats_finished = $this->transients->create_transient( $transient_name, 'wpdb->get_var', $query, MONTH_IN_SECONDS );
+					$this->total_book_read_count = $all_results_for_stats_finished;
+				}
+
+				// Getting total book count from entire library - checking for Transients first!
+				$transient_name   = 'wpbl_' . md5( 'SELECT COUNT(*) FROM ' . $this->table );
+				$transient_exists = $this->transients->existing_transient_check( $transient_name );
+				if ( $transient_exists ) {
+					$all_results_for_stats_total = $transient_exists;
+					$book_count                  = $all_results_for_stats_total;
+				} else {
+					$query = 'SELECT COUNT(*) FROM ' . $this->table;
+					$all_results_for_stats_total = $wpdb->get_var( $query );
+					$all_results_for_stats_total = $this->transients->create_transient( $transient_name, 'wpdb->get_var', $query, MONTH_IN_SECONDS );
+					$book_count                  = $all_results_for_stats_total;
 				}
 
 				// Setting some variables and strings for the Stats section below.
-				$book_count               = count( $all_results_for_stats );
 				$stats_books_string       = $this->trans->trans_23 . ':';
 				$stats_completion_percent = $this->trans->trans_30 . ':';
 
-				// Getting total # of books read/finished.
-				foreach ( $all_results_for_stats as $book ) {
-					if ( 'Yes' === $book->finished ) {
-						$this->total_book_read_count++;
-					}
+				// Getting total # of pages read/finished - checking for Transients first!
+				$transient_name   = 'wpbl_' . md5( 'SELECT * FROM ' . $this->table . ' WHERE finished = Yes' );
+				$transient_exists = $this->transients->existing_transient_check( $transient_name );
+				if ( $transient_exists ) {
+					$all_results_for_stats_finished_bookpages = $transient_exists;
+				} else {
+					$query = 'SELECT * FROM ' . $this->table . " WHERE finished = 'Yes'";
+					$all_results_for_stats_finished_bookpages = $wpdb->get_results( $query );
+					$all_results_for_stats_finished_bookpages = $this->transients->create_transient( $transient_name, 'wpdb->get_results', $query, MONTH_IN_SECONDS );
 				}
 
-				// Getting total # of pages read/finished.
-				foreach ( $all_results_for_stats as $book ) {
+				foreach ( $all_results_for_stats_finished_bookpages as $book ) {
 					if ( 'Yes' === $book->finished ) {
 						$this->total_pages_read_count = $this->total_pages_read_count + $book->pages;
 					}
 				}
 
-				// Getting total # of books signed.
-				foreach ( $all_results_for_stats as $book ) {
-					if ( 'true' === $book->signed ) {
-						$this->total_book_signed_count++;
-					}
+				// Getting total # of books signed - checking for Transients first!
+				$transient_name   = 'wpbl_' . md5( 'SELECT COUNT(*) FROM ' . $this->table . ' WHERE finished = Yes' );
+				$transient_exists = $this->transients->existing_transient_check( $transient_name );
+				if ( $transient_exists ) {
+					$all_results_for_stats_signed  = $transient_exists;
+					$this->total_book_signed_count = $all_results_for_stats_finished;
+				} else {
+					$query = 'SELECT COUNT(*) FROM ' . $this->table . " WHERE finished = 'Yes'";
+					$all_results_for_stats_signed  = $wpdb->get_var( $query );
+					$all_results_for_stats_signed  = $this->transients->create_transient( $transient_name, 'wpdb->get_var', $query, MONTH_IN_SECONDS );
+					$this->total_book_signed_count = $all_results_for_stats_signed;
 				}
 
-				// Getting total # of books first edition.
-				foreach ( $all_results_for_stats as $book ) {
-					if ( 'true' === $book->first_edition ) {
-						$this->total_book_first_edition_count++;
-					}
+				// Getting total # of books first edition. - checking for Transients first!
+				$transient_name   = 'wpbl_' . md5( 'SELECT COUNT(*) FROM ' . $this->table . ' WHERE first_edition = Yes OR first_edition = true OR edition = 1 OR edition = 1st OR edition = first or edition = First' );
+				$transient_exists = $this->transients->existing_transient_check( $transient_name );
+				if ( $transient_exists ) {
+					$all_results_for_stats_firstedition  = $transient_exists;
+					$this->total_book_first_edition_count = $all_results_for_stats_finished;
+				} else {
+					$query = 'SELECT COUNT(*) FROM ' . $this->table . "  WHERE first_edition = 'Yes' OR first_edition = 'true' OR edition = '1' OR edition = '1st' OR edition = 'first' or edition = 'First'";
+					$all_results_for_stats_firstedition  = $wpdb->get_var( $query );
+					$all_results_for_stats_firstedition  = $this->transients->create_transient( $transient_name, 'wpdb->get_var', $query, MONTH_IN_SECONDS );
+					$this->total_book_first_edition_count = $all_results_for_stats_signed;
 				}
+				
 			} else {
 
 				// Setting some variables and strings for the Stats section below.
@@ -1196,44 +1227,80 @@ if ( ! class_exists( 'WPBookList_Front_End_Library_UI', false ) ) :
 				// If the Sort flag is true, and if the 'sortby' value equals specific terms, get all books for Stats calculations, otherwise stick with what we have.
 				if ( $this->sortflag && 'year_read' !== $this->sortby && 'signed' !== $this->sortby && 'first_edition' !== $this->sortby ) {
 
-					// Getting ALL results from particular Library - checking for Transients first!
-					$transient_name   = 'wpbl_' . md5( 'SELECT * FROM ' . $this->table );
+					// Getting the number of books finished - checking for Transients first!
+					$transient_name   = 'wpbl_' . md5( 'SELECT COUNT(*) FROM ' . $this->table . ' WHERE finished = Yes' );
 					$transient_exists = $this->transients->existing_transient_check( $transient_name );
 					if ( $transient_exists ) {
-						$all_results_for_stats = $transient_exists;
+						$all_results_for_stats_finished = $transient_exists;
+						$this->total_book_read_count    = $all_results_for_stats_finished;
 					} else {
-						$query = 'SELECT * FROM ' . $this->table;
-						$all_results_for_stats = $this->transients->create_transient( $transient_name, 'wpdb->get_results', $query, MONTH_IN_SECONDS );
+						$query = 'SELECT COUNT(*) FROM ' . $this->table . " WHERE finished = 'Yes'";
+						$all_results_for_stats_finished = $wpdb->get_var( $query );
+						$all_results_for_stats_finished = $this->transients->create_transient( $transient_name, 'wpdb->get_var', $query, MONTH_IN_SECONDS );
+						$this->total_book_read_count = $all_results_for_stats_finished;
 					}
 
-					// Getting total # of books read/finished.
-					foreach ( $all_results_for_stats as $book ) {
-						if ( 'Yes' === $book->finished ) {
-							$this->total_book_read_count++;
-						}
+					// Getting total book count from entire library - checking for Transients first!
+					$transient_name   = 'wpbl_' . md5( 'SELECT COUNT(*) FROM ' . $this->table );
+					$transient_exists = $this->transients->existing_transient_check( $transient_name );
+					if ( $transient_exists ) {
+						$all_results_for_stats_total = $transient_exists;
+						$book_count                  = $all_results_for_stats_total;
+					} else {
+						$query = 'SELECT COUNT(*) FROM ' . $this->table;
+						$all_results_for_stats_total = $wpdb->get_var( $query );
+						$all_results_for_stats_total = $this->transients->create_transient( $transient_name, 'wpdb->get_var', $query, MONTH_IN_SECONDS );
+						$book_count                  = $all_results_for_stats_total;
 					}
 
-					// Getting total # of pages read/finished.
-					foreach ( $all_results_for_stats as $book ) {
+					// Setting some variables and strings for the Stats section below.
+					$stats_books_string       = $this->trans->trans_23 . ':';
+					$stats_completion_percent = $this->trans->trans_30 . ':';
+
+					// Getting total # of pages read/finished - checking for Transients first!
+					$transient_name   = 'wpbl_' . md5( 'SELECT * FROM ' . $this->table . ' WHERE finished = Yes' );
+					$transient_exists = $this->transients->existing_transient_check( $transient_name );
+					if ( $transient_exists ) {
+						$all_results_for_stats_finished_bookpages = $transient_exists;
+					} else {
+						$query = 'SELECT * FROM ' . $this->table . " WHERE finished = 'Yes'";
+						$all_results_for_stats_finished_bookpages = $wpdb->get_results( $query );
+						$all_results_for_stats_finished_bookpages = $this->transients->create_transient( $transient_name, 'wpdb->get_results', $query, MONTH_IN_SECONDS );
+					}
+
+					foreach ( $all_results_for_stats_finished_bookpages as $book ) {
 						if ( 'Yes' === $book->finished ) {
 							$this->total_pages_read_count = $this->total_pages_read_count + $book->pages;
 						}
 					}
 
-					// Getting total # of books signed.
-					foreach ( $all_results_for_stats as $book ) {
-						if ( 'true' === $book->signed ) {
-							$this->total_book_signed_count++;
-						}
+					// Getting total # of books signed - checking for Transients first!
+					$transient_name   = 'wpbl_' . md5( 'SELECT COUNT(*) FROM ' . $this->table . ' WHERE finished = Yes' );
+					$transient_exists = $this->transients->existing_transient_check( $transient_name );
+					if ( $transient_exists ) {
+						$all_results_for_stats_signed  = $transient_exists;
+						$this->total_book_signed_count = $all_results_for_stats_finished;
+					} else {
+						$query = 'SELECT COUNT(*) FROM ' . $this->table . " WHERE finished = 'Yes'";
+						$all_results_for_stats_signed  = $wpdb->get_var( $query );
+						$all_results_for_stats_signed  = $this->transients->create_transient( $transient_name, 'wpdb->get_var', $query, MONTH_IN_SECONDS );
+						$this->total_book_signed_count = $all_results_for_stats_signed;
 					}
 
-					// Getting total # of books first edition.
-					foreach ( $all_results_for_stats as $book ) {
-						if ( 'true' === $book->first_edition ) {
-							$this->total_book_first_edition_count++;
-						}
+					// Getting total # of books first edition. - checking for Transients first!
+					$transient_name   = 'wpbl_' . md5( 'SELECT COUNT(*) FROM ' . $this->table . ' WHERE first_edition = Yes OR first_edition = true OR edition = 1 OR edition = 1st OR edition = first or edition = First' );
+					$transient_exists = $this->transients->existing_transient_check( $transient_name );
+					if ( $transient_exists ) {
+						$all_results_for_stats_firstedition  = $transient_exists;
+						$this->total_book_first_edition_count = $all_results_for_stats_finished;
+					} else {
+						$query = 'SELECT COUNT(*) FROM ' . $this->table . "  WHERE first_edition = 'Yes' OR first_edition = 'true' OR edition = '1' OR edition = '1st' OR edition = 'first' or edition = 'First'";
+						$all_results_for_stats_firstedition  = $wpdb->get_var( $query );
+						$all_results_for_stats_firstedition  = $this->transients->create_transient( $transient_name, 'wpdb->get_var', $query, MONTH_IN_SECONDS );
+						$this->total_book_first_edition_count = $all_results_for_stats_signed;
 					}
 				} else {
+
 					// Getting total # of books read/finished.
 					foreach ( $this->books_actual as $book ) {
 						if ( 'Yes' === $book->finished ) {
@@ -1277,7 +1344,13 @@ if ( ! class_exists( 'WPBookList_Front_End_Library_UI', false ) ) :
 			if ( ( 0 === $this->total_book_read_count ) || ( 0 === $this->total_book_count ) ) {
 				$string2 = '0%';
 			} else {
-				$string2 = number_format( ( ( $this->total_book_read_count / $book_count ) * 100 ), 2 ) . '%';
+
+				// Division by zero check.
+				if ( 0 !== $this->total_book_read_count && 0 !== $book_count && '0' !== $this->total_book_read_count && '0' !== $book_count ) {
+					$string2 = number_format( ( ( $this->total_book_read_count / $book_count ) * 100 ), 2 ) . '%';
+				} else {
+					$string2 = '0%';
+				}
 			}
 
 			$string3 = '</p></div>';
@@ -1300,7 +1373,8 @@ if ( ! class_exists( 'WPBookList_Front_End_Library_UI', false ) ) :
 				$this->quotes_actual = $transient_exists;
 			} else {
 				$query               = 'SELECT * FROM ' . $this->quotes_table;
-				$this->quotes_actual = $this->transients->create_transient( $transient_name, 'wpdb->get_results', $query, MONTH_IN_SECONDS );
+				$this->quotes_actual = $wpdb->get_results( $query );
+				//$this->quotes_actual = $this->transients->create_transient( $transient_name, 'wpdb->get_results', $query, MONTH_IN_SECONDS );
 			}
 
 			// Getting number of quotes.
