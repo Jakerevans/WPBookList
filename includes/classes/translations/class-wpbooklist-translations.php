@@ -668,8 +668,15 @@ if ( ! class_exists( 'WPBookList_Translations', false ) ) :
 			$this->trans_636 = __( 'Save Affiliate IDs', 'wpbooklist-textdomain' );
 			$this->trans_637 = __( 'Search General Settings', 'wpbooklist-textdomain' );
 			$this->trans_638 = __( 'Configure Search Fields', 'wpbooklist-textdomain' );
-			$this->trans_639 = __( 'Here you can configure individual Search Fields, to include whether the field should be selected by default, included by default and hidden from visitors, or removed as an option altogether. You can also set the same options for which of your Libraries are searchable.', 'wpbooklist-textdomain' );
+			$this->trans_639 = __( 'Here you can configure individual Search Fields, to include whether the field should be checked by default, checked by default and hidden from visitors, or removed as an option altogether. You can also set the same options for which of your Libraries are searchable.', 'wpbooklist-textdomain' );
 			$this->trans_640 = __( 'Configure Libraries to Search Within', 'wpbooklist-textdomain' );
+			$this->trans_641 = __( 'Check by Default', 'wpbooklist-textdomain' );
+			$this->trans_642 = __( 'Check by Default and hide', 'wpbooklist-textdomain' );
+			$this->trans_643 = __( 'Remove this Library', 'wpbooklist-textdomain' );
+			$this->trans_644 = __( 'Configure Fields to Search By', 'wpbooklist-textdomain' );
+			$this->trans_645 = __( 'Save Search Settings', 'wpbooklist-textdomain' );
+
+
 
 
 
