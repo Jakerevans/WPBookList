@@ -671,12 +671,25 @@ if ( ! class_exists( 'WPBookList_Translations', false ) ) :
 			$this->trans_639 = __( 'Here you can configure individual Search Fields, to include whether the field should be checked by default, checked by default and hidden from visitors, or removed as an option altogether. You can also set the same options for which of your Libraries are searchable.', 'wpbooklist-textdomain' );
 			$this->trans_640 = __( 'Configure Libraries to Search Within', 'wpbooklist-textdomain' );
 			$this->trans_641 = __( 'Check by Default', 'wpbooklist-textdomain' );
-			$this->trans_642 = __( 'Check by Default and hide', 'wpbooklist-textdomain' );
+			$this->trans_642 = __( 'Check by Default and Hide', 'wpbooklist-textdomain' );
 			$this->trans_643 = __( 'Remove this Library', 'wpbooklist-textdomain' );
 			$this->trans_644 = __( 'Configure Fields to Search By', 'wpbooklist-textdomain' );
 			$this->trans_645 = __( 'Save Search Settings', 'wpbooklist-textdomain' );
+			$this->trans_646 = __( 'Remove This Field', 'wpbooklist-textdomain' );
+			$this->trans_647 = __( 'Check All \'by Default\'  ', 'wpbooklist-textdomain' );
+			$this->trans_648 = __( 'Check All \'by Default and Hide\'', 'wpbooklist-textdomain' );
+			$this->trans_649 = __( 'Check All \'Remove\'', 'wpbooklist-textdomain' );
+			$this->trans_650 = __( 'Here you can configure some general options, including how many Search Results you\'d like displayed per page, and whether or not to perform an \'Inclusive\' or \'Exclusive\' Search.', 'wpbooklist-textdomain' );
+			$this->trans_651 = __( 'Search Results Per Page', 'wpbooklist-textdomain' );
+			$this->trans_652 = __( 'Perform an \'Inclusive\' or \'Exclusive\' Search', 'wpbooklist-textdomain' );
+			$this->trans_653 = __( 'An  \'Exclusive Search\' requires the term being searched for to appear in every single field - so if we searched for \'History\' and wanted to search by Title, Genre, and Description, the Search Term \'History\' would have to appear in all three of those fields. An \'Inclusive Search\' would return results for the Search Term \'History\' that appears in any one of those three fields.', 'wpbooklist-textdomain' );
+			$this->trans_654 = __( 'Inclusive Search', 'wpbooklist-textdomain' );
+			$this->trans_655 = __( 'Exclusive Search', 'wpbooklist-textdomain' );
+			$this->trans_656 = __( 'Select a Search Mode', 'wpbooklist-textdomain' );
 
 
+
+							// Exclusive search = a search with the 'AND' keyword - we require that the search term appear in every single field we're searching in. Inclusive Search = search with the 'OR' keyword - we require that the search term appear in only one of the fields we're searching in.
 
 
 

@@ -22,6 +22,16 @@ if ( ! class_exists( 'WPBookList_Display_Options', false ) ) :
 	 */
 	class WPBookList_Display_Options {
 
+		/**
+		 * Class Constructor - Simply calls the Translations
+		 */
+		public function __construct() {
+
+			// Require the Transients file.
+			require_once CLASS_TRANSIENTS_DIR . 'class-wpbooklist-transients.php';
+			$this->transients = new WPBookList_Transients();
+		}
+
 		/** Function to save Display Options.
 		 *
 		 * @param string $table - The Library these display options are being applied to.
@@ -80,6 +90,9 @@ if ( ! class_exists( 'WPBookList_Display_Options', false ) ) :
 			$where  = array( 'ID' => 1 );
 			$result = $wpdb->update( $final_table, $settings_array, $where );
 
+			// Delete all existing WPBookList Transients.
+			$result = $this->transients->delete_all_wpbl_transients();
+
 		}
 
 		/** Function to save Post Display Options.
@@ -129,6 +142,9 @@ if ( ! class_exists( 'WPBookList_Display_Options', false ) ) :
 
 			$where  = array( 'ID' => 1 );
 			$result = $wpdb->update( $table, $settings_array, $where );
+
+			// Delete all existing WPBookList Transients.
+			$result = $this->transients->delete_all_wpbl_transients();
 
 		}
 
@@ -180,6 +196,9 @@ if ( ! class_exists( 'WPBookList_Display_Options', false ) ) :
 
 			$where  = array( 'ID' => 1 );
 			$result = $wpdb->update( $table, $settings_array, $where );
+
+			// Delete all existing WPBookList Transients.
+			$result = $this->transients->delete_all_wpbl_transients();
 		}
 	}
 

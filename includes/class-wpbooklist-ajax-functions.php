@@ -5,7 +5,7 @@
  * @author   Jake Evans
  * @category Admin
  * @package  Includes
- * @version  6.1.3
+ * @version  6.1.4
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -32,6 +32,10 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 			require_once CLASS_UTILITIES_DIR . 'class-wpbooklist-utilities-date.php';
 			$utilities_date = new WPBookList_Utilities_Date();
 			$this->date     = $utilities_date->wpbooklist_get_date_via_current_time( 'mysql' );
+
+			// Require the Transients file.
+			require_once CLASS_TRANSIENTS_DIR . 'class-wpbooklist-transients.php';
+			$this->transients = new WPBookList_Transients();
 		}
 
 		/**
@@ -1539,7 +1543,7 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 			global $wpdb;
 			check_ajax_referer( 'wpbooklist_delete_all_transients_action_callback', 'security' );
 
-			$result = $wpdb->query( "DELETE FROM `{$wpdb->prefix}options` WHERE `option_name` LIKE ('%\_wpbl\_%')" );
+			$this->transients->delete_all_wpbl_transients();
 
 			wp_die( $result );
 
@@ -1787,6 +1791,9 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 					$wpdb->query( "ALTER TABLE $table_name ADD activeposttemplate varchar( 255 ) NOT NULL DEFAULT 'default'" );
 				}
 			}
+
+			$this->transients->delete_all_wpbl_transients();
+			
 			wp_die();
 		}
 
@@ -1843,6 +1850,8 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 				$query = $wpdb->prepare( "ALTER TABLE $table_name_dynamic AUTO_INCREMENT = %d", $title_count );
 				$query = str_replace( '\'', '`', $query );
 				$wpdb->query( $query );
+
+				$this->transients->delete_all_wpbl_transients();
 			}
 
 			wp_die();
@@ -3622,6 +3631,8 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 			$where_format = array( '%d' );
 			$result       = $wpdb->update( $table_name, $data, $where, $format, $where_format );
 
+			$this->transients->delete_all_wpbl_transients();
+
 			echo $result;
 			wp_die();
 		}
@@ -3693,6 +3704,9 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 				$where        = array( 'ID' => 1 );
 				$where_format = array( '%d' );
 				echo $wpdb->update( $table_name, $data, $where, $format, $where_format );
+
+				$this->transients->delete_all_wpbl_transients();
+
 			} else {
 				$table_name   = $wpdb->prefix . 'wpbooklist_jre_list_dynamic_db_names';
 				$library      = substr( $library, strrpos( $library, '_' ) + 1 );
@@ -3704,6 +3718,8 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 				$where_format = array( '%s' );
 				echo $stylepak . ' ' . $library;
 				echo $wpdb->update( $table_name, $data, $where, $format, $where_format );
+
+				$this->transients->delete_all_wpbl_transients();
 			}
 
 			wp_die();
@@ -3768,6 +3784,8 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 					$where_format = array( '%d' );
 					echo $wpdb->update( $table_name, $data, $where, $format, $where_format );
 
+					$this->transients->delete_all_wpbl_transients();
+
 			wp_die();
 		}
 
@@ -3818,21 +3836,23 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 			global $wpdb;
 			check_ajax_referer( 'wpbooklist_assign_page_template_action_callback', 'security' );
 
-			// For assigning a page_template
-				$template = filter_var( wp_unslash( $_POST["template"] ), FILTER_SANITIZE_STRING );
+			// For assigning a page_template.
+			$template = filter_var( wp_unslash( $_POST["template"] ), FILTER_SANITIZE_STRING );
 
-				$template = str_replace( '.php', '', $template );
-				$template = str_replace( '.zip', '', $template );
+			$template = str_replace( '.php', '', $template );
+			$template = str_replace( '.zip', '', $template );
 
-				$table_name = $wpdb->prefix . 'wpbooklist_jre_user_options';
+			$table_name = $wpdb->prefix . 'wpbooklist_jre_user_options';
 
-				$data = array(
-					'activepagetemplate' => $template,
-					);
-					$format = array( '%s' );   
-					$where = array( 'ID' => 1 );
-					$where_format = array( '%d' );
-					$wpdb->update( $table_name, $data, $where, $format, $where_format );
+			$data = array(
+				'activepagetemplate' => $template,
+			);
+			$format = array( '%s' );
+			$where = array( 'ID' => 1 );
+			$where_format = array( '%d' );
+			$wpdb->update( $table_name, $data, $where, $format, $where_format );
+
+			$this->transients->delete_all_wpbl_transients();
 
 			wp_die();
 		}
@@ -3889,6 +3909,9 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 			$where = array( 'ID' => 1 );
 			$where_format = array( '%d' );
 			$wpdb->update( $table_name, $data, $where, $format, $where_format );
+
+			$this->transients->delete_all_wpbl_transients();
+
 			wp_die();
 		}
 
@@ -3978,6 +4001,9 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 				$format = array( '%d' );  
 				$where_format = array( '%d' );
 				echo $wpdb->update( $table_name, $data, $where, $format, $where_format );
+
+				$this->transients->delete_all_wpbl_transients();
+
 				wp_die();
 			}
 
@@ -3992,6 +4018,9 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 				$format = array( '%d' );  
 				$where_format = array( '%d' );
 				echo $wpdb->update( $table_name, $data, $where, $format, $where_format );
+
+				$this->transients->delete_all_wpbl_transients();
+
 				wp_die();
 			}
 		}
@@ -4018,6 +4047,7 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 				$where = array( 'book_uid' => $value );
 				$where_format = array( '%s' );
 				$wpdb->update( $table, $data, $where, $format, $where_format );
+
 			}
 
 			// Adding primary key back to database 
@@ -4032,6 +4062,8 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 			// Setting the AUTO_INCREMENT value based on number of remaining entries
 			$title_count++;
 			$wpdb->query( $wpdb->prepare( "ALTER TABLE $table AUTO_INCREMENT = %d", $title_count ) );
+
+			$this->transients->delete_all_wpbl_transients();
 
 			wp_die();
 		}
@@ -4228,6 +4260,8 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 			  $where_format = array( '%d' );
 			  $wpdb->update( $table_name, $data, $where, $format, $where_format );
 
+			  $this->transients->delete_all_wpbl_transients();
+
 			wp_die();
 		}
 
@@ -4267,6 +4301,8 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 			// Setting the AUTO_INCREMENT value based on number of remaining entries
 			$title_count++;
 			echo $wpdb->query( $wpdb->prepare( "ALTER TABLE $stories_table AUTO_INCREMENT = %d", $title_count ) );
+
+			$this->transients->delete_all_wpbl_transients();
 
 			wp_die();
 		}

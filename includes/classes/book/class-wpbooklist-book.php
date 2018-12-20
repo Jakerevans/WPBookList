@@ -5,7 +5,7 @@
  * @author   Jake Evans
  * @category Books
  * @package  Includes/Classes/Book
- * @version  6.1.3.
+ * @version  6.1.4.
  */
 
 if ( ! defined( 'ABSPATH' ) ) {

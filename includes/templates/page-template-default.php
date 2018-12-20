@@ -5,7 +5,7 @@
  * @author   Jake Evans
  * @category Admin
  * @package  Includes/Classes/Templates
- * @version  6.1.3
+ * @version  6.1.4
  */
 
 $string1  = '';
