@@ -1576,7 +1576,7 @@ if ( ! class_exists( 'WPBookList_Front_End_Library_UI', false ) ) :
 			$pagination_options_string = '';
 
 			// Setting up variables to determine the previous offset to go back to, or to disable that ability if on Page 1.
-			if ( 0 !== $this->offset ) {
+			if ( '0' !== $this->offset ) {
 				$prevnum          = $this->offset - $this->booksonpage;
 				$styledisableleft = '';
 			} else {
@@ -1614,9 +1614,9 @@ if ( ! class_exists( 'WPBookList_Front_End_Library_UI', false ) ) :
 				for ( $i = 1; $i <= ( $whole_pages + $remainder_pages ); $i++ ) {
 
 					if ( ( 1 + ( $this->offset / $this->booksonpage ) ) === $i ) {
-						$pagination_options_string = $pagination_options_string . '<option value=' . ( ( $i - 1 ) * $this->booksonpage ) . ' selected>'. $this->trans->trans_37 .' ' . $i . '</option>';
+						$pagination_options_string = $pagination_options_string . '<option value=' . ( ( $i - 1 ) * $this->booksonpage ) . ' selected>'. $this->trans->trans_600 .' ' . $i . '</option>';
 					} else {
-						$pagination_options_string = $pagination_options_string . '<option value=' . ( ( $i - 1 ) * $this->booksonpage ) . '>'. $this->trans->trans_37 .' ' . $i . '</option>';
+						$pagination_options_string = $pagination_options_string . '<option value=' . ( ( $i - 1 ) * $this->booksonpage ) . '>'. $this->trans->trans_600 .' ' . $i . '</option>';
 					}
 				}
 			}
