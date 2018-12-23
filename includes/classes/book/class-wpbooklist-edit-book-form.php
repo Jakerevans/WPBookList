@@ -233,6 +233,14 @@ if ( ! class_exists( 'WPBookList_Edit_Book_Form', false ) ) :
 			}
 
 			$string3 = $string3 . '</div>';
+
+			// Now build the total number of books in this Library.
+			$total_books_html = '
+			<div id="wpbooklist-edit-books-total-count-wrapper">
+				<p><span id="wpbooklist-edit-books-total-count-text">' . $this->trans->trans_657 . ': </span><span id="wpbooklist-edit-books-total-count-number">' . number_format( count( $this->books_actual ) ) . '</span></p>
+			</div>';
+			$string3 = $string3 . $total_books_html;
+
 			$string6 = '';
 
 			// If there are no results from the query...
@@ -322,6 +330,7 @@ if ( ! class_exists( 'WPBookList_Edit_Book_Form', false ) ) :
 				}
 			}
 
+			// Begin building the Pagination Stuff.
 			$string7 = '<div id="wpbooklist-edit_books-pagination-div">
 							<div ';
 
@@ -330,12 +339,80 @@ if ( ! class_exists( 'WPBookList_Edit_Book_Form', false ) ) :
 				$string8 = 'style="opacity:0.3; pointer-events:none;"';
 			}
 
-			$string9 = ' data-limit="' . $this->limit . '" id="wpbooklist-edit-next-100">' . $this->trans->trans_603 . ' ' . EDIT_PAGE_OFFSET . ' ' . $this->trans->trans_605 . '<img class="wpbooklist-edit-book-icon-next" src="' . ROOT_IMG_ICONS_URL . 'next-page.svg"/></div>
-							<div data-limit="' . $this->limit . '" id="wpbooklist-edit-previous-100"><img class="wpbooklist-edit-book-icon-back" src="' . ROOT_IMG_ICONS_URL . 'next-page.svg"/>' . $this->trans->trans_604 . ' ' . EDIT_PAGE_OFFSET . ' ' . $this->trans->trans_605 . '</div>
-						</div>
-						<div class="wpbooklist-spinner" id="wpbooklist-spinner-pagination"></div>' . $divclose;
+			// If we have more books in the Library than the EDIT_PAGE_OFFSET constant, display pagination.
+			if ( count( $this->books_actual ) > EDIT_PAGE_OFFSET ) {
 
-			return $string1 . $string2 . $string3 . $string6 . $string7 . $string8 . $string9;
+				$pagination_options_string = '';
+
+				// Setting up variables to determine the previous offset to go back to, or to disable that ability if on Page 1.
+				$prevnum          = EDIT_PAGE_OFFSET;
+				$styledisableleft = '';
+
+				// Setting up variables to determine the next offset to go to, or to disable that ability if on last Page.
+				if ( 0 < ( count( $this->books_actual ) - EDIT_PAGE_OFFSET ) ) {
+					$nextnum           = EDIT_PAGE_OFFSET;
+					$styledisableright = '';
+				} else {
+					$nextnum           = 0;
+					$styledisableright = 'style="pointer-events:none;opacity:0.5;"';
+				}
+
+				// Getting total number of full pages and/or if there's only a partial/remainder page.
+				if ( count( $this->books_actual ) > 0 && EDIT_PAGE_OFFSET > 0 ) {
+
+					// Getting whole pages. Can be zero if total number of books is less that amount set to be displayed per page in the backend settings.
+					$whole_pages = floor( count( $this->books_actual ) / EDIT_PAGE_OFFSET );
+
+					// Determing whether there is a partial page, whose contents contains less books than amount set to be displayed per page in the backend settings. Will only be 0 if total number of books is evenly divisible by EDIT_PAGE_OFFSET.
+					$remainder_pages = count( $this->books_actual ) % EDIT_PAGE_OFFSET;
+					if ( 0 !== $remainder_pages ) {
+						$remainder_pages = 1;
+					}
+
+					// If there's only one page, don't show pagination.
+					if ( ( 1 === $whole_pages && 0 === $remainder_pages ) || ( 0 === $whole_pages && 1 === $remainder_pages ) ) {
+						return;
+					}
+
+					// The loop that will create the <option> html for the <select>.
+					for ( $i = 1; $i <= ( $whole_pages + $remainder_pages ); $i++ ) {
+
+						if ( ( 1 + ( 0 / EDIT_PAGE_OFFSET ) ) === $i ) {
+							$pagination_options_string = $pagination_options_string . '<option value=' . ( ( $i - 1 ) * EDIT_PAGE_OFFSET ) . ' selected>' . $this->trans->trans_600 . ' ' . $i . '</option>';
+						} else {
+							$pagination_options_string = $pagination_options_string . '<option value=' . ( ( $i - 1 ) * EDIT_PAGE_OFFSET ) . '>' . $this->trans->trans_600 . ' ' . $i . '</option>';
+						}
+					}
+				}
+
+				// Actual Pagination HTML.
+				if ( '' !== $pagination_options_string ) {
+
+					$string_pagination = '
+					<div class="wpbooklist-pagination-div">
+						<div class="wpbooklist-pagination-div-inner">
+							<div style="opacity:0.3; pointer-events:none;" data-limit="' . $this->limit . '" id="wpbooklist-edit-previous-100" class="wpbooklist-pagination-left-div" ' . $styledisableleft . ' data-offset="' . $prevnum . '" data-table="' . $this->table . '">
+								<p><img class="wpbooklist-pagination-prev-img" src="' . ROOT_IMG_URL . 'next-left.png" />' . $this->trans->trans_36 . '</p>
+							</div>
+							<div class="wpbooklist-pagination-middle-div">
+								<select data-limit="' . $this->limit . '" class="wpbooklist-pagination-middle-div-select" data-table="' . $this->table . '">
+									' . $pagination_options_string . '
+								</select>
+							</div>
+							<div data-limit="' . $this->limit . '" id="wpbooklist-edit-next-100" class="wpbooklist-pagination-right-div" ' . $styledisableright . ' data-offset="' . $nextnum . '" data-table="' . $this->table . '">
+								<p>' . $this->trans->trans_37 . '<img class="wpbooklist-pagination-prev-img" src="' . ROOT_IMG_URL . 'next-right.png" /></p>
+							</div>
+						</div>
+					</div>';
+				} else {
+					$string_pagination = '';
+				}
+
+				$this->pagination_string = $string_pagination . '</div>
+										<div class="wpbooklist-spinner" id="wpbooklist-spinner-pagination"></div>' . $divclose;
+			}
+
+			return $string1 . $string2 . $string3 . $string6 . $string7 . $string8 . $this->pagination_string;
 		}
 
 

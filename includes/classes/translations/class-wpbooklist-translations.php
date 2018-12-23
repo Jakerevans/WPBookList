@@ -686,6 +686,7 @@ if ( ! class_exists( 'WPBookList_Translations', false ) ) :
 			$this->trans_654 = __( 'Inclusive Search', 'wpbooklist-textdomain' );
 			$this->trans_655 = __( 'Exclusive Search', 'wpbooklist-textdomain' );
 			$this->trans_656 = __( 'Select a Search Mode', 'wpbooklist-textdomain' );
+			$this->trans_657 = __( 'Total # of Books in Library', 'wpbooklist-textdomain' );
 
 
 

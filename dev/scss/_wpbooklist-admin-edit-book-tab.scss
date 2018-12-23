@@ -211,22 +211,27 @@
     position: relative;
 }
 
-#wpbooklist-edit_books-pagination-div div {
-    @extend %wpbooklist-default-buttons-style;
+.wpbooklist-pagination-left-div .wpbooklist-pagination-prev-img {
+    right: 3px;
+}
+
+.wpbooklist-pagination-prev-img {
+    width: 16px;
+    position: relative;
+    top: 3px;
+}
+
+.wpbooklist-pagination-left-div, .wpbooklist-pagination-middle-div, .wpbooklist-pagination-right-div {
     display: inline-block;
-    background-color: $primary-color;
     cursor: pointer;
-    padding-bottom: 10px;
-    padding-right: 5px;
-    padding-left: 5px;
-    padding-top: 0px;
-    border-radius: 5px;
-    color: white;
+}
+
+#wpbooklist-edit_books-pagination-div{
     text-align: center;
-    vertical-align: top;
-    width: 180px;
-    margin-top: 20px;
-    margin-bottom: 20px;
+}
+
+.wpbooklist-pagination-div-inner p{
+    margin:0px;
 }
 
 .wpbooklist-edit-book-icon-back, .wpbooklist-edit-book-icon-next {
@@ -243,6 +248,30 @@
     transform: rotate(180deg);
 }
 
-#wpbooklist-edit-next-100 {
-    float: right;
+#wpbooklist-edit-books-total-count-wrapper{
+    text-align: center;
+}
+
+#wpbooklist-edit-books-total-count-text{
+    font-weight: bold;
+}
+
+
+.wpbooklist-pagination-div .wpbooklist-pagination-div-inner .wpbooklist-pagination-left-div, .wpbooklist-pagination-div .wpbooklist-pagination-div-inner .wpbooklist-pagination-right-div{
+    border-radius: 6px;
+    cursor: pointer;
+    border: solid;
+    box-shadow: 0px 0px 8px #888;
+    border-color: transparent;
+    font-size: 12px;
+    font-style: italic;
+    padding-left:5px;
+    padding-right: 5px;
+}
+
+.wpbooklist-pagination-middle-div-select{
+    position: relative;
+    bottom: 3px;
+    margin-left: 10px;
+    margin-right: 10px;
 }
