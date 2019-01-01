@@ -410,6 +410,8 @@ if ( ! class_exists( 'WPBookList_Edit_Book_Form', false ) ) :
 
 				$this->pagination_string = $string_pagination . '</div>
 										<div class="wpbooklist-spinner" id="wpbooklist-spinner-pagination"></div>' . $divclose;
+			} else {
+				$this->pagination_string = '</div></div></div>';
 			}
 
 			return $string1 . $string2 . $string3 . $string6 . $string7 . $string8 . $this->pagination_string;
