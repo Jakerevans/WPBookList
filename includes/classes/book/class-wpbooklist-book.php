@@ -721,6 +721,11 @@ if ( ! class_exists( 'WPBookList_Book', false ) ) :
 				);
 			}
 
+			// Making a check for escaped ampersands.
+			if ( false !== stripos( $postdata, '&amp;' ) ) {
+				$postdata = str_replace( '&amp;', '&', $postdata );
+			}
+
 			if ( '' !== $this->isbn && null !== $this->isbn ) {
 				$this->apireport = $this->apireport . 'Results for "' . $this->isbn . '": ';
 			} elseif ( '' !== $this->title && null !== $this->title ) {
