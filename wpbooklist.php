@@ -11,7 +11,7 @@
  * Plugin Name: WordPress Book List
  * Plugin URI: https://www.jakerevans.com
  * Description: For authors, publishers, librarians, and book-lovers alike - use it to sell your books, record and catalog your library, and more!
- * Version: 6.1.4
+ * Version: 6.1.5
  * Author: Jake Evans
  * Text Domain: wpbooklist
  * Author URI: https://www.jakerevans.com
@@ -35,7 +35,7 @@ global $wpdb;
 
 // Root plugin folder directory.
 if ( ! defined( 'WPBOOKLIST_VERSION_NUM' ) ) {
-	define( 'WPBOOKLIST_VERSION_NUM', '6.1.4' );
+	define( 'WPBOOKLIST_VERSION_NUM', '6.1.5' );
 }
 
 // Root plugin folder directory.

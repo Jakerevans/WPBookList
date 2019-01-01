@@ -4,7 +4,7 @@
  * @author   Jake Evans
  * @category JavaScript
  * @package  Includes/Assets/Js
- * @version  6.1.4
+ * @version  6.1.5
  */
 
 jQuery( document ).ready( function( $ ) {

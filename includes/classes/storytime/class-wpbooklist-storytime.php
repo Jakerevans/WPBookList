@@ -5,7 +5,7 @@
  * @author   Jake Evans
  * @category Root Product
  * @package  Includes/Classes/Storytime
- * @version  6.1.4
+ * @version  6.1.5
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
