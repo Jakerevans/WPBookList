@@ -1995,6 +1995,18 @@ if ( ! class_exists( 'WPBookList_Book', false ) ) :
 				}
 			}
 
+			// Add the Categories into the Genres...
+			if ( '' !== $this->category && null !== $this->category ) {
+
+				// If it's not already in the genres string...
+				if ( false === stripos( $this->genres, $this->category ) ) {
+					$this->genres = rtrim( $this->genres, '---' );
+					$this->genres = $this->genres  . '---' . $this->category;
+				}
+			}
+
+			// Add in 
+
 			// Building array to add to DB.
 			$db_insert_array = array(
 				'additionalimage1'   => $this->additionalimage1,
@@ -2577,6 +2589,16 @@ if ( ! class_exists( 'WPBookList_Book', false ) ) :
 			} else {
 				$page = $this->page_yes;
 				$post = $this->post_yes;
+			}
+
+			// Add the Categories into the Genres...
+			if ( '' !== $this->category && null !== $this->category ) {
+
+				// If it's not already in the genres string...
+				if ( false === stripos( $this->genres, $this->category ) ) {
+					$this->genres = rtrim( $this->genres, '---' );
+					$this->genres = $this->genres  . '---' . $this->category;
+				}
 			}
 
 			// Building array to edit existing book.
