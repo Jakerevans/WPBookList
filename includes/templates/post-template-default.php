@@ -131,7 +131,7 @@ if ( ( null === $options_post_row->hiderating ) && ( 0 !== $book_row->rating ) )
 			$string4 = '<img style="width: 50px;" src="' . ROOT_IMG_URL . '1star.jpg" />';
 			break;
 		default:
-			$string4 = '<p style="margin:0px;font-size:10px; font-variant:all-small-caps; margin-left:5px;">' . $this->trans->trans_448 . '</p>';
+			$string4 = '<p style="margin:0px;font-size:10px; font-variant:all-small-caps; margin-left:5px;">' . $trans->trans_448 . '</p>';
 			break;
 	}
 }

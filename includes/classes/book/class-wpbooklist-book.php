@@ -1673,7 +1673,7 @@ if ( ! class_exists( 'WPBookList_Book', false ) ) :
 				}
 
 				if ( '' === $this->regularprice || null === $this->regularprice ) {
-					$this->regularprice = $settings->defaultprice;
+					$this->regularprice = $settings->defaultregularprice;
 				}
 
 				if ( '' === $this->stock || null === $this->stock ) {
@@ -1742,7 +1742,6 @@ if ( ! class_exists( 'WPBookList_Book', false ) ) :
 			global $wpdb;
 
 			if ( 'Yes' === $this->woocommerce ) {
-
 				$price = '';
 				if ( null !== $this->price && '' !== $this->price ) {
 					if ( ! is_numeric( $this->price[0] ) ) {
@@ -1762,10 +1761,17 @@ if ( ! class_exists( 'WPBookList_Book', false ) ) :
 					}
 				}
 
+				$this->book_array['price'] = $price;
+
 				$woocommerce_existing_id = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM $this->library WHERE ID = %d", $this->id ) );
 
+				$existingid = null;
+				if ( null !== $woocommerce_existing_id ) {
+					$existingid = $woocommerce_existing_id->woocommerce;
+				}
+
 				include_once STOREFRONT_CLASS_DIR . 'class-wpbooklist-storefront-woocommerce.php';
-				$this->woocommerce = new WPBookList_StoreFront_WooCommerce( $this->book_array, $woocommerce_existing_id->woocommerce, $this->title, $this->description, $this->image, $this->upsells, $this->crosssells );
+				$this->woocommerce = new WPBookList_StoreFront_WooCommerce( $this->book_array, $existingid, $this->title, $this->description, $this->image, $this->upsells, $this->crosssells );
 
 				$this->wooid = $this->woocommerce->post_id;
 
@@ -1872,9 +1878,9 @@ if ( ! class_exists( 'WPBookList_Book', false ) ) :
 
 			global $wpdb;
 
+			$similar_string = ';bsp;';
 			if ( false !== stripos( $this->similarbooks, '---' ) ) {
 				$similarbooks   = explode( '---', $this->similarbooks );
-				$similar_string = ';bsp;';
 				foreach ( $similarbooks as $key => $book ) {
 
 					if ( '' !== $book && false !== stripos( $book, ';' ) ) {
@@ -2156,9 +2162,6 @@ if ( ! class_exists( 'WPBookList_Book', false ) ) :
 					}
 				}
 			}
-
-			error_log( 'The array of Book values RIGHT before being added as a new book in DB:' );
-			error_log( print_r( $db_insert_array,true ) );
 
 			// Actually Adding submitted values to the DB.
 			global $wpdb;
@@ -2750,8 +2753,6 @@ if ( ! class_exists( 'WPBookList_Book', false ) ) :
 				}
 			}
 
-			error_log( 'The array of Book values RIGHT before being updated/edited in DB:' );
-			error_log( print_r( $data_for_edits,true ) );
 
 
 			// Now actually updating the book in the db.
