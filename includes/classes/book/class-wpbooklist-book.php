@@ -1665,7 +1665,7 @@ if ( ! class_exists( 'WPBookList_Book', false ) ) :
 			if ( is_plugin_active( 'wpbooklist-storefront/wpbooklist-storefront.php' ) ) {
 
 				// Get saved settings.
-				$settings_table = $wpdb->prefix . 'wpbooklist_jre_storefront_options';
+				$settings_table = $wpdb->prefix . 'wpbooklist_storefront_settings';
 				$settings       = $wpdb->get_row( "SELECT * FROM $settings_table" );
 
 				if ( '' === $this->saleprice || null === $this->saleprice ) {

@@ -21,96 +21,37 @@ var gulp   = require( 'gulp' ),
 	zip    = require( 'gulp-zip' ),
 	del    = require( 'del' );
 
-// Define file sources.
-var sassMain                  = [ 'dev/scss/wpbooklist-admin-ui.scss' ];
-var sassFrontendSource        = [ 'dev/scss/wpbooklist-main-frontend.scss' ];
-var sassFrontendSourcePartial = [ 'dev/scss/_wpbooklist-frontend-ui.scss' ];
-var sassBackendSource         = [ 'dev/scss/wpbooklist-main-admin.scss' ];
-var sassBackendSourcePartial  = [ 'dev/scss/_wpbooklist-backend-ui.scss' ];
-var sassPostPagesSource       = [ 'dev/scss/wpbooklist-posts-pages-default.scss' ];
-var sassWatch                 = [ 'dev/scss/*.scss' ];
-var jsBackendSource           = [ 'dev/js/backend/*.js' ];
-var jsFrontendSource          = [ 'dev/js/frontend/*.js' ];
-var jsFrontendWatch           = [ 'dev/js/frontend/*.js' ];
-var jsBackendWatch            = [ 'dev/js/backend/*.js' ];
-
 // Define default task.
-gulp.task( 'default', function() {
-
-});
-
-// Task to compile Frontend SASS file.
-gulp.task( 'sassFrontendSource', function() {
-	gulp.src( sassFrontendSource )
-		.pipe(sass({
-			outputStyle: 'compressed'
-		})
-			.on( 'error', gutil.log ) )
-		.pipe(gulp.dest( 'assets/css' ) )
-});
-
-// Task to compile Backend SASS file
-gulp.task( 'sassBackendSource', function() {
-	gulp.src( sassBackendSource )
-		.pipe(sass({
-			outputStyle: 'compressed'
-		})
-			.on( 'error', gutil.log) )
-		.pipe(gulp.dest( 'assets/css' ) );
-});
-
-// Task to compile Post/Pages SASS file
-gulp.task( 'sassPostPagesSource', function() {
-	gulp.src( sassPostPagesSource ) // use sassMain file source
-		.pipe(sass({
-			outputStyle: 'compressed' // Style of compiled CSS
-		})
-			.on( 'error', gutil.log) ) // Log descriptive errors to the terminal
-		.pipe(gulp.dest( 'assets/css' ) ); // The destination for the compiled file
-});
-
-// Task to concatenate and uglify js files
-gulp.task( 'concatAdminJs', function() {
-	gulp.src(jsBackendSource ) // use jsSources
-		.pipe(concat( 'wpbooklist_admin.min.js' ) ) // Concat to a file named 'script.js'
-		.pipe(uglify() ) // Uglify concatenated file
-		.pipe(gulp.dest( 'assets/js' ) ); // The destination for the concatenated and uglified file
-});
-
-// Task to concatenate and uglify js files
-gulp.task( 'concatFrontendJs', function() {
-	gulp.src(jsFrontendSource ) // use jsSources
-		.pipe(concat( 'wpbooklist_frontend.min.js' ) ) // Concat to a file named 'script.js'
-		.pipe(uglify() ) // Uglify concatenated file
-		.pipe(gulp.dest( 'assets/js' ) ); // The destination for the concatenated and uglified file
+gulp.task( 'default', function(done) {
+	return done();
 });
 
 gulp.task( 'copyassets', function () {
-	gulp.src([ './assets/**/*' ], {base: './'}).pipe(gulp.dest( '../wpbooklist_dist/WPBookList-Distribution' ) );
+	return gulp.src([ './assets/**/*' ], {base: './'}).pipe(gulp.dest( '../wpbooklist_dist/WPBookList-Distribution' ) );
 });
 
 gulp.task( 'copyincludes', function () {
-	gulp.src([ './includes/**/*' ], {base: './'}).pipe(gulp.dest( '../wpbooklist_dist/WPBookList-Distribution' ) );
+	return gulp.src([ './includes/**/*' ], {base: './'}).pipe(gulp.dest( '../wpbooklist_dist/WPBookList-Distribution' ) );
 });
 
 gulp.task( 'copyquotes', function () {
-	gulp.src([ './quotes/**/*' ], {base: './'}).pipe(gulp.dest( '../wpbooklist_dist/WPBookList-Distribution' ) );
+	return gulp.src([ './quotes/**/*' ], {base: './'}).pipe(gulp.dest( '../wpbooklist_dist/WPBookList-Distribution' ) );
 });
 
 gulp.task( 'copyconfig', function () {
-	gulp.src([ './wpbooklistconfig.ini' ], {base: './'}).pipe(gulp.dest( '../wpbooklist_dist/WPBookList-Distribution' ) );
+	return gulp.src([ './wpbooklistconfig.ini' ], {base: './'}).pipe(gulp.dest( '../wpbooklist_dist/WPBookList-Distribution' ) );
 });
 
 gulp.task( 'copyreadme', function () {
-	gulp.src([ './readme.txt' ], {base: './'}).pipe(gulp.dest( '../wpbooklist_dist/WPBookList-Distribution' ) );
+	return gulp.src([ './readme.txt' ], {base: './'}).pipe(gulp.dest( '../wpbooklist_dist/WPBookList-Distribution' ) );
 });
 
 gulp.task( 'copylang', function () {
-	gulp.src([ './languages/**/*' ], {base: './'}).pipe(gulp.dest( '../wpbooklist_dist/WPBookList-Distribution' ) );
+	return gulp.src([ './languages/**/*' ], {base: './'}).pipe(gulp.dest( '../wpbooklist_dist/WPBookList-Distribution' ) );
 });
 
 gulp.task( 'copymainfile', function () {
-	gulp.src([ './wpbooklist.php' ], {base: './'}).pipe(gulp.dest( '../wpbooklist_dist/WPBookList-Distribution' ) );
+	return gulp.src([ './wpbooklist.php' ], {base: './'}).pipe(gulp.dest( '../wpbooklist_dist/WPBookList-Distribution' ) );
 });
 
 gulp.task( 'zip', function () {
@@ -120,27 +61,70 @@ gulp.task( 'zip', function () {
 });
 
 gulp.task( 'cleanzip', function(cb) {
-	del([ '../wpbooklist_dist/WPBookList-Distribution/**/*' ], {force: true}, cb);
+	return del([ '../wpbooklist_dist/WPBookList-Distribution/**/*' ], {force: true}, cb);
 });
 
 gulp.task( 'clean', function(cb) {
-	del([ '../wpbooklist_dist/WPBookList-Distribution/**/*', '!../wpbooklist_dist/WPBookList-Distribution/wpbooklist.zip' ], {force: true}, cb);
+	return del([ '../wpbooklist_dist/WPBookList-Distribution/**/*', '!../wpbooklist_dist/WPBookList-Distribution/wpbooklist.zip' ], {force: true}, cb);
 });
 
-// Task to watch for changes in our file sources
-gulp.task( 'watch', function() {
-	gulp.watch(sassWatch,[ 'sassFrontendSource', 'sassBackendSource' ]);
-	gulp.watch(jsFrontendWatch,[ 'concatFrontendJs' ]);
-	gulp.watch(jsBackendWatch,[ 'concatAdminJs' ]);
+// Cleanup/Zip/Deploy task
+gulp.task('default',gulp.series( 'cleanzip', gulp.parallel('copyassets','copyincludes','copyquotes','copyconfig','copyreadme','copylang','copymainfile'),'zip','clean',function(done) {done();}));
+
+/*
+ *	WATCH TASKS FOR SCSS/CSS
+ *
+*/
+var sassFrontendSource        = [ 'dev/scss/wpbooklist-main-frontend.scss' ];
+var sassBackendSource         = [ 'dev/scss/wpbooklist-main-admin.scss' ];
+var jsBackendSource           = [ 'dev/js/backend/*.js' ];
+var jsFrontendSource          = [ 'dev/js/frontend/*.js' ];
+var watcherMainFrontEndScss = gulp.watch( sassFrontendSource );
+watcherMainFrontEndScss.on('all', function(event, path, stats) {
+
+	gulp.src( sassFrontendSource )
+		.pipe(sass({
+			outputStyle: 'compressed'
+		})
+			.on( 'error', gutil.log ) )
+		.pipe(gulp.dest( 'assets/css' ) )
+		.on('end', function(){ console.log('Finished!!!') });
+
+  console.log('File ' + path + ' was ' + event + 'ed, running tasks...');
 });
+var watcherMainBackEndScss = gulp.watch( sassBackendSource );
+watcherMainBackEndScss.on('all', function(event, path, stats) {
 
-// Default gulp task
-gulp.task( 'default', [ 'sassFrontendSource', 'sassBackendSource', 'sassPostPagesSource', 'concatAdminJs', 'concatFrontendJs', 'watch' ]);
+	gulp.src( sassBackendSource )
+		.pipe(sass({
+			outputStyle: 'compressed'
+		})
+			.on( 'error', gutil.log) )
+		.pipe(gulp.dest( 'assets/css' ) )
+		.on('end', function(){ console.log('Finished!!!') });
 
-//gulp.task( 'default', [ 'cleanzip' ]);
+  console.log('File ' + path + ' was ' + event + 'ed, running tasks...');
+});
+var watcherJsBackendSource = gulp.watch( jsBackendSource );
+watcherJsBackendSource.on('all', function(event, path, stats) {
 
-//gulp.task( 'default', [ 'copyassets', 'copyincludes', 'copyquotes', 'copyconfig', 'copyreadme', 'copylang', 'copymainfile' ]);
+	gulp.src( jsBackendSource ) // use jsSources
+		.pipe(concat( 'wpbooklist_admin.min.js' ) ) // Concat to a file named 'script.js'
+		.pipe(uglify() ) // Uglify concatenated file
+		.pipe(gulp.dest( 'assets/js' ) )
+		.on('end', function(){ console.log('Finished!!!') });
 
-//gulp.task( 'default', [ 'zip' ]);
 
-//gulp.task( 'default', [ 'clean' ]);
+  console.log('File ' + path + ' was ' + event + 'ed, running tasks...');
+});
+var watcherJsFrontendSource = gulp.watch( jsFrontendSource );
+watcherJsFrontendSource.on('all', function(event, path, stats) {
+
+	gulp.src(jsFrontendSource ) // use jsSources
+		.pipe(concat( 'wpbooklist_frontend.min.js' ) ) // Concat to a file named 'script.js'
+		.pipe(uglify() ) // Uglify concatenated file
+		.pipe(gulp.dest( 'assets/js' ) ) // The destination for the concatenated and uglified file
+		.on('end', function(){ console.log('Finished!!!') });
+
+  console.log('File ' + path + ' was ' + event + 'ed, running tasks...');
+});
