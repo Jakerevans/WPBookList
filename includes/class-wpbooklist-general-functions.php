@@ -46,6 +46,7 @@ if ( ! class_exists( 'WPBookList_General_Functions', false ) ) :
 				'wpbooklist-search/wpbooklist-search.php',
 				'wpbooklist-storefront/wpbooklist-storefront.php',
 				'wpbooklist-stylizer/wpbooklist-stylizer.php',
+				'wpbooklist-ebook/wpbooklist-ebook.php',
 			);
 
 			foreach ( $dependent_array as $key => $extension ) {
