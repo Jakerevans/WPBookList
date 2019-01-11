@@ -45,7 +45,23 @@ if ( ! class_exists( 'WPBookList_Add_Book_Form', false ) ) :
 			$db_row     = $wpdb->get_results( "SELECT * FROM $table_name" );
 
 			$string1 = '<div id="wpbooklist-addbook-container">
-			<p class="wpbooklist-tab-intro-para">' . $this->trans->trans_502 . '<span class="wpbooklist-color-orange-italic">WPBookList</span> ' . $this->trans->trans_503 . '<br/><br/>
+			<p class="wpbooklist-tab-intro-para">' . $this->trans->trans_502 . ' <span class="wpbooklist-color-orange-italic">WPBookList</span> ' . $this->trans->trans_503 . '<br/><br/>
+				<div class="wpbooklist-mini-ultimate-advert">
+						<div id="span_1_of_1_featured">
+							<div id="wpbooklist-featured-bundle-img-text-div">
+							<div id="wpbooklist-featured-bundle-text">
+								<p style="display:none;">Get every <span class="wpbooklist-color-orange-italic">WPBookList</span> product in <strong><em>one single purchase! </em></strong> Choose an <a href="https://wpbooklist.com/index.php/ultimate-bundles/">Ultimate WPBookList Bundle</a> and receive:</p>
+								<p>
+									<img class="wpbooklist-featured-icon-img" src="https://wpbooklist.com/wp-content/uploads/2017/08/svgs/librarystylepaksblack.svg" scale="0"><a class="wpbooklist-icon-link" href="https://wpbooklist.com/index.php/ultimate-bundles/">Every StylePak</a><img class="wpbooklist-featured-icon-img" src="https://wpbooklist.com/wp-content/plugins/wpbooklist/assets/img/icons/web-site.svg" scale="0"><a class="wpbooklist-icon-link" href="https://wpbooklist.com/index.php/ultimate-bundles/">Every Extension</a><img class="wpbooklist-featured-icon-img" src="https://wpbooklist.com/wp-content/uploads/2017/08/svgs/seo-template.svg" scale="0"><a class="wpbooklist-icon-link" href="https://wpbooklist.com/index.php/ultimate-bundles/">Every Template Pak</a><br><img class="wpbooklist-featured-icon-img" src="https://wpbooklist.com/wp-content/uploads/2017/08/svgs/new.svg" scale="0"><a class="wpbooklist-icon-link" href="https://wpbooklist.com/index.php/ultimate-bundles/">All Future Extensions</a><img class="wpbooklist-featured-icon-img" src="https://wpbooklist.com/wp-content/uploads/2017/08/svgs/support-woman.svg" scale="0"><a class="wpbooklist-icon-link" href="https://wpbooklist.com/index.php/ultimate-bundles/">Priority Tech Support</a>
+								</p>
+							</div>
+							<div id="wpbooklist-featured-bundle-purchase-div">
+							<div class="wpbooklist-extensions-purchase-button-link"><a href="https://wpbooklist.com/index.php/ultimate-bundles/">Bundles Start at $30
+							Purchase Now!</a></div>
+							</div>
+						</div>
+					</div>
+				</div>
 				<div class="section group">
 					<div class="col span_1_of_2">
 						<a id="wpbooklist-extensions-page-img-link" href="http://wpbooklist.com/index.php/downloads/extensions-bundle/">
@@ -53,7 +69,7 @@ if ( ! class_exists( 'WPBookList_Add_Book_Form', false ) ) :
 								<img class="wpbooklist-extension-img-bundle-mult" src="http://wpbooklist.com/wp-content/uploads/2017/08/svgs/book.svg"/>
 								<img class="wpbooklist-extension-img-bundle-mult" src="http://wpbooklist.com/wp-content/uploads/2017/08/svgs/ereader-with-bookmark.svg"/>
 								<img class="wpbooklist-extension-img-bundle-mult" src="http://wpbooklist.com/wp-content/uploads/2017/08/svgs/profits.svg">
-								<p class="wpbooklist-extension-p-bundle-ext">' . $this->trans->trans_504 . '</p>
+								<p class="wpbooklist-extension-p-bundle-ext">Extensions Bundle</p>
 								<p class="wpbooklist-tab-intro-para"><img class="wpbooklist-extension-img-bundle-mult" src="http://wpbooklist.com/wp-content/uploads/2017/08/svgs/server.svg">
 									<img class="wpbooklist-extension-img-bundle-mult" src="http://wpbooklist.com/wp-content/uploads/2017/08/svgs/ereader.svg"/>
 									<img class="wpbooklist-extension-img-bundle-mult" src="http://wpbooklist.com/wp-content/uploads/2017/08/svgs/goodreads-letter-logo.svg"/>

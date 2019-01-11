@@ -522,6 +522,9 @@ if ( ! class_exists( 'WPBookList_Compat_Functions', false ) ) :
 				if ( 0 === $wpdb->query( "SHOW COLUMNS FROM `$table_name_default` LIKE 'sale_url'" ) ) {
 					$wpdb->query( "ALTER TABLE $table_name_default ADD sale_url TEXT" );
 				}
+				if ( 0 === $wpdb->query( "SHOW COLUMNS FROM `$table_name_default` LIKE 'ebook'" ) ) {
+					$wpdb->query( "ALTER TABLE $table_name_default ADD ebook TEXT" );
+				}
 				
 
 				// Modify the ISBN column in the default library to be varchar, which will allow the storage of ASIN numbers.
@@ -704,6 +707,9 @@ if ( ! class_exists( 'WPBookList_Compat_Functions', false ) ) :
 					}
 					if ( 0 === $wpdb->query( "SHOW COLUMNS FROM `$table` LIKE 'sale_url'" ) ) {
 						$wpdb->query( "ALTER TABLE $table ADD sale_url TEXT" );
+					}
+					if ( 0 === $wpdb->query( "SHOW COLUMNS FROM `$table` LIKE 'ebook'" ) ) {
+						$wpdb->query( "ALTER TABLE $table ADD ebook TEXT" );
 					}
 
 					// Now begin modifying the custom library's settings tables.

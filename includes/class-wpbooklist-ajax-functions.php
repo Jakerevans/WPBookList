@@ -123,6 +123,7 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 			$woocommerce        = '';
 			$woofile            = '';
 			$bookaction         = '';
+			$ebookurl           = '';
 
 			// First set the variables we'll be passing to class-wpbooklist-book.php to ''.
 			if ( isset( $_POST['additionalimage1'] ) ) {
@@ -440,6 +441,10 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 				$bookid = filter_var( wp_unslash( $_POST['bookid'] ), FILTER_SANITIZE_STRING );
 			}
 
+			if ( isset( $_POST['ebookurl'] ) ) {
+				$ebookurl = filter_var( wp_unslash( $_POST['ebookurl'] ), FILTER_SANITIZE_URL );
+			}
+
 			// Removing any dashes from the ISBN Field.
 			if ( '' !== $isbn && null !== $isbn && false !== stripos( $isbn, '-' ) ) {
 				$isbn = str_replace( '-', '', $isbn );
@@ -536,6 +541,7 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 				'width'              => $width,
 				'woocommerce'        => $woocommerce,
 				'woofile'            => $woofile,
+				'ebook'              => $ebookurl,
 			);
 
 			// Now adding in any custom fields to above arrays for insertion into DB.
@@ -1012,6 +1018,7 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 			$woocommerce        = '';
 			$woofile            = '';
 			$bookaction         = '';
+			$ebookurl           = '';
 
 			// First set the variables we'll be passing to class-wpbooklist-book.php to ''.
 			if ( isset( $_POST['additionalimage1'] ) ) {
@@ -1333,10 +1340,16 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 				$bookid = filter_var( wp_unslash( $_POST['bookid'] ), FILTER_SANITIZE_STRING );
 			}
 
+			if ( isset( $_POST['ebookurl'] ) ) {
+				$ebookurl = filter_var( wp_unslash( $_POST['ebookurl'] ), FILTER_SANITIZE_URL );
+			}
+
 			// Removing any dashes from the ISBN Field.
 			if ( '' !== $isbn && null !== $isbn && false !== stripos( $isbn, '-' ) ) {
 				$isbn = str_replace( '-', '', $isbn );
 			}
+
+
 
 			// Removing any dashes from the ISBN13 Field.
 			if ( '' !== $isbn13 && null !== $isbn13 && false !== stripos( $isbn13, '-' ) ) {
@@ -1430,6 +1443,7 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 				'width'              => $width,
 				'woocommerce'        => $woocommerce,
 				'woofile'            => $woofile,
+				'ebook'              => $ebookurl,
 			);
 
 			// Now adding in any custom fields to above arrays for insertion into DB.
@@ -1603,7 +1617,8 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 					currentlendemail TEXT,
 					currentlendname TEXT,
 					date_finished TEXT,
-					description MEDIUMTEXT, 
+					description MEDIUMTEXT,
+					ebook TEXT,
 					edition TEXT,
 					finished TEXT,
 					first_edition TEXT,

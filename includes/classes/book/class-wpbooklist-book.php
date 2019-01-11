@@ -92,6 +92,7 @@ if ( ! class_exists( 'WPBookList_Book', false ) ) :
 		public $subject;
 		public $title;
 		public $woocommerce;
+		public $ebook;
 
 		// Variables that pertain to the Storefront Extension / WooCommerce Specifics.
 		public $saleprice;
@@ -497,6 +498,10 @@ if ( ! class_exists( 'WPBookList_Book', false ) ) :
 
 				if ( isset( $book_array['woofile'] ) ) {
 					$this->woofile = $book_array['woofile'];
+				}
+
+				if ( isset( $book_array['ebook'] ) ) {
+					$this->ebook = $book_array['ebook'];
 				}
 
 				$this->id = $id;
@@ -2072,6 +2077,7 @@ if ( ! class_exists( 'WPBookList_Book', false ) ) :
 				'subject'            => $this->subject,
 				'title'              => $this->title,
 				'woocommerce'        => $this->wooid,
+				'ebook'              => $this->ebook,
 			);
 
 			// Building mask array to add to DB.
@@ -2123,6 +2129,7 @@ if ( ! class_exists( 'WPBookList_Book', false ) ) :
 				'%d',
 				'%s',
 				'%f',
+				'%s',
 				'%s',
 				'%s',
 				'%s',
@@ -2663,6 +2670,7 @@ if ( ! class_exists( 'WPBookList_Book', false ) ) :
 				'subject'            => $this->subject,
 				'title'              => $this->title,
 				'woocommerce'        => $this->wooid,
+				'ebook'              => $this->ebook,
 			);
 
 			// Building mask array to edit existing book.
@@ -2714,6 +2722,7 @@ if ( ! class_exists( 'WPBookList_Book', false ) ) :
 				'%d',
 				'%s',
 				'%f',
+				'%s',
 				'%s',
 				'%s',
 				'%s',

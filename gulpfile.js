@@ -21,9 +21,55 @@ var gulp   = require( 'gulp' ),
 	zip    = require( 'gulp-zip' ),
 	del    = require( 'del' );
 
+var sassFrontendSource        = [ 'dev/scss/wpbooklist-main-frontend.scss' ];
+var sassBackendSource         = [ 'dev/scss/wpbooklist-main-admin.scss' ];
+var jsBackendSource           = [ 'dev/js/backend/*.js' ];
+var jsFrontendSource          = [ 'dev/js/frontend/*.js' ];
+var watcherMainFrontEndScss = gulp.watch( sassFrontendSource );
+var watcherMainBackEndScss = gulp.watch( sassBackendSource );
+var watcherJsFrontendSource = gulp.watch( jsFrontendSource );
+var watcherJsBackendSource = gulp.watch( jsBackendSource );
+
 // Define default task.
-gulp.task( 'default', function(done) {
+gulp.task( 'default', function( done ) {
 	return done();
+});
+
+// Task to compile Frontend SASS file.
+gulp.task( 'sassFrontendSource', function() {
+	return gulp.src( sassFrontendSource )
+		.pipe(sass({
+			outputStyle: 'compressed'
+		})
+			.on( 'error', gutil.log ) )
+		.pipe(gulp.dest( 'assets/css' ) )
+});
+
+// Task to compile Backend SASS file
+gulp.task( 'sassBackendSource', function() {
+	return gulp.src( sassBackendSource )
+		.pipe(sass({
+			outputStyle: 'compressed'
+		})
+			.on( 'error', gutil.log) )
+		.pipe(gulp.dest( 'assets/css' ) );
+});
+
+// Task to concatenate and uglify js files
+gulp.task( 'concatAdminJs', function() {
+	return gulp.src(jsBackendSource ) // use jsSources
+		.pipe(concat( 'wpbooklist_admin.min.js' ) ) // Concat to a file named 'script.js'
+		.pipe(uglify() ) // Uglify concatenated file
+		.pipe(gulp.dest( 'assets/js' ) ); // The destination for the concatenated and uglified file
+});
+
+
+// Task to concatenate and uglify js files
+gulp.task( 'concatFrontendJs', function() {
+	return gulp.src(jsFrontendSource ) // use jsSources
+		.pipe(concat( 'wpbooklist_frontend.min.js' ) ) // Concat to a file named 'script.js'
+		.pipe(uglify() ) // Uglify concatenated file
+		.pipe(gulp.dest( 'assets/js' ) ); // The destination for the concatenated and uglified file
 });
 
 gulp.task( 'copyassets', function () {
@@ -69,17 +115,12 @@ gulp.task( 'clean', function(cb) {
 });
 
 // Cleanup/Zip/Deploy task
-gulp.task('default',gulp.series( 'cleanzip', gulp.parallel('copyassets','copyincludes','copyquotes','copyconfig','copyreadme','copylang','copymainfile'),'zip','clean',function(done) {done();}));
+gulp.task('default',gulp.series( 'cleanzip', 'sassFrontendSource', 'sassBackendSource', 'concatAdminJs', 'concatFrontendJs', gulp.parallel('copyassets','copyincludes','copyquotes','copyconfig','copyreadme','copylang','copymainfile'),'zip','clean',function(done) {done();}));
 
 /*
  *	WATCH TASKS FOR SCSS/CSS
  *
 */
-var sassFrontendSource        = [ 'dev/scss/wpbooklist-main-frontend.scss' ];
-var sassBackendSource         = [ 'dev/scss/wpbooklist-main-admin.scss' ];
-var jsBackendSource           = [ 'dev/js/backend/*.js' ];
-var jsFrontendSource          = [ 'dev/js/frontend/*.js' ];
-var watcherMainFrontEndScss = gulp.watch( sassFrontendSource );
 watcherMainFrontEndScss.on('all', function(event, path, stats) {
 
 	gulp.src( sassFrontendSource )
@@ -92,7 +133,6 @@ watcherMainFrontEndScss.on('all', function(event, path, stats) {
 
   console.log('File ' + path + ' was ' + event + 'ed, running tasks...');
 });
-var watcherMainBackEndScss = gulp.watch( sassBackendSource );
 watcherMainBackEndScss.on('all', function(event, path, stats) {
 
 	gulp.src( sassBackendSource )
@@ -105,7 +145,6 @@ watcherMainBackEndScss.on('all', function(event, path, stats) {
 
   console.log('File ' + path + ' was ' + event + 'ed, running tasks...');
 });
-var watcherJsBackendSource = gulp.watch( jsBackendSource );
 watcherJsBackendSource.on('all', function(event, path, stats) {
 
 	gulp.src( jsBackendSource ) // use jsSources
@@ -117,7 +156,6 @@ watcherJsBackendSource.on('all', function(event, path, stats) {
 
   console.log('File ' + path + ' was ' + event + 'ed, running tasks...');
 });
-var watcherJsFrontendSource = gulp.watch( jsFrontendSource );
 watcherJsFrontendSource.on('all', function(event, path, stats) {
 
 	gulp.src(jsFrontendSource ) // use jsSources
