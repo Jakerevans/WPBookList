@@ -787,7 +787,8 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 					$custom_delete_result = $wpdb->delete( $wpdb->prefix . 'wpbooklist_jre_users_table', array( 'wpuserid' => $wpuserid ), array( '%d' ) );
 
 					// Now delete the associated WordPress user.
-					$wp_delete_result = wp_delete_user( $wpuserid );
+					$wp_delete_result = 1;
+					// $wp_delete_result = wp_delete_user( $wpuserid );
 
 					wp_die( $custom_delete_result . ' ' . $wp_delete_result );
 

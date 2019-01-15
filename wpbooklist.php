@@ -260,6 +260,9 @@ if ( false !== stripos( plugin_dir_path( __FILE__ ), '/wpbooklist.com' ) ) {
 	// Registers table names.
 	add_action( 'init', array( $wp_book_list_general_functions, 'wpbooklist_jre_register_table_name' ) );
 
+	// Creates the WPBookList Users table and the default WPBookList User.
+	register_activation_hook( __FILE__, array( $wp_book_list_general_functions, 'wpbooklist_add_user_table' ) );
+
 	// Records the user's url upon activation.
 	register_activation_hook( __FILE__, array( $wp_book_list_general_functions, 'wpbooklist_jre_record_user_url' ) );
 
@@ -298,9 +301,6 @@ if ( false !== stripos( plugin_dir_path( __FILE__ ), '/wpbooklist.com' ) ) {
 
 	// Creates the one master display options table.
 	register_activation_hook( __FILE__, array( $wp_book_list_general_functions, 'wpbooklist_jre_create_storytime_stories_settings_table' ) );
-
-	// Creates the WPBookList Users table and the default WPBookList User.
-	register_activation_hook( __FILE__, array( $wp_book_list_general_functions, 'wpbooklist_jre_create_user_table' ) );
 
 	// 
 	register_deactivation_hook( __FILE__, array( $wp_book_list_general_functions, 'wpbooklist_deactivate_all_extensions' ) );

@@ -99,74 +99,79 @@ if ( ! class_exists( 'WPBookList_General_Functions', false ) ) :
 			$utilities_date = new WPBookList_Utilities_Date();
 			$this->date     = $utilities_date->wpbooklist_get_date_via_current_time( 'mysql' );
 
-			// First let's check and see that we don't already have a user with the SuperAdmin role.
-			$superadmin = $wpdb->get_row( 'SELECT * FROM ' . $wpdb->prefix . "wpbooklist_jre_users_table WHERE role = 'SuperAdmin'" );
+			// Checking if table exists.
+			$test_name = $wpdb->prefix . 'wpbooklist_jre_users_table';
+			if ( $test_name === $wpdb->get_var( "SHOW TABLES LIKE '$test_name'" ) ) {
 
-			// If we don't have a user with the 'SuperAdmin' role, create a new user as a SuperAdmin with the logged-in user's info.
-			if ( null === $superadmin ) {
-				if ( is_user_logged_in() ) {
+				// First let's check and see that we don't already have a user with the SuperAdmin role.
+				$superadmin = $wpdb->get_row( 'SELECT * FROM ' . $wpdb->prefix . "wpbooklist_jre_users_table WHERE role = 'SuperAdmin'" );
 
-					$current_user = wp_get_current_user();
-					if ( ! $current_user->exists() ) {
-						return;
+				// If we don't have a user with the 'SuperAdmin' role, create a new user as a SuperAdmin with the logged-in user's info.
+				if ( null === $superadmin ) {
+					if ( is_user_logged_in() ) {
+
+						$current_user = wp_get_current_user();
+						if ( ! $current_user->exists() ) {
+							return;
+						}
+
+						// Create the permissions string.
+						$permissions = 'Yes-Yes-Yes-Yes-Yes';
+
+						$users_save_array = array(
+							'firstname'    => $current_user->user_firstname,
+							'lastname'     => $current_user->user_lastname,
+							'datecreated'  => $this->date,
+							'wpuserid'     => $current_user->ID,
+							'email'        => $current_user->user_email,
+							'username'     => $current_user->user_email,
+							'role'         => 'SuperAdmin',
+							'permissions'  => $permissions,
+							'libraries'    => 'alllibraries',
+							'profileimage' => get_avatar_url( $current_user->ID ),
+						);
+
+						// Requiring & Calling the file/class that will insert or update our data.
+						require_once CLASS_USERS_DIR . 'class-wpbooklist-save-users-data.php';
+						$save_class      = new WPBOOKLIST_Save_Users_Data( $users_save_array );
+						$db_write_result = $save_class->wpbooklist_jre_save_users_actual();
 					}
-
-					// Create the permissions string.
-					$permissions = 'Yes-Yes-Yes-Yes-Yes';
-
-					$users_save_array = array(
-						'firstname'    => $current_user->user_firstname,
-						'lastname'     => $current_user->user_lastname,
-						'datecreated'  => $this->date,
-						'wpuserid'     => $current_user->ID,
-						'email'        => $current_user->user_email,
-						'username'     => $current_user->user_email,
-						'role'         => 'SuperAdmin',
-						'permissions'  => $permissions,
-						'libraries'    => 'alllibraries',
-						'profileimage' => get_avatar_url( $current_user->ID ),
-					);
-
-					// Requiring & Calling the file/class that will insert or update our data.
-					require_once CLASS_USERS_DIR . 'class-wpbooklist-save-users-data.php';
-					$save_class      = new WPBOOKLIST_Save_Users_Data( $users_save_array );
-					$db_write_result = $save_class->wpbooklist_jre_save_users_actual();
-				}
-			} else {
-
-				// If we already have a SuperAdmin, then add this user with a role of null, if they don't already exist.
-				$current_user = wp_get_current_user();
-				if ( ! $current_user->exists() ) {
-					return;
 				}
 
-				$regularadmin = $wpdb->get_row( 'SELECT * FROM ' . $wpdb->prefix . 'wpbooklist_jre_users_table WHERE wpuserid = ' . $current_user->ID );
+				// Now add all WordPress users as basic wpbooklist users.
+				$all_users = get_users();
+				foreach ( $all_users as $key => $value ) {
 
-				// add this user if they don't already exist. Limit them to the Default Library, and prevent them from making any Display or Setting changes.
-				if ( null === $regularadmin ) {
+					$regularadmin = $wpdb->get_row( 'SELECT * FROM ' . $wpdb->prefix . 'wpbooklist_jre_users_table WHERE wpuserid = ' . $value->ID );
 
-					// Create the permissions string.
-					$permissions = 'Yes-Yes-Yes-No-No';
+					// Add this user if they don't already exist. Limit them to the Default Library, and prevent them from making any Display or Setting changes.
+					if ( null === $regularadmin ) {
 
-					$users_save_array = array(
-						'firstname'    => $current_user->user_firstname,
-						'lastname'     => $current_user->user_lastname,
-						'datecreated'  => $this->date,
-						'wpuserid'     => $current_user->ID,
-						'email'        => $current_user->user_email,
-						'username'     => $current_user->user_email,
-						'role'         => null,
-						'permissions'  => $permissions,
-						'libraries'    => '-wp_wpbooklist_jre_saved_book_log',
-						'profileimage' => get_avatar_url( $current_user->ID ),
-					);
+						// Create the permissions string.
+						$permissions = 'Yes-Yes-Yes-No-No';
 
-					// Requiring & Calling the file/class that will insert or update our data.
-					require_once CLASS_USERS_DIR . 'class-wpbooklist-save-users-data.php';
-					$save_class      = new WPBOOKLIST_Save_Users_Data( $users_save_array );
-					$db_write_result = $save_class->wpbooklist_jre_save_users_actual();
+						$users_save_array = array(
+							'firstname'    => $value->user_firstname,
+							'lastname'     => $value->user_lastname,
+							'datecreated'  => $this->date,
+							'wpuserid'     => $value->ID,
+							'email'        => $value->user_email,
+							'username'     => $value->user_email,
+							'role'         => null,
+							'permissions'  => $permissions,
+							'libraries'    => '-wp_wpbooklist_jre_saved_book_log',
+							'profileimage' => get_avatar_url( $value->ID ),
+						);
+
+						// Requiring & Calling the file/class that will insert or update our data.
+						require_once CLASS_USERS_DIR . 'class-wpbooklist-save-users-data.php';
+						$save_class      = new WPBOOKLIST_Save_Users_Data( $users_save_array );
+						$db_write_result = $save_class->wpbooklist_jre_save_users_actual();
+
+					}
 				}
 			}
+
 		}
 
 		/**
@@ -1007,7 +1012,7 @@ if ( ! class_exists( 'WPBookList_General_Functions', false ) ) :
 		/**
 		 *  Runs once upon plugin activation and creates the Users tables
 		 */
-		public function wpbooklist_jre_create_user_table() {
+		public function wpbooklist_add_user_table() {
 			require_once ABSPATH . 'wp-admin/includes/upgrade.php';
 			global $wpdb;
 			global $charset_collate;

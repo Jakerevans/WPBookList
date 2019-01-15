@@ -46,42 +46,49 @@ if ( ! class_exists( ' WPBookList_Storytime', false ) ) :
 		 */
 		public function __construct( $action, $category = null, $id = null, $incoming_story_data = null ) {
 
-			// Default class-wide variables.
 			global $wpdb;
-			$this->table               = $wpdb->prefix . 'wpbooklist_jre_storytime_stories';
-			$this->stories_db_data     = $wpdb->get_results( 'SELECT * FROM ' . $wpdb->prefix . 'wpbooklist_jre_storytime_stories' );
-			$this->default_mask_array  = array( '%s', '%s', '%s', '%s', '%s', '%s' );
-			$this->category            = $category;
-			$this->id                  = $id;
-			$this->incoming_story_data = $incoming_story_data;
 
-			if ( 'install' === $action ) {
-				$this->create_default_data();
-				$this->insert_default_data();
-			}
+			// Checking if table exists.
+			$test_name = $wpdb->prefix . 'wpbooklist_jre_storytime_stories';
+			if ( $test_name === $wpdb->get_var( "SHOW TABLES LIKE '$test_name'" ) ) {
 
-			if ( 'categorychange' === $action ) {
-				$this->category_change();
-			}
+				// Default class-wide variables.
+				$this->table               = $wpdb->prefix . 'wpbooklist_jre_storytime_stories';
+				$this->stories_db_data     = $wpdb->get_results( 'SELECT * FROM ' . $wpdb->prefix . 'wpbooklist_jre_storytime_stories' );
+				$this->default_mask_array  = array( '%s', '%s', '%s', '%s', '%s', '%s' );
+				$this->category            = $category;
+				$this->id                  = $id;
+				$this->incoming_story_data = $incoming_story_data;
 
-			if ( 'getcontent' === $action ) {
-				$this->get_content();
-			}
+				if ( 'install' === $action ) {
+					$this->create_default_data();
+					$this->insert_default_data();
+				}
 
-			if ( 'createpage' === $action ) {
-				$this->post_type = 'page';
-				$this->create_page_category();
-				$this->create_page();
-			}
+				if ( 'categorychange' === $action ) {
+					$this->category_change();
+				}
 
-			if ( 'createpost' === $action ) {
-				$this->post_type = 'post';
-				$this->create_post_category();
-				$this->create_post();
-			}
+				if ( 'getcontent' === $action ) {
+					$this->get_content();
+				}
 
-			if ( 'frontend_shortcode_output' === $action ) {
-				$this->output_storytime_reader();
+				if ( 'createpage' === $action ) {
+					$this->post_type = 'page';
+					$this->create_page_category();
+					$this->create_page();
+				}
+
+				if ( 'createpost' === $action ) {
+					$this->post_type = 'post';
+					$this->create_post_category();
+					$this->create_post();
+				}
+
+				if ( 'frontend_shortcode_output' === $action ) {
+					$this->output_storytime_reader();
+				}
+
 			}
 		}
 
