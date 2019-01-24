@@ -1031,7 +1031,7 @@ if ( ! class_exists( 'WPBookList_General_Functions', false ) ) :
 			            firstname varchar(190),
 			            lastname varchar(255),
 			            datecreated varchar(255),
-			            wpuserid smallint(6),
+			            wpuserid bigint(255),
 			            email varchar(255),
 			            username varchar(255),
 			            role varchar(255),
