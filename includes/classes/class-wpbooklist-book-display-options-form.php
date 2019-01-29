@@ -562,6 +562,7 @@ if ( ! class_exists( 'WPBookList_Book_Display_Options_Form', false ) ) :
 					<input id="wpbooklist-uncheck-all" type="checkbox" name="uncheck-all">
 				</div>
 				<button class="wpbooklist-response-success-fail-button wpbooklist-admin-save-book-display-button" type="button">' . $this->trans->trans_245 . '</button>
+				<div class="wpbooklist-spinner" id="wpbooklist-spinner-1"></div>
 			</div>';
 
 			echo $string1 . $string2 . $string3 . $string4 . $string5;

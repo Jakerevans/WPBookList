@@ -87,8 +87,7 @@ $string1 = '<div id="wpbl-pagetd-top-container">
 	<div id="wpbl-pagetd-left-row">
 		<div id="wpbl-pagetd-image">';
 
-if ( null === $options_page_row->hidebookimage || 0 === $options_page_row->hidebookimage ) {
-
+if ( null === $options_page_row->hidebookimage || '0' === $options_page_row->hidebookimage ) {
 	if ( null === $book_row->image ) {
 		$string2 = '<img id="wpbl-pagetd-img" src="' . ROOT_IMG_URL . 'image_unavaliable.png"/>';
 	} else {
@@ -99,36 +98,34 @@ if ( null === $options_page_row->hidebookimage || 0 === $options_page_row->hideb
 
 $string3 = '</div>
 		<div id="wpbl-pagetd-details-div">';
-
-if ( ( null === $options_page_row->hiderating ) && ( 0 !== $book_row->rating ) ) {
-
+if ( ( '1' !== $options_page_row->hiderating ) && ( '0' !== $book_row->rating ) ) {
 	switch ( $book_row->rating ) {
 		case '5':
-			$string4 = '<img style="width: 50px;" src="' . ROOT_IMG_URL . '5star.jpg" />';
+			$string4 = '<img style="width: 80px;" src="' . ROOT_IMG_URL . '5star.jpg" />';
 			break;
 		case '4.5':
-			$string4 = '<img style="width: 50px;" src="' . ROOT_IMG_URL . '4halfstar.jpg" />';
+			$string4 = '<img style="width: 80px;" src="' . ROOT_IMG_URL . '4halfstar.jpg" />';
 			break;
 		case '4':
-			$string4 = '<img style="width: 50px;" src="' . ROOT_IMG_URL . '4star.jpg" />';
+			$string4 = '<img style="width: 80px;" src="' . ROOT_IMG_URL . '4star.jpg" />';
 			break;
 		case '3.5':
-			$string4 = '<img style="width: 50px;" src="' . ROOT_IMG_URL . '3halfstar.jpg" />';
+			$string4 = '<img style="width: 80px;" src="' . ROOT_IMG_URL . '3halfstar.jpg" />';
 			break;
 		case '3':
-			$string4 = '<img style="width: 50px;" src="' . ROOT_IMG_URL . '3star.jpg" />';
+			$string4 = '<img style="width: 80px;" src="' . ROOT_IMG_URL . '3star.jpg" />';
 			break;
 		case '2.5':
-			$string4 = '<img style="width: 50px;" src="' . ROOT_IMG_URL . '2halfstar.jpg" />';
+			$string4 = '<img style="width: 80px;" src="' . ROOT_IMG_URL . '2halfstar.jpg" />';
 			break;
 		case '2':
-			$string4 = '<img style="width: 50px;" src="' . ROOT_IMG_URL . '2star.jpg" />';
+			$string4 = '<img style="width: 80px;" src="' . ROOT_IMG_URL . '2star.jpg" />';
 			break;
 		case '1.5':
-			$string4 = '<img style="width: 50px;" src="' . ROOT_IMG_URL . '1halfstar.jpg" />';
+			$string4 = '<img style="width: 80px;" src="' . ROOT_IMG_URL . '1halfstar.jpg" />';
 			break;
 		case '1':
-			$string4 = '<img style="width: 50px;" src="' . ROOT_IMG_URL . '1star.jpg" />';
+			$string4 = '<img style="width: 80px;" src="' . ROOT_IMG_URL . '1star.jpg" />';
 			break;
 		default:
 			$string4 = '<p style="margin:0px;font-size:10px; font-variant:all-small-caps; margin-left:5px;">' . $trans->trans_448 . '</p>';

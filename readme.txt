@@ -4,7 +4,7 @@ Donate link: https://ko-fi.com/A8385C9
 Tags: books, woocommerce, author, book, affiliate  
 Requires at least: 3.0.1
 Tested up to: 5.0
-Stable tag: 6.1.5
+Stable tag: 6.1.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -279,12 +279,15 @@ In order to become one of these "Official Translators", I'll need to know your o
 
 **6.1.2** - Removed the 'Filter_var' function call inside of the 'Empty' construct on line 1145 of class-wpbooklist-general-functions.php file.
 
-**6.1.3** - Introduced a new area in the Book View that displays the Additional Images that are specified when a book is added. Fixed quite a few bugs and other errors, including, but not limited to: An error with the WPBookList Cache not saving with the correct prefix, a bug preventing the editing of some fields, the inclusion of the 'Enable Storefront' Options on the 'Pages' and 'Posts' Display Options Pages, inclusion of a new function to deactivate all WPBookList Extensions when the Core WPBookList Plugin is deactivaed, to prevent any possible PHP errors, A bug that sometimes caused a book to be edited and/or added into the wrong Library, a bug that prevented the addition of exisitng Custom Fields into a newly-created Custom Library, removed the 'Set Default Sorting' area in the Book View Display Options pages, and various other Translation additions/modifications and other code improvements.
+**6.1.3** - Introduced a new area in the Book View that displays the Additional Images that are specified when a book is added. Fixed quite a few bugs and other errors, including, but not limited to: An error with the WPBookList Cache not saving with the correct prefix, a bug preventing the editing of some fields, the inclusion of the 'Enable Storefront' Options on the 'Pages' and 'Posts' Display Options Pages, inclusion of a new function to deactivate all WPBookList Extensions when the Core WPBookList Plugin is deactivated, to prevent any possible PHP errors, A bug that sometimes caused a book to be edited and/or added into the wrong Library, a bug that prevented the addition of exisitng Custom Fields into a newly-created Custom Library, removed the 'Set Default Sorting' area in the Book View Display Options pages, and various other Translation additions/modifications and other code improvements.
 
 **6.1.4** - Introduced code to clear WPBookList cache on any and all Display Option database changes. Introduced code to create seperate Transients for the displaying of the Stats area, as websites with Libraries in the thousands had performance issues. Introduced new translations for various upcoming WPBookList Extensions.
 
 **6.1.5** - Added text that displays the total number of books in a Library on the 'Edit & Delete Books' tab, along with improved Pagination, including the ability to jump to a particular page of book results. Also fixed bug that prevented the Apple iBooks link from appearing in Colorbox.
 
+**6.1.6** - Bug fixes for Library and Book View Display Options, as well as bug fixes for the displaying of Cover Images on the default Posts and Pages Templates. Change the wpuserid column in the Users table to accomodate large WP User IDs on Wordpress.com sites. 
+
+**6.1.7** - Prevented the Pagination tools from appearing on the front-end if multiple pages of books do not exist (Github Issue #75). Introduced check in class-wpbooklist-frontend-library-ui.php file, lines 1387-1392, that prevents attempting to grab a quote using an undefined array index key. Also modified the quotation display to not have the closing quotation mark bolded. ( Github Issue #98).
 
 
 == Upgrade Notice ==
@@ -396,3 +399,7 @@ Modified the class-show-book-in-colorbox.php file, lines 130-148, to better dete
 =6.1.4= - Introduced code to clear WPBookList cache on any and all Display Option database changes. Introduced code to create seperate Transients for the displaying of the Stats area, as websites with Libraries in the thousands had performance issues. Introduced new translations for various upcoming WPBookList Extensions.
 
 =6.1.5= - Added text that displays the total number of books in a Library on the 'Edit & Delete Books' tab, along with improved Pagination, including the ability to jump to a particular page of book results. Also fixed bug that prevented the Apple iBooks link from appearing in Colorbox.
+
+=6.1.6= - Bug fixes for Library and Book View Display Options, as well as bug fixes for the displaying of Cover Images on the default Posts and Pages Templates. Change the wpuserid column in the Users table to accomodate large WP User IDs on Wordpress.com sites. 
+
+=6.1.7= - Prevented the Pagination tools from appearing on the front-end if multiple pages of books do not exist (Github Issue #75). Introduced check in class-wpbooklist-frontend-library-ui.php file, lines 1387-1392, that prevents attempting to grab a quote using an undefined array index key. Also modified the quotation display to not have the closing quotation mark bolded. ( Github Issue #98).

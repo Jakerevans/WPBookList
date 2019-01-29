@@ -500,6 +500,7 @@ if ( ! class_exists( 'WPBookList_Pages_Display_Options_Form', false ) ) :
                     <input id="wpbooklist-uncheck-all" type="checkbox" name="uncheck-all">
                 </div>
 	            <button class="wpbooklist-response-success-fail-button wpbooklist-admin-save-page-display-button" type="button">' . $this->trans->trans_245 . '</button>
+	            <div class="wpbooklist-spinner" id="wpbooklist-spinner-1"></div>
 			</div>';
 
 			echo $string1;

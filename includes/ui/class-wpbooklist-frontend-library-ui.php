@@ -1346,7 +1346,8 @@ if ( ! class_exists( 'WPBookList_Front_End_Library_UI', false ) ) :
 			} else {
 
 				// Division by zero check.
-				if ( 0 !== $this->total_book_read_count && 0 !== $book_count && '0' !== $this->total_book_read_count && '0' !== $book_count ) {
+				if ( 0 !== $this->total_book_read_count && 0 !== $book_count && null !== $book_count && '0' !== $this->total_book_read_count && '0' !== $book_count ) {
+
 					$string2 = number_format( ( ( $this->total_book_read_count / $book_count ) * 100 ), 2 ) . '%';
 				} else {
 					$string2 = '0%';
@@ -1382,10 +1383,17 @@ if ( ! class_exists( 'WPBookList_Front_End_Library_UI', false ) ) :
 
 			$quote_num = wp_rand( 0, $this->total_quotes_count );
 			if ( null !== $quote_num ) {
-				$quote_actual = $this->quotes_actual[ $quote_num ]->quote;
+
+				// Making sure the array key exists.
+				if ( array_key_exists( $quote_num, $this->quotes_actual ) ) {
+					$quote_actual = $this->quotes_actual[ $quote_num ]->quote;
+				} else {
+					$quote_actual = $this->quotes_actual[0]->quote;
+				}
+
 				$pos          = strpos( $quote_actual, '" - ' );
-				$attribution  = substr( $quote_actual, $pos );
-				$quote        = substr( $quote_actual, 0, $pos );
+				$attribution  = substr( $quote_actual, $pos +1 );
+				$quote        = substr( $quote_actual, 0, $pos + 1 );
 				echo '<div class="wpbooklist-ui-quote-area-div">
 		    		<p class="wpbooklist-ui-quote-area-p">
 		    			<span id="wpbooklist-quote-actual">' . stripslashes( $quote ) . '</span>
@@ -1417,6 +1425,12 @@ if ( ! class_exists( 'WPBookList_Front_End_Library_UI', false ) ) :
 
 			foreach ( $this->books_actual as $key => $book ) {
 
+				// Determine if we're hiding the book title.
+				$hidelibrarytitle = '';
+				if ( '1' === $this->display_options_actual->hidelibrarytitle ) {
+					$hidelibrarytitle = 'style="display:none;"';
+				}
+
 				// Replace default tag if the user has provided their own - 5.5.3.
 				if ( strpos( $book->amazon_detail_page, 'wpbooklistid-20' ) ) {
 					if ( '' !== $this->display_options_actual->amazonaff && null !== $this->display_options_actual->amazonaff ) {
@@ -1439,7 +1453,7 @@ if ( ! class_exists( 'WPBookList_Front_End_Library_UI', false ) ) :
 						<div class="wpbooklist_inner_main_display_div">
 						    <a href="' . get_permalink( $book->post_yes ) . '"><img class="wpbooklist_cover_image_class" data-bookid="' . $book->ID . '" data-booktable="' . $this->table . '" id="wpbooklist_cover_image" src="' . $book->image . '" style="opacity: 1;"></a>
 						    <span class="hidden_id_title">' . $book->ID . '</span>
-						    <a href="' . $book->amazon_detail_page . '"><p class="wpbooklist_saved_title_link" data-bookid="' . $book->ID . '" data-booktable="' . $this->table . '" id="wpbooklist_saved_title_link">' . stripslashes( $book->title ) . '<span class="hidden_id_title">1</span>
+						    <a href="' . $book->amazon_detail_page . '"><p ' . $hidelibrarytitle . ' class="wpbooklist_saved_title_link" data-bookid="' . $book->ID . '" data-booktable="' . $this->table . '" id="wpbooklist_saved_title_link">' . stripslashes( $book->title ) . '<span class="hidden_id_title">1</span>
 						    </p></a>';
 					} else {
 						$string2 = $string2 . '<div class="wpbooklist_entry_div">
@@ -1447,7 +1461,7 @@ if ( ! class_exists( 'WPBookList_Front_End_Library_UI', false ) ) :
 						<div class="wpbooklist_inner_main_display_div">
 						    <img class="wpbooklist_cover_image_class wpbooklist-show-book-colorbox" data-bookid="' . $book->ID . '" data-booktable="' . $this->table . '" id="wpbooklist_cover_image" src="' . $book->image . '" style="opacity: 1;">
 						    <span class="hidden_id_title">' . $book->ID . '</span>
-						    <p class="wpbooklist_saved_title_link wpbooklist-show-book-colorbox" data-bookid="' . $book->ID . '" data-booktable="' . $this->table . '" id="wpbooklist_saved_title_link">' . stripslashes( $book->title ) . '<span class="hidden_id_title">1</span>
+						    <p ' . $hidelibrarytitle . ' class="wpbooklist_saved_title_link wpbooklist-show-book-colorbox" data-bookid="' . $book->ID . '" data-booktable="' . $this->table . '" id="wpbooklist_saved_title_link">' . stripslashes( $book->title ) . '<span class="hidden_id_title">1</span>
 						    </p>';
 					}
 				} elseif ( 'page' === $this->action ) {
@@ -1457,7 +1471,7 @@ if ( ! class_exists( 'WPBookList_Front_End_Library_UI', false ) ) :
 						<div class="wpbooklist_inner_main_display_div">
 						    <a href="' . get_permalink( $book->page_yes ) . '"><img class="wpbooklist_cover_image_class" data-bookid="' . $book->ID . '" data-booktable="' . $this->table . '" id="wpbooklist_cover_image" src="' . $book->image . '" style="opacity: 1;"></a>
 						    <span class="hidden_id_title">' . $book->ID . '</span>
-						    <a href="' . $book->amazon_detail_page . '"><p class="wpbooklist_saved_title_link" data-bookid="' . $book->ID . '" data-booktable="' . $this->table . '" id="wpbooklist_saved_title_link">' . stripslashes( $book->title ) . '<span class="hidden_id_title">1</span>
+						    <a href="' . $book->amazon_detail_page . '"><p ' . $hidelibrarytitle . ' class="wpbooklist_saved_title_link" data-bookid="' . $book->ID . '" data-booktable="' . $this->table . '" id="wpbooklist_saved_title_link">' . stripslashes( $book->title ) . '<span class="hidden_id_title">1</span>
 						    </p></a>';
 					} else {
 						$string2 = $string2 . '<div class="wpbooklist_entry_div">
@@ -1465,7 +1479,7 @@ if ( ! class_exists( 'WPBookList_Front_End_Library_UI', false ) ) :
 						<div class="wpbooklist_inner_main_display_div">
 						    <img class="wpbooklist_cover_image_class wpbooklist-show-book-colorbox" data-bookid="' . $book->ID . '" data-booktable="' . $this->table . '" id="wpbooklist_cover_image" src="' . $book->image . '" style="opacity: 1;">
 						    <span class="hidden_id_title">' . $book->ID . '</span>
-						    <p class="wpbooklist_saved_title_link wpbooklist-show-book-colorbox" data-bookid="' . $book->ID . '" data-booktable="' . $this->table . '" id="wpbooklist_saved_title_link">' . stripslashes( $book->title ) . '<span class="hidden_id_title">1</span>
+						    <p ' . $hidelibrarytitle . ' class="wpbooklist_saved_title_link wpbooklist-show-book-colorbox" data-bookid="' . $book->ID . '" data-booktable="' . $this->table . '" id="wpbooklist_saved_title_link">' . stripslashes( $book->title ) . '<span class="hidden_id_title">1</span>
 						    </p>';
 					}
 				} elseif ( 'amazon' === $this->action ) {
@@ -1474,7 +1488,7 @@ if ( ! class_exists( 'WPBookList_Front_End_Library_UI', false ) ) :
 					<div class="wpbooklist_inner_main_display_div">
 					    <a href="' . $book->amazon_detail_page . '"><img class="wpbooklist_cover_image_class" data-bookid="' . $book->ID . '" data-booktable="' . $this->table . '" id="wpbooklist_cover_image" src="' . $book->image . '" style="opacity: 1;"></a>
 					    <span class="hidden_id_title">' . $book->ID . '</span>
-					    <a href="' . $book->amazon_detail_page . '"><p class="wpbooklist_saved_title_link" data-bookid="' . $book->ID . '" data-booktable="' . $this->table . '" id="wpbooklist_saved_title_link">' . stripslashes( $book->title ) . '<span class="hidden_id_title">1</span>
+					    <a href="' . $book->amazon_detail_page . '"><p ' . $hidelibrarytitle . ' class="wpbooklist_saved_title_link" data-bookid="' . $book->ID . '" data-booktable="' . $this->table . '" id="wpbooklist_saved_title_link">' . stripslashes( $book->title ) . '<span class="hidden_id_title">1</span>
 					    </p></a>';
 				} elseif ( 'googlebooks' === $this->action ) {
 					$string2 = $string2 . '<div class="wpbooklist_entry_div">
@@ -1482,7 +1496,7 @@ if ( ! class_exists( 'WPBookList_Front_End_Library_UI', false ) ) :
 					<div class="wpbooklist_inner_main_display_div">
 					    <a href="' . $book->google_preview . '"><img class="wpbooklist_cover_image_class" data-bookid="' . $book->ID . '" data-booktable="' . $this->table . '" id="wpbooklist_cover_image" src="' . $book->image . '" style="opacity: 1;"></a>
 					    <span class="hidden_id_title">' . $book->ID . '</span>
-					    <a href="' . $book->google_preview . '"><p class="wpbooklist_saved_title_link" data-bookid="' . $book->ID . '" data-booktable="' . $this->table . '" id="wpbooklist_saved_title_link">' . stripslashes( $book->title ) . '<span class="hidden_id_title">1</span>
+					    <a href="' . $book->google_preview . '"><p ' . $hidelibrarytitle . ' class="wpbooklist_saved_title_link" data-bookid="' . $book->ID . '" data-booktable="' . $this->table . '" id="wpbooklist_saved_title_link">' . stripslashes( $book->title ) . '<span class="hidden_id_title">1</span>
 					    </p></a>';
 
 				} elseif ( 'ibooks' === $this->action ) {
@@ -1491,7 +1505,7 @@ if ( ! class_exists( 'WPBookList_Front_End_Library_UI', false ) ) :
 					<div class="wpbooklist_inner_main_display_div">
 					    <a href="' . $book->itunes_page . '"><img class="wpbooklist_cover_image_class" data-bookid="' . $book->ID . '" data-booktable="' . $this->table . '" id="wpbooklist_cover_image" src="' . $book->image . '" style="opacity: 1;"></a>
 					    <span class="hidden_id_title">' . $book->ID . '</span>
-					    <a href="' . $book->itunes_page . '"><p class="wpbooklist_saved_title_link" data-bookid="' . $book->ID . '" data-booktable="' . $this->table . '" id="wpbooklist_saved_title_link">' . stripslashes( $book->title ) . '<span class="hidden_id_title">1</span>
+					    <a href="' . $book->itunes_page . '"><p ' . $hidelibrarytitle . ' class="wpbooklist_saved_title_link" data-bookid="' . $book->ID . '" data-booktable="' . $this->table . '" id="wpbooklist_saved_title_link">' . stripslashes( $book->title ) . '<span class="hidden_id_title">1</span>
 					    </p></a>';
 
 				} elseif ( 'booksamillion' === $this->action ) {
@@ -1500,7 +1514,7 @@ if ( ! class_exists( 'WPBookList_Front_End_Library_UI', false ) ) :
 					<div class="wpbooklist_inner_main_display_div">
 					    <a href="http://www.anrdoezrs.net/links/8090484/type/dlg/' . $book->bam_link . '?id=7059442747215"><img class="wpbooklist_cover_image_class" data-bookid="' . $book->ID . '" data-booktable="' . $this->table . '" id="wpbooklist_cover_image" src="' . $book->image . '" style="opacity: 1;"></a>
 					    <span class="hidden_id_title">' . $book->ID . '</span>
-					    <a href="http://www.anrdoezrs.net/links/8090484/type/dlg/' . $book->bam_link . '?id=7059442747215"><p class="wpbooklist_saved_title_link" data-bookid="' . $book->ID . '" data-booktable="' . $this->table . '" id="wpbooklist_saved_title_link">' . stripslashes( $book->title ) . '<span class="hidden_id_title">1</span>
+					    <a href="http://www.anrdoezrs.net/links/8090484/type/dlg/' . $book->bam_link . '?id=7059442747215"><p ' . $hidelibrarytitle . ' class="wpbooklist_saved_title_link" data-bookid="' . $book->ID . '" data-booktable="' . $this->table . '" id="wpbooklist_saved_title_link">' . stripslashes( $book->title ) . '<span class="hidden_id_title">1</span>
 					    </p></a>';
 
 				} elseif ( 'kobo' === $this->action ) {
@@ -1509,7 +1523,7 @@ if ( ! class_exists( 'WPBookList_Front_End_Library_UI', false ) ) :
 					<div class="wpbooklist_inner_main_display_div">
 					    <a href="' . $book->kobo_link . '"><img class="wpbooklist_cover_image_class" data-bookid="' . $book->ID . '" data-booktable="' . $this->table . '" id="wpbooklist_cover_image" src="' . $book->image . '" style="opacity: 1;"></a>
 					    <span class="hidden_id_title">' . $book->ID . '</span>
-					    <a href="' . $book->kobo_link . '"><p class="wpbooklist_saved_title_link" data-bookid="' . $book->ID . '" data-booktable="' . $this->table . '" id="wpbooklist_saved_title_link">' . stripslashes( $book->title ) . '<span class="hidden_id_title">1</span>
+					    <a href="' . $book->kobo_link . '"><p ' . $hidelibrarytitle . ' class="wpbooklist_saved_title_link" data-bookid="' . $book->ID . '" data-booktable="' . $this->table . '" id="wpbooklist_saved_title_link">' . stripslashes( $book->title ) . '<span class="hidden_id_title">1</span>
 					    </p></a>';
 				} else {
 					$string2 = $string2 . '<div class="wpbooklist_entry_div">
@@ -1517,30 +1531,46 @@ if ( ! class_exists( 'WPBookList_Front_End_Library_UI', false ) ) :
 					<div class="wpbooklist_inner_main_display_div">
 					    <img class="wpbooklist_cover_image_class wpbooklist-show-book-colorbox" data-bookid="' . $book->ID . '" data-booktable="' . $this->table . '" id="wpbooklist_cover_image" src="' . $book->image . '" style="opacity: 1;">
 					    <span class="hidden_id_title">' . $book->ID . '</span>
-					    <p class="wpbooklist_saved_title_link wpbooklist-show-book-colorbox" data-bookid="' . $book->ID . '" data-booktable="' . $this->table . '" id="wpbooklist_saved_title_link">' . stripslashes( $book->title ) . '<span class="hidden_id_title">1</span>
+					    <p ' . $hidelibrarytitle . ' class="wpbooklist_saved_title_link wpbooklist-show-book-colorbox" data-bookid="' . $book->ID . '" data-booktable="' . $this->table . '" id="wpbooklist_saved_title_link">' . stripslashes( $book->title ) . '<span class="hidden_id_title">1</span>
 					    </p>';
 				}
 
 				if ( '1' !== $this->display_options_actual->hiderating && 0 !== $book->rating && null !== $book->rating ) {
 
-					if ( 1 === $book->rating ) {
-						$string2 = $string2 . '<img style="opacity: 1;" class="wpbooklist-rating-image" src="' . ROOT_IMG_URL . '1star.png">';
+					if ( '1' === $book->rating ) {
+						$string2 = $string2 . '<img style="opacity: 1;" class="wpbooklist-rating-image" src="' . ROOT_IMG_URL . '1star.jpg">';
 					}
 
-					if ( 2 === $book->rating ) {
-						$string2 = $string2 . '<img style="opacity: 1;" class="wpbooklist-rating-image" src="' . ROOT_IMG_URL . '2star.png">';
+					if ( '1.5' === $book->rating ) {
+						$string2 = $string2 . '<img style="opacity: 1;" class="wpbooklist-rating-image" src="' . ROOT_IMG_URL . '1halfstar.jpg">';
 					}
 
-					if ( 3 === $book->rating ) {
-						$string2 = $string2 . '<img style="opacity: 1;" class="wpbooklist-rating-image" src="' . ROOT_IMG_URL . '3star.png">';
+					if ( '2' === $book->rating ) {
+						$string2 = $string2 . '<img style="opacity: 1;" class="wpbooklist-rating-image" src="' . ROOT_IMG_URL . '2star.jpg">';
 					}
 
-					if ( 4 === $book->rating ) {
-						$string2 = $string2 . '<img style="opacity: 1;" class="wpbooklist-rating-image" src="' . ROOT_IMG_URL . '4star.png">';
+					if ( '2.5' === $book->rating ) {
+						$string2 = $string2 . '<img style="opacity: 1;" class="wpbooklist-rating-image" src="' . ROOT_IMG_URL . '2halfstar.jpg">';
 					}
 
-					if ( 5 === $book->rating ) {
-						$string2 = $string2 . '<img style="opacity: 1;" class="wpbooklist-rating-image" src="' . ROOT_IMG_URL . '5star.png">';
+					if ( '3' === $book->rating ) {
+						$string2 = $string2 . '<img style="opacity: 1;" class="wpbooklist-rating-image" src="' . ROOT_IMG_URL . '3star.jpg">';
+					}
+
+					if ( '3.5' === $book->rating ) {
+						$string2 = $string2 . '<img style="opacity: 1;" class="wpbooklist-rating-image" src="' . ROOT_IMG_URL . '3halfstar.jpg">';
+					}
+
+					if ( '4' === $book->rating ) {
+						$string2 = $string2 . '<img style="opacity: 1;" class="wpbooklist-rating-image" src="' . ROOT_IMG_URL . '4star.jpg">';
+					}
+
+					if ( '4.5' === $book->rating ) {
+						$string2 = $string2 . '<img style="opacity: 1;" class="wpbooklist-rating-image" src="' . ROOT_IMG_URL . '4halfstar.jpg">';
+					}
+
+					if ( '5' === $book->rating ) {
+						$string2 = $string2 . '<img style="opacity: 1;" class="wpbooklist-rating-image" src="' . ROOT_IMG_URL . '5star.jpg">';
 					}
 				}
 
@@ -1573,77 +1603,82 @@ if ( ! class_exists( 'WPBookList_Front_End_Library_UI', false ) ) :
 		 */
 		private function build_library_pagination() {
 
-			$pagination_options_string = '';
+			if ( $this->total_book_count > $this->booksonpage ) {
 
-			// Setting up variables to determine the previous offset to go back to, or to disable that ability if on Page 1.
-			if ( '0' !== $this->offset ) {
-				$prevnum          = $this->offset - $this->booksonpage;
-				$styledisableleft = '';
-			} else {
-				$prevnum          = 0;
-				$styledisableleft = 'style="pointer-events:none;opacity:0.5;"';
-			}
+				$pagination_options_string = '';
 
-			// Setting up variables to determine the next offset to go to, or to disable that ability if on last Page.
-			if ( $this->offset < ( $this->total_book_count - $this->booksonpage ) ) {
-				$nextnum           = $this->offset + $this->booksonpage;
-				$styledisableright = '';
-			} else {
-				$nextnum           = $this->offset;
-				$styledisableright = 'style="pointer-events:none;opacity:0.5;"';
-			}
-
-			// Getting total number of full pages and/or if there's only a partial/remainder page.
-			if ( $this->total_book_count > 0 && $this->booksonpage > 0 ) {
-
-				// Getting whole pages. Can be zero if total number of books is less that amount set to be displayed per page in the backend settings.
-				$whole_pages = floor( $this->total_book_count / $this->booksonpage );
-
-				// Determing whether there is a partial page, whose contents contains less books than amount set to be displayed per page in the backend settings. Will only be 0 if total number of books is evenly divisible by $this->booksonpage.
-				$remainder_pages = $this->total_book_count % $this->booksonpage;
-				if ( 0 !== $remainder_pages ) {
-					$remainder_pages = 1;
+				// Setting up variables to determine the previous offset to go back to, or to disable that ability if on Page 1.
+				if ( '0' !== $this->offset ) {
+					$prevnum          = $this->offset - $this->booksonpage;
+					$styledisableleft = '';
+				} else {
+					$prevnum          = 0;
+					$styledisableleft = 'style="pointer-events:none;opacity:0.5;"';
 				}
 
-				// If there's only one page, don't show pagination.
-				if ( ( 1 === $whole_pages && 0 === $remainder_pages ) || ( 0 === $whole_pages && 1 === $remainder_pages ) ) {
-					return;
+				// Setting up variables to determine the next offset to go to, or to disable that ability if on last Page.
+				if ( $this->offset < ( $this->total_book_count - $this->booksonpage ) ) {
+					$nextnum           = $this->offset + $this->booksonpage;
+					$styledisableright = '';
+				} else {
+					$nextnum           = $this->offset;
+					$styledisableright = 'style="pointer-events:none;opacity:0.5;"';
 				}
 
-				// The loop that will create the <option> html for the <select>.
-				for ( $i = 1; $i <= ( $whole_pages + $remainder_pages ); $i++ ) {
+				// Getting total number of full pages and/or if there's only a partial/remainder page.
+				if ( $this->total_book_count > 0 && $this->booksonpage > 0 ) {
 
-					if ( ( 1 + ( $this->offset / $this->booksonpage ) ) === $i ) {
-						$pagination_options_string = $pagination_options_string . '<option value=' . ( ( $i - 1 ) * $this->booksonpage ) . ' selected>'. $this->trans->trans_600 .' ' . $i . '</option>';
-					} else {
-						$pagination_options_string = $pagination_options_string . '<option value=' . ( ( $i - 1 ) * $this->booksonpage ) . '>'. $this->trans->trans_600 .' ' . $i . '</option>';
+					// Getting whole pages. Can be zero if total number of books is less that amount set to be displayed per page in the backend settings.
+					$whole_pages = floor( $this->total_book_count / $this->booksonpage );
+
+					// Determing whether there is a partial page, whose contents contains less books than amount set to be displayed per page in the backend settings. Will only be 0 if total number of books is evenly divisible by $this->booksonpage.
+					$remainder_pages = $this->total_book_count % $this->booksonpage;
+					if ( 0 !== $remainder_pages ) {
+						$remainder_pages = 1;
+					}
+
+					// If there's only one page, don't show pagination.
+					if ( ( 1 === $whole_pages && 0 === $remainder_pages ) || ( 0 === $whole_pages && 1 === $remainder_pages ) ) {
+						return;
+					}
+
+					// The loop that will create the <option> html for the <select>.
+					for ( $i = 1; $i <= ( $whole_pages + $remainder_pages ); $i++ ) {
+
+						if ( ( 1 + ( $this->offset / $this->booksonpage ) ) === $i ) {
+							$pagination_options_string = $pagination_options_string . '<option value=' . ( ( $i - 1 ) * $this->booksonpage ) . ' selected>'. $this->trans->trans_600 .' ' . $i . '</option>';
+						} else {
+							$pagination_options_string = $pagination_options_string . '<option value=' . ( ( $i - 1 ) * $this->booksonpage ) . '>'. $this->trans->trans_600 .' ' . $i . '</option>';
+						}
 					}
 				}
-			}
 
-			// Actual Pagination HTML.
-			if ( '' !== $pagination_options_string ) {
-				$string1 = '
-				<div class="wpbooklist-pagination-div">
-					<div class="wpbooklist-pagination-div-inner">
-						<div class="wpbooklist-pagination-left-div" ' . $styledisableleft . ' data-offset="' . $prevnum . '" data-table="' . $this->table . '">
-							<p><img class="wpbooklist-pagination-prev-img" src="' . ROOT_IMG_URL . 'next-left.png" />' . $this->trans->trans_36 . '</p>
+				// Actual Pagination HTML.
+				if ( '' !== $pagination_options_string ) {
+					$string1 = '
+					<div class="wpbooklist-pagination-div">
+						<div class="wpbooklist-pagination-div-inner">
+							<div class="wpbooklist-pagination-left-div" ' . $styledisableleft . ' data-offset="' . $prevnum . '" data-table="' . $this->table . '">
+								<p><img class="wpbooklist-pagination-prev-img" src="' . ROOT_IMG_URL . 'next-left.png" />' . $this->trans->trans_36 . '</p>
+							</div>
+							<div class="wpbooklist-pagination-middle-div">
+								<select class="wpbooklist-pagination-middle-div-select" data-table="' . $this->table . '">
+									' . $pagination_options_string . '
+								</select>
+							</div>
+							<div class="wpbooklist-pagination-right-div" ' . $styledisableright . ' data-offset="' . $nextnum . '" data-table="' . $this->table . '">
+								<p>' . $this->trans->trans_37 . '<img class="wpbooklist-pagination-prev-img" src="' . ROOT_IMG_URL . 'next-right.png" /></p>
+							</div>
 						</div>
-						<div class="wpbooklist-pagination-middle-div">
-							<select class="wpbooklist-pagination-middle-div-select" data-table="' . $this->table . '">
-								' . $pagination_options_string . '
-							</select>
-						</div>
-						<div class="wpbooklist-pagination-right-div" ' . $styledisableright . ' data-offset="' . $nextnum . '" data-table="' . $this->table . '">
-							<p>' . $this->trans->trans_37 . '<img class="wpbooklist-pagination-prev-img" src="' . ROOT_IMG_URL . 'next-right.png" /></p>
-						</div>
-					</div>
-				</div>';
+					</div>';
+				} else {
+					$string1 = '';
+				}
+
+				$this->pagination_string = $string1;
 			} else {
-				$string1 = '';
+				$this->pagination_string = '';
 			}
-
-			$this->pagination_string = $string1;
 		}
 
 		/**

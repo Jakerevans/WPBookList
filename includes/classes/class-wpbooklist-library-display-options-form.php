@@ -262,6 +262,7 @@ if ( ! class_exists( 'WPBookList_Library_Display_Options_Form', false ) ) :
 	            	</tbody>
 	            </table>
 	            <button class="wpbooklist-response-success-fail-button wpbooklist-admin-save-library-display-button" type="button">' . $this->trans->trans_245 . '</button>
+	           	<div class="wpbooklist-spinner" id="wpbooklist-spinner-1"></div>
 			</div>';
 
 			echo $string1 . $string2 . $string3 . $string4 . $string5;
