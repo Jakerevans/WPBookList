@@ -716,6 +716,8 @@ if ( ! class_exists( 'WPBookList_Translations', false ) ) :
 			$this->trans_685 = __( 'E-Book URL', 'wpbooklist' );
 			$this->trans_686 = __( 'Choose File', 'wpbooklist' );
 			$this->trans_687 = __( 'E-Book Download', 'wpbooklist' );
+			$this->trans_688 = __( 'Uh-Oh! Looks like you haven\'t entered your License Key for the WPBookList Submissions Extension yet! Enter your License Key below to begin using WPBookList Submissions.', 'wpbooklist-textdomain' );
+			$this->trans_689 = __( 'Get Book Info', 'wpbooklist-textdomain' );
 
 			// The array of translation strings.
 			$translation_array = array(

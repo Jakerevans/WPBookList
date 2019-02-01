@@ -141,10 +141,11 @@ if ( ! class_exists( 'WPBookList_Book', false ) ) :
 		public $itunesapiresult    = '';
 		public $openlibapiresult   = '';
 		public $apiamazonfailcount = 0;
-		public $rerun_amazon_flag  = true;
-		public $whichapifound      = array();
-		public $amazon_array       = array();
+		public $rerun_amazon_flag          = true;
+		public $whichapifound              = array();
+		public $amazon_array               = array();
 		public $gather_amazon_attempt_with = 'isbn';
+		public $db_insert_array            = array();
 
 		/** Class Constructor - Simply calls the Translations
 		 *
@@ -531,6 +532,8 @@ if ( ! class_exists( 'WPBookList_Book', false ) ) :
 					$this->gather_open_library_data();
 					$this->gather_itunes_data();
 					$this->create_buy_links();
+					$this->add_book();
+					$this->add_result = true;
 				} else {
 
 					// If $this->go_amazon is false, query the other apis and add the provided data to database.
@@ -539,6 +542,8 @@ if ( ! class_exists( 'WPBookList_Book', false ) ) :
 					$this->gather_open_library_data();
 					$this->gather_itunes_data();
 					$this->create_buy_links();
+					$this->add_book();
+					$this->add_result = true;
 				}
 			}
 
@@ -2016,10 +2021,8 @@ if ( ! class_exists( 'WPBookList_Book', false ) ) :
 				}
 			}
 
-			// Add in 
-
 			// Building array to add to DB.
-			$db_insert_array = array(
+			$this->db_insert_array = array(
 				'additionalimage1'   => $this->additionalimage1,
 				'additionalimage2'   => $this->additionalimage2,
 				'amazon_detail_page' => $this->amazon_detail_page,
@@ -2161,7 +2164,7 @@ if ( ! class_exists( 'WPBookList_Book', false ) ) :
 						if ( array_key_exists( 0, $entry_details ) && isset( $entry_details[0] ) && '' !== $entry_details[0] && null !== $entry_details[0] ) {
 
 							// Add new value with key into DB array.
-							$db_insert_array[ $entry_details[0] ] = $this->book_array[ $entry_details[0] ];
+							$this->db_insert_array[ $entry_details[0] ] = $this->book_array[ $entry_details[0] ];
 
 							// Adding a mask for new value.
 							array_push( $db_mask_insert_array, '%s' );
@@ -2172,7 +2175,10 @@ if ( ! class_exists( 'WPBookList_Book', false ) ) :
 
 			// Actually Adding submitted values to the DB.
 			global $wpdb;
-			$result = $wpdb->insert( $this->library, $db_insert_array, $db_mask_insert_array );
+
+			if ( 'search' !== $this->action ) {
+				$result = $wpdb->insert( $this->library, $this->db_insert_array, $db_mask_insert_array );
+			}
 
 			$this->add_result = $result;
 			if ( 1 === $result ) {
