@@ -718,6 +718,14 @@ if ( ! class_exists( 'WPBookList_Translations', false ) ) :
 			$this->trans_687 = __( 'E-Book Download', 'wpbooklist' );
 			$this->trans_688 = __( 'Uh-Oh! Looks like you haven\'t entered your License Key for the WPBookList Submissions Extension yet! Enter your License Key below to begin using WPBookList Submissions.', 'wpbooklist-textdomain' );
 			$this->trans_689 = __( 'Get Book Info', 'wpbooklist-textdomain' );
+			$this->trans_690 = __( 'Phone', 'wpbooklist-textdomain' );
+			$this->trans_691 = __( 'Feature Date', 'wpbooklist-textdomain' );
+			$this->trans_692 = __( 'Contact Information', 'wpbooklist-textdomain' );
+			$this->trans_693 = __( 'Book Information', 'wpbooklist-textdomain' );
+			$this->trans_694 = __( 'Submit Book', 'wpbooklist-textdomain' );
+			$this->trans_695 = __( 'Click here to view your submission', 'wpbooklist-textdomain' );
+			$this->trans_696  = __( 'You\'ve just Submitted a book for review!', 'wpbooklist' );
+			$this->trans_697  = __( 'Whoops! Looks like there might have been an error when trying to submit your book! Please try again, or reach out to', 'wpbooklist' );
 
 			// The array of translation strings.
 			$translation_array = array(
@@ -1401,6 +1409,20 @@ if ( ! class_exists( 'WPBookList_Translations', false ) ) :
 				'trans681' => $this->trans_681,
 				'trans682' => $this->trans_682,
 				'trans683' => $this->trans_683,
+				'trans684' => $this->trans_684,
+				'trans685' => $this->trans_685,
+				'trans686' => $this->trans_686,
+				'trans687' => $this->trans_687,
+				'trans688' => $this->trans_688,
+				'trans689' => $this->trans_689,
+				'trans690' => $this->trans_690,
+				'trans691' => $this->trans_691,
+				'trans692' => $this->trans_692,
+				'trans693' => $this->trans_693,
+				'trans694' => $this->trans_694,
+				'trans695' => $this->trans_695,
+				'trans696' => $this->trans_696,
+				'trans697' => $this->trans_697,
 			);
 
 			return $translation_array;
