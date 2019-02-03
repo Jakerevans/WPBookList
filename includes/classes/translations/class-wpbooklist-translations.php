@@ -726,6 +726,8 @@ if ( ! class_exists( 'WPBookList_Translations', false ) ) :
 			$this->trans_695 = __( 'Click here to view your submission', 'wpbooklist-textdomain' );
 			$this->trans_696  = __( 'You\'ve just Submitted a book for review!', 'wpbooklist' );
 			$this->trans_697  = __( 'Whoops! Looks like there might have been an error when trying to submit your book! Please try again, or reach out to', 'wpbooklist' );
+			$this->trans_698  = __( 'E-Books' );
+			$this->trans_699  = __( 'Offer simple E-Book Downloads in your Book Views for all your visitors!' );
 
 			// The array of translation strings.
 			$translation_array = array(
