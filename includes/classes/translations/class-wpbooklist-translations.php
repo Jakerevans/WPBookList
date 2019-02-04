@@ -728,6 +728,7 @@ if ( ! class_exists( 'WPBookList_Translations', false ) ) :
 			$this->trans_697  = __( 'Whoops! Looks like there might have been an error when trying to submit your book! Please try again, or reach out to', 'wpbooklist' );
 			$this->trans_698  = __( 'E-Books' );
 			$this->trans_699  = __( 'Offer simple E-Book Downloads in your Book Views for all your visitors!' );
+			$this->trans_700 = __( 'You\'ve just saved your WPBookList Search Settings!', 'wpbooklist' );
 
 			// The array of translation strings.
 			$translation_array = array(
@@ -1425,6 +1426,9 @@ if ( ! class_exists( 'WPBookList_Translations', false ) ) :
 				'trans695' => $this->trans_695,
 				'trans696' => $this->trans_696,
 				'trans697' => $this->trans_697,
+				'trans698' => $this->trans_698,
+				'trans699' => $this->trans_699,
+				'trans700' => $this->trans_700,
 			);
 
 			return $translation_array;
