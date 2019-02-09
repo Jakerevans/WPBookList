@@ -15,9 +15,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 if ( ! class_exists( 'WPBookList_Front_End_Library_UI', false ) ) :
 
 	/**
-	 * WPBookList_Frontend_Library_UI Class.
+	 * WPBookList_Frontend_Library_List_UI Class.
 	 */
-	class WPBookList_Frontend_Library_UI {
+	class WPBookList_Frontend_Library_List_UI {
 
 		// One-off Class string variables.
 		public $table                 = '';
@@ -36,6 +36,8 @@ if ( ! class_exists( 'WPBookList_Front_End_Library_UI', false ) ) :
 		public $params_true           = false;
 		public $action                = '';
 		public $trans                 = '';
+		public $display               = '';
+		public $fields                = '';
 
 
 		// Dealing with Sort/Search/Filter/Pagination.
@@ -100,12 +102,14 @@ if ( ! class_exists( 'WPBookList_Front_End_Library_UI', false ) ) :
 		 *  @param string $which_table - The WPBookList table in question.
 		 *  @param string $action - The action to take.
 		 */
-		public function __construct( $which_table, $action ) {
+		public function __construct( $which_table, $action, $display, $fields ) {
 
 			// First set up some class-wide stuff.
 			global $wpdb;
-			$this->table  = $which_table;
-			$this->action = $action;
+			$this->table   = $which_table;
+			$this->action  = $action;
+			$this->display = $display;
+			$this->fields  = $fields;
 
 			// Get Translations.
 			require_once CLASS_TRANSLATIONS_DIR . 'class-wpbooklist-translations.php';
@@ -1408,14 +1412,14 @@ if ( ! class_exists( 'WPBookList_Front_End_Library_UI', false ) ) :
 		 */
 		private function build_library_actual() {
 
-			$string1 = '<div id="wpbooklist_main_display_div">';
+			$string1 = '<div id="wpbooklist-list_main_display_div">';
 
 			// Create some messages if there aren't any books in a library, or if no search results were found.
 			$nobooksmessage = '';
 
 			// Check for zero results found - if so, display a error message.
 			if ( '0' === $this->total_books_filter || '0' === $this->total_book_count ) {
-				$nobooksmessage = '<p><img class="wpbooklist-storytime-shocked-img-front" src="' . ROOT_IMG_ICONS_URL . 'shocked.svg"/>' . $this->trans->trans_31 . '<br/>' . $this->trans->trans_32 . ' <a href="https://wordpress.org/plugins/wpbooklist/">' . $this->trans->trans_33 . '</a><br/><br/>' . $this->trans->trans_34 . ' <a href="https://wpbooklist.com/">' . $this->trans->trans_35 . '</a></p>';
+				$nobooksmessage = '<p><img class="wpbooklist-list-storytime-shocked-img-front" src="' . ROOT_IMG_ICONS_URL . 'shocked.svg"/>' . $this->trans->trans_31 . '<br/>' . $this->trans->trans_32 . ' <a href="https://wordpress.org/plugins/wpbooklist/">' . $this->trans->trans_33 . '</a><br/><br/>' . $this->trans->trans_34 . ' <a href="https://wpbooklist.com/">' . $this->trans->trans_35 . '</a></p>';
 			}
 
 			// Add the no books message to the HTML string.
@@ -1445,136 +1449,479 @@ if ( ! class_exists( 'WPBookList_Front_End_Library_UI', false ) ) :
 					}
 				}
 
+				// Build the Authors - if there's only the one author field...
+				$authors = '';
+				if ( ( '' !== $book->author && null !== $book->author ) && ( '' === $book->author2 || null === $book->author2 ) && ( '' === $book->author3 || null === $book->author3 ) ) {
+					$authors = $book->author;
+				}
+
+				// If the Author and Author2 fields are both in use...
+				if ( ( '' !== $book->author && null !== $book->author ) && ( '' !== $book->author2 && null !== $book->author2 ) ) {
+					$authors = $book->author . ' and ' . $book->author2;
+				}
+
+				// If the Author and Author2 fields are both in use...
+				if ( ( '' !== $book->author && null !== $book->author ) && ( '' !== $book->author2 && null !== $book->author2 ) && ( '' !== $book->author3 && null !== $book->author3 ) ) {
+					$authors = $book->author . ', ' . $book->author2 . ', and ' . $book->author3;
+				}
+
+				// Build the fields array.
+				$fields_array = array();
+				if ( '' !== $this->fields ) {
+					if ( false !== stripos( $this->fields, ',' ) ) {
+						$fields_array = explode( ',', $this->fields );
+					} else {
+						if ( 'default' !== $this->fields ) {
+							array_push( $fields_array, $this->fields );
+						}
+					}
+				}
+
+				// Now build the actual fields html.
+				$fields_html = '';
+				foreach ( $fields_array as $key => $value ) {
+
+					$db_value = '';
+					switch ( $value ) {
+						case 'asin':
+							if ( '' !== $book->asin && null !== $book->asin ) {
+								$db_value = '<span>' . $this->trans->trans_137 . ': ' . $book->asin . '</span> ';
+							} else {
+								$db_value = '';
+							}
+							break;
+						case 'isbn10':
+							if ( '' !== $book->isbn && null !== $book->isbn ) {
+								$db_value = '<span>' . $this->trans->trans_135 . ': ' . $book->isbn . '</span> ';
+							} else {
+								$db_value = '';
+							}
+							break;
+						case 'isbn13':
+							if ( '' !== $book->isbn13 && null !== $book->isbn13 ) {
+								$db_value = '<span>' . $this->trans->trans_136 . ': ' . $book->isbn13 . '</span> ';
+							} else {
+								$db_value = '';
+							}
+							break;
+						case 'authorurl':
+							if ( '' !== $book->author_url && null !== $book->author_url ) {
+								$db_value = '<span>' . $this->trans->trans_166 . ': <a target="_blank" href="' . $book->author_url . '">' . $this->trans->trans_701 . '</a></span> ';
+							} else {
+								$db_value = '';
+							}
+							break;
+						case 'bamlink':
+							if ( '' !== $book->bam_link && null !== $book->bam_link ) {
+								$db_value = '<span>' . $this->trans->trans_164 . ': <a target="_blank" href="' . $book->bam_link . '">' . $this->trans->trans_701 . '</a></span> ';
+							} else {
+								$db_value = '';
+							}
+							break;
+						case 'bnlink':
+							if ( '' !== $book->bn_link && null !== $book->bn_link ) {
+								$db_value = '<span>' . $this->trans->trans_160 . ': <a target="_blank" href="' . $book->bn_link . '">' . $this->trans->trans_701 . '</a></span> ';
+							} else {
+								$db_value = '';
+							}
+							break;
+						case 'callnumber':
+							if ( '' !== $book->callnumber && null !== $book->callnumber ) {
+								$db_value = '<span>' . $this->trans->trans_144 . ': ' . $book->callnumber . '</span> ';
+							} else {
+								$db_value = '';
+							}
+							break;
+						case 'country':
+							if ( '' !== $book->country && null !== $book->country ) {
+								$db_value = '<span>' . $this->trans->trans_273 . ': ' . $book->country . '</span> ';
+							} else {
+								$db_value = '';
+							}
+							break;
+						case 'description':
+							if ( '' !== $book->description && null !== $book->description ) {
+								$db_value = '<div class="wpbl-list-book-description-contents">' . html_entity_decode( $book->description ) . '</div></span> ';
+							} else {
+								$db_value = '';
+							}
+							break;
+						case 'ebook':
+							if ( '' !== $book->ebook && null !== $book->ebook ) {
+
+								global $wpdb;
+
+								$extension_settings = $wpdb->get_row( 'SELECT * FROM ' . $wpdb->prefix . 'wpbooklist_ebook_settings' );
+
+								$actual_html = '';
+								if ( null !== $extension_settings->linkimg && '' !== $extension_settings->linkimg ) {
+
+									$actual_html = '<a href="' . $book->ebook . '"><img src="' . $extension_settings->linkimg . '"/></a>';
+
+								} else {
+									$actual_html = '<a href="' . $book->ebook . '">' . $extension_settings->linktext . '</a>';
+								}
+
+								$db_value = '<span>' . $this->trans->trans_668 . ': ' . $actual_html . '</span> ';
+							} else {
+								$db_value = '';
+							}
+							break;
+						case 'edition':
+							if ( '' !== $book->edition && null !== $book->edition ) {
+								$db_value = '<span>' . $this->trans->trans_155 . ': ' . $book->edition . '</span> ';
+							} else {
+								$db_value = '';
+							}
+							break;
+						case 'genres':
+							if ( '' !== $book->genres && null !== $book->genres ) {
+
+								$genre_string = '';
+								if ( false !== stripos( $book->genres, '---' ) ) {
+									$temp = explode( '---', $book->genres );
+
+									foreach ( $temp as $key => $value ) {
+										if ( '' !== $value ) {
+											$genre_string = $genre_string . ', ' . $value;
+										}
+									}
+								} else {
+									$genre_string = $book->genres;
+								}
+								$genre_string = rtrim( $genre_string );
+								$genre_string = ltrim( $genre_string );
+								$genre_string = rtrim( $genre_string, ',' );
+								$genre_string = ltrim( $genre_string, ',' );
+								$db_value     = '<span>' . $this->trans->trans_146 . ': ' . $genre_string . '</span> ';
+							} else {
+								$db_value = '';
+							}
+							break;
+						case 'format':
+							if ( '' !== $book->format && null !== $book->format ) {
+								$db_value = '<span>' . $this->trans->trans_158 . ': ' . $book->format . '</span> ';
+							} else {
+								$db_value = '';
+							}
+							break;
+						case 'goodreads':
+							if ( '' !== $book->goodreadslink && null !== $book->goodreadslink ) {
+								$db_value = '<span>' . $this->trans->trans_163 . ': <a target="_blank" href="' . $book->goodreadslink . '">' . $this->trans->trans_701 . '</a></span> ';
+							} else {
+								$db_value = '';
+							}
+							break;
+						case 'illustrator':
+							if ( '' !== $book->illustrator && null !== $book->illustrator ) {
+								$db_value = '<span>' . $this->trans->trans_281 . ': ' . $book->illustrator . '</span> ';
+							} else {
+								$db_value = '';
+							}
+							break;
+						case 'ituneslink':
+							if ( '' !== $book->itunes_page && null !== $book->itunes_page ) {
+								$db_value = '<span>' . $this->trans->trans_282 . ': <a target="_blank" href="' . $book->itunes_page . '">' . $this->trans->trans_701 . '</a></span> ';
+							} else {
+								$db_value = '';
+							}
+							break;
+						case 'keywords':
+							if ( '' !== $book->keywords && null !== $book->keywords ) {
+
+								$keywords_string = '';
+								if ( false !== stripos( $book->keywords, '---' ) ) {
+									$temp = explode( '---', $book->keywords );
+
+									foreach ( $temp as $key => $value ) {
+										if ( '' !== $value ) {
+											$keywords_string = $keywords_string . ', ' . $value;
+										}
+									}
+								} else {
+									$keywords_string = $book->keywords;
+								}
+								$keywords_string = rtrim( $keywords_string );
+								$keywords_string = ltrim( $keywords_string );
+								$keywords_string = rtrim( $keywords_string, ',' );
+								$keywords_string = ltrim( $keywords_string, ',' );
+								$db_value     = '<span>' . $this->trans->trans_146 . ': ' . $keywords_string . '</span> ';
+							} else {
+								$db_value = '';
+							}
+							break;
+						case 'kobolink':
+							if ( '' !== $book->kobo_link && null !== $book->kobo_link ) {
+								$db_value = '<span>' . $this->trans->trans_283 . ': <a target="_blank" href="' . $book->kobo_link . '">' . $this->trans->trans_701 . '</a></span> ';
+							} else {
+								$db_value = '';
+							}
+							break;
+						case 'language':
+							if ( '' !== $book->language && null !== $book->language ) {
+								$db_value = '<span>' . $this->trans->trans_154 . ': ' . $book->language . '</span> ';
+							} else {
+								$db_value = '';
+							}
+						case 'notes':
+							if ( '' !== $book->notes && null !== $book->notes ) {
+								$db_value = '<div class="wpbl-list-book-description-contents">' . html_entity_decode( $book->notes ) . '</div></span> ';
+							} else {
+								$db_value = '';
+							}
+							break;
+						case 'seriesnumber':
+							if ( '' !== $book->numberinseries && null !== $book->numberinseries ) {
+								$db_value = '<span>' . $this->trans->trans_157 . ': ' . $book->numberinseries . '</span> ';
+							} else {
+								$db_value = '';
+							}
+							break;
+						case 'origpubyear':
+							if ( '' !== $book->originalpubyear && null !== $book->originalpubyear && 0 !== $book->originalpubyear && '0' !== $book->originalpubyear ) {
+								$db_value = '<span>' . $this->trans->trans_145 . ': ' . $book->originalpubyear . '</span> ';
+							} else {
+								$db_value = '';
+							}
+							break;
+						case 'origtitle':
+							if ( '' !== $book->originaltitle && null !== $book->originaltitle ) {
+								$db_value = '<span>' . $this->trans->trans_139 . ': ' . $book->originaltitle . '</span> ';
+							} else {
+								$db_value = '';
+							}
+							break;
+						case 'outofprint':
+							if ( '' !== $book->outofprint && null !== $book->outofprint && 'N/A' !== $book->outofprint ) {
+								$db_value = '<span>' . $this->trans->trans_222 . ': ' . $book->outofprint . '</span> ';
+							} else {
+								$db_value = '';
+							}
+							break;
+						case 'page':
+							if ( '' !== $book->page_yes && null !== $book->page_yes ) {
+								$db_value = '<span>' . $this->trans->trans_452 . ': <a target="_blank" href="' . get_permalink( $book->page_yes ) . '">' . $this->trans->trans_701 . '</a></span> ';
+							} else {
+								$db_value = '';
+							}
+							break;
+						case 'post':
+							if ( '' !== $book->post_yes && null !== $book->post_yes ) {
+								$db_value = '<span>' . $this->trans->trans_453 . ': <a target="_blank" href="' . get_permalink( $book->post_yes ) . '">' . $this->trans->trans_701 . '</a></span> ';
+							} else {
+								$db_value = '';
+							}
+							break;
+						case 'pages':
+							if ( '' !== $book->pages && null !== $book->pages ) {
+								$db_value = '<span>' . $this->trans->trans_142 . ': ' . $book->pages . '</span> ';
+							} else {
+								$db_value = '';
+							}
+							break;
+						case 'pubyear':
+							if ( '' !== $book->pub_year && null !== $book->pub_year && 0 !== $book->pub_year && '0' !== $book->pub_year ) {
+								$db_value = '<span>' . $this->trans->trans_143 . ': ' . $book->pub_year . '</span> ';
+							} else {
+								$db_value = '';
+							}
+							break;
+						case 'publisher':
+							if ( '' !== $book->publisher && null !== $book->publisher && 0 !== $book->publisher && '0' !== $book->publisher ) {
+								$db_value = '<span>' . $this->trans->trans_141 . ': ' . $book->publisher . '</span> ';
+							} else {
+								$db_value = '';
+							}
+							break;
+						case 'rating':
+							if ( '' !== $book->rating && null !== $book->rating && 0 !== $book->rating && '0' !== $book->rating ) {
+
+								if ( '1' === $book->rating ) {
+									$db_value = '<img style="opacity: 1;" class="wpbooklist-list-rating-image" src="' . ROOT_IMG_URL . '1star.jpg">';
+								}
+
+								if ( '1.5' === $book->rating ) {
+									$db_value = '<img style="opacity: 1;" class="wpbooklist-list-rating-image" src="' . ROOT_IMG_URL . '1halfstar.jpg">';
+								}
+
+								if ( '2' === $book->rating ) {
+									$db_value = '<img style="opacity: 1;" class="wpbooklist-list-rating-image" src="' . ROOT_IMG_URL . '2star.jpg">';
+								}
+
+								if ( '2.5' === $book->rating ) {
+									$db_value = '<img style="opacity: 1;" class="wpbooklist-list-rating-image" src="' . ROOT_IMG_URL . '2halfstar.jpg">';
+								}
+
+								if ( '3' === $book->rating ) {
+									$db_value = '<img style="opacity: 1;" class="wpbooklist-list-rating-image" src="' . ROOT_IMG_URL . '3star.jpg">';
+								}
+
+								if ( '3.5' === $book->rating ) {
+									$db_value = '<img style="opacity: 1;" class="wpbooklist-list-rating-image" src="' . ROOT_IMG_URL . '3halfstar.jpg">';
+								}
+
+								if ( '4' === $book->rating ) {
+									$db_value = '<img style="opacity: 1;" class="wpbooklist-list-rating-image" src="' . ROOT_IMG_URL . '4star.jpg">';
+								}
+
+								if ( '4.5' === $book->rating ) {
+									$db_value = '<img style="opacity: 1;" class="wpbooklist-list-rating-image" src="' . ROOT_IMG_URL . '4halfstar.jpg">';
+								}
+
+								if ( '5' === $book->rating ) {
+									$db_value = '<img style="opacity: 1;" class="wpbooklist-list-rating-image" src="' . ROOT_IMG_URL . '5star.jpg">';
+								}
+							} else {
+								$db_value = '';
+							}
+							break;
+						case 'series':
+							if ( '' !== $book->series && null !== $book->series ) {
+								$db_value = '<span>' . $this->trans->trans_156 . ': ' . $book->series . '</span> ';
+							} else {
+								$db_value = '';
+							}
+							break;
+						case 'shortdescription':
+							if ( '' !== $book->shortdescription && null !== $book->shortdescription ) {
+								$db_value = '<div class="wpbl-list-book-description-contents">' . html_entity_decode( $book->shortdescription ) . '</div></span> ';
+							} else {
+								$db_value = '';
+							}
+							break;
+						case 'subgenre':
+							if ( '' !== $book->subgenre && null !== $book->subgenre ) {
+
+								$subgenre_string = '';
+								if ( false !== stripos( $book->subgenre, '---' ) ) {
+									$temp = explode( '---', $book->subgenre );
+
+									foreach ( $temp as $key => $value ) {
+										if ( '' !== $value ) {
+											$subgenre_string = $subgenre_string . ', ' . $value;
+										}
+									}
+								} else {
+									$subgenre_string = $book->subgenre;
+								}
+								$subgenre_string = rtrim( $subgenre_string );
+								$subgenre_string = ltrim( $subgenre_string );
+								$subgenre_string = rtrim( $subgenre_string, ',' );
+								$subgenre_string = ltrim( $subgenre_string, ',' );
+								$db_value     = '<span>' . $this->trans->trans_147 . ': ' . $subgenre_string . '</span> ';
+							} else {
+								$db_value = '';
+							}
+							break;
+						default:
+							$db_value = '';
+							break;
+					}
+
+//[wpbooklist_shortcode display="list" fields="authorurl,asin,isbn10,isbn13,bamlink,bnlink,callnumber,country,ebook,description,edition,format,genres,goodreads,illustrator,ituneslinkkeywords,kobolink,language,notes,seriesnumber,origpubyear,origtitle,outofprint,page,post,pages,price,pubyear,publisher,rating,series,shortdescription,subgenre"]
+
+
+
+					$fields_html = $fields_html . '<p class="wpbooklist-list-indiv-details">' . $db_value . '</p>';
+				}
+
 				// Displaying books based on provided action.
 				if ( 'post' === $this->action ) {
 					if ( null !== $book->post_yes && 'false' !== $book->post_yes && 'N/A' !== $book->post_yes && 'no' !== $book->post_yes) {
-						$string2 = $string2 . '<div class="wpbooklist_entry_div">
-						<p style="display:none;" id="wpbooklist-hidden-isbn1">' . $book->isbn . '</p>
-						<div class="wpbooklist_inner_main_display_div">
-						    <a href="' . get_permalink( $book->post_yes ) . '"><img class="wpbooklist_cover_image_class" data-bookid="' . $book->ID . '" data-booktable="' . $this->table . '" id="wpbooklist_cover_image" src="' . $book->image . '" style="opacity: 1;"></a>
+						$string2 = $string2 . '<div class="wpbooklist-list_entry_div">
+						<p style="display:none;" id="wpbooklist-list-hidden-isbn1">' . $book->isbn . '</p>
+						<div class="wpbooklist-list_inner_main_display_div">
+						    <a href="' . get_permalink( $book->post_yes ) . '"><img class="wpbooklist-list_cover_image_class" data-bookid="' . $book->ID . '" data-booktable="' . $this->table . '" id="wpbooklist-list_cover_image" src="' . $book->image . '" style="opacity: 1;"></a>
 						    <span class="hidden_id_title">' . $book->ID . '</span>
-						    <a href="' . $book->amazon_detail_page . '"><p ' . $hidelibrarytitle . ' class="wpbooklist_saved_title_link" data-bookid="' . $book->ID . '" data-booktable="' . $this->table . '" id="wpbooklist_saved_title_link">' . stripslashes( $book->title ) . '<span class="hidden_id_title">1</span>
+						    <a href="' . $book->amazon_detail_page . '"><p ' . $hidelibrarytitle . ' class="wpbooklist-list_saved_title_link" data-bookid="' . $book->ID . '" data-booktable="' . $this->table . '" id="wpbooklist-list_saved_title_link">' . stripslashes( $book->title ) . '<span class="hidden_id_title">1</span>
 						    </p></a>';
 					} else {
-						$string2 = $string2 . '<div class="wpbooklist_entry_div">
-						<p style="display:none;" id="wpbooklist-hidden-isbn1">' . $book->isbn . '</p>
-						<div class="wpbooklist_inner_main_display_div">
-						    <img class="wpbooklist_cover_image_class wpbooklist-show-book-colorbox" data-bookid="' . $book->ID . '" data-booktable="' . $this->table . '" id="wpbooklist_cover_image" src="' . $book->image . '" style="opacity: 1;">
+						$string2 = $string2 . '<div class="wpbooklist-list_entry_div">
+						<p style="display:none;" id="wpbooklist-list-hidden-isbn1">' . $book->isbn . '</p>
+						<div class="wpbooklist-list_inner_main_display_div">
+						    <img class="wpbooklist-list_cover_image_class wpbooklist-show-book-colorbox" data-bookid="' . $book->ID . '" data-booktable="' . $this->table . '" id="wpbooklist-list_cover_image" src="' . $book->image . '" style="opacity: 1;">
 						    <span class="hidden_id_title">' . $book->ID . '</span>
-						    <p ' . $hidelibrarytitle . ' class="wpbooklist_saved_title_link wpbooklist-show-book-colorbox" data-bookid="' . $book->ID . '" data-booktable="' . $this->table . '" id="wpbooklist_saved_title_link">' . stripslashes( $book->title ) . '<span class="hidden_id_title">1</span>
+						    <p ' . $hidelibrarytitle . ' class="wpbooklist-list_saved_title_link wpbooklist-show-book-colorbox" data-bookid="' . $book->ID . '" data-booktable="' . $this->table . '" id="wpbooklist-list_saved_title_link">' . stripslashes( $book->title ) . '<span class="hidden_id_title">1</span>
 						    </p>';
 					}
 				} elseif ( 'page' === $this->action ) {
 					if ( null !== $book->page_yes && 'false' !== $book->page_yes && 'N/A' !== $book->page_yes && 'no' !== $book->page_yes ) {
-						$string2 = $string2 . '<div class="wpbooklist_entry_div">
-						<p style="display:none;" id="wpbooklist-hidden-isbn1">' . $book->isbn . '</p>
-						<div class="wpbooklist_inner_main_display_div">
-						    <a href="' . get_permalink( $book->page_yes ) . '"><img class="wpbooklist_cover_image_class" data-bookid="' . $book->ID . '" data-booktable="' . $this->table . '" id="wpbooklist_cover_image" src="' . $book->image . '" style="opacity: 1;"></a>
+						$string2 = $string2 . '<div class="wpbooklist-list_entry_div">
+						<p style="display:none;" id="wpbooklist-list-hidden-isbn1">' . $book->isbn . '</p>
+						<div class="wpbooklist-list_inner_main_display_div">
+						    <a href="' . get_permalink( $book->page_yes ) . '"><img class="wpbooklist-list_cover_image_class" data-bookid="' . $book->ID . '" data-booktable="' . $this->table . '" id="wpbooklist-list_cover_image" src="' . $book->image . '" style="opacity: 1;"></a>
 						    <span class="hidden_id_title">' . $book->ID . '</span>
-						    <a href="' . $book->amazon_detail_page . '"><p ' . $hidelibrarytitle . ' class="wpbooklist_saved_title_link" data-bookid="' . $book->ID . '" data-booktable="' . $this->table . '" id="wpbooklist_saved_title_link">' . stripslashes( $book->title ) . '<span class="hidden_id_title">1</span>
+						    <a href="' . $book->amazon_detail_page . '"><p ' . $hidelibrarytitle . ' class="wpbooklist-list_saved_title_link" data-bookid="' . $book->ID . '" data-booktable="' . $this->table . '" id="wpbooklist-list_saved_title_link">' . stripslashes( $book->title ) . '<span class="hidden_id_title">1</span>
 						    </p></a>';
 					} else {
-						$string2 = $string2 . '<div class="wpbooklist_entry_div">
-						<p style="display:none;" id="wpbooklist-hidden-isbn1">' . $book->isbn . '</p>
-						<div class="wpbooklist_inner_main_display_div">
-						    <img class="wpbooklist_cover_image_class wpbooklist-show-book-colorbox" data-bookid="' . $book->ID . '" data-booktable="' . $this->table . '" id="wpbooklist_cover_image" src="' . $book->image . '" style="opacity: 1;">
+						$string2 = $string2 . '<div class="wpbooklist-list_entry_div">
+						<p style="display:none;" id="wpbooklist-list-hidden-isbn1">' . $book->isbn . '</p>
+						<div class="wpbooklist-list_inner_main_display_div">
+						    <img class="wpbooklist-list_cover_image_class wpbooklist-show-book-colorbox" data-bookid="' . $book->ID . '" data-booktable="' . $this->table . '" id="wpbooklist-list_cover_image" src="' . $book->image . '" style="opacity: 1;">
 						    <span class="hidden_id_title">' . $book->ID . '</span>
-						    <p ' . $hidelibrarytitle . ' class="wpbooklist_saved_title_link wpbooklist-show-book-colorbox" data-bookid="' . $book->ID . '" data-booktable="' . $this->table . '" id="wpbooklist_saved_title_link">' . stripslashes( $book->title ) . '<span class="hidden_id_title">1</span>
+						    <p ' . $hidelibrarytitle . ' class="wpbooklist-list_saved_title_link wpbooklist-show-book-colorbox" data-bookid="' . $book->ID . '" data-booktable="' . $this->table . '" id="wpbooklist-list_saved_title_link">' . stripslashes( $book->title ) . '<span class="hidden_id_title">1</span>
 						    </p>';
 					}
 				} elseif ( 'amazon' === $this->action ) {
-					$string2 = $string2 . '<div class="wpbooklist_entry_div">
-					<p style="display:none;" id="wpbooklist-hidden-isbn1">' . $book->isbn . '</p>
-					<div class="wpbooklist_inner_main_display_div">
-					    <a href="' . $book->amazon_detail_page . '"><img class="wpbooklist_cover_image_class" data-bookid="' . $book->ID . '" data-booktable="' . $this->table . '" id="wpbooklist_cover_image" src="' . $book->image . '" style="opacity: 1;"></a>
+					$string2 = $string2 . '<div class="wpbooklist-list_entry_div">
+					<p style="display:none;" id="wpbooklist-list-hidden-isbn1">' . $book->isbn . '</p>
+					<div class="wpbooklist-list_inner_main_display_div">
+					    <a href="' . $book->amazon_detail_page . '"><img class="wpbooklist-list_cover_image_class" data-bookid="' . $book->ID . '" data-booktable="' . $this->table . '" id="wpbooklist-list_cover_image" src="' . $book->image . '" style="opacity: 1;"></a>
 					    <span class="hidden_id_title">' . $book->ID . '</span>
-					    <a href="' . $book->amazon_detail_page . '"><p ' . $hidelibrarytitle . ' class="wpbooklist_saved_title_link" data-bookid="' . $book->ID . '" data-booktable="' . $this->table . '" id="wpbooklist_saved_title_link">' . stripslashes( $book->title ) . '<span class="hidden_id_title">1</span>
+					    <a href="' . $book->amazon_detail_page . '"><p ' . $hidelibrarytitle . ' class="wpbooklist-list_saved_title_link" data-bookid="' . $book->ID . '" data-booktable="' . $this->table . '" id="wpbooklist-list_saved_title_link">' . stripslashes( $book->title ) . '<span class="hidden_id_title">1</span>
 					    </p></a>';
 				} elseif ( 'googlebooks' === $this->action ) {
-					$string2 = $string2 . '<div class="wpbooklist_entry_div">
-					<p style="display:none;" id="wpbooklist-hidden-isbn1">' . $book->isbn . '</p>
-					<div class="wpbooklist_inner_main_display_div">
-					    <a href="' . $book->google_preview . '"><img class="wpbooklist_cover_image_class" data-bookid="' . $book->ID . '" data-booktable="' . $this->table . '" id="wpbooklist_cover_image" src="' . $book->image . '" style="opacity: 1;"></a>
+					$string2 = $string2 . '<div class="wpbooklist-list_entry_div">
+					<p style="display:none;" id="wpbooklist-list-hidden-isbn1">' . $book->isbn . '</p>
+					<div class="wpbooklist-list_inner_main_display_div">
+					    <a href="' . $book->google_preview . '"><img class="wpbooklist-list_cover_image_class" data-bookid="' . $book->ID . '" data-booktable="' . $this->table . '" id="wpbooklist-list_cover_image" src="' . $book->image . '" style="opacity: 1;"></a>
 					    <span class="hidden_id_title">' . $book->ID . '</span>
-					    <a href="' . $book->google_preview . '"><p ' . $hidelibrarytitle . ' class="wpbooklist_saved_title_link" data-bookid="' . $book->ID . '" data-booktable="' . $this->table . '" id="wpbooklist_saved_title_link">' . stripslashes( $book->title ) . '<span class="hidden_id_title">1</span>
+					    <a href="' . $book->google_preview . '"><p ' . $hidelibrarytitle . ' class="wpbooklist-list_saved_title_link" data-bookid="' . $book->ID . '" data-booktable="' . $this->table . '" id="wpbooklist-list_saved_title_link">' . stripslashes( $book->title ) . '<span class="hidden_id_title">1</span>
 					    </p></a>';
 
 				} elseif ( 'ibooks' === $this->action ) {
-					$string2 = $string2 . '<div class="wpbooklist_entry_div">
-					<p style="display:none;" id="wpbooklist-hidden-isbn1">' . $book->isbn . '</p>
-					<div class="wpbooklist_inner_main_display_div">
-					    <a href="' . $book->itunes_page . '"><img class="wpbooklist_cover_image_class" data-bookid="' . $book->ID . '" data-booktable="' . $this->table . '" id="wpbooklist_cover_image" src="' . $book->image . '" style="opacity: 1;"></a>
+					$string2 = $string2 . '<div class="wpbooklist-list_entry_div">
+					<p style="display:none;" id="wpbooklist-list-hidden-isbn1">' . $book->isbn . '</p>
+					<div class="wpbooklist-list_inner_main_display_div">
+					    <a href="' . $book->itunes_page . '"><img class="wpbooklist-list_cover_image_class" data-bookid="' . $book->ID . '" data-booktable="' . $this->table . '" id="wpbooklist-list_cover_image" src="' . $book->image . '" style="opacity: 1;"></a>
 					    <span class="hidden_id_title">' . $book->ID . '</span>
-					    <a href="' . $book->itunes_page . '"><p ' . $hidelibrarytitle . ' class="wpbooklist_saved_title_link" data-bookid="' . $book->ID . '" data-booktable="' . $this->table . '" id="wpbooklist_saved_title_link">' . stripslashes( $book->title ) . '<span class="hidden_id_title">1</span>
+					    <a href="' . $book->itunes_page . '"><p ' . $hidelibrarytitle . ' class="wpbooklist-list_saved_title_link" data-bookid="' . $book->ID . '" data-booktable="' . $this->table . '" id="wpbooklist-list_saved_title_link">' . stripslashes( $book->title ) . '<span class="hidden_id_title">1</span>
 					    </p></a>';
 
 				} elseif ( 'booksamillion' === $this->action ) {
-					$string2 = $string2 . '<div class="wpbooklist_entry_div">
-					<p style="display:none;" id="wpbooklist-hidden-isbn1">' . $book->isbn . '</p>
-					<div class="wpbooklist_inner_main_display_div">
-					    <a href="http://www.anrdoezrs.net/links/8090484/type/dlg/' . $book->bam_link . '?id=7059442747215"><img class="wpbooklist_cover_image_class" data-bookid="' . $book->ID . '" data-booktable="' . $this->table . '" id="wpbooklist_cover_image" src="' . $book->image . '" style="opacity: 1;"></a>
+					$string2 = $string2 . '<div class="wpbooklist-list_entry_div">
+					<p style="display:none;" id="wpbooklist-list-hidden-isbn1">' . $book->isbn . '</p>
+					<div class="wpbooklist-list_inner_main_display_div">
+					    <a href="http://www.anrdoezrs.net/links/8090484/type/dlg/' . $book->bam_link . '?id=7059442747215"><img class="wpbooklist-list_cover_image_class" data-bookid="' . $book->ID . '" data-booktable="' . $this->table . '" id="wpbooklist-list_cover_image" src="' . $book->image . '" style="opacity: 1;"></a>
 					    <span class="hidden_id_title">' . $book->ID . '</span>
-					    <a href="http://www.anrdoezrs.net/links/8090484/type/dlg/' . $book->bam_link . '?id=7059442747215"><p ' . $hidelibrarytitle . ' class="wpbooklist_saved_title_link" data-bookid="' . $book->ID . '" data-booktable="' . $this->table . '" id="wpbooklist_saved_title_link">' . stripslashes( $book->title ) . '<span class="hidden_id_title">1</span>
+					    <a href="http://www.anrdoezrs.net/links/8090484/type/dlg/' . $book->bam_link . '?id=7059442747215"><p ' . $hidelibrarytitle . ' class="wpbooklist-list_saved_title_link" data-bookid="' . $book->ID . '" data-booktable="' . $this->table . '" id="wpbooklist-list_saved_title_link">' . stripslashes( $book->title ) . '<span class="hidden_id_title">1</span>
 					    </p></a>';
 
 				} elseif ( 'kobo' === $this->action ) {
-					$string2 = $string2 . '<div class="wpbooklist_entry_div">
-					<p style="display:none;" id="wpbooklist-hidden-isbn1">' . $book->isbn . '</p>
-					<div class="wpbooklist_inner_main_display_div">
-					    <a href="' . $book->kobo_link . '"><img class="wpbooklist_cover_image_class" data-bookid="' . $book->ID . '" data-booktable="' . $this->table . '" id="wpbooklist_cover_image" src="' . $book->image . '" style="opacity: 1;"></a>
+					$string2 = $string2 . '<div class="wpbooklist-list_entry_div">
+					<p style="display:none;" id="wpbooklist-list-hidden-isbn1">' . $book->isbn . '</p>
+					<div class="wpbooklist-list_inner_main_display_div">
+					    <a href="' . $book->kobo_link . '"><img class="wpbooklist-list_cover_image_class" data-bookid="' . $book->ID . '" data-booktable="' . $this->table . '" id="wpbooklist-list_cover_image" src="' . $book->image . '" style="opacity: 1;"></a>
 					    <span class="hidden_id_title">' . $book->ID . '</span>
-					    <a href="' . $book->kobo_link . '"><p ' . $hidelibrarytitle . ' class="wpbooklist_saved_title_link" data-bookid="' . $book->ID . '" data-booktable="' . $this->table . '" id="wpbooklist_saved_title_link">' . stripslashes( $book->title ) . '<span class="hidden_id_title">1</span>
+					    <a href="' . $book->kobo_link . '"><p ' . $hidelibrarytitle . ' class="wpbooklist-list_saved_title_link" data-bookid="' . $book->ID . '" data-booktable="' . $this->table . '" id="wpbooklist-list_saved_title_link">' . stripslashes( $book->title ) . '<span class="hidden_id_title">1</span>
 					    </p></a>';
 				} else {
-					$string2 = $string2 . '<div class="wpbooklist_entry_div">
-					<p style="display:none;" id="wpbooklist-hidden-isbn1">' . $book->isbn . '</p>
-					<div class="wpbooklist_inner_main_display_div">
-					    <img class="wpbooklist_cover_image_class wpbooklist-show-book-colorbox" data-bookid="' . $book->ID . '" data-booktable="' . $this->table . '" id="wpbooklist_cover_image" src="' . $book->image . '" style="opacity: 1;">
-					    <span class="hidden_id_title">' . $book->ID . '</span>
-					    <p ' . $hidelibrarytitle . ' class="wpbooklist_saved_title_link wpbooklist-show-book-colorbox" data-bookid="' . $book->ID . '" data-booktable="' . $this->table . '" id="wpbooklist_saved_title_link">' . stripslashes( $book->title ) . '<span class="hidden_id_title">1</span>
-					    </p>';
+					$string2 = $string2 . '<div class="wpbooklist-list_entry_div">
+					<p style="display:none;" id="wpbooklist-list-hidden-isbn1">' . $book->isbn . '</p>
+					<div class="wpbooklist-list_inner_main_display_div">
+						<div class="wpbooklist-list-cover-img-class-div">
+						    <img class="wpbooklist-list_cover_image_class wpbooklist-show-book-colorbox" data-bookid="' . $book->ID . '" data-booktable="' . $this->table . '" id="wpbooklist-list_cover_image" src="' . $book->image . '" style="opacity: 1;">
+						    <span class="hidden_id_title">' . $book->ID . '</span>
+					    </div>
+					    <div class="wpbooklist-list-book-details-div">
+						    <p ' . $hidelibrarytitle . ' class="wpbooklist-list_saved_title_link wpbooklist-show-book-colorbox" data-bookid="' . $book->ID . '" data-booktable="' . $this->table . '" id="wpbooklist-list_saved_title_link">' . stripslashes( $book->title ) . '<span class="hidden_id_title">1</span>
+						    </p>
+						    <p class="wpbooklist-list-indiv-details wpbooklist-list-indiv-details-author">By ' . stripslashes( $authors ) . '</p>
+						    ' . $fields_html . '
+					    </div>';
 				}
 
-				if ( '1' !== $this->display_options_actual->hiderating && 0 !== $book->rating && null !== $book->rating ) {
-
-					if ( '1' === $book->rating ) {
-						$string2 = $string2 . '<img style="opacity: 1;" class="wpbooklist-rating-image" src="' . ROOT_IMG_URL . '1star.jpg">';
-					}
-
-					if ( '1.5' === $book->rating ) {
-						$string2 = $string2 . '<img style="opacity: 1;" class="wpbooklist-rating-image" src="' . ROOT_IMG_URL . '1halfstar.jpg">';
-					}
-
-					if ( '2' === $book->rating ) {
-						$string2 = $string2 . '<img style="opacity: 1;" class="wpbooklist-rating-image" src="' . ROOT_IMG_URL . '2star.jpg">';
-					}
-
-					if ( '2.5' === $book->rating ) {
-						$string2 = $string2 . '<img style="opacity: 1;" class="wpbooklist-rating-image" src="' . ROOT_IMG_URL . '2halfstar.jpg">';
-					}
-
-					if ( '3' === $book->rating ) {
-						$string2 = $string2 . '<img style="opacity: 1;" class="wpbooklist-rating-image" src="' . ROOT_IMG_URL . '3star.jpg">';
-					}
-
-					if ( '3.5' === $book->rating ) {
-						$string2 = $string2 . '<img style="opacity: 1;" class="wpbooklist-rating-image" src="' . ROOT_IMG_URL . '3halfstar.jpg">';
-					}
-
-					if ( '4' === $book->rating ) {
-						$string2 = $string2 . '<img style="opacity: 1;" class="wpbooklist-rating-image" src="' . ROOT_IMG_URL . '4star.jpg">';
-					}
-
-					if ( '4.5' === $book->rating ) {
-						$string2 = $string2 . '<img style="opacity: 1;" class="wpbooklist-rating-image" src="' . ROOT_IMG_URL . '4halfstar.jpg">';
-					}
-
-					if ( '5' === $book->rating ) {
-						$string2 = $string2 . '<img style="opacity: 1;" class="wpbooklist-rating-image" src="' . ROOT_IMG_URL . '5star.jpg">';
-					}
-				}
-
-				$string2 = $string2 . '<div class="wpbooklist-library-frontend-purchase-div">';
+				$string2 = $string2 . '<div class="wpbooklist-list-library-frontend-purchase-div">';
 
 				$sales_array = array( $book->author_url, $book->price );
 

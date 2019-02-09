@@ -116,7 +116,7 @@
     margin-top: 0px;
 }
 
-.wpbooklist-edit-actions-delete-button, .wpbooklist-edit-actions-edit-button, .wpbooklist-edituser-actions-delete-button, .wpbooklist-edituser-actions-edit-button {
+.wpbooklist-submissions-actions-review-button, .wpbooklist-edit-actions-delete-button, .wpbooklist-edit-actions-edit-button, .wpbooklist-edituser-actions-delete-button, .wpbooklist-edituser-actions-edit-button, .wpbooklist-submissions-actions-review-button {
    @extend %wpbooklist-default-buttons-style;
    display: block!important;
 }
@@ -128,15 +128,15 @@
     position: relative;
 }
 
-.wpbooklist-edit-actions-div .wpbooklist-edit-actions-edit-button {
+.wpbooklist-edit-actions-div .wpbooklist-edit-actions-edit-button, .wpbooklist-edit-actions-div .wpbooklist-submissions-actions-review-button {
     margin-bottom: 10px;
 }
 
-.wpbooklist-edit-actions-div .wpbooklist-edit-actions-edit-button, .wpbooklist-edit-actions-div .wpbooklist-edit-actions-delete-button {
+.wpbooklist-edit-actions-div .wpbooklist-submissions-actions-review-button, .wpbooklist-edit-actions-div .wpbooklist-edit-actions-edit-button, .wpbooklist-edit-actions-div .wpbooklist-edit-actions-delete-button {
     @extend %wpbooklist-default-buttons-style;
 }
 
-#wpbooklist-edit_books-pagination-div div:hover, .wpbooklist-edit-actions-div .wpbooklist-edit-actions-edit-button:hover, .wpbooklist-edit-actions-div .wpbooklist-edit-actions-delete-button:hover {
+#wpbooklist-edit_books-pagination-div div:hover, .wpbooklist-edit-actions-div .wpbooklist-edit-actions-edit-button:hover, .wpbooklist-edit-actions-div .wpbooklist-edit-actions-delete-button:hover, .wpbooklist-edit-actions-div .wpbooklist-submissions-actions-review-button:hover {
     @extend %wpbooklist-default-buttons-style-hover;
 }
 

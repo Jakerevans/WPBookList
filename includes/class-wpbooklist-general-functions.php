@@ -1343,8 +1343,11 @@ if ( ! class_exists( 'WPBookList_General_Functions', false ) ) :
 			extract(
 				shortcode_atts(
 					array(
-						'table'  => $wpdb->prefix . "wpbooklist_jre_saved_book_log",
-						'action' => 'colorbox',
+						'table'   => $wpdb->prefix . "wpbooklist_jre_saved_book_log",
+						'action'  => 'colorbox',
+						'display' => 'default',
+						'fields'  => 'default',
+
 					),
 				$atts )
 			);
@@ -1363,6 +1366,27 @@ if ( ! class_exists( 'WPBookList_General_Functions', false ) ) :
 				$action = 'colorbox';
 			}
 
+			// Set up the display variable that will determine which layout to use.
+			if ( isset( $atts['display'] ) ) {
+				$display = $atts['display'];
+			} else {
+				$display = 'default';
+			}
+
+			// Set up the fields variable that will determine which book details to display.
+			if ( isset( $atts['fields'] ) ) {
+				$fields = $atts['fields'];
+			} else {
+				$fields = 'default';
+			}
+
+			// Set up the action taken when cover image is clicked on.
+			if ( isset( $atts['action'] ) ) {
+				$action = $atts['action'];
+			} else {
+				$action = 'colorbox';
+			}
+
 			if ( null === $atts ) {
 				$which_table = $wpdb->prefix . 'wpbooklist_jre_saved_book_log';
 				$action      = 'colorbox';
@@ -1370,10 +1394,30 @@ if ( ! class_exists( 'WPBookList_General_Functions', false ) ) :
 
 			$offset = 0;
 
-			ob_start();
-			include_once ROOT_INCLUDES_UI . 'class-wpbooklist-frontend-library-ui.php';
-			$front_end_library_ui = new WPBookList_Frontend_Library_UI( $which_table, $action );
-			return ob_get_clean();
+			// If the 'Display' shortcode argument isn't set, display the deafult Library layout.
+			if ( 'default' === $display ) {
+
+				ob_start();
+				include_once ROOT_INCLUDES_UI . 'class-wpbooklist-frontend-library-ui.php';
+				$front_end_library_ui = new WPBookList_Frontend_Library_UI( $which_table, $action );
+				return ob_get_clean();
+
+			} else {
+
+				if ( 'list' === $display ) {
+
+					ob_start();
+					include_once ROOT_INCLUDES_UI . 'class-wpbooklist-frontend-library-list-ui.php';
+					$front_end_library_list_ui = new WPBookList_Frontend_Library_List_UI( $which_table, $action, $display, $fields );
+					return ob_get_clean();
+
+				}
+
+				
+
+			}
+
+			
 		}
 
 
