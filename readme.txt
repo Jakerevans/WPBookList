@@ -4,7 +4,7 @@ Donate link: https://ko-fi.com/A8385C9
 Tags: books, woocommerce, author, book, affiliate  
 Requires at least: 3.0.1
 Tested up to: 5.0
-Stable tag: 6.1.7
+Stable tag: 6.1.8
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -289,6 +289,8 @@ In order to become one of these "Official Translators", I'll need to know your o
 
 **6.1.7** - Prevented the Pagination tools from appearing on the front-end if multiple pages of books do not exist (Github Issue #75). Introduced check in class-wpbooklist-frontend-library-ui.php file, lines 1387-1392, that prevents attempting to grab a quote using an undefined array index key. Also modified the quotation display to not have the closing quotation mark bolded. (Github Issue #98). Added in translations for the new Submissions Extension (Github Issue #100). Modify the IDs of the field values in the 'Book Form' HTML (Github Issue #101). Modified the 'Class-book.php' file to suite the Submissions Extension (Github Issue #102). Modified the "wpbooklist_dashboard_add_book_action_callback" function to return found book info for the Submissions Extension (Github Issue #103). Added in Advertisment for the new E-Books Extension on the Extensions Menu Page (Github Issue #104). Added in some translations for the WPBookList Search Extension (Github Issue #105).
 
+**6.1.8** - Made change to Amazon API calls to reflect the new Product API Guidelines. Amazon has removed current access to their Product Advertising API for WPBookList, as sufficient revenue wasn't being generated. 
+
 
 == Upgrade Notice ==
 
@@ -403,4 +405,7 @@ Modified the class-show-book-in-colorbox.php file, lines 130-148, to better dete
 =6.1.6= - Bug fixes for Library and Book View Display Options, as well as bug fixes for the displaying of Cover Images on the default Posts and Pages Templates. Change the wpuserid column in the Users table to accomodate large WP User IDs on Wordpress.com sites. 
 
 =6.1.7= - Prevented the Pagination tools from appearing on the front-end if multiple pages of books do not exist (Github Issue #75). Introduced check in class-wpbooklist-frontend-library-ui.php file, lines 1387-1392, that prevents attempting to grab a quote using an undefined array index key. Also modified the quotation display to not have the closing quotation mark bolded. (Github Issue #98). Added in translations for the new Submissions Extension (Github Issue #100). Modify the IDs of the field values in the 'Book Form' HTML (Github Issue #101). Modified the 'Class-book.php' file to suite the Submissions Extension (Github Issue #102). Modified the "wpbooklist_dashboard_add_book_action_callback" function to return found book info for the Submissions Extension (Github Issue #103). Added in Advertisment for the new E-Books Extension on the Extensions Menu Page (Github Issue #104). Added in some translations for the WPBookList Search Extension (Github Issue #105).
+
+=6.1.8=
+Made change to Amazon API calls to reflect the new Product API Guidelines. Amazon has removed current access to their Product Advertising API for WPBookList, as sufficient revenue wasn't being generated. 
 

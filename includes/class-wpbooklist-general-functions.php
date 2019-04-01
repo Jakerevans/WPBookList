@@ -1576,8 +1576,8 @@ if ( ! class_exists( 'WPBookList_General_Functions', false ) ) :
 					$asin = $arr[0];
 
 					// Removing my Affiliate ID, as it's only needed for initial API calls when Adding/Editing/Searching for books.
-					if ( 'wpbooklistid-20' === $options_row->amazonaff ) {
-						$options_row->amazonaff = '';
+					if ( '' === $options_row->amazonaff || null === $options_row->amazonaff ) {
+						$options_row->amazonaff = 'wpbooklistid-20';
 					}
 
 					$image = 'http://images.amazon.com/images/P/' . $asin . '.01.LZZZZZZZ.jpg';
@@ -1606,7 +1606,7 @@ if ( ! class_exists( 'WPBookList_General_Functions', false ) ) :
 
 				// Removing my Affiliate ID, as it's only needed for initial API calls when Adding/Editing/Searching for books.
 				if ( false !== stripos( $book_row->amazon_detail_page, 'tag=wpbooklistid-20' ) ) {
-					$book_row->amazon_detail_page = str_replace( 'tag=wpbooklistid-20', '', $book_row->amazon_detail_page );
+					//$book_row->amazon_detail_page = str_replace( 'tag=wpbooklistid-20', '', $book_row->amazon_detail_page );
 				}
 
 				if ( 'page' === $page_post_row->type ) {
@@ -1780,7 +1780,9 @@ if ( ! class_exists( 'WPBookList_General_Functions', false ) ) :
 
 				// Replace with user's affiliate id, if available.
 				$amazonaff = $options_results->amazonaff;
-				$link      = str_replace( 'wpbooklistid-20', $amazonaff, $link );
+				if ( '' !== $amazonaff && null !== $amazonaff ) {
+					$link = str_replace( 'wpbooklistid-20', $amazonaff, $link );
+				}
 
 				$amazoncountryinfo = $options_results->amazoncountryinfo;
 				switch ( $amazoncountryinfo ) {
