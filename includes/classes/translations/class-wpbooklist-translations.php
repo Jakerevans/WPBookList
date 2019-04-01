@@ -719,7 +719,7 @@ if ( ! class_exists( 'WPBookList_Translations', false ) ) :
 			$this->trans_688 = __( 'Uh-Oh! Looks like you haven\'t entered your License Key for the WPBookList Submissions Extension yet! Enter your License Key below to begin using WPBookList Submissions.', 'wpbooklist-textdomain' );
 			$this->trans_689 = __( 'Get Book Info', 'wpbooklist-textdomain' );
 			$this->trans_690 = __( 'Phone', 'wpbooklist-textdomain' );
-			$this->trans_691 = __( 'Feature Date', 'wpbooklist-textdomain' );
+			$this->trans_691 = __( 'Preferred Feature Date', 'wpbooklist-textdomain' );
 			$this->trans_692 = __( 'Contact Information', 'wpbooklist-textdomain' );
 			$this->trans_693 = __( 'Book Information', 'wpbooklist-textdomain' );
 			$this->trans_694 = __( 'Submit Book', 'wpbooklist-textdomain' );
@@ -733,6 +733,10 @@ if ( ! class_exists( 'WPBookList_Translations', false ) ) :
 			$this->trans_702 = __( 'Total # of Pending Submissions', 'wpbooklist' );
 			$this->trans_703 = __( 'Review the fields below and click the \'Approve Submission\' button at the bottom of this section.', 'wpbooklist' );
 			$this->trans_704 = __( 'Approve Submission', 'wpbooklist' );
+			$this->trans_705 = __( 'Discount Price', 'wpbooklist' );
+			$this->trans_706 = __( 'Discount Price Begins on...', 'wpbooklist' );
+			$this->trans_707 = __( 'Discount Price Ends on...', 'wpbooklist' );
+			$this->trans_708 = __( 'Regular Price', 'wpbooklist' );
 
 			// The array of translation strings.
 			$translation_array = array(

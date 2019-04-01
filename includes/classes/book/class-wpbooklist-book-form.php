@@ -158,24 +158,28 @@ if ( ! class_exists( 'WPBookList_Book_Form', false ) ) :
 		/**
 		 * Outputs the form for adding or editing a book.
 		 */
-		public function output_book_form() {
+		public function output_book_form( $bypass_auth = false ) {
 
 			global $wpdb;
 
 			// Set the current WordPress user.
 			$currentwpuser = wp_get_current_user();
 
+
 			// Now we'll determine access, and stop all execution if user isn't allowed in.
 			require_once CLASS_UTILITIES_DIR . 'class-wpbooklist-utilities-accesscheck.php';
 			$this->access          = new WPBookList_Utilities_Accesscheck();
 			$this->currentwpbluser = $this->access->wpbooklist_accesscheck( $currentwpuser->ID, 'addbook' );
 
-			// If we received false from accesscheck class, display permissions message and stop all further execution.
-			if ( false === $this->currentwpbluser ) {
+			// If we want to bypass the authorization check, for example, in the case of outputting the 'Add a Book' form to the frontend in the Submissions Extension.
+			if ( ! $bypass_auth ) {
+				// If we received false from accesscheck class, display permissions message and stop all further execution.
+				if ( false === $this->currentwpbluser ) {
 
-				// Outputs the 'No Permission!' message.
-				$this->initial_output = $this->access->wpbooklist_accesscheck_no_permission_message();
-				return $this->initial_output;
+					// Outputs the 'No Permission!' message.
+					$this->initial_output = $this->access->wpbooklist_accesscheck_no_permission_message();
+					return $this->initial_output;
+				}
 			}
 
 			// Now we'll get what libraries the user is allowed to access.
@@ -189,6 +193,12 @@ if ( ! class_exists( 'WPBookList_Book_Form', false ) ) :
 			} else {
 				$query                  = 'SELECT * FROM ' . $settings_table_name . " WHERE wpuserid = " . $currentwpuser->ID;
 				$this->wpbl_user = $transients->create_transient( $transient_name, 'wpdb->get_row', $query, MONTH_IN_SECONDS );
+			}
+
+			// If the user isn't logged into WordPress (thus $this->wpbl_user is null) and is trying to use this form from the front-end, create the $this->wpbl_user object, and set the 'Libraries' value to 'alllibraries'. This is mainly required for the Submissions Extension.
+			if ( null === $this->wpbl_user ) {
+				$this->wpbl_user            = new \stdClass();
+				$this->wpbl_user->libraries = 'alllibraries';
 			}
 
 			$wpuser = $this->wpbl_user;

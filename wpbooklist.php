@@ -11,7 +11,7 @@
  * Plugin Name: WordPress Book List
  * Plugin URI: https://www.jakerevans.com
  * Description: For authors, publishers, librarians, and book-lovers alike - use it to sell your books, record and catalog your library, and more!
- * Version: 6.1.6
+ * Version: 6.1.7
  * Author: Jake Evans
  * Text Domain: wpbooklist
  * Author URI: https://www.jakerevans.com
@@ -35,7 +35,7 @@ global $wpdb;
 
 // Root plugin folder directory.
 if ( ! defined( 'WPBOOKLIST_VERSION_NUM' ) ) {
-	define( 'WPBOOKLIST_VERSION_NUM', '6.1.6' );
+	define( 'WPBOOKLIST_VERSION_NUM', '6.1.7' );
 }
 
 // Root plugin folder directory.
@@ -376,6 +376,9 @@ if ( false !== stripos( plugin_dir_path( __FILE__ ), '/wpbooklist.com' ) ) {
 
 	// For adding a book from the admin dashboard.
 	add_action( 'wp_ajax_wpbooklist_dashboard_add_book_action', array( $wp_book_list_ajax_functions, 'wpbooklist_dashboard_add_book_action_callback' ) );
+
+	// For adding a book from the frontend, or anywhere else a user could access the 'Add a Book' form while not being logged in.
+	add_action( 'wp_ajax_nopriv_wpbooklist_dashboard_add_book_action', array( $wp_book_list_ajax_functions, 'wpbooklist_dashboard_add_book_action_callback' ) );
 
 	// For creating a WordPress User.
 	add_action( 'wp_ajax_wpbooklist_dashboard_create_wp_user_action', array( $wp_book_list_ajax_functions, 'wpbooklist_dashboard_create_wp_user_action_callback' ) );

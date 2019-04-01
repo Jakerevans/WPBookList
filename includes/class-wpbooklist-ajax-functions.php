@@ -1775,6 +1775,7 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 					hideseries bigint(255),
 					hideshortdesc bigint(255),
 					hidesubgenre bigint(255),
+					hideadditionalimgs bigint(255),
 					adminmessage varchar(10000) NOT NULL DEFAULT '" . ADMIN_MESSAGE . "',
 					PRIMARY KEY  (ID),
 					KEY username (username )

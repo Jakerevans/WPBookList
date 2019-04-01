@@ -1477,6 +1477,11 @@ if ( ! class_exists( 'WPBookList_Front_End_Library_UI', false ) ) :
 					}
 				}
 
+				// Let's get the Custom Fields values, if they exist.
+				// Now adding in any custom fields to above arrays for insertion into DB.
+				global $wpdb;
+				$user_options = $wpdb->get_row( 'SELECT * FROM ' . $wpdb->prefix . 'wpbooklist_jre_user_options' );
+
 				// Now build the actual fields html.
 				$fields_html = '';
 				foreach ( $fields_array as $key => $value ) {
@@ -1484,70 +1489,70 @@ if ( ! class_exists( 'WPBookList_Front_End_Library_UI', false ) ) :
 					$db_value = '';
 					switch ( $value ) {
 						case 'asin':
-							if ( '' !== $book->asin && null !== $book->asin ) {
-								$db_value = '<span>' . $this->trans->trans_137 . ': ' . $book->asin . '</span> ';
+							if ( property_exists( $book, $value ) && '' !== $book->asin && null !== $book->asin ) {
+								$db_value = '<span id="wpbooklist-list-indiv-asin">' . $this->trans->trans_137 . ': ' . $book->asin . '</span> ';
 							} else {
 								$db_value = '';
 							}
 							break;
 						case 'isbn10':
-							if ( '' !== $book->isbn && null !== $book->isbn ) {
-								$db_value = '<span>' . $this->trans->trans_135 . ': ' . $book->isbn . '</span> ';
+							if ( property_exists( $book, $value ) && '' !== $book->isbn && null !== $book->isbn ) {
+								$db_value = '<span id="wpbooklist-list-indiv-isbn10">' . $this->trans->trans_135 . ': ' . $book->isbn . '</span> ';
 							} else {
 								$db_value = '';
 							}
 							break;
 						case 'isbn13':
-							if ( '' !== $book->isbn13 && null !== $book->isbn13 ) {
-								$db_value = '<span>' . $this->trans->trans_136 . ': ' . $book->isbn13 . '</span> ';
+							if ( property_exists( $book, $value ) && '' !== $book->isbn13 && null !== $book->isbn13 ) {
+								$db_value = '<span id="wpbooklist-list-indiv-isbn13">' . $this->trans->trans_136 . ': ' . $book->isbn13 . '</span> ';
 							} else {
 								$db_value = '';
 							}
 							break;
 						case 'authorurl':
-							if ( '' !== $book->author_url && null !== $book->author_url ) {
-								$db_value = '<span>' . $this->trans->trans_166 . ': <a target="_blank" href="' . $book->author_url . '">' . $this->trans->trans_701 . '</a></span> ';
+							if ( property_exists( $book, $value ) && '' !== $book->author_url && null !== $book->author_url ) {
+								$db_value = '<span id="wpbooklist-list-indiv-authorurl">' . $this->trans->trans_166 . ': <a target="_blank" href="' . $book->author_url . '">' . $this->trans->trans_701 . '</a></span> ';
 							} else {
 								$db_value = '';
 							}
 							break;
 						case 'bamlink':
-							if ( '' !== $book->bam_link && null !== $book->bam_link ) {
-								$db_value = '<span>' . $this->trans->trans_164 . ': <a target="_blank" href="' . $book->bam_link . '">' . $this->trans->trans_701 . '</a></span> ';
+							if ( property_exists( $book, $value ) && '' !== $book->bam_link && null !== $book->bam_link ) {
+								$db_value = '<span id="wpbooklist-list-indiv-bamlink">' . $this->trans->trans_164 . ': <a target="_blank" href="' . $book->bam_link . '">' . $this->trans->trans_701 . '</a></span> ';
 							} else {
 								$db_value = '';
 							}
 							break;
 						case 'bnlink':
-							if ( '' !== $book->bn_link && null !== $book->bn_link ) {
-								$db_value = '<span>' . $this->trans->trans_160 . ': <a target="_blank" href="' . $book->bn_link . '">' . $this->trans->trans_701 . '</a></span> ';
+							if ( property_exists( $book, $value ) && '' !== $book->bn_link && null !== $book->bn_link ) {
+								$db_value = '<span id="wpbooklist-list-indiv-bnlink">' . $this->trans->trans_160 . ': <a target="_blank" href="' . $book->bn_link . '">' . $this->trans->trans_701 . '</a></span> ';
 							} else {
 								$db_value = '';
 							}
 							break;
 						case 'callnumber':
-							if ( '' !== $book->callnumber && null !== $book->callnumber ) {
-								$db_value = '<span>' . $this->trans->trans_144 . ': ' . $book->callnumber . '</span> ';
+							if ( property_exists( $book, $value ) && '' !== $book->callnumber && null !== $book->callnumber ) {
+								$db_value = '<span id="wpbooklist-list-indiv-callnumber">' . $this->trans->trans_144 . ': ' . $book->callnumber . '</span> ';
 							} else {
 								$db_value = '';
 							}
 							break;
 						case 'country':
-							if ( '' !== $book->country && null !== $book->country ) {
-								$db_value = '<span>' . $this->trans->trans_273 . ': ' . $book->country . '</span> ';
+							if ( property_exists( $book, $value ) && '' !== $book->country && null !== $book->country ) {
+								$db_value = '<span id="wpbooklist-list-indiv-country">' . $this->trans->trans_273 . ': ' . $book->country . '</span> ';
 							} else {
 								$db_value = '';
 							}
 							break;
 						case 'description':
-							if ( '' !== $book->description && null !== $book->description ) {
-								$db_value = '<div class="wpbl-list-book-description-contents">' . html_entity_decode( $book->description ) . '</div></span> ';
+							if ( property_exists( $book, $value ) && '' !== $book->description && null !== $book->description ) {
+								$db_value = '<div class="wpbl-list-book-description-contents" id="wpbooklist-list-indiv-description">' . html_entity_decode( $book->description ) . '</div></span> ';
 							} else {
 								$db_value = '';
 							}
 							break;
 						case 'ebook':
-							if ( '' !== $book->ebook && null !== $book->ebook ) {
+							if ( property_exists( $book, $value ) && '' !== $book->ebook && null !== $book->ebook ) {
 
 								global $wpdb;
 
@@ -1562,27 +1567,27 @@ if ( ! class_exists( 'WPBookList_Front_End_Library_UI', false ) ) :
 									$actual_html = '<a href="' . $book->ebook . '">' . $extension_settings->linktext . '</a>';
 								}
 
-								$db_value = '<span>' . $this->trans->trans_668 . ': ' . $actual_html . '</span> ';
+								$db_value = '<span id="wpbooklist-list-indiv-ebook">' . $this->trans->trans_668 . ': ' . $actual_html . '</span> ';
 							} else {
 								$db_value = '';
 							}
 							break;
 						case 'edition':
-							if ( '' !== $book->edition && null !== $book->edition ) {
-								$db_value = '<span>' . $this->trans->trans_155 . ': ' . $book->edition . '</span> ';
+							if ( property_exists( $book, $value ) && '' !== $book->edition && null !== $book->edition ) {
+								$db_value = '<span id="wpbooklist-list-indiv-edition">' . $this->trans->trans_155 . ': ' . $book->edition . '</span> ';
 							} else {
 								$db_value = '';
 							}
 							break;
 						case 'genres':
-							if ( '' !== $book->genres && null !== $book->genres ) {
+							if ( property_exists( $book, $value ) && '' !== $book->genres && null !== $book->genres ) {
 
 								$genre_string = '';
 								if ( false !== stripos( $book->genres, '---' ) ) {
 									$temp = explode( '---', $book->genres );
 
 									foreach ( $temp as $key => $value ) {
-										if ( '' !== $value ) {
+										if ( property_exists( $book, $value ) && '' !== $value ) {
 											$genre_string = $genre_string . ', ' . $value;
 										}
 									}
@@ -1593,48 +1598,48 @@ if ( ! class_exists( 'WPBookList_Front_End_Library_UI', false ) ) :
 								$genre_string = ltrim( $genre_string );
 								$genre_string = rtrim( $genre_string, ',' );
 								$genre_string = ltrim( $genre_string, ',' );
-								$db_value     = '<span>' . $this->trans->trans_146 . ': ' . $genre_string . '</span> ';
+								$db_value     = '<span id="wpbooklist-list-indiv-genres">' . $this->trans->trans_146 . ': ' . $genre_string . '</span> ';
 							} else {
 								$db_value = '';
 							}
 							break;
 						case 'format':
-							if ( '' !== $book->format && null !== $book->format ) {
-								$db_value = '<span>' . $this->trans->trans_158 . ': ' . $book->format . '</span> ';
+							if ( property_exists( $book, $value ) && '' !== $book->format && null !== $book->format ) {
+								$db_value = '<span id="wpbooklist-list-indiv-format">' . $this->trans->trans_158 . ': ' . $book->format . '</span> ';
 							} else {
 								$db_value = '';
 							}
 							break;
 						case 'goodreads':
-							if ( '' !== $book->goodreadslink && null !== $book->goodreadslink ) {
-								$db_value = '<span>' . $this->trans->trans_163 . ': <a target="_blank" href="' . $book->goodreadslink . '">' . $this->trans->trans_701 . '</a></span> ';
+							if ( property_exists( $book, $value ) && '' !== $book->goodreadslink && null !== $book->goodreadslink ) {
+								$db_value = '<span id="wpbooklist-list-indiv-goodreads">' . $this->trans->trans_163 . ': <a target="_blank" href="' . $book->goodreadslink . '">' . $this->trans->trans_701 . '</a></span> ';
 							} else {
 								$db_value = '';
 							}
 							break;
 						case 'illustrator':
-							if ( '' !== $book->illustrator && null !== $book->illustrator ) {
-								$db_value = '<span>' . $this->trans->trans_281 . ': ' . $book->illustrator . '</span> ';
+							if ( property_exists( $book, $value ) && '' !== $book->illustrator && null !== $book->illustrator ) {
+								$db_value = '<span id="wpbooklist-list-indiv-illustrator">' . $this->trans->trans_281 . ': ' . $book->illustrator . '</span> ';
 							} else {
 								$db_value = '';
 							}
 							break;
 						case 'ituneslink':
-							if ( '' !== $book->itunes_page && null !== $book->itunes_page ) {
-								$db_value = '<span>' . $this->trans->trans_282 . ': <a target="_blank" href="' . $book->itunes_page . '">' . $this->trans->trans_701 . '</a></span> ';
+							if ( property_exists( $book, $value ) && '' !== $book->itunes_page && null !== $book->itunes_page ) {
+								$db_value = '<span id="wpbooklist-list-indiv-ituneslink">' . $this->trans->trans_282 . ': <a target="_blank" href="' . $book->itunes_page . '">' . $this->trans->trans_701 . '</a></span> ';
 							} else {
 								$db_value = '';
 							}
 							break;
 						case 'keywords':
-							if ( '' !== $book->keywords && null !== $book->keywords ) {
+							if ( property_exists( $book, $value ) && '' !== $book->keywords && null !== $book->keywords ) {
 
 								$keywords_string = '';
 								if ( false !== stripos( $book->keywords, '---' ) ) {
 									$temp = explode( '---', $book->keywords );
 
 									foreach ( $temp as $key => $value ) {
-										if ( '' !== $value ) {
+										if ( property_exists( $book, $value ) && '' !== $value ) {
 											$keywords_string = $keywords_string . ', ' . $value;
 										}
 									}
@@ -1645,96 +1650,96 @@ if ( ! class_exists( 'WPBookList_Front_End_Library_UI', false ) ) :
 								$keywords_string = ltrim( $keywords_string );
 								$keywords_string = rtrim( $keywords_string, ',' );
 								$keywords_string = ltrim( $keywords_string, ',' );
-								$db_value     = '<span>' . $this->trans->trans_146 . ': ' . $keywords_string . '</span> ';
+								$db_value     = '<span id="wpbooklist-list-indiv-keywords">' . $this->trans->trans_146 . ': ' . $keywords_string . '</span> ';
 							} else {
 								$db_value = '';
 							}
 							break;
 						case 'kobolink':
-							if ( '' !== $book->kobo_link && null !== $book->kobo_link ) {
-								$db_value = '<span>' . $this->trans->trans_283 . ': <a target="_blank" href="' . $book->kobo_link . '">' . $this->trans->trans_701 . '</a></span> ';
+							if ( property_exists( $book, $value ) && '' !== $book->kobo_link && null !== $book->kobo_link ) {
+								$db_value = '<span id="wpbooklist-list-indiv-kobolink">' . $this->trans->trans_283 . ': <a target="_blank" href="' . $book->kobo_link . '">' . $this->trans->trans_701 . '</a></span> ';
 							} else {
 								$db_value = '';
 							}
 							break;
 						case 'language':
-							if ( '' !== $book->language && null !== $book->language ) {
-								$db_value = '<span>' . $this->trans->trans_154 . ': ' . $book->language . '</span> ';
+							if ( property_exists( $book, $value ) && '' !== $book->language && null !== $book->language ) {
+								$db_value = '<span id="wpbooklist-list-indiv-language">' . $this->trans->trans_154 . ': ' . $book->language . '</span> ';
 							} else {
 								$db_value = '';
 							}
 						case 'notes':
-							if ( '' !== $book->notes && null !== $book->notes ) {
-								$db_value = '<div class="wpbl-list-book-description-contents">' . html_entity_decode( $book->notes ) . '</div></span> ';
+							if ( property_exists( $book, $value ) && '' !== $book->notes && null !== $book->notes ) {
+								$db_value = '<div class="wpbl-list-book-description-contents" id="wpbooklist-list-indiv-notes">' . html_entity_decode( $book->notes ) . '</div></span> ';
 							} else {
 								$db_value = '';
 							}
 							break;
 						case 'seriesnumber':
-							if ( '' !== $book->numberinseries && null !== $book->numberinseries ) {
-								$db_value = '<span>' . $this->trans->trans_157 . ': ' . $book->numberinseries . '</span> ';
+							if ( property_exists( $book, $value ) && '' !== $book->numberinseries && null !== $book->numberinseries ) {
+								$db_value = '<span id="wpbooklist-list-indiv-seriesnumber">' . $this->trans->trans_157 . ': ' . $book->numberinseries . '</span> ';
 							} else {
 								$db_value = '';
 							}
 							break;
 						case 'origpubyear':
-							if ( '' !== $book->originalpubyear && null !== $book->originalpubyear && 0 !== $book->originalpubyear && '0' !== $book->originalpubyear ) {
-								$db_value = '<span>' . $this->trans->trans_145 . ': ' . $book->originalpubyear . '</span> ';
+							if ( property_exists( $book, $value ) && '' !== $book->originalpubyear && null !== $book->originalpubyear && 0 !== $book->originalpubyear && '0' !== $book->originalpubyear ) {
+								$db_value = '<span id="wpbooklist-list-indiv-origpubyear">' . $this->trans->trans_145 . ': ' . $book->originalpubyear . '</span> ';
 							} else {
 								$db_value = '';
 							}
 							break;
 						case 'origtitle':
-							if ( '' !== $book->originaltitle && null !== $book->originaltitle ) {
-								$db_value = '<span>' . $this->trans->trans_139 . ': ' . $book->originaltitle . '</span> ';
+							if ( property_exists( $book, $value ) && '' !== $book->originaltitle && null !== $book->originaltitle ) {
+								$db_value = '<span id="wpbooklist-list-indiv-origtitle">' . $this->trans->trans_139 . ': ' . $book->originaltitle . '</span> ';
 							} else {
 								$db_value = '';
 							}
 							break;
 						case 'outofprint':
-							if ( '' !== $book->outofprint && null !== $book->outofprint && 'N/A' !== $book->outofprint ) {
-								$db_value = '<span>' . $this->trans->trans_222 . ': ' . $book->outofprint . '</span> ';
+							if ( property_exists( $book, $value ) && '' !== $book->outofprint && null !== $book->outofprint && 'N/A' !== $book->outofprint ) {
+								$db_value = '<span id="wpbooklist-list-indiv-outofprint">' . $this->trans->trans_222 . ': ' . $book->outofprint . '</span> ';
 							} else {
 								$db_value = '';
 							}
 							break;
 						case 'page':
-							if ( '' !== $book->page_yes && null !== $book->page_yes ) {
-								$db_value = '<span>' . $this->trans->trans_452 . ': <a target="_blank" href="' . get_permalink( $book->page_yes ) . '">' . $this->trans->trans_701 . '</a></span> ';
+							if ( property_exists( $book, $value ) && '' !== $book->page_yes && null !== $book->page_yes ) {
+								$db_value = '<span id="wpbooklist-list-indiv-page">' . $this->trans->trans_452 . ': <a target="_blank" href="' . get_permalink( $book->page_yes ) . '">' . $this->trans->trans_701 . '</a></span> ';
 							} else {
 								$db_value = '';
 							}
 							break;
 						case 'post':
-							if ( '' !== $book->post_yes && null !== $book->post_yes ) {
-								$db_value = '<span>' . $this->trans->trans_453 . ': <a target="_blank" href="' . get_permalink( $book->post_yes ) . '">' . $this->trans->trans_701 . '</a></span> ';
+							if ( property_exists( $book, $value ) && '' !== $book->post_yes && null !== $book->post_yes ) {
+								$db_value = '<span id="wpbooklist-list-indiv-post">' . $this->trans->trans_453 . ': <a target="_blank" href="' . get_permalink( $book->post_yes ) . '">' . $this->trans->trans_701 . '</a></span> ';
 							} else {
 								$db_value = '';
 							}
 							break;
 						case 'pages':
-							if ( '' !== $book->pages && null !== $book->pages ) {
-								$db_value = '<span>' . $this->trans->trans_142 . ': ' . $book->pages . '</span> ';
+							if ( property_exists( $book, $value ) && '' !== $book->pages && null !== $book->pages ) {
+								$db_value = '<span id="wpbooklist-list-indiv-pages">' . $this->trans->trans_142 . ': ' . $book->pages . '</span> ';
 							} else {
 								$db_value = '';
 							}
 							break;
 						case 'pubyear':
-							if ( '' !== $book->pub_year && null !== $book->pub_year && 0 !== $book->pub_year && '0' !== $book->pub_year ) {
-								$db_value = '<span>' . $this->trans->trans_143 . ': ' . $book->pub_year . '</span> ';
+							if ( property_exists( $book, $value ) && '' !== $book->pub_year && null !== $book->pub_year && 0 !== $book->pub_year && '0' !== $book->pub_year ) {
+								$db_value = '<span id="wpbooklist-list-indiv-pubyear">' . $this->trans->trans_143 . ': ' . $book->pub_year . '</span> ';
 							} else {
 								$db_value = '';
 							}
 							break;
 						case 'publisher':
-							if ( '' !== $book->publisher && null !== $book->publisher && 0 !== $book->publisher && '0' !== $book->publisher ) {
-								$db_value = '<span>' . $this->trans->trans_141 . ': ' . $book->publisher . '</span> ';
+							if ( property_exists( $book, $value ) && '' !== $book->publisher && null !== $book->publisher && 0 !== $book->publisher && '0' !== $book->publisher ) {
+								$db_value = '<span id="wpbooklist-list-indiv-publisher">' . $this->trans->trans_141 . ': ' . $book->publisher . '</span> ';
 							} else {
 								$db_value = '';
 							}
 							break;
 						case 'rating':
-							if ( '' !== $book->rating && null !== $book->rating && 0 !== $book->rating && '0' !== $book->rating ) {
+							if ( property_exists( $book, $value ) && '' !== $book->rating && null !== $book->rating && 0 !== $book->rating && '0' !== $book->rating ) {
 
 								if ( '1' === $book->rating ) {
 									$db_value = '<img style="opacity: 1;" class="wpbooklist-list-rating-image" src="' . ROOT_IMG_URL . '1star.jpg">';
@@ -1776,28 +1781,28 @@ if ( ! class_exists( 'WPBookList_Front_End_Library_UI', false ) ) :
 							}
 							break;
 						case 'series':
-							if ( '' !== $book->series && null !== $book->series ) {
-								$db_value = '<span>' . $this->trans->trans_156 . ': ' . $book->series . '</span> ';
+							if ( property_exists( $book, $value ) && '' !== $book->series && null !== $book->series ) {
+								$db_value = '<span id="wpbooklist-list-indiv-series">' . $this->trans->trans_156 . ': ' . $book->series . '</span> ';
 							} else {
 								$db_value = '';
 							}
 							break;
 						case 'shortdescription':
-							if ( '' !== $book->shortdescription && null !== $book->shortdescription ) {
-								$db_value = '<div class="wpbl-list-book-description-contents">' . html_entity_decode( $book->shortdescription ) . '</div></span> ';
+							if ( property_exists( $book, $value ) && '' !== $book->shortdescription && null !== $book->shortdescription ) {
+								$db_value = '<div class="wpbl-list-book-description-contents" id="wpbooklist-list-indiv-shortdescription">' . html_entity_decode( $book->shortdescription ) . '</div></span> ';
 							} else {
 								$db_value = '';
 							}
 							break;
 						case 'subgenre':
-							if ( '' !== $book->subgenre && null !== $book->subgenre ) {
+							if ( property_exists( $book, $value ) && '' !== $book->subgenre && null !== $book->subgenre ) {
 
 								$subgenre_string = '';
 								if ( false !== stripos( $book->subgenre, '---' ) ) {
 									$temp = explode( '---', $book->subgenre );
 
 									foreach ( $temp as $key => $value ) {
-										if ( '' !== $value ) {
+										if ( property_exists( $book, $value ) && '' !== $value ) {
 											$subgenre_string = $subgenre_string . ', ' . $value;
 										}
 									}
@@ -1808,13 +1813,95 @@ if ( ! class_exists( 'WPBookList_Front_End_Library_UI', false ) ) :
 								$subgenre_string = ltrim( $subgenre_string );
 								$subgenre_string = rtrim( $subgenre_string, ',' );
 								$subgenre_string = ltrim( $subgenre_string, ',' );
-								$db_value     = '<span>' . $this->trans->trans_147 . ': ' . $subgenre_string . '</span> ';
+								$db_value     = '<span id="wpbooklist-list-indiv-subgenre">' . $this->trans->trans_147 . ': ' . $subgenre_string . '</span> ';
 							} else {
 								$db_value = '';
 							}
 							break;
 						default:
-							$db_value = '';
+							// Add ability to include the Custom Fields.
+							if ( 'author' !== $value && 'title' !== $value ) {
+
+								$db_name = str_replace( ' ', '_', $value );
+								$display_value = ucfirst( $value );
+
+								// Loop through the Custom Fields.
+								if ( false !== stripos( $user_options->customfields, $db_name ) ) {
+									if ( false !== stripos( $user_options->customfields, '--' ) ) {
+										$fields = explode( '--', $user_options->customfields );
+
+										// Loop through each custom field entry.
+										foreach ( $fields as $key => $entry ) {
+
+											if ( false !== stripos( $entry, ';' ) ) {
+
+												$entry_details = explode( ';', $entry );
+
+												if ( $db_name === $entry_details[0] ) {
+
+													switch ( $entry_details[1] ) {
+														case 'Plain Text Entry':
+															if ( property_exists( $book, $db_name ) && '' !== $book->{$db_name} && null !== $book->{$db_name} ) {
+																$db_value = '<span id="wpbooklist-list-indiv-' . $value . '">' . $display_value . ': ' . $book->{$db_name} . '</span> ';
+															} else {
+																$db_value = '';
+															}
+															break;
+														case 'Drop-Down':
+															if ( property_exists( $book, $db_name ) && '' !== $book->{$db_name} && null !== $book->{$db_name} ) {
+																$db_value = '<span id="wpbooklist-list-indiv-' . $value . '">' . $display_value . ': ' . $book->{$db_name} . '</span> ';
+															} else {
+																$db_value = '';
+															}
+															break;
+														case 'Paragraph':
+															if ( property_exists( $book, $db_name ) && '' !== $book->{$db_name} && null !== $book->{$db_name} ) {
+
+																$db_value = '<div class="wpbl-list-book-description-contents" id="wpbooklist-list-indiv-' . $display_value . '">' . html_entity_decode( $book->{$db_name} ) . '</div></span> ';
+
+															} else {
+																$db_value = '';
+															}
+															break;
+														case 'Text Link':
+															if ( property_exists( $book, $db_name ) && '' !== $book->{$db_name} && null !== $book->{$db_name} ) {
+
+																$text_and_link = explode( '---', $book->{$db_name} );
+
+																$db_value = '<span id="wpbooklist-list-indiv-' . $value . '"><a target="_blank" href="' . $text_and_link[1] . '">' . $text_and_link[0] . '</a></span> ';
+															} else {
+																$db_value = '';
+															}
+															break;
+														case 'Image Link':
+															if ( property_exists( $book, $db_name ) && '' !== $book->{$db_name} && null !== $book->{$db_name} ) {
+
+																$text_and_link = explode( '---', $book->{$db_name} );
+
+																$db_value = '<span id="wpbooklist-list-indiv-' . $value . '"><a target="_blank" href="' . $text_and_link[1] . '"><img src="' . $text_and_link[0] . '"/></a></span> ';
+															} else {
+																$db_value = '';
+															}
+															break;
+
+														default:
+															$db_value = '';
+															break;
+													}
+												}
+											}
+										}
+									}
+								} else {
+									if ( property_exists( $book, $db_name ) && '' !== $book->{$db_name} && null !== $book->{$db_name} ) {
+										$db_value = '<span id="wpbooklist-list-indiv-' . $value . '">' . $display_value . ': ' . $book->{$db_name} . '</span> ';
+									}
+								}
+
+
+
+								
+							}
 							break;
 					}
 

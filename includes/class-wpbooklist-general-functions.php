@@ -613,6 +613,7 @@ if ( ! class_exists( 'WPBookList_General_Functions', false ) ) :
 				extensionversions MEDIUMTEXT,
 				adminmessage varchar(10000) NOT NULL DEFAULT '" . ADMIN_MESSAGE . "',
 				customfields MEDIUMTEXT,
+				hideadditionalimgs bigint(255),
 				PRIMARY KEY  (ID),
 				KEY username (username)
 			) $charset_collate; ";
