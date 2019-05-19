@@ -1432,9 +1432,9 @@ if ( ! class_exists( 'WPBookList_Front_End_Library_UI', false ) ) :
 				}
 
 				// Replace default tag if the user has provided their own - 5.5.3.
-				if ( strpos( $book->amazon_detail_page, 'wpbooklistid-20' ) ) {
-					if ( '' !== $this->display_options_actual->amazonaff && null !== $this->display_options_actual->amazonaff && 'wpbooklistid-20' !== $this->display_options_actual->amazonaff ) {
-						$book->amazon_detail_page = str_replace( 'wpbooklistid-20', $this->display_options_actual->amazonaff, $book->amazon_detail_page );
+				if ( strpos( $book->amazon_detail_page, 'wpbooklisti0e-21' ) ) {
+					if ( '' !== $this->display_options_actual->amazonaff && null !== $this->display_options_actual->amazonaff && 'wpbooklisti0e-21' !== $this->display_options_actual->amazonaff ) {
+						$book->amazon_detail_page = str_replace( 'wpbooklisti0e-21', $this->display_options_actual->amazonaff, $book->amazon_detail_page );
 					}
 				}
 

@@ -522,7 +522,7 @@ if ( ! class_exists( 'WPBookList_General_Functions', false ) ) :
 				ID bigint(190) auto_increment,
 				username varchar(190),
 				version varchar(255) NOT NULL DEFAULT '3.3',
-				amazonaff varchar(255) NOT NULL DEFAULT 'wpbooklistid-20',
+				amazonaff varchar(255) NOT NULL DEFAULT 'wpbooklisti0e-21',
 				amazonauth varchar(255),
 				itunesaff varchar(255) NOT NULL DEFAULT '1010lnPx',
 				enablepurchase bigint(255),
@@ -643,7 +643,7 @@ if ( ! class_exists( 'WPBookList_General_Functions', false ) ) :
 			(
 				ID bigint(190) auto_increment,
 				username varchar(190),
-				amazonaff varchar(255) NOT NULL DEFAULT 'wpbooklistid-20',
+				amazonaff varchar(255) NOT NULL DEFAULT 'wpbooklisti0e-21',
 				amazonauth varchar(255),
 				barnesaff varchar(255),
 				itunesaff varchar(255) NOT NULL DEFAULT '1010lnPx',
@@ -720,7 +720,7 @@ if ( ! class_exists( 'WPBookList_General_Functions', false ) ) :
 			(
 				ID bigint(190) auto_increment,
 				username varchar(190),
-				amazonaff varchar(255) NOT NULL DEFAULT 'wpbooklistid-20',
+				amazonaff varchar(255) NOT NULL DEFAULT 'wpbooklisti0e-21',
 				amazonauth varchar(255),
 				barnesaff varchar(255),
 				itunesaff varchar(255) NOT NULL DEFAULT '1010lnPx',
@@ -1577,7 +1577,7 @@ if ( ! class_exists( 'WPBookList_General_Functions', false ) ) :
 
 					// Removing my Affiliate ID, as it's only needed for initial API calls when Adding/Editing/Searching for books.
 					if ( '' === $options_row->amazonaff || null === $options_row->amazonaff ) {
-						$options_row->amazonaff = 'wpbooklistid-20';
+						$options_row->amazonaff = 'wpbooklisti0e-21';
 					}
 
 					$image = 'http://images.amazon.com/images/P/' . $asin . '.01.LZZZZZZZ.jpg';
@@ -1605,8 +1605,8 @@ if ( ! class_exists( 'WPBookList_General_Functions', false ) ) :
 				$book->refresh_amazon_review( $book_row->ID, $table_name );
 
 				// Removing my Affiliate ID, as it's only needed for initial API calls when Adding/Editing/Searching for books.
-				if ( false !== stripos( $book_row->amazon_detail_page, 'tag=wpbooklistid-20' ) ) {
-					//$book_row->amazon_detail_page = str_replace( 'tag=wpbooklistid-20', '', $book_row->amazon_detail_page );
+				if ( false !== stripos( $book_row->amazon_detail_page, 'tag=wpbooklisti0e-21' ) ) {
+					//$book_row->amazon_detail_page = str_replace( 'tag=wpbooklisti0e-21', '', $book_row->amazon_detail_page );
 				}
 
 				if ( 'page' === $page_post_row->type ) {
@@ -1781,7 +1781,7 @@ if ( ! class_exists( 'WPBookList_General_Functions', false ) ) :
 				// Replace with user's affiliate id, if available.
 				$amazonaff = $options_results->amazonaff;
 				if ( '' !== $amazonaff && null !== $amazonaff ) {
-					$link = str_replace( 'wpbooklistid-20', $amazonaff, $link );
+					$link = str_replace( 'wpbooklisti0e-21', $amazonaff, $link );
 				}
 
 				$amazoncountryinfo = $options_results->amazoncountryinfo;

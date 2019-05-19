@@ -1473,8 +1473,8 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 				}
 			}
 
-			error_log( 'Here is the Array being sent to Class-wpbooklist-book.php to Edit a book:' );
-			error_log( print_r( $book_array, true ) );
+			//error_log( 'Here is the Array being sent to Class-wpbooklist-book.php to Edit a book:' );
+			//error_log( print_r( $book_array, true ) );
 
 			require_once CLASS_BOOK_DIR . 'class-wpbooklist-book.php';
 			$book_class  = new WPBookList_Book( 'edit', $book_array, $bookid );
@@ -1691,7 +1691,7 @@ if ( ! class_exists( 'WPBookList_Ajax_Functions', false ) ) :
 					ID bigint(190) auto_increment,
 					username varchar(190),
 					version varchar(255) NOT NULL DEFAULT '3.3',
-					amazonaff varchar(255) NOT NULL DEFAULT 'wpbooklistid-20',
+					amazonaff varchar(255) NOT NULL DEFAULT 'wpbooklisti0e-21',
 					amazonauth varchar(255),
 					itunesaff varchar(255) NOT NULL DEFAULT '1010lnPx',
 					enablepurchase bigint(255),

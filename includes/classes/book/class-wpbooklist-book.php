@@ -141,10 +141,12 @@ if ( ! class_exists( 'WPBookList_Book', false ) ) :
 		public $itunesapiresult    = '';
 		public $openlibapiresult   = '';
 		public $apiamazonfailcount = 0;
+		public $apigoodreadsfailcount = 0;
 		public $rerun_amazon_flag          = true;
 		public $whichapifound              = array();
 		public $amazon_array               = array();
 		public $gather_amazon_attempt_with = 'isbn';
+		public $gather_goodreads_attempt_with = 'isbn';
 		public $db_insert_array            = array();
 
 		/** Class Constructor - Simply calls the Translations
@@ -528,9 +530,10 @@ if ( ! class_exists( 'WPBookList_Book', false ) ) :
 				if ( 'true' === $this->amazonauth && 'true' === $this->use_amazon_yes ) {
 					$this->go_amazon = true;
 					$this->gather_amazon_data();
-					$this->gather_google_data();
+					//$this->gather_google_data();
 					$this->gather_open_library_data();
 					$this->gather_itunes_data();
+					$this->gather_goodreads_data();
 					$this->create_buy_links();
 					$this->add_book();
 					$this->add_result = true;
@@ -538,9 +541,10 @@ if ( ! class_exists( 'WPBookList_Book', false ) ) :
 
 					// If $this->go_amazon is false, query the other apis and add the provided data to database.
 					$this->go_amazon = false;
-					$this->gather_google_data();
+					//$this->gather_google_data();
 					$this->gather_open_library_data();
 					$this->gather_itunes_data();
+					$this->gather_goodreads_data();
 					$this->create_buy_links();
 					$this->add_book();
 					$this->add_result = true;
@@ -548,7 +552,7 @@ if ( ! class_exists( 'WPBookList_Book', false ) ) :
 			}
 
 			if ( 'bookfinder-colorbox' === $this->action ) {
-				$this->gather_google_data();
+				//$this->gather_google_data();
 				$this->gather_open_library_data();
 				$this->gather_itunes_data();
 				$this->create_buy_links();
@@ -622,9 +626,10 @@ if ( ! class_exists( 'WPBookList_Book', false ) ) :
 			if ( 'true' === $this->amazonauth && 'true' === $this->use_amazon_yes ) {
 				$this->go_amazon = true;
 				$this->gather_amazon_data();
-				$this->gather_google_data();
+				//$this->gather_google_data();
 				$this->gather_open_library_data();
 				$this->gather_itunes_data();
+				$this->gather_goodreads_data();
 				$this->create_buy_links();
 				$this->set_default_woocommerce_data();
 				$this->create_wpbooklist_woocommerce_product();
@@ -634,9 +639,10 @@ if ( ! class_exists( 'WPBookList_Book', false ) ) :
 			} else {
 				// If $this->go_amazon is false, query the other apis and add the provided data to database.
 				$this->go_amazon = false;
-				$this->gather_google_data();
+				//$this->gather_google_data();
 				$this->gather_open_library_data();
 				$this->gather_itunes_data();
+				$this->gather_goodreads_data();
 				$this->create_buy_links();
 				$this->set_default_woocommerce_data();
 				$this->create_wpbooklist_woocommerce_product();
@@ -1663,6 +1669,177 @@ if ( ! class_exists( 'WPBookList_Book', false ) ) :
 				$this->whichapifound['itunes_page'] = 'iTunes iBooks';
 			}
 		}
+
+
+
+		/**
+		 * Function to handle the gathering of Goodreads data.
+		 */
+		private function gather_goodreads_data() {
+
+			global $wpdb;
+
+			if ( '' !== $this->isbn && null !== $this->isbn ) {
+				$this->apireport = $this->apireport . 'Results for "' . $this->isbn . '": ';
+			} elseif ( '' !== $this->title && null !== $this->title ) {
+				$this->apireport = $this->apireport . 'Results for "' . $this->title . '": ';
+			} else {
+				$this->apireport = $this->apireport . 'Results for Unknown Book: ';
+			}
+
+			// Before we do anything else, let's make sure we don't have a saved transient for this book - if we do, no sense in making a new api call - will cut down on requests. Also, do not use a transient at all if we're editing a book, and try to delete an existing transient in the 'else' part before creating a new one.
+			$transient_name   = 'wpbl_' . md5( $this->isbn . '_goodreads' );
+			$transient_exists = $this->transients->existing_transient_check( $transient_name );
+			if ( $transient_exists && 'edit' !== $this->action ) {
+				$this->goodreadsapiresult      = $transient_exists;
+				$this->goodreads_transient_use = 'Yes';
+
+			} else {
+
+				$status                        = '';
+				$this->goodreadsapiresult      = '';
+				$this->goodreadsapiresult      = wp_remote_get( 'https://sublime-vine-199216.appspot.com/?whichapi=goodreads&key=LgBmcNLBTzCrOxIF4O7R6g&q=' . $this->isbn );
+				$this->goodreads_transient_use = 'No';
+
+				//error_log( print_r($this->goodreadsapiresult,true) );
+
+				// Check the response code.
+				$response_code    = wp_remote_retrieve_response_code( $this->goodreadsapiresult );
+				$response_message = wp_remote_retrieve_response_message( $this->goodreadsapiresult );
+
+				if ( 200 !== $response_code && ! empty( $response_message ) ) {
+
+					$this->apigoodreadsfailcount++;
+
+					// Let's try this 2 more times, one for ISBN13, and one for ASIN, if they exist.
+					if ( 'isbn-isbn13-asin' !== $this->gather_goodreads_attempt_with ) {
+
+						if ( 'isbn' === $this->gather_goodreads_attempt_with ) {
+							$this->gather_goodreads_attempt_with = 'isbn-isbn13';
+							$this->isbn                          = $this->isbn13;
+							$this->gather_goodreads_data();
+						}
+
+						if ( 'isbn-isbn13' === $this->gather_goodreads_attempt_with ) {
+							$this->gather_goodreads_attempt_with = 'isbn-isbn13-asin';
+							$this->isbn                          = $this->asin;
+							$this->gather_goodreads_data();
+						}
+					}
+
+					$this->apireport = $this->apireport . 'Looks like we tried the Goodreads wp_remote_get function, but something went wrong .  Status Code is: ' . $response_code . ' and Response Message is: ' . $response_message . ' .  URL Request was: https://wpbooklist.com/awsapiconfig.php?key=LgBmcNLBTzCrOxIF4O7R6g&q=' . $this->isbn . ' ';
+					return new WP_Error( $response_code, $response_message );
+				} elseif ( 200 !== $response_code ) {
+					$this->apireport = $this->apireport . 'Unknown error occurred with the Goodreads wp_remote_get function';
+					return new WP_Error( $response_code, 'Unknown error occurred with the Goodreads wp_remote_get function' );
+				} else {
+					$this->apireport          = $this->apireport . 'Goodreads API call via wp_remote_get looks to be successful.  URL Request was: https://wpbooklist.com/awsapiconfig.php?key=LgBmcNLBTzCrOxIF4O7R6g&q=' . $this->isbn . ' ';
+					$this->goodreadsapiresult = wp_remote_retrieve_body( $this->goodreadsapiresult );
+				}
+
+				// Actually attempting to delete existing transients before creation of new one.
+				$transient_delete_api_data_result = $this->transients->delete_transient( $transient_name );
+				$this->transient_create_result    = $this->transients->create_api_transient( $transient_name, $this->goodreadsapiresult, WEEK_IN_SECONDS );
+			}
+
+			// Convert result from API call to regular ol' array.
+			if ( 3 > $this->apigoodreadsfailcount ) {
+
+				$xml = simplexml_load_string( $this->goodreadsapiresult, 'SimpleXMLElement', LIBXML_NOCDATA );
+
+				// Checking to see if the XML conversion was successful.
+				if ( false === $xml ) {
+					$this->apireport = $this->apireport . 'Looks like something went wrong with converting the Goodreads API result to XML. ';
+				} else {
+					$this->apireport = $this->apireport . 'Goodreads XML conversion went well. ';
+
+					// Convert XML to array.
+					$json                  = wp_json_encode( $xml );
+					$this->goodreads_array = json_decode( $json, true );
+
+					//error_log( print_r($this->goodreads_array , true ) );
+
+					// Now check and see if the converted XML contains any error report, and set the error flag if so.
+					$error_flag = false;
+
+					// If $error_flag is false,  begin assigning values from $this->goodreads_array to properties.
+					if ( ! $error_flag ) {
+
+						if ( null === $this->author || '' === $this->author ) {
+							if ( array_key_exists( 'search', $this->goodreads_array )
+								&& array_key_exists( 'results', $this->goodreads_array['search'] )
+								&& array_key_exists( 'work', $this->goodreads_array['search']['results'] )
+								&& array_key_exists( 'best_book', $this->goodreads_array['search']['results']['work'] )
+								&& array_key_exists( 'author', $this->goodreads_array['search']['results']['work']['best_book'] )
+								&& array_key_exists( 'name', $this->goodreads_array['search']['results']['work']['best_book']['author'] ) ) {
+									$this->author = $this->goodreads_array['search']['results']['work']['best_book']['author']['name'];
+							}
+						}
+
+						//if ( null === $this->image || '' === $this->image ) {
+							if ( array_key_exists( 'search', $this->goodreads_array )
+								&& array_key_exists( 'results', $this->goodreads_array['search'] )
+								&& array_key_exists( 'work', $this->goodreads_array['search']['results'] )
+								&& array_key_exists( 'best_book', $this->goodreads_array['search']['results']['work'] )
+								&& array_key_exists( 'image_url', $this->goodreads_array['search']['results']['work']['best_book'] ) ) {
+									$this->image = $this->goodreads_array['search']['results']['work']['best_book']['image_url'];
+									$this->image = explode( '/books', $this->image );
+									$this->image = str_replace( 'm/', 'l/', $this->image[1] );
+									$this->image = 'https://images.gr-assets.com/books' . $this->image;
+							}
+						//}
+
+						if ( null !== $this->title || '' !== $this->title ) {
+							if ( array_key_exists( 'search', $this->goodreads_array )
+								&& array_key_exists( 'results', $this->goodreads_array['search'] )
+								&& array_key_exists( 'work', $this->goodreads_array['search']['results'] )
+								&& array_key_exists( 'best_book', $this->goodreads_array['search']['results']['work'] )
+								&& array_key_exists( 'title', $this->goodreads_array['search']['results']['work']['best_book'] ) ) {
+									$this->title = $this->goodreads_array['search']['results']['work']['best_book']['title'];
+							}
+						}
+					}
+				}
+			} else {
+
+				if ( $this->rerun_goodreads_flag ) {
+					sleep( 1 );
+					$this->rerun_goodreads_flag  = false;
+					$this->apigoodreadsfailcount = 0;
+					$this->gather_goodreads_data();
+				}
+			}
+
+			// Create report of what values were found and what weren't.
+			if ( null !== $this->title && '' !== $this->title ) {
+				$this->whichapifound['title'] = 'Goodreads';
+			}
+
+			if ( null !== $this->image && '' !== $this->image ) {
+				$this->whichapifound['image'] = 'Goodreads';
+			}
+
+			if ( null !== $this->author && '' !== $this->author ) {
+				$this->whichapifound['author'] = 'Goodreads';
+			}
+
+		}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 		/**
 		 * Function to handle the setting of default WooCommerce data for creation of WooCommerce products.

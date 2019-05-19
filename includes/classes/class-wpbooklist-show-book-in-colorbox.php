@@ -550,18 +550,18 @@ if ( ! class_exists( 'WPBookList_Show_Book_In_Colorbox', false ) ) :
 
 			// Removing my Affiliate ID with the user's, if set.
 			if ( '' !== $this->amazonaff && null !== $this->amazonaff ) {
-				$this->amazon_detail_page = str_replace( 'wpbooklistid-20', $this->amazonaff, $this->amazon_detail_page );
+				$this->amazon_detail_page = str_replace( 'wpbooklisti0e-21', $this->amazonaff, $this->amazon_detail_page );
 			}
 
 			/*
 			// Removing my Affiliate ID, as it's only needed for initial API calls when Adding/Editing/Searching for books.
-			if ( 'wpbooklistid-20' === $this->amazonaff ) {
+			if ( 'wpbooklisti0e-21' === $this->amazonaff ) {
 				$this->amazonaff = '';
 			}
 
 			// Removing my Affiliate ID, as it's only needed for initial API calls when Adding/Editing/Searching for books.
-			if ( stripos( $this->amazon_detail_page, 'tag=wpbooklistid-20' ) !== false ) {
-				$this->amazon_detail_page = str_replace( 'tag=wpbooklistid-20', '', $this->amazon_detail_page );
+			if ( stripos( $this->amazon_detail_page, 'tag=wpbooklisti0e-21' ) !== false ) {
+				$this->amazon_detail_page = str_replace( 'tag=wpbooklisti0e-21', '', $this->amazon_detail_page );
 			}
 			*/
 		}

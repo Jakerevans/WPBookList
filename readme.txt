@@ -3,8 +3,8 @@ Contributors: forwardcreation
 Donate link: https://ko-fi.com/A8385C9
 Tags: books, woocommerce, author, book, affiliate  
 Requires at least: 3.0.1
-Tested up to: 5.0
-Stable tag: 6.1.8
+Tested up to: 5.2
+Stable tag: 6.2.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -291,6 +291,10 @@ In order to become one of these "Official Translators", I'll need to know your o
 
 **6.1.8** - Made change to Amazon API calls to reflect the new Product API Guidelines. Amazon has removed current access to their Product Advertising API for WPBookList, as sufficient revenue wasn't being generated. 
 
+**6.1.9** - WordPress 5.2 Compat update. 
+
+**6.2.0** - Various misc. typo fixes and code cleanup. 
+
 
 == Upgrade Notice ==
 
@@ -408,4 +412,10 @@ Modified the class-show-book-in-colorbox.php file, lines 130-148, to better dete
 
 =6.1.8=
 Made change to Amazon API calls to reflect the new Product API Guidelines. Amazon has removed current access to their Product Advertising API for WPBookList, as sufficient revenue wasn't being generated. 
+
+=6.1.9=
+WordPress 5.2 Compat update.
+
+ =6.2.0=
+ Various misc. typo fixes and code cleanup. 
 
